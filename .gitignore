@@ -1,0 +1,45 @@
+# ===== Build directories =====
+cmake-build-*/
+build/
+out/
+ThirdParty/
+
+# ===== IDE =====
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+
+# ===== Windows =====
+Thumbs.db
+Desktop.ini
+
+# ===== CMake =====
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+compile_commands.json
+
+# ===== Compiled binaries =====
+*.exe
+*.dll
+*.lib
+*.pdb
+*.exp
+*.ilk
+
+# ===== Logs =====
+*.log
+
+# ===== Third-party build artifacts =====
+ThirdParty/**/build/
+ThirdParty/**/bin/
+ThirdParty/**/lib/
+
+# ===== Temp =====
+*.tmp
+*.bak

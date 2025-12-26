@@ -1,0 +1,75 @@
+#
+# Enable the Ice discovery plugin
+#
+Ice.Plugin.IceDiscovery=IceDiscovery:createIceDiscovery
+
+# 
+# 指定多播参数
+#
+IceDiscovery.Address = 239.255.0.99
+IceDiscovery.Port = 10000
+IceDiscovery.DomainId = IBQ
+
+#
+# 行情数据库Adapter地址
+#
+Adapter_IBQDatabase.Endpoints=tcp -h 10.0.0.64 -p 10000
+#Adapter_IBQDatabase.Endpoints=tcp:udp
+Adapter_IBQDatabase.AdapterId=Adapter_IBQDatabase
+
+
+#
+# 行情数据库大小
+# G部分和M部分
+#
+QDatabaseHis.SizeG = 0
+QDatabaseHis.SizeM = 256
+
+#
+# 内存池上限(单位:M)
+#
+MemPool.MaxSize = 16
+
+#
+# 消息内存上限(单位:10M)
+#
+Ice.MessageSizeMax=10240 
+
+
+#
+# 日志打印所使用的最大BUFF长度
+#
+Logbuff.MaxLength = 1024
+
+
+
+#
+# 行情数据库接口代理
+#
+IBQDatabase.Proxy=QServer/IBQDatabase:tcp -h 10.0.0.64 -p 10000
+#IBQDatabase.Proxy=QServer/IBQDatabase@Adapter_IBQDatabase
+
+#
+# 线程池
+#
+Ice.ThreadPool.Server.Size=10
+Ice.ThreadPool.Server.SizeMax=100
+
+
+
+#
+# Warn about connection exceptions
+#
+Ice.Warn.Connections=1
+
+#
+# Locator tracing
+#
+Ice.Trace.Locator=0
+
+
+
+
+
+
+

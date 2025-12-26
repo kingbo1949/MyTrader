@@ -1,0 +1,48 @@
+[
+	{
+		"antiTrendParam1" : 0.006,
+		"canChgBaseCount" : 0,
+		"canCover" : true,
+		"canOpen" : true,
+		"key" : 
+		{
+			"BuyOrSell" : "Buy",
+			"id" : 1,
+			"strategyName" : "manual",
+			"targetCodeId" : "NQ"
+		},
+		"line1" : 21404.0,
+		"line2" : 21259.0,
+		"maxTradeCount" : 100,
+		"maxVol" : 1.0,
+		"param2" : 50.0,
+		"proTrendParam1" : -0.001,
+		"probeVol" : 1.0,
+		"timetype" : "M30",
+		"useInterval" : true,
+		"useTimeInterval" : true
+	},
+	{
+		"antiTrendParam1" : 0.7,
+		"canChgBaseCount" : 0,
+		"canCover" : true,
+		"canOpen" : true,
+		"key" : 
+		{
+			"BuyOrSell" : "Sell",
+			"id" : 1,
+			"strategyName" : "manual",
+			"targetCodeId" : "NQ"
+		},
+		"line1" : 21581.0,
+		"line2" : 21779.0,
+		"maxTradeCount" : 100,
+		"maxVol" : 1.0,
+		"param2" : 50.0,
+		"proTrendParam1" : 0.001,
+		"probeVol" : 1.0,
+		"timetype" : "M30",
+		"useInterval" : true,
+		"useTimeInterval" : true
+	}
+]

@@ -1,0 +1,33 @@
+﻿{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "macos",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/cmake-build-macos",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_PREFIX_PATH": "$env{QtRoot}"
+      }
+    },
+    {
+      "name": "windows",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/cmake-build-win",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_PREFIX_PATH": "$env{QtRoot}",
+        "BERKELEYDB_ROOT": "${sourceDir}/ThirdParty/BerkeleyDB",
+        "JSONCPP_ROOT": "${sourceDir}/ThirdParty/jsoncpp",
+        "SPDLOG_ROOT": "${sourceDir}/ThirdParty/spdlog",
+        "CONCURRENTQUEUE_ROOT": "${sourceDir}/ThirdParty/concurrentqueue",
+        "ICE_ROOT": "${sourceDir}/ThirdParty/ice.3.7/build",
+        "BOOST_ROOT": "${sourceDir}/ThirdParty/boost_1_70_0",
+        "INTERRDFPMATH_ROOT": "${sourceDir}/ThirdParty/intelrdfpmathlib",
+        "BZIP2_ROOT": "${sourceDir}/ThirdParty/bzip2"
+
+
+      }
+    }
+  ]
+}

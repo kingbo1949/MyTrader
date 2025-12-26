@@ -1,0 +1,57 @@
+[
+	{
+		"breakBegin" : "20:00:00",
+		"breakEnd" : "23:59:59",
+		"closeAfternoon" : "20:00:00",
+		"closeEvening" : "20:00:01",
+		"closeMorning" : "12:00:00",
+		"openAfternoon" : "12:00:01",
+		"openEvening" : "20:00:00",
+		"openMorning" : "4:00:00",
+		"primaryExchangePl" : "NASDAQ"
+	},
+	{
+		"breakBegin" : "5:10:00",
+		"breakEnd" : "5:10:01",
+		"closeAfternoon" : "3:00:00",
+		"closeEvening" : "5:00:01",
+		"closeMorning" : "23:00:00",
+		"openAfternoon" : "0:00:00",
+		"openEvening" : "5:00:00",
+		"openMorning" : "20:30:00",
+		"primaryExchangePl" : "SEHK"
+	},
+	{
+		"breakBegin" : "17:00:01",
+		"breakEnd" : "17:59:59",
+		"closeAfternoon" : "17:00:00",
+		"closeEvening" : "23:59:59",
+		"closeMorning" : "12:00:00",
+		"openAfternoon" : "12:00:01",
+		"openEvening" : "18:00:00",
+		"openMorning" : "0:00:00",
+		"primaryExchangePl" : "CME"
+	},
+	{
+		"breakBegin" : "20:00:00",
+		"breakEnd" : "23:59:59",
+		"closeAfternoon" : "20:00:00",
+		"closeEvening" : "20:00:01",
+		"closeMorning" : "12:00:00",
+		"openAfternoon" : "12:00:01",
+		"openEvening" : "20:00:00",
+		"openMorning" : "4:00:00",
+		"primaryExchangePl" : "NYSE"
+	},
+	{
+		"breakBegin" : "20:00:00",
+		"breakEnd" : "23:59:59",
+		"closeAfternoon" : "20:00:00",
+		"closeEvening" : "20:00:01",
+		"closeMorning" : "12:00:00",
+		"openAfternoon" : "12:00:01",
+		"openEvening" : "20:00:00",
+		"openMorning" : "4:00:00",
+		"primaryExchangePl" : "COMEX"
+	}
+]

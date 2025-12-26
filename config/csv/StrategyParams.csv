@@ -1,0 +1,33 @@
+strategyName,codeId,buyOrSell, id, canOpen, canCover,timetype,useInterval,canChgBaseCount,useTimeInterval,proTrendParam1,antiTrendParam1,param2,line1,line2,maxTradeCount, maxVol, probeVol, psVol
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+dayBreak,NQ,Sell,0,False ,False ,M30,True ,3,False ,0.00225,0.00575,0.0023,0.0036,1000,100,1,1,0
+dayBreak,NQ,Sell,1,False ,False ,M30,True ,3,False ,0.00225,0.00575,0.0023,0.0038,1000,100,1,1,0
+dayBreak,NQ,Sell,2,False ,False ,M30,True ,3,False ,0.00225,0.00575,0.0023,0.004,1000,100,1,1,0
+dayBreak,NQ,Sell,3,False ,False ,M30,True ,3,False ,0.00225,0.00575,0.0023,0.0042,1000,100,1,1,0
+dayBreak,NQ,Sell,4,False ,False ,M30,True ,3,False ,0.00225,0.00575,0.0023,0.0044,1000,100,1,1,0
+,,,,,,,,,,,,,,,,,,
+dayBreak,NQ,Buy ,0,False ,False ,M30,True ,0,False ,-0.0009,0.0042,0.0027,1000,1000,100,1,1,0
+dayBreak,NQ,Sell,1,False ,False ,M30,True ,0,False ,0.00225,0.00575,0.0035,1000,1000,100,1,1,0
+,,,,,,,,,,,,,,,,,,
+dayBreak,NQ,Buy ,0,False ,False ,M30,True ,3,False ,-0.0009,0.0042,0.0027,0.006,1000,100,1,1,0
+dayBreak,NQ,Sell,0,False ,False ,M30,True ,3,False ,0.00225,0.00575,0.0023,0.004,1000,100,1,1,0
+,,,,,,,,,,,,,,,,,,
+dayBreak,TSLA,Buy ,1,False ,False ,M30,True ,0,False ,0.008,0.0145,0.01,1000,1000,100,1,1,0
+dayBreak,TSLA,Sell ,1,False ,False ,M30,True ,0,False ,0.008,0.014,0.01,1000,1000,100,200,200,0
+,,,,,,,,,,,,,,,,,,
+dayBreak,NQ,Buy ,0,False ,False ,M30,True ,0,False ,-0.0009,0.0042,0.0027,1000,1000,100,1,1,0
+dayBreak,NQ,Sell,1,False ,False ,M30,True ,0,False ,0.00225,0.00575,0.0035,1000,1000,100,1,1,0
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+dayBreak,NQ,Buy ,0,False ,False ,M30,True ,0,True ,-0.0009,0.0042,0.0027,1000,1000,100,1,1,0
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+dayBreak,NQ,Buy ,0,False ,False ,M30,True ,3,False ,-0.0009,0.0042,0.0027,0.006,1000,100,1,1,0
+dayBreak,NQ,Sell,0,False ,False ,M30,True ,3,False ,0.00225,0.00575,0.0023,0.004,1000,100,1,1,0
+,,,,,,,,,,,,,,,,,,
+dayBreakManual,NQ,Buy ,1,False ,False ,M30,True ,0,True ,-0.001,0.006,50,21404,21259,100,1,1,0
+dayBreakManual,NQ,Sell ,1,False ,False ,M30,True ,0,True ,0.001,0.7,50,21581,21779,100,1,1,0
+,,,,,,,,,,,,,,,,,,
+manual,NQ,Buy ,1,True ,True ,M30,True ,0,True ,-0.001,0.006,50,21404,21259,100,1,1,0
+manual,NQ,Sell ,1,True ,True ,M30,True ,0,True ,0.001,0.7,50,21581,21779,100,1,1,0

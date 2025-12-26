@@ -1,0 +1,43 @@
+
+1、下单之后首先回调的函数是OpenOrder，状态为Status: PreSubmitted表示柜台接受到委托
+2、OrderStatus，Status: PreSubmitted, Filled: 0, Remaining: 100, AvgFillPrice: 0, LastFillPrice: 0
+3、ExecDetails，execution.shares = 100 表示已经成交的量
+4、OpenOrder，Status: Filled表示全部成交
+5、OrderStatus， Status: Filled, Filled: 100, Remaining: 0, AvgFillPrice: 185.16, LastFillPrice: 185.16 表示已成交量，剩余未成交量，平均成交价格，最后一笔成交价格
+
+6、OpenOrder，Status: Filled表示全部成交 第四项重新发送
+7、OrderStatus， Status: Filled, Filled: 100, Remaining: 0, AvgFillPrice: 185.16, LastFillPrice: 185.16 第5项重新发送
+
+
+------------------------------------------------- 委托部分 ------------------------------------------------
+OpenOrder. PermId: 685508120, ClientId: 0, OrderId: 345, Account: U6944938, Symbol: TSLA, SecType: STK, Exchange: SMART:, Action: SELL, OrderType:LMT, TotalQty: 200, CashQty: 0, LmtPrice: 191.52, AuxPrice: 0, Status: PreSubmitted, MinTradeQty: 0, MinCompeteSize: 100, CompeteAgainstBestOffset: 0.02, MidOffsetAtWhole: 0, MidOffsetAtHalf: 0
+
+OrderStatus. Id: 345, Status: PreSubmitted, Filled: 0, Remaining: 200, AvgFillPrice: 0, PermId: 685508120, LastFillPrice: 0, ClientId: 0, WhyHeld: , MktCapPrice: 0
+AvgFillPrice: 0, LastFillPrice: 0           ------ 下单200股
+
+OpenOrder. PermId: 685508120, ClientId: 0, OrderId: 345, Account: U6944938, Symbol: TSLA, SecType: STK, Exchange: SMART:, Action: SELL, OrderType:LMT, TotalQty: 200, CashQty: 0, LmtPrice: 191.52, AuxPrice: 0, Status: PreSubmitted, MinTradeQty: 0, MinCompeteSize: 100, CompeteAgainstBestOffset: 0.02, MidOffsetAtWhole: 0, MidOffsetAtHalf: 0
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+OrderStatus. Id: 345, Status: PreSubmitted, Filled: 100, Remaining: 100, AvgFillPrice: 192.16, PermId: 685508120, LastFillPrice: 192.16, ClientId: 0, WhyHeld: , MktCapPrice: 0
+AvgFillPrice: 192.16, LastFillPrice: 192.16  ----- 已成交100股 未成交100股 当前持仓平均为192.16 最近一笔成交价格为192.16
+
+OpenOrder. PermId: 685508120, ClientId: 0, OrderId: 345, Account: U6944938, Symbol: TSLA, SecType: STK, Exchange: SMART:, Action: SELL, OrderType:LMT, TotalQty: 200, CashQty: 0, LmtPrice: 191.52, AuxPrice: 0, Status: Filled, MinTradeQty: 0, MinCompeteSize: 100, CompeteAgainstBestOffset: 0.02, MidOffsetAtWhole: 0, MidOffsetAtHalf: 0
+
+OrderStatus. Id: 345, Status: Filled, Filled: 200, Remaining: 0, AvgFillPrice: 192.17, PermId: 685508120, LastFillPrice: 192.18, ClientId: 0, WhyHeld: , MktCapPrice: 0
+AvgFillPrice: 192.17, LastFillPrice: 192.18  ----- 已成交200股 未成交0股 当前持仓平均为192.17 最近一笔成交价格为192.18 
+
+总结：下单200股 分两笔成交 第一笔成交100股 成交价是192.16 第二笔成交100股 成交价是192.18，因此200股的持仓成本是192.17
+
+[2024-06-26 10:29:23.000] [warning] deal vol = 100.0, order status = SomeDealed
+[2024-06-26 10:29:23.002] [warning] deal vol = 100.0, order status = AllDealed
+
+OpenOrder. PermId: 685508120, ClientId: 0, OrderId: 345, Account: U6944938, Symbol: TSLA, SecType: STK, Exchange: SMART:, Action: SELL, OrderType:LMT, TotalQty: 200, CashQty: 0, LmtPrice: 191.52, AuxPrice: 0, Status: Filled, MinTradeQty: 0, MinCompeteSize: 100, CompeteAgainstBestOffset: 0.02, MidOffsetAtWhole: 0, MidOffsetAtHalf: 0
+
+OrderStatus. Id: 345, Status: Filled, Filled: 200, Remaining: 0, AvgFillPrice: 192.17, PermId: 685508120, LastFillPrice: 192.18, ClientId: 0, WhyHeld: , MktCapPrice: 0
+AvgFillPrice: 192.17, LastFillPrice: 192.18  ----- 重复发送
+
+OpenOrder. PermId: 685508120, ClientId: 0, OrderId: 345, Account: U6944938, Symbol: TSLA, SecType: STK, Exchange: SMART:, Action: SELL, OrderType:LMT, TotalQty: 200, CashQty: 0, LmtPrice: 191.52, AuxPrice: 0, Status: Filled, MinTradeQty: 0, MinCompeteSize: 100, CompeteAgainstBestOffset: 0.02, MidOffsetAtWhole: 0, MidOffsetAtHalf: 0
+
+OrderStatus. Id: 345, Status: Filled, Filled: 200, Remaining: 0, AvgFillPrice: 192.17, PermId: 685508120, LastFillPrice: 192.18, ClientId: 0, WhyHeld: , MktCapPrice: 0
+AvgFillPrice: 192.17, LastFillPrice: 192.18  ----- 重复发送

@@ -1,0 +1,8 @@
+{
+  "connId": 4,
+  "gatewayIp": "127.0.0.1",
+  "gatewayPort": 4001,
+  "setupType": "RealTrader"
+
+}
+
