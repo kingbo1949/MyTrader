@@ -1,19 +1,7 @@
 ﻿#pragma once
 
-#ifdef WIN32
+#include "Factory_IBGlobalShare_Export.h"
 
-#ifdef FACTORY_IBGLOBALSHARE_EXPORTS
-#define FACTORY_IBGLOBALSHARE_API __declspec(dllexport)
-#else
-#define FACTORY_IBGLOBALSHARE_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_IBGLOBALSHARE_API 
-
-#endif // WIN32
 
 
 #include <base_struc.h>
@@ -36,15 +24,8 @@ typedef void(*PFunc_Print)(LogLevel logLevel, const std::string& str);
 
 
 
-#ifndef WIN32
 
-#include "tscns.h"
-extern TSCNS g_tn;
 
-extern "C"
-{
-
-#endif // !WIN32
 
 	FACTORY_IBGLOBALSHARE_API MyThreadPoolPtr					MakeAndGet_MyThreadPool();
 
@@ -61,28 +42,19 @@ extern "C"
 	FACTORY_IBGLOBALSHARE_API void								DefaultLogFunc(LogLevel logLevel, const std::string& str);
 
 
-	class FACTORY_IBGLOBALSHARE_API  							CTransToStr;
+	class   							CTransToStr;
 
-	class FACTORY_IBGLOBALSHARE_API  							CTrans;
+	class   							CTrans;
 
-	class FACTORY_IBGLOBALSHARE_API  							CReverse;
+	class   							CReverse;
 
-	class FACTORY_IBGLOBALSHARE_API								CHighFrequencyGlobalFunc;
+	class 								CHighFrequencyGlobalFunc;
 
-	class FACTORY_IBGLOBALSHARE_API								CTransDataToStr;
+	class 								CTransDataToStr;
 
-	class FACTORY_IBGLOBALSHARE_API								CGetRecordNo;
-
-
+	class 								CGetRecordNo;
 
 
-
-
-
-
-#ifndef WIN32
-}
-#endif // !WIN32
 
 
 

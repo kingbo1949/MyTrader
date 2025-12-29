@@ -19,24 +19,12 @@ FACTORY_IBGLOBALSHARE_API MyThreadPoolPtr MakeAndGet_MyThreadPool()
 }
 
 
-#ifndef WIN32
-TSCNS g_tn;
-
-#endif // !WIN32
 
 
 CurrentTimePtr	g_pCurrentTime = nullptr;
 CurrentTimeType g_currentTimeType = CurrentTimeType::For_Real;
 FACTORY_IBGLOBALSHARE_API void Make_CurrentTime(CurrentTimeType currentTimeType, MicroSecond_T microSecond)
 {
-#ifndef WIN32
-	// 初始化TSCNS
-	g_tn.init();
-	std::this_thread::sleep_for(std::chrono::seconds(1));
-	g_tn.calibrate();
-
-#endif // !WIN32
-
 	g_currentTimeType = currentTimeType;
 
 	if (g_pCurrentTime) return;

@@ -25,8 +25,8 @@ public:
 	virtual void			SetMatches(const KlinePlotSuit& klinePlotSuit) override final { ; };
 
 	// 得到坐标系
-	virtual QCPAxisQPtr		GetX() = 0;
-	virtual QCPAxisQPtr		GetY() = 0;
+	virtual QCPAxisQPtr		GetX() override = 0 ;
+	virtual QCPAxisQPtr		GetY() override = 0;
 
 
 

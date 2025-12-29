@@ -7,7 +7,16 @@
       "binaryDir": "${sourceDir}/cmake-build-macos",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_PREFIX_PATH": "$env{QtRoot}"
+        "CMAKE_PREFIX_PATH": "$env{QtRoot}",
+        "BERKELEYDB_ROOT": "/Users/fantang/local/berkeleyDb.6.2",
+        "BOOST_ROOT": "/Users/fantang/local/boost.1.90.0",
+        "ICE_ROOT": "/Users/fantang/local/ice.3.7.9",
+        "JSONCPP_ROOT": "/Users/fantang/local/jsoncpp.1.9.5",
+        "SPDLOG_ROOT": "/Users/fantang/local/spdlog",
+        "CONCURRENTQUEUE_ROOT": "/Users/fantang/local/concurrentqueue"
+
+
+
       }
     },
     {

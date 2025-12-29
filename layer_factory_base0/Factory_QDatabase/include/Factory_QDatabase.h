@@ -1,20 +1,5 @@
 ﻿#pragma once
-
-
-#ifdef WIN32
-
-#ifdef FACTORY_QDATABASE_EXPORTS
-#define FACTORY_QDATABASE_API __declspec(dllexport)
-#else
-#define FACTORY_QDATABASE_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_QDATABASE_API 
-
-#endif // WIN32
+#include "Factory_QDatabase_Export.h"
 
 
 // 模块功能：
@@ -30,11 +15,6 @@
 #include "MarketDepth.h"
 #include "CheckTrend.h"
 
-#ifndef WIN32
-
-extern "C"
-{
-#endif // WIN32
 
 	FACTORY_QDATABASE_API MyQDatabasePtr			MakeAndGet_QDatabase();
 	FACTORY_QDATABASE_API void						ReleaseQDatabase();
@@ -60,10 +40,5 @@ extern "C"
 
 
 
-
-
-#ifndef WIN32
-}
-#endif // WIN32
 
 

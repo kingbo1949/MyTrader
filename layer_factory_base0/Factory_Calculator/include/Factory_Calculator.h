@@ -1,19 +1,5 @@
 ﻿#pragma once
-
-#ifdef WIN32
-
-#ifdef FACTORY_CALCULATOR_EXPORTS
-#define FACTORY_CALCULATOR_API __declspec(dllexport)
-#else
-#define FACTORY_CALCULATOR_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_CALCULATOR_API 
-
-#endif // WIN32
+#include "Factory_Calculator_Export.h"
 
 
 #include "Calculator_Macd.h"
@@ -24,13 +10,6 @@
 #include "Container_MacdDiv.h"
 #include "Container_Average.h"
 
-#ifndef WIN32
-
-
-extern "C"
-{
-
-#endif // !WIN32
 
 	FACTORY_CALCULATOR_API Calculator_AveragePtr	Make_Calculator_Ma();
 	FACTORY_CALCULATOR_API Calculator_MacdPtr		Make_Calculator_Macd();
@@ -43,9 +22,5 @@ extern "C"
 	FACTORY_CALCULATOR_API Container_AveragePtr		Make_Container_Ema();
 
 
-
-#ifndef WIN32
-}
-#endif // !WIN32
 
 

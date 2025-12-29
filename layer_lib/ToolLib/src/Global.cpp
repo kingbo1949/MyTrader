@@ -16,39 +16,9 @@ using namespace boost::algorithm;
 
 
 
-//#include <boost/filesystem.hpp>
-//using namespace boost::filesystem;
-
-
-
 #ifdef _WIN32
 
 #include <windows.h>
-// windows编译需要
-#ifdef _DEBUG
-#define CON_PRINTF DebugOutput
-#else
-#define CON_PRINTF printf
-#endif
-#define MY_VSNPRINTF(buff,len,format,argptr)    _vsnprintf_s((buff),(len),(len-1),(format),(argptr))
-#define MY_VPRINTF       _vscprintf
-#else
-// linux需要
-#define CON_PRINTF printf
-#define MY_VSNPRINTF    vsnprintf
-#define MY_VPRINTF      vprintf
-#endif
-
-#ifndef _WIN32
-// linux
-typedef unsigned int UINT;
-typedef unsigned long ULONG;
-typedef char _TCHAR;
-#define ZeroMemory(destination,length) memset((destination),0,(length))
-#define _I64_MAX 9223372036854775807
-#define _atoi64 atoll
-
-
 #endif
 
 
@@ -82,10 +52,10 @@ std::string CGlobal::GetTimeStr(time_t sencondTime)
 	struct tm localTime = {};
 
 	// 获取本地时间（考虑夏令时）
-#ifdef WIN32
+#ifdef _WIN32
 	localtime_s(&localTime, &sencondTime); // Windows 使用 localtime_s
 #else
-	localtime_r(&timestamp, &localTime); // Linux/macOS 使用 localtime_r
+	localtime_r(&sencondTime, &localTime);// Linux/macOS 使用 localtime_r
 #endif
 
 	// 格式化时间为 YYYYMMDD hh:mm:ss
@@ -138,10 +108,16 @@ time_t CGlobal::GetTickTimeByStr(const std::string& timeStr)
 time_t CGlobal::QGetDayTime(time_t timeSecond)
 {
 	std::tm localTime{};
+
+#if defined(_WIN32)
 	if (localtime_s(&localTime, &timeSecond) != 0)
-	{ // 安全版本
 		throw std::runtime_error("Failed to get local time");
-	}
+#else
+	if (localtime_r(&timeSecond, &localTime) == nullptr)
+		throw std::runtime_error("Failed to get local time");
+#endif
+
+
 	// 将时间设置为当日零点
 	localTime.tm_hour = 0;
 	localTime.tm_min = 0;
@@ -166,42 +142,52 @@ bool CGlobal::MyLocalTime(const time_t* pTime, struct tm* pTm)
 	return  pTm->tm_mday >= 1 && pTm->tm_mday <= 31;
 
 }
-
 int CGlobal::SafePrintf(char* buff, int buffLength, const char* format, ...)
 {
-	// windows
-	int listCount = 0;
-	va_list argList;
-	if (!buff) return 0;
+	if (!buff || buffLength <= 0 || !format) return 0;
 
-	va_start(argList, format);
+	va_list args;
+	va_start(args, format);
 
-	// 测试缓冲区长度
-#ifdef _WIN32
-	int  str_count = MY_VPRINTF(format, argList);
-	if (buffLength <= str_count)
-	{
-		// 缓冲区不够长，全部清掉返回
-		ZeroMemory(buff, buffLength);
+	// 先拷贝一份参数，用于“预计算长度”
+	va_list args_copy;
+	va_copy(args_copy, args);
+
+	int required = 0;
+
+#if defined(_WIN32)
+	required = _vscprintf(format, args_copy);  // 不含 '\0'
+#else
+	required = vsnprintf(nullptr, 0, format, args_copy); // 不含 '\0'
+#endif
+
+	va_end(args_copy);
+
+	if (required < 0 || required >= buffLength) {
+		// 按你原 Windows 语义：不够就清空并返回 0
+		std::memset(buff, 0, buffLength);
+		va_end(args);
 		return 0;
 	}
-	listCount += MY_VSNPRINTF(buff + listCount, buffLength - listCount, format, argList);
 
-	if (listCount > (buffLength - 1))
-	{
-		listCount = buffLength - 1;
+#if defined(_WIN32)
+	int written = vsnprintf_s(buff, buffLength, _TRUNCATE, format, args);
+#else
+	int written = vsnprintf(buff, buffLength, format, args);
+#endif
+
+	va_end(args);
+
+	if (written < 0) {
+		std::memset(buff, 0, buffLength);
+		return 0;
 	}
 
-	*(buff + listCount) = '\0';
-
-#else
-	vsprintf(buff, format, argList);
-#endif
-	va_end(argList);
-
-	return listCount;
-
+	// 保证结尾（vsnprintf 已保证，但留着更稳）
+	buff[buffLength - 1] = '\0';
+	return written;
 }
+
 
 
 

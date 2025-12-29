@@ -40,6 +40,10 @@ target_compile_definitions(${TARGETNAME}
         PRIVATE
         FACTORY_QDATABASE_EXPORTS   # 注意是 PRIVATE
 )
+set_target_properties(${TARGETNAME} PROPERTIES
+        CXX_VISIBILITY_PRESET hidden
+        VISIBILITY_INLINES_HIDDEN YES
+)
 
 
 target_include_directories(${TARGETNAME}

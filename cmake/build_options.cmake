@@ -11,8 +11,23 @@ add_library(MyTrader::build_options ALIAS build_options)
 # 3) 工程统一编译标准与宏
 target_compile_features(build_options INTERFACE cxx_std_17)
 
-target_compile_definitions(build_options INTERFACE
-        WIN32_LEAN_AND_MEAN
-        ICE_CPP11_MAPPING
-)
+
+if(APPLE)
+    target_compile_definitions(build_options INTERFACE
+            ICE_CPP11_MAPPING
+    )
+
+    return()
+endif()
+
+if(WIN32)
+    target_compile_definitions(build_options INTERFACE
+            WIN32_LEAN_AND_MEAN
+            ICE_CPP11_MAPPING
+    )
+
+    return()
+endif()
+
+
 

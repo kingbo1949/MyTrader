@@ -1,8 +1,8 @@
 #pragma once
-
+#include "Factory_Log_Export.h"
 #include <string>
 #include <memory>
-class CToStr
+class FACTORY_LOG_API CToStr
 {
 public:
 	CToStr() {};

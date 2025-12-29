@@ -1,7 +1,8 @@
 #pragma once
+#include "Factory_Log_Export.h"
 #include "ToStr.h"
 #include <functional>
-class CToStr_FunctionObj : public CToStr
+class FACTORY_LOG_API CToStr_FunctionObj : public CToStr
 {
 public:
 	CToStr_FunctionObj(std::function<std::string()> fr);

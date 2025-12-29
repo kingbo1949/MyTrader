@@ -19,7 +19,7 @@ public:
 	virtual ~CMacdDivergenceItem() { ; };
 
 	// 鼠标移动
-	virtual void			MouseMoveEvent(QMouseEvent* event, const KlinePlotSuit& klinePlotSuit) { ; };
+	virtual void			MouseMoveEvent(QMouseEvent* event, const KlinePlotSuit& klinePlotSuit) override { ; };
 
 	// 坐标变化事件
 	virtual void			AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit) override;

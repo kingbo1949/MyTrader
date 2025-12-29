@@ -26,7 +26,7 @@
 #ifndef QCUSTOMPLOT_H
 #define QCUSTOMPLOT_H
 
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/qglobal.h>
+#include <QtCore/qglobal.h>
 
 // some Qt version/configuration dependent macros to include or exclude certain code paths:
 #ifdef QCUSTOMPLOT_USE_OPENGL
@@ -47,26 +47,26 @@
 #  endif
 #endif
 
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QObject>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QPointer>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QSharedPointer>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QTimer>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtGui/QPainter>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtGui/QPainterPath>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtGui/QPaintEvent>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtGui/QMouseEvent>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtGui/QWheelEvent>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtGui/QPixmap>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QVector>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QString>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QDateTime>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QMultiMap>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QFlags>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QDebug>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QStack>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QCache>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QMargins>
-#include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/qmath.h>
+#include <QtCore/QObject>
+#include <QtCore/QPointer>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QTimer>
+#include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QWheelEvent>
+#include <QtGui/QPixmap>
+#include <QtCore/QVector>
+#include <QtCore/QString>
+#include <QtCore/QDateTime>
+#include <QtCore/QMultiMap>
+#include <QtCore/QFlags>
+#include <QtCore/QDebug>
+#include <QtCore/QStack>
+#include <QtCore/QCache>
+#include <QtCore/QMargins>
+#include <qmath.h>
 #include <limits>
 #include <algorithm>
 #ifdef QCP_OPENGL_FBO
@@ -92,15 +92,15 @@
 #  include <QtGui/QPrinter>
 #  include <QtGui/QPrintEngine>
 #else
-#  include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QtNumeric>
-#  include <C:/Qt/6.8.2/msvc2022_64/include/QtWidgets/QWidget>
-#  include <C:/Qt/6.8.2/msvc2022_64/include/QtPrintSupport/QtPrintSupport>
+#  include <QtNumeric>
+#  include <QtWidgets/QWidget>
+#  include <QtPrintSupport/QtPrintSupport>
 #endif
 #if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
-#  include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QElapsedTimer>
+#  include <QtCore/QElapsedTimer>
 #endif
 # if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
-#  include <C:/Qt/6.8.2/msvc2022_64/include/QtCore/QTimeZone>
+#  include <QtCore/QTimeZone>
 #endif
 
 class QCPPainter;

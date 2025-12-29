@@ -1,19 +1,7 @@
 ﻿#pragma once
 
-#ifdef WIN32
+#include "Factory_HashEnv_Export.h"
 
-#ifdef FACTORY_HASHENV_EXPORTS
-#define FACTORY_HASHENV_API __declspec(dllexport)
-#else
-#define FACTORY_HASHENV_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_HASHENV_API 
-
-#endif // WIN32
 
 
 #include <base_trade.h>

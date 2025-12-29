@@ -38,7 +38,7 @@ protected:
 	std::map<Tick_T, IBAvgValuePtr>	m_mapAvgValue;
 
 	// 把数据库查询做成map
-	virtual bool			MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLinePtrs& klines, int beginPos) = 0;
+	virtual bool			MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLinePtrs& klines, int beginPos) override = 0;
 
 	void					SetKLines(Time_Type timeType, const IBKLinePtrs& klines, int maCircle);
 	void					UpdateKlines(Time_Type timeType, const IBKLinePtrs& klines, int maCircle, int addcount, int chgcount);

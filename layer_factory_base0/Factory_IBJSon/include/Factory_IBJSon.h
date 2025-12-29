@@ -1,19 +1,5 @@
 #pragma once
-
-#ifdef WIN32
-
-#ifdef FACTORY_IBJSON_EXPORTS
-#define FACTORY_IBJSON_API __declspec(dllexport)
-#else
-#define FACTORY_IBJSON_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_IBJSON_API 
-
-#endif // WIN32
+#include "Factory_IBJSon_Export.h"
 
 
 #include "JSon_Contracts.h"
@@ -27,11 +13,6 @@
 #include "JSon_LastOrder.h"
 #include "JSon_PricePair.h"
 
-#ifndef WIN32
-extern "C"
-{
-
-#endif // !WIN32
 
 
 	FACTORY_IBJSON_API JSon_ContractsPtr				MakeAndGet_JSonContracts();
@@ -54,10 +35,6 @@ extern "C"
 
 	FACTORY_IBJSON_API JSon_LastOrderPtr				MakeAndGet_JSonLastOrder();
 	
-
-#ifndef WIN32
-}
-#endif // !WIN32
 
 
 

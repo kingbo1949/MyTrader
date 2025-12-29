@@ -26,9 +26,9 @@ public:
 
 	virtual QVariant				data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-	virtual QModelIndex				nextBidJump(int beginRow) { return index(0, 0); };
+	virtual QModelIndex				nextBidJump(int beginRow) override final { return index(0, 0); } ;
 
-	virtual QModelIndex				nextAskJump(int beginRow) { return index(0, 0); };
+	virtual QModelIndex				nextAskJump(int beginRow) override final { return index(0, 0); };
 
 
 protected:

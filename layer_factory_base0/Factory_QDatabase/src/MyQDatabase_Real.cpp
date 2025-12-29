@@ -21,9 +21,14 @@ void CMyQDatabase_Real::UpdateTicks(IBTickPtr tick)
 
 IBTickPtr CMyQDatabase_Real::GetLastUpdateTick(int& updateCount, time_t& recentUpdateSecnd)
 {
-	ITick recentUpdateTick = MakeAndGet_IceProxy()->GetQDatabasePrx()->GetLastUpdateTick(updateCount, recentUpdateSecnd);
-	if (updateCount == 0) return nullptr;
+	Ice::Long recentUpdateSecndIce = 0;  // out 参数，初始化为 0 即可
 
+	ITick recentUpdateTick =
+		MakeAndGet_IceProxy()->GetQDatabasePrx()->GetLastUpdateTick(updateCount, recentUpdateSecndIce);
+
+	recentUpdateSecnd = static_cast<time_t>(recentUpdateSecndIce);
+
+	if (updateCount == 0) return nullptr;
 	return CIceTransfor::TransTickIceToMy(recentUpdateTick);
 
 }

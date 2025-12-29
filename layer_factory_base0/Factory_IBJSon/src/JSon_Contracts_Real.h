@@ -6,7 +6,7 @@ public:
 	CJSon_Contracts_Real();
 	virtual ~CJSon_Contracts_Real();
 
-	virtual void							Save_Contracts(const IbContractPtrs& contracts) ;
+	virtual void							Save_Contracts(const IbContractPtrs& contracts) override final;
 
 	virtual void							Load_Contracts(IbContractPtrs& contracts, SelectType selectType) override final;
 

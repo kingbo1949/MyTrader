@@ -188,12 +188,15 @@ set_target_properties(${TARGETNAME} PROPERTIES
 set(run_dir "${CMAKE_BINARY_DIR}/bin/run/$<TARGET_FILE_BASE_NAME:${TARGETNAME}>")
 
 # 把第三方依赖拷贝到工作目录
-add_custom_command(TARGET ${TARGETNAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND}
-        "-Ddlls=$<JOIN:$<TARGET_RUNTIME_DLLS:${TARGETNAME}>,;>"
-        "-Ddest_dir=${run_dir}"
-        -P "${CMAKE_SOURCE_DIR}/cmake/copy_thirdparty_dlls.cmake"
-        VERBATIM
-)
+if (WIN32)
+    add_custom_command(TARGET ${TARGETNAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND}
+            "-Ddlls=$<JOIN:$<TARGET_RUNTIME_DLLS:${TARGETNAME}>,;>"
+            "-Ddest_dir=${run_dir}"
+            -P "${CMAKE_SOURCE_DIR}/cmake/copy_thirdparty_dlls.cmake"
+            VERBATIM
+    )
+
+endif ()
 
 

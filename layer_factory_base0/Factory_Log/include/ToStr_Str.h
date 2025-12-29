@@ -1,6 +1,7 @@
 #pragma once
+#include "Factory_Log_Export.h"
 #include "ToStr.h"
-class CToStr_Str : public CToStr
+class FACTORY_LOG_API CToStr_Str : public CToStr
 {
 public:
 	CToStr_Str(const std::string& msg)

@@ -23,6 +23,10 @@ target_compile_definitions(${TARGETNAME}
         PRIVATE
         FACTORY_UNIFYINTERFACE_EXPORTS   # 注意是 PRIVATE
 )
+set_target_properties(${TARGETNAME} PROPERTIES
+        CXX_VISIBILITY_PRESET hidden
+        VISIBILITY_INLINES_HIDDEN YES
+)
 
 
 target_include_directories(${TARGETNAME}
@@ -31,21 +35,28 @@ target_include_directories(${TARGETNAME}
             $<INSTALL_INTERFACE: include>
 
 )
-target_link_libraries(${TARGETNAME}
-        PUBLIC
-        IBSysDefine
-        PRIVATE
-        IBSourceLib
-        Factory_Simulator
-        Factory_Topics
-        Factory_Callback
-        Factory_IBGlobalShare
-        ToolLib
-        Factory_Log
-        Factory_HashEnv
-        Factory_IBJSon
-        Factory_QDatabase
-        Factory_TShareEnv
-        Intelrdfpmath::intelrdfpmath
 
-)
+if(WIN32)
+    target_link_libraries(${TARGETNAME}
+            PUBLIC
+            IBSysDefine
+            PRIVATE
+            IBSourceLib
+            Factory_Simulator
+            Factory_Topics
+            Factory_Callback
+            Factory_IBGlobalShare
+            ToolLib
+            Factory_Log
+            Factory_HashEnv
+            Factory_IBJSon
+            Factory_QDatabase
+            Factory_TShareEnv
+            Intelrdfpmath::intelrdfpmath
+
+    )
+
+    return()
+endif()
+
+

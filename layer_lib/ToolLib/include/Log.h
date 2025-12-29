@@ -33,6 +33,8 @@ public:
 	// 把文本文件读到string
 	std::string			ReadFileToString(std::string fileName);
 
+	static std::string	vformat_string(const char* fmt, va_list args);
+
 
 
 
@@ -42,8 +44,6 @@ protected:
 
 	int					m_maxLogBuffLength;
 	char* m_logBuff;
-	int					m_maxDbgLen;
-	char* m_dbgOutputBuff;
 
 	std::mutex			m_mutex;
 

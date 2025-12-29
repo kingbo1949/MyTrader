@@ -151,7 +151,7 @@ Json::Value CJSon_LastOrder_Real::MakeValue_CoverCounts_Item(StrategyIdHashId st
 {
 	Json::Value back;
 	back["strategyIdHashId"] = Get_StrategyParamEnv()->Get_StrategyParam(strategyIdHashId)->key.ToStr();
-	back["count"] = count;
+	back["count"] = Json::UInt64(count);
 	return back;
 }
 

@@ -1,19 +1,6 @@
 ﻿#pragma once
+#include "Factory_TShareEnv_Export.h"
 
-#ifdef WIN32
-
-#ifdef FACTORY_TSHAREENV_EXPORTS
-#define FACTORY_TSHAREENV_API __declspec(dllexport)
-#else
-#define FACTORY_TSHAREENV_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_TSHAREENV_API 
-
-#endif // WIN32
 
 
 #include "db_ActiveAction.h"
@@ -23,10 +10,6 @@
 #include "db_LastOrder.h"
 #include "db_PricePair.h"
 
-#ifndef WIN32
-extern "C"
-{
-#endif // !WIN32
 
 	FACTORY_TSHAREENV_API db_ActiveActionPtr				MakeAndGet_DbActiveAction();
 
@@ -57,11 +40,6 @@ extern "C"
 	
 
 	
-
-
-#ifndef WIN32
-}
-#endif // !WIN32
 
 
 
