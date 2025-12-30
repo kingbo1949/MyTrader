@@ -6,7 +6,6 @@ add_subdirectory(Factory_Simulator)
 
 if(WIN32)
     add_subdirectory(Factory_UnifyInterface)
-    return()
 endif()
 
 
@@ -21,7 +20,6 @@ if(WIN32)
             Factory_Simulator
             Factory_UnifyInterface
     )
-    return()
 endif()
 
 if(APPLE)
@@ -30,7 +28,6 @@ if(APPLE)
             Factory_Callback
             Factory_Simulator
     )
-    return()
 endif()
 
 

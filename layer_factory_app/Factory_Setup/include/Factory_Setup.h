@@ -1,16 +1,6 @@
 ﻿#pragma once
 
-
-#ifdef WIN32
-
-#ifdef FACTORY_SETUP_EXPORTS
-#define FACTORY_SETUP_API __declspec(dllexport)
-#else
-#define FACTORY_SETUP_API __declspec(dllimport)
-#endif
-#else
-#define FACTORY_SETUP_API 
-#endif // WIN32
+#include "Factory_Setup_Export.h"
 
 
 
@@ -27,10 +17,6 @@ enum class CodeIdType
 };
 
 
-#ifndef WIN32
-extern "C"
-{
-#endif // !WIN32
 
 	FACTORY_SETUP_API void					Make_DaemonByTick(SetupType setupType);
 
@@ -55,6 +41,3 @@ extern "C"
 
 
 
-#ifndef WIN32
-}
-#endif // !WIN32

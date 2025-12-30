@@ -1,0 +1,16 @@
+﻿
+// 兼容 clang/gcc 的可见性属性
+#if defined(_WIN32) || defined(__CYGWIN__)
+  #if defined(FACTORY_STOPERATOR_EXPORTS)
+    #define FACTORY_STOPERATOR_API __declspec(dllexport)
+  #else
+    #define FACTORY_STOPERATOR_API __declspec(dllimport)
+  #endif
+#else
+  // macOS / clang / gcc
+  #if __GNUC__ >= 4
+    #define FACTORY_STOPERATOR_API __attribute__((visibility("default")))
+  #else
+    #define FACTORY_STOPERATOR_API
+  #endif
+#endif

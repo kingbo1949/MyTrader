@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // 兼容 clang/gcc 的可见性属性
 #if defined(_WIN32) || defined(__CYGWIN__)

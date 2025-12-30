@@ -1,28 +1,11 @@
 ﻿#pragma once
 
-#ifdef WIN32
+#include "Factory_UnifyInterface_Export.h"
 
-
-#ifdef FACTORY_UNIFYINTERFACE_EXPORTS
-#define FACTORY_UNIFYINTERFACE_API __declspec(dllexport)
-#else
-#define FACTORY_UNIFYINTERFACE_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_UNIFYINTERFACE_API 
-
-#endif // WIN32
 
 
 #include "IBApi.h"
 #include <base_struc.h>
-#ifndef WIN32
-extern "C"
-{
-#endif // !WIN32
 
 
 	FACTORY_UNIFYINTERFACE_API void				Set_Sys_Status(Thread_Status runOrStop);
@@ -46,6 +29,3 @@ extern "C"
 
 
 
-#ifndef WIN32
-}
-#endif // !WIN32

@@ -25,33 +25,23 @@ endfunction()
 
 # ---------------- Windows ----------------
 if(WIN32)
-    set(_boost_includes "${BOOST_ROOT}")
+    set(_boost_includes "${BOOST_ROOT}/include/boost-1_90")
 
-    # 1) system
-    _boost_import_static(Boost::system
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_system-vc142-mt-x64-1_70.lib"
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_system-vc142-mt-gd-x64-1_70.lib"
-    )
-    _boost_set_includes(Boost::system "${_boost_includes}")
-
-    # 2) filesystem
     _boost_import_static(Boost::filesystem
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_filesystem-vc142-mt-x64-1_70.lib"
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_filesystem-vc142-mt-gd-x64-1_70.lib"
+            "${BOOST_ROOT}/lib/libboost_filesystem-vc143-mt-x64-1_90.lib"
+            "${BOOST_ROOT}/lib/libboost_filesystem-vc143-mt-gd-x64-1_90.lib"
     )
     _boost_set_includes(Boost::filesystem "${_boost_includes}")
 
-    # 3) regex
     _boost_import_static(Boost::regex
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_regex-vc142-mt-x64-1_70.lib"
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_regex-vc142-mt-gd-x64-1_70.lib"
+            "${BOOST_ROOT}/lib/libboost_regex-vc143-mt-x64-1_90.lib"
+            "${BOOST_ROOT}/lib/libboost_regex-vc143-mt-gd-x64-1_90.lib"
     )
     _boost_set_includes(Boost::regex "${_boost_includes}")
 
-    # 4) locale
     _boost_import_static(Boost::locale
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_locale-vc142-mt-x64-1_70.lib"
-            "${BOOST_ROOT}/lib32-msvc-142/libboost_locale-vc142-mt-gd-x64-1_70.lib"
+            "${BOOST_ROOT}/lib/libboost_locale-vc143-mt-x64-1_90.lib"
+            "${BOOST_ROOT}/lib/libboost_locale-vc143-mt-gd-x64-1_90.lib"
     )
     _boost_set_includes(Boost::locale "${_boost_includes}")
 

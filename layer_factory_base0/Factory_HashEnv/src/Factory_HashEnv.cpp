@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Factory_HashEnv.h"
 
 #include "CodeIdHashEnv_Real.h"
@@ -49,7 +49,7 @@ StrategyParamHashEnvPtr Get_StrategyParamEnv()
 	return g_pStrategyParamHashEnv;
 }
 
-FACTORY_HASHENV_API StrategyIdHashId My_BKDR_Str_Hash(const char* str)
+StrategyIdHashId My_BKDR_Str_Hash(const char* str)
 {
 	unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
 	unsigned int hash = 0;

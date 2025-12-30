@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 
 // 兼容 clang/gcc 的可见性属性
 #if defined(_WIN32) || defined(__CYGWIN__)
-  #if defined(FACTORY_LOG_EXPORTS)
+  #if defined(FACTORY_QDATABASE_EXPORTS)
     #define FACTORY_QDATABASE_API __declspec(dllexport)
   #else
     #define FACTORY_QDATABASE_API __declspec(dllimport)

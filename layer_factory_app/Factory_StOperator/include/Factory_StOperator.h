@@ -1,19 +1,7 @@
 ﻿#pragma once
 
-#ifdef WIN32
+#include "Factory_StOperator_Export.h"
 
-#ifdef FACTORY_STOPERATOR_EXPORTS
-#define FACTORY_STOPERATOR_API __declspec(dllexport)
-#else
-#define FACTORY_STOPERATOR_API __declspec(dllimport)
-#endif
-
-
-#else
-
-#define FACTORY_STOPERATOR_API 
-
-#endif // WIN32
 
 
 #include <base_trade.h>
@@ -22,10 +10,6 @@
 
 #include "OpenPrice.h"
 #include <Factory_Calculator.h>
-#ifndef WIN32
-extern "C"
-{
-#endif // !WIN32
 
 	// 取得活跃的挂单
 	FACTORY_STOPERATOR_API OneOrderPtr			GetActiveOrder(StrategyIdHashId stHashId, StSubModule stSubModule);
@@ -52,12 +36,6 @@ extern "C"
 
 
 
-
-
-
-#ifndef WIN32
-}
-#endif // !WIN32
 
 
 
