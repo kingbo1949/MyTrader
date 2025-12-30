@@ -52,7 +52,7 @@ if(WIN32)
             Factory_IBJSon
             Factory_QDatabase
             Factory_TShareEnv
-            Intelrdfpmath::intelrdfpmath
+#            Intelrdfpmath::intelrdfpmath
 
     )
 

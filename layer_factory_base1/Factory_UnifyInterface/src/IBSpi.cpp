@@ -22,7 +22,7 @@
 #include <EClientSocket.h>
 #include <Utils.h>
 
-#include <IntelRDFPMathLib.h>
+// #include <IntelRDFPMathLib.h>
 
 
 #ifdef WIN32

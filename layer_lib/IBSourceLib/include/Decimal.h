@@ -1,7 +1,74 @@
-/* Copyright (C) 2021 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+﻿/* Copyright (C) 2021 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 #pragma once
+
+#ifndef TWS_API_CLIENT_DECIMAL_H
+#define TWS_API_CLIENT_DECIMAL_H
+
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
+// 使用 16 位精度
+typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<16>> Decimal;
+
+// 定义 UNSET 常量
+const Decimal UNSET_DECIMAL("1.7976931348623157E308");
+
+// 核心运算逻辑（去掉了判断，由 Boost 自动处理）
+inline Decimal add(Decimal d1, Decimal d2) { return d1 + d2; }
+inline Decimal sub(Decimal d1, Decimal d2) { return d1 - d2; }
+inline Decimal mul(Decimal d1, Decimal d2) { return d1 * d2; }
+inline Decimal div(Decimal d1, Decimal d2) { return (d2 == 0) ? Decimal(0) : (d1 / d2); }
+
+// 转换逻辑
+inline double decimalToDouble(Decimal d) { return d.convert_to<double>(); }
+inline Decimal doubleToDecimal(double d) { return Decimal(d); }
+
+inline Decimal stringToDecimal(std::string str) {
+    if (str.empty() || str == "2147483647" || str == "9223372036854775807" || str == "1.7976931348623157E308")
+        return UNSET_DECIMAL;
+    try { return Decimal(str); } catch (...) { return Decimal(0); }
+}
+
+inline std::string decimalToString(Decimal v) {
+    return (v == UNSET_DECIMAL) ? "" : v.str();
+}
+
+// 这个函数在原版中就很复杂，新版其实已经比原版简单了
+inline std::string decimalStringToDisplay(Decimal v) {
+    if (v == UNSET_DECIMAL) return "";
+    // 直接利用 Boost 的精度格式化功能
+    std::stringstream ss;
+    ss << std::setprecision(16) << std::noshowpoint << v;
+    return ss.str();
+}
+
+inline Decimal decimal_from_int(int x)
+{
+    // 直接利用 Boost 的构造函数将 int 转换为 Decimal
+    return Decimal(x);
+}
+
+inline int decimal_to_int(Decimal x)
+{
+    // 直接利用 Boost 的转换函数
+    // 如果 x 的值超过了 int 的表达范围，Boost 默认会抛出异常或根据配置处理
+    return x.convert_to<int>();
+}
+inline double decimal_To_double(Decimal decimal)
+{
+    // 直接利用 Boost 的转换函数将十进制高精度类型转为标准的 double (binary64)
+    // 这样做不再需要外部的 __bid64_to_binary64 函数，也不再需要处理 flags 标志位
+    return decimal.convert_to<double>();
+}
+
+#endif
+
+
+
+
+// 以下是原来IBKR提供的Decimal实现，使用了IntelRDFPMathLib，现在用自己的实现，使用boost把它换掉
+/*
 #ifndef TWS_API_CLIENT_DECIMAL_H
 #define TWS_API_CLIENT_DECIMAL_H
 
@@ -127,3 +194,4 @@ inline std::string decimalStringToDisplay(Decimal value) {
 }
 
 #endif
+*/

@@ -29,7 +29,13 @@ set(SRC_LIST
 
 add_library(${TARGETNAME} STATIC ${SRC_LIST})
 
-target_link_libraries(${TARGETNAME} PRIVATE MyTrader::build_options)
+target_link_libraries(${TARGETNAME}
+        PRIVATE
+        MyTrader::build_options
+        Boost::all
+)
+
+
 
 
 
