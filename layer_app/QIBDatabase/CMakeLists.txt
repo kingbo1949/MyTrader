@@ -82,6 +82,5 @@ if (WIN32)
             VERBATIM
     )
 
-    return()
 endif()
 

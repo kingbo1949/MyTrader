@@ -29,7 +29,7 @@ public:
 	virtual void						Init() override final;
 
 	// 设置初始参数
-	virtual void						SetTradeParams() = 0;
+	virtual void						SetTradeParams() override = 0;
 
 	// 行情触发
 	virtual void						OnRtnTick(CodeHashId codeHash, RoundAction openOrCover) override final;

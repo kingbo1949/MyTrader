@@ -328,7 +328,7 @@ void CIBSpi::updateAccountValue(const std::string& key, const std::string& val, 
 
 void CIBSpi::updatePortfolio(const Contract& contract, Decimal position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, const std::string& accountName)
 {
-	printf("UpdatePortfolio. %s, %s @ %s: Position: %g, MarketPrice: %g, MarketValue: %g, AverageCost: %g, UnrealizedPNL: %g, RealizedPNL: %g, AccountName: %s\n", (contract.symbol).c_str(), (contract.secType).c_str(), (contract.primaryExchange).c_str(), position, marketPrice, marketValue, averageCost, unrealizedPNL, realizedPNL, accountName.c_str());
+	printf("UpdatePortfolio. %s, %s @ %s: Position: %g, MarketPrice: %g, MarketValue: %g, AverageCost: %g, UnrealizedPNL: %g, RealizedPNL: %g, AccountName: %s\n", (contract.symbol).c_str(), (contract.secType).c_str(), (contract.primaryExchange).c_str(), decimal_To_double(position), marketPrice, marketValue, averageCost, unrealizedPNL, realizedPNL, accountName.c_str());
 }
 
 void CIBSpi::updateAccountTime(const std::string& timeStamp)
@@ -485,7 +485,7 @@ void CIBSpi::updateMktDepth(TickerId id, int position, int operation, int side, 
 
 void CIBSpi::updateMktDepthL2(TickerId id, int position, const std::string& marketMaker, int operation, int side, double price, Decimal size, bool isSmartDepth)
 {
-	printf("UpdateMarketDepthL2. %ld - Position: %d, Operation: %d, Side: %d, Price: %g, Size: %d, isSmartDepth: %d\n", id, position, operation, side, price, size, isSmartDepth);
+	printf("UpdateMarketDepthL2. %ld - Position: %d, Operation: %d, Side: %d, Price: %g, Size: %d, isSmartDepth: %d\n", id, position, operation, side, price, decimal_to_int(size), isSmartDepth);
 }
 
 void CIBSpi::updateNewsBulletin(int msgId, int msgType, const std::string& newsMessage, const std::string& originExch)
@@ -566,7 +566,7 @@ void CIBSpi::scannerDataEnd(int reqId)
 
 void CIBSpi::realtimeBar(TickerId reqId, long time, double open, double high, double low, double close, Decimal volume, Decimal wap, int count)
 {
-	printf("RealTimeBars. %ld - Time: %ld, Open: %g, High: %g, Low: %g, Close: %g, Volume: %ld, Count: %d, WAP: %g\n", reqId, time, open, high, low, close, volume, count, wap);
+	printf("RealTimeBars. %ld - Time: %ld, Open: %g, High: %g, Low: %g, Close: %g, Volume: %ld, Count: %d, WAP: %g\n", reqId, time, open, high, low, close, (long)decimal_to_int(volume), count, decimal_To_double(wap));
 }
 
 void CIBSpi::currentTime(long time)
@@ -601,7 +601,7 @@ void CIBSpi::commissionReport(const CommissionReport& commissionReport)
 
 void CIBSpi::position(const std::string& account, const Contract& contract, Decimal position, double avgCost)
 {
-	printf("Position. %s - Symbol: %s, SecType: %s, Currency: %s, Position: %g, Avg Cost: %g\n", account.c_str(), contract.symbol.c_str(), contract.secType.c_str(), contract.currency.c_str(), position, avgCost);
+	printf("Position. %s - Symbol: %s, SecType: %s, Currency: %s, Position: %g, Avg Cost: %g\n", account.c_str(), contract.symbol.c_str(), contract.secType.c_str(), contract.currency.c_str(), decimal_To_double(position), avgCost);
 }
 
 void CIBSpi::positionEnd()
@@ -661,7 +661,7 @@ void CIBSpi::connectAck()
 
 void CIBSpi::positionMulti(int reqId, const std::string& account, const std::string& modelCode, const Contract& contract, Decimal pos, double avgCost)
 {
-	printf("Position Multi. Request: %d, Account: %s, ModelCode: %s, Symbol: %s, SecType: %s, Currency: %s, Position: %g, Avg Cost: %g\n", reqId, account.c_str(), modelCode.c_str(), contract.symbol.c_str(), contract.secType.c_str(), contract.currency.c_str(), pos, avgCost);
+	printf("Position Multi. Request: %d, Account: %s, ModelCode: %s, Symbol: %s, SecType: %s, Currency: %s, Position: %g, Avg Cost: %g\n", reqId, account.c_str(), modelCode.c_str(), contract.symbol.c_str(), contract.secType.c_str(), contract.currency.c_str(), decimal_To_double(pos), avgCost);
 }
 
 
@@ -739,7 +739,7 @@ void CIBSpi::symbolSamples(int reqId, const std::vector<ContractDescription>& co
 
 void CIBSpi::mktDepthExchanges(const std::vector<DepthMktDataDescription>& depthMktDataDescriptions)
 {
-	printf("Mkt Depth Exchanges (%llu):\n", depthMktDataDescriptions.size());
+	printf("Mkt Depth Exchanges (%zu):\n", depthMktDataDescriptions.size());
 
 	for (unsigned int i = 0; i < depthMktDataDescriptions.size(); i++) {
 		printf("Depth Mkt Data Description [%d] - exchange: %s secType: %s listingExch: %s serviceDataType: %s aggGroup: %s\n", i,
@@ -760,7 +760,7 @@ void CIBSpi::tickNews(int tickerId, time_t timeStamp, const std::string& provide
 
 void CIBSpi::smartComponents(int reqId, const SmartComponentsMap& theMap)
 {
-	printf("Smart components: (%llu):\n", theMap.size());
+	printf("Smart components: (%zu):\n", theMap.size());
 
 	for (SmartComponentsMap::const_iterator i = theMap.begin(); i != theMap.end(); i++) {
 		printf(" bit number: %d exchange: %s exchange letter: %c\n", i->first, std::get<0>(i->second).c_str(), std::get<1>(i->second));
@@ -837,10 +837,10 @@ void CIBSpi::headTimestamp(int reqId, const std::string& headTimestamp)
 
 void CIBSpi::histogramData(int reqId, const HistogramDataVector& data)
 {
-	printf("Histogram. ReqId: %d, data length: %llu\n", reqId, data.size());
+	printf("Histogram. ReqId: %d, data length: %zu\n", reqId, data.size());
 
 	for (auto item : data) {
-		printf("\t price: %f, size: %lld\n", item.price, item.size);
+		printf("\t price: %f, size: %lld\n", item.price, (long long)decimal_to_int(item.size));
 	}
 
 }
@@ -848,7 +848,7 @@ void CIBSpi::histogramData(int reqId, const HistogramDataVector& data)
 
 void CIBSpi::historicalDataUpdate(TickerId reqId, const Bar& bar)
 {
-	printf("HistoricalDataUpdate. ReqId: %ld - Date: %s, Open: %g, High: %g, Low: %g, Close: %g, Volume: %lld, Count: %d, WAP: %g\n", reqId, bar.time.c_str(), bar.open, bar.high, bar.low, bar.close, bar.volume, bar.count, bar.wap);
+	printf("HistoricalDataUpdate. ReqId: %ld - Date: %s, Open: %g, High: %g, Low: %g, Close: %g, Volume: %lld, Count: %d, WAP: %g\n", reqId, bar.time.c_str(), bar.open, bar.high, bar.low, bar.close, (long long)decimal_to_int(bar.volume), bar.count, decimal_To_double(bar.wap));
 }
 
 
@@ -882,7 +882,7 @@ void CIBSpi::pnl(int reqId, double dailyPnL, double unrealizedPnL, double realiz
 
 void CIBSpi::pnlSingle(int reqId, Decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
 {
-	printf("PnL Single. ReqId: %d, pos: %d, daily PnL: %g, unrealized PnL: %g, realized PnL: %g, value: %g\n", reqId, pos, dailyPnL, unrealizedPnL, realizedPnL, value);
+	printf("PnL Single. ReqId: %d, pos: %d, daily PnL: %g, unrealized PnL: %g, realized PnL: %g, value: %g\n", reqId, decimal_to_int(pos), dailyPnL, unrealizedPnL, realizedPnL, value);
 }
 
 
@@ -968,10 +968,10 @@ void CIBSpi::orderBound(long long orderId, int apiClientId, int apiOrderId)
 
 void CIBSpi::completedOrder(const Contract& contract, const Order& order, const OrderState& orderState)
 {
-	printf("CompletedOrder. PermId: %ld, ParentPermId: %lld, Account: %s, Symbol: %s, SecType: %s, Exchange: %s:, Action: %s, OrderType: %s, TotalQty: %g, CashQty: %g, FilledQty: %g, "
+	printf("CompletedOrder. PermId: %d, ParentPermId: %lld, Account: %s, Symbol: %s, SecType: %s, Exchange: %s:, Action: %s, OrderType: %s, TotalQty: %g, CashQty: %g, FilledQty: %g, "
 		"LmtPrice: %g, AuxPrice: %g, Status: %s, CompletedTime: %s, CompletedStatus: %s\n",
 		order.permId, order.parentPermId == UNSET_LONG ? 0 : order.parentPermId, order.account.c_str(), contract.symbol.c_str(), contract.secType.c_str(), contract.exchange.c_str(),
-		order.action.c_str(), order.orderType.c_str(), order.totalQuantity, order.cashQty == UNSET_DOUBLE ? 0 : order.cashQty, order.filledQuantity,
+		order.action.c_str(), order.orderType.c_str(), decimal_To_double(order.totalQuantity), order.cashQty == UNSET_DOUBLE ? 0 : order.cashQty, decimal_To_double(order.filledQuantity),
 		order.lmtPrice, order.auxPrice, orderState.status.c_str(), orderState.completedTime.c_str(), orderState.completedStatus.c_str());
 
 }

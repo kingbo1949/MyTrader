@@ -35,28 +35,23 @@ target_include_directories(${TARGETNAME}
             $<INSTALL_INTERFACE: include>
 
 )
+target_link_libraries(${TARGETNAME}
+        PUBLIC
+        IBSysDefine
+        PRIVATE
+        IBSourceLib
+        Factory_Simulator
+        Factory_Topics
+        Factory_Callback
+        Factory_IBGlobalShare
+        ToolLib
+        Factory_Log
+        Factory_HashEnv
+        Factory_IBJSon
+        Factory_QDatabase
+        Factory_TShareEnv
+        #            Intelrdfpmath::intelrdfpmath
 
-if(WIN32)
-    target_link_libraries(${TARGETNAME}
-            PUBLIC
-            IBSysDefine
-            PRIVATE
-            IBSourceLib
-            Factory_Simulator
-            Factory_Topics
-            Factory_Callback
-            Factory_IBGlobalShare
-            ToolLib
-            Factory_Log
-            Factory_HashEnv
-            Factory_IBJSon
-            Factory_QDatabase
-            Factory_TShareEnv
-#            Intelrdfpmath::intelrdfpmath
-
-    )
-
-    return()
-endif()
+)
 
 

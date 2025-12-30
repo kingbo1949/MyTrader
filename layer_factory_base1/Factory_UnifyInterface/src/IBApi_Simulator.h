@@ -7,7 +7,7 @@ public:
 	virtual ~CIBApi_Simulator() { ; };
 
 	///建立连接
-	virtual void				Connect() { ; };
+	virtual void				Connect() override final { ; };
 
 	///查询tick, 从起始点往后查询count个tick数据
 	virtual IBTickPtrs			QueryTicks(const CodeStr& codeId, time_t beginSecond, int count) override final;
@@ -23,10 +23,10 @@ public:
 	virtual IBKLinePtrs			QueryKLineRange(const CodeStr& codeId, Time_Type timetype, time_t beginSecond, time_t endSecond, int daysForMinute, bool onlyRegularTime, UseType useType) override final;
 
 	///订阅行情
-	virtual void				SubscribeQuote(const IbContractPtrs& contracts) { ; };
+	virtual void				SubscribeQuote(const IbContractPtrs& contracts) override final { ; };
 
 	///取消订阅行情
-	virtual void				UnSubscribeQuote(const IbContractPtrs& contracts) { ; };
+	virtual void				UnSubscribeQuote(const IbContractPtrs& contracts) override final { ; };
 
 	///报单录入请求
 	virtual bool				SendOrder(OneOrderPtr porder)  override final;

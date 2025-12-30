@@ -19,7 +19,7 @@ void CQCallbackObject_Trade::DriveStategys(IBTickPtr tick, RoundAction openOrCov
 void CQCallbackObject_Trade::CleanTradeRtnQueue()
 {
 	OnRtnPtr pOnRtn = nullptr;
-	while (pOnRtn = MakeAndGet_OnRtns()->PopOne())
+	while ((pOnRtn = MakeAndGet_OnRtns()->PopOne()))
 	{
 		pOnRtn->Execute();
 	}
