@@ -20,14 +20,18 @@ void CJSon_Contracts_Real::Save_Contracts(const IbContractPtrs& contracts)
 
 void CJSon_Contracts_Real::Load_Contracts(IbContractPtrs& contracts, SelectType selectType)
 {
-	printf("load %s ... \n", GetFileName().c_str());
+	if (m_contracts.empty())
+	{
+		printf("load %s ... \n", GetFileName().c_str());
 
-	Json::Value contractsValue;
-	LoadJSonValue(GetFileName(), contractsValue);
+		Json::Value contractsValue;
+		LoadJSonValue(GetFileName(), contractsValue);
 
+		m_contracts = Make_Contracts(contractsValue);
+
+	}
 	contracts.clear();
-	IbContractPtrs temcontracts = Make_Contracts(contractsValue);
-	for (auto onecontract : temcontracts)
+	for (auto onecontract : m_contracts)
 	{
 		if (selectType == SelectType::All)
 		{

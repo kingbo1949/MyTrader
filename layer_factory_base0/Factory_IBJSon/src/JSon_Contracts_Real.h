@@ -12,6 +12,7 @@ public:
 
 
 protected:
+	IbContractPtrs							m_contracts;
 	std::string								GetFileName();
 
 	Json::Value								MakeValue_Contract(const IbContractPtr& contract);
