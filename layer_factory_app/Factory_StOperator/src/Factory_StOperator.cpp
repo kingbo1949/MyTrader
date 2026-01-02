@@ -14,27 +14,6 @@
 #include "MakePrice_Manual.h"
 
 
-#include "MakePrice_BreakInDay.h"
-#include "NeedCancel_BreakInDay.h"
-
-
-
-#include "MakePrice_On29min.h"
-#include "NeedCancel_On29min.h"
-
-#include "MakePrice_DoubleBreak.h"
-#include "NeedCancel_DoubleBreak.h"
-
-#include "MakePrice_JumpTick.h"
-#include "NeedCancel_JumpTick.h"
-
-#include "MakePrice_DayBreak.h"
-#include "NeedCancel_DayBreak.h"
-
-#include "MakePrice_DayBreakManual.h"
-#include "NeedCancel_DayBreakManual.h"
-
-
 #include "OpenPrice_Real.h"
 
 
@@ -75,30 +54,6 @@ FACTORY_STOPERATOR_API NeedCancelPtr MakeAndGet_NeedCancel(const SubModuleParams
 	{
 		back = std::make_shared<CNeedCancel_Manual>(subModuleParams);
 	}
-	if (pStrategyParam->key.strategyName == BreakInDayName)
-	{
-		back = std::make_shared<CNeedCancel_BreakInDay>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == On29minName)
-	{
-		back = std::make_shared<CNeedCancel_On29min>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == DoubleBreakName)
-	{
-		back = std::make_shared<CNeedCancel_DoubleBreak>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == JumpTickName)
-	{
-		back = std::make_shared<CNeedCancel_JumpTick>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == DayBreakName)
-	{
-		back = std::make_shared<CNeedCancel_DayBreak>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == DayBreakManualName)
-	{
-		back = std::make_shared<CNeedCancel_DayBreakManual>(subModuleParams);
-	}
 
 	if (!back)
 	{
@@ -117,30 +72,6 @@ FACTORY_STOPERATOR_API MakePricePtr MakeAndGet_MakePrice(const SubModuleParams& 
 	if (pStrategyParam->key.strategyName == ManualName)
 	{
 		back = std::make_shared<CMakePrice_Manual>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == BreakInDayName)
-	{
-		back = std::make_shared<CMakePrice_BreakInDay>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == On29minName)
-	{
-		back = std::make_shared<CMakePrice_On29min>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == DoubleBreakName)
-	{
-		back = std::make_shared<CMakePrice_DoubleBreak>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == JumpTickName)
-	{
-		back = std::make_shared<CMakePrice_JumpTick>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == DayBreakName)
-	{
-		back = std::make_shared<CMakePrice_DayBreak>(subModuleParams);
-	}
-	if (pStrategyParam->key.strategyName == DayBreakManualName)
-	{
-		back = std::make_shared<CMakePrice_DayBreakManual>(subModuleParams);
 	}
 
 	if (!back)
