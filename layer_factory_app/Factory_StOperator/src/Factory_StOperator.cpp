@@ -161,35 +161,6 @@ FACTORY_STOPERATOR_API OpenPricePtr MakeAndGet_OpenPrice()
 	}
 	return g_pOpenPrice;
 }
-Container_MacdPtr g_macdContainer = nullptr;
-FACTORY_STOPERATOR_API Container_MacdPtr MakeAndGet_Container_Macd()
-{
-	if (!g_macdContainer)
-	{
-		g_macdContainer = Make_Container_Macd();
-	}
-	return g_macdContainer;
-}
-
-Container_MacdDivPtr g_macdDivContainer = nullptr;
-FACTORY_STOPERATOR_API Container_MacdDivPtr MakeAndGet_Container_MacdDiv()
-{
-	if (!g_macdDivContainer)
-	{
-		g_macdDivContainer = Make_Container_MacdDiv(MakeAndGet_Container_Macd());
-	}
-	return g_macdDivContainer;
-
-}
-Container_AveragePtr g_maContainer = nullptr;
-FACTORY_STOPERATOR_API Container_AveragePtr MakeAndGet_Container_Ma()
-{
-	if (!g_maContainer)
-	{
-		g_maContainer = Make_Container_Ma();
-	}
-	return g_maContainer;
-}
 
 
 

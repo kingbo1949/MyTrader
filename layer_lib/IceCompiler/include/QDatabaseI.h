@@ -1,4 +1,4 @@
-﻿#ifndef __QDatabaseI_h__
+#ifndef __QDatabaseI_h__
 #define __QDatabaseI_h__
 
 #include <QDatabase.h>
@@ -258,6 +258,42 @@ public:
                                long long int,
                                IDivTypeValue&,
                                const Ice::Current&) override;
+
+    virtual void RecountAvgAtr(::std::string,
+                               ITimeType,
+                               const Ice::Current&) override;
+
+    virtual void RecountAvgAtrFromTimePos(::std::string,
+                                          ITimeType,
+                                          long long int,
+                                          const Ice::Current&) override;
+
+    virtual void UpdateAvgAtr(::std::string,
+                              ITimeType,
+                              double,
+                              const Ice::Current&) override;
+
+    virtual void RemoveAllAvgAtrs(::std::string,
+                                  ITimeType,
+                                  const Ice::Current&) override;
+
+    virtual void RemoveAvgAtrsByRange(::std::string,
+                                      ITimeType,
+                                      long long int,
+                                      long long int,
+                                      const Ice::Current&) override;
+
+    virtual void GetAvgAtrs(::std::string,
+                            ITimeType,
+                            IQuery,
+                            IAvgAtrs&,
+                            const Ice::Current&) override;
+
+    virtual bool GetOneAvgAtr(::std::string,
+                              ITimeType,
+                              long long int,
+                              double&,
+                              const Ice::Current&) override;
 };
 
 }

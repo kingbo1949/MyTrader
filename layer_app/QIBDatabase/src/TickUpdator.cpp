@@ -9,7 +9,7 @@ CTickUpdator::CTickUpdator()
 
 void CTickUpdator::UpdateTickToDB(const ITick& tick)
 {
-	UpdateTickToTickHis(tick);
+	//UpdateTickToTickHis(tick);
 	UpdateTickToKLine(tick);
 
 }
@@ -79,8 +79,13 @@ void CTickUpdator::UpdateTickToKLine(const ITick& tick, ITimeType timeType)
 
 	MakeAndGet_Env()->GetDB_KLine()->AddOne(tick.codeId, timeType, kline);
 
-	if (!CanUpdateIndex(tick.codeId, timeType) && exist) return;
+	if (!CanUpdateIndex(tick.codeId, timeType) && exist)
+	{
+		// K线已经存在但不久前扫描过，不要更新
+		return;
+	}
 
+	// 需要扫描并更新指标
 	if (!exist)
 	{
 		// 新生成的K线

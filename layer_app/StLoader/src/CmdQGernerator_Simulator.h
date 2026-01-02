@@ -22,10 +22,6 @@ protected:
 
 	IBTickPtrs				GetTicksFromDb_Klines(const TimeZoneOfCodeId& timeZoneOfCodeId);
 
-	// 初始化macd_calculators
-	void					InitCalculators(TimeZoneOfCodeId timeZoneOfCodeId);
-	void					InitCalculators(const CodeStr& codeId, Time_Type timeType, TimePair time_pair);
-
 	void					PrintTicksDec(const IBTickPtrs& ticks);
 
 	// 打印交易分析结果

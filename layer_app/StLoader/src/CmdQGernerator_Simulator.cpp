@@ -25,7 +25,6 @@ void CCmdQGernerator_Simulator::operator()()
 	TimeZoneOfCodeIdPtr timeZone = MakeAndGet_JSonTimeZone(TimeZone_Type::For_Simulator)->Load_TimeZone();
 	if (timeZone->lineType == LineType::UseKLine)
 	{
-		InitCalculators(*timeZone);
 		ticks = GetTicksFromDb_Klines(*timeZone);
 	}
 	else
@@ -137,41 +136,7 @@ IBTickPtrs CCmdQGernerator_Simulator::GetTicksFromDb_Klines(const TimeZoneOfCode
 
 }
 
-void CCmdQGernerator_Simulator::InitCalculators(TimeZoneOfCodeId timeZoneOfCodeId)
-{
-	// 把起始时间提前30天
-	TimePair timePair;
-	timePair.beginPos = timeZoneOfCodeId.beginPos - Tick_T(30) * 24 * 60 * 60 * 1000;
-	timePair.endPos = timeZoneOfCodeId.endPos;
 
-	InitCalculators(timeZoneOfCodeId.codeId, Time_Type::M1, timePair);
-	InitCalculators(timeZoneOfCodeId.codeId, Time_Type::M5, timePair);
-	InitCalculators(timeZoneOfCodeId.codeId, Time_Type::M15, timePair);
-	InitCalculators(timeZoneOfCodeId.codeId, Time_Type::M30, timePair);
-	InitCalculators(timeZoneOfCodeId.codeId, Time_Type::H1, timePair);
-	InitCalculators(timeZoneOfCodeId.codeId, Time_Type::D1, timePair);
-
-
-}
-
-void CCmdQGernerator_Simulator::InitCalculators(const CodeStr& codeId, Time_Type timeType, TimePair time_pair)
-{
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLineByLoop(codeId, timeType, time_pair);
-	MakeAndGet_Container_Ma()->Initialize(timeType, klines);
-	MakeAndGet_Container_Macd()->Initialize(timeType, klines);
-	MakeAndGet_Container_MacdDiv()->Initialize(timeType, klines);
-
-	Log_Print(LogLevel::Info, fmt::format("InitCalculators klines, {} {} {}->{}, klines count = {}",
-		codeId.c_str(),
-		CTransToStr::Get_TimeType(timeType).c_str(),
-		CGlobal::GetTickTimeStr(time_pair.beginPos).c_str(),
-		CGlobal::GetTickTimeStr(time_pair.endPos).c_str(),
-		klines.size()
-
-	));
-
-
-}
 
 void CCmdQGernerator_Simulator::PrintTicksDec(const IBTickPtrs& ticks)
 {

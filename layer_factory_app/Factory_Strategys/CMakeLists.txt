@@ -42,7 +42,6 @@ target_link_libraries(${TARGETNAME}
         Factory_TShareEnv
         Factory_Log
         Factory_StOperator
-        Factory_Calculator
         Factory_QDatabase
         Factory_Topics
         Factory_UnifyInterface

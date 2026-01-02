@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) ZeroC, Inc. All rights reserved.
 //
 //
@@ -410,6 +410,50 @@ public:
     virtual bool GetOneDivType(::std::string codeId, ITimeType timeType, long long int timePos, IDivTypeValue& divtype, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_GetOneDivType(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RecountAvgAtr(::std::string codeId, ITimeType timeType, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RecountAvgAtr(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RecountAvgAtrFromTimePos(::std::string codeId, ITimeType timeType, long long int timePos, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void UpdateAvgAtr(::std::string codeId, ITimeType timeType, double avgAtr, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_UpdateAvgAtr(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RemoveAllAvgAtrs(::std::string codeId, ITimeType timeType, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RemoveAllAvgAtrs(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RemoveAvgAtrsByRange(::std::string codeId, ITimeType timeType, long long int beginTime, long long int endTime, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void GetAvgAtrs(::std::string codeId, ITimeType timeType, IQuery query, IAvgAtrs& avgAtrs, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetAvgAtrs(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    /**
+     * Encapsulates the results of a call to GetOneAvgAtr.
+     */
+    struct GetOneAvgAtrResult
+    {
+        bool returnValue;
+        double avgAtr;
+    };
+
+    virtual bool GetOneAvgAtr(::std::string codeId, ITimeType timeType, long long int timePos, double& avgAtr, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetOneAvgAtr(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
     /// \cond INTERNAL
@@ -1748,6 +1792,194 @@ public:
     void _iceI_GetOneDivType(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneDivTypeResult>>&, const ::std::string&, ITimeType, long long int, const ::Ice::Context&);
     /// \endcond
 
+    void RecountAvgAtr(const ::std::string& codeId, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_RecountAvgAtr, codeId, timeType, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto RecountAvgAtrAsync(const ::std::string& codeId, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<void>>().get_future())
+    {
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_RecountAvgAtr, codeId, timeType, context);
+    }
+
+    ::std::function<void()>
+    RecountAvgAtrAsync(const ::std::string& codeId, ITimeType timeType,
+                       ::std::function<void()> response,
+                       ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                       ::std::function<void(bool)> sent = nullptr,
+                       const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_RecountAvgAtr, codeId, timeType, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_RecountAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, const ::Ice::Context&);
+    /// \endcond
+
+    void RecountAvgAtrFromTimePos(const ::std::string& codeId, ITimeType timeType, long long int timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_RecountAvgAtrFromTimePos, codeId, timeType, timePos, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto RecountAvgAtrFromTimePosAsync(const ::std::string& codeId, ITimeType timeType, long long int timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<void>>().get_future())
+    {
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_RecountAvgAtrFromTimePos, codeId, timeType, timePos, context);
+    }
+
+    ::std::function<void()>
+    RecountAvgAtrFromTimePosAsync(const ::std::string& codeId, ITimeType timeType, long long int timePos,
+                                  ::std::function<void()> response,
+                                  ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                                  ::std::function<void(bool)> sent = nullptr,
+                                  const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_RecountAvgAtrFromTimePos, codeId, timeType, timePos, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_RecountAvgAtrFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, long long int, const ::Ice::Context&);
+    /// \endcond
+
+    void UpdateAvgAtr(const ::std::string& codeId, ITimeType timeType, double avgAtr, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateAvgAtr, codeId, timeType, avgAtr, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto UpdateAvgAtrAsync(const ::std::string& codeId, ITimeType timeType, double avgAtr, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<void>>().get_future())
+    {
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateAvgAtr, codeId, timeType, avgAtr, context);
+    }
+
+    ::std::function<void()>
+    UpdateAvgAtrAsync(const ::std::string& codeId, ITimeType timeType, double avgAtr,
+                      ::std::function<void()> response,
+                      ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                      ::std::function<void(bool)> sent = nullptr,
+                      const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateAvgAtr, codeId, timeType, avgAtr, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_UpdateAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, double, const ::Ice::Context&);
+    /// \endcond
+
+    void RemoveAllAvgAtrs(const ::std::string& codeId, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_RemoveAllAvgAtrs, codeId, timeType, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto RemoveAllAvgAtrsAsync(const ::std::string& codeId, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<void>>().get_future())
+    {
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_RemoveAllAvgAtrs, codeId, timeType, context);
+    }
+
+    ::std::function<void()>
+    RemoveAllAvgAtrsAsync(const ::std::string& codeId, ITimeType timeType,
+                          ::std::function<void()> response,
+                          ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                          ::std::function<void(bool)> sent = nullptr,
+                          const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_RemoveAllAvgAtrs, codeId, timeType, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_RemoveAllAvgAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, const ::Ice::Context&);
+    /// \endcond
+
+    void RemoveAvgAtrsByRange(const ::std::string& codeId, ITimeType timeType, long long int beginTime, long long int endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_RemoveAvgAtrsByRange, codeId, timeType, beginTime, endTime, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto RemoveAvgAtrsByRangeAsync(const ::std::string& codeId, ITimeType timeType, long long int beginTime, long long int endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<void>>().get_future())
+    {
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_RemoveAvgAtrsByRange, codeId, timeType, beginTime, endTime, context);
+    }
+
+    ::std::function<void()>
+    RemoveAvgAtrsByRangeAsync(const ::std::string& codeId, ITimeType timeType, long long int beginTime, long long int endTime,
+                              ::std::function<void()> response,
+                              ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                              ::std::function<void(bool)> sent = nullptr,
+                              const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_RemoveAvgAtrsByRange, codeId, timeType, beginTime, endTime, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_RemoveAvgAtrsByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, long long int, long long int, const ::Ice::Context&);
+    /// \endcond
+
+    void GetAvgAtrs(const ::std::string& codeId, ITimeType timeType, const IQuery& query, IAvgAtrs& avgAtrs, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        avgAtrs = _makePromiseOutgoing<::IBTrader::IAvgAtrs>(true, this, &IQDatabasePrx::_iceI_GetAvgAtrs, codeId, timeType, query, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto GetAvgAtrsAsync(const ::std::string& codeId, ITimeType timeType, const IQuery& query, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<::IBTrader::IAvgAtrs>>().get_future())
+    {
+        return _makePromiseOutgoing<::IBTrader::IAvgAtrs, P>(false, this, &IQDatabasePrx::_iceI_GetAvgAtrs, codeId, timeType, query, context);
+    }
+
+    ::std::function<void()>
+    GetAvgAtrsAsync(const ::std::string& codeId, ITimeType timeType, const IQuery& query,
+                    ::std::function<void(::IBTrader::IAvgAtrs)> response,
+                    ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                    ::std::function<void(bool)> sent = nullptr,
+                    const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<::IBTrader::IAvgAtrs>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_GetAvgAtrs, codeId, timeType, query, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_GetAvgAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IAvgAtrs>>&, const ::std::string&, ITimeType, const IQuery&, const ::Ice::Context&);
+    /// \endcond
+
+    bool GetOneAvgAtr(const ::std::string& codeId, ITimeType timeType, long long int timePos, double& avgAtr, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        auto _result = _makePromiseOutgoing<IQDatabase::GetOneAvgAtrResult>(true, this, &IQDatabasePrx::_iceI_GetOneAvgAtr, codeId, timeType, timePos, context).get();
+        avgAtr = _result.avgAtr;
+        return _result.returnValue;
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto GetOneAvgAtrAsync(const ::std::string& codeId, ITimeType timeType, long long int timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<IQDatabase::GetOneAvgAtrResult>>().get_future())
+    {
+        return _makePromiseOutgoing<IQDatabase::GetOneAvgAtrResult, P>(false, this, &IQDatabasePrx::_iceI_GetOneAvgAtr, codeId, timeType, timePos, context);
+    }
+
+    ::std::function<void()>
+    GetOneAvgAtrAsync(const ::std::string& codeId, ITimeType timeType, long long int timePos,
+                      ::std::function<void(bool, double)> response,
+                      ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                      ::std::function<void(bool)> sent = nullptr,
+                      const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        auto _responseCb = [response](IQDatabase::GetOneAvgAtrResult&& _result)
+        {
+            response(_result.returnValue, _result.avgAtr);
+        };
+        return _makeLamdaOutgoing<IQDatabase::GetOneAvgAtrResult>(std::move(_responseCb), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_GetOneAvgAtr, codeId, timeType, timePos, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_GetOneAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneAvgAtrResult>>&, const ::std::string&, ITimeType, long long int, const ::Ice::Context&);
+    /// \endcond
+
     /**
      * Obtains the Slice type ID of this interface.
      * @return The fully-scoped type ID.
@@ -2211,6 +2443,62 @@ typedef ::IceUtil::Handle< Callback_IQDatabase_GetDivTypes_Base> Callback_IQData
  */
 class Callback_IQDatabase_GetOneDivType_Base : public virtual ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_IQDatabase_GetOneDivType_Base> Callback_IQDatabase_GetOneDivTypePtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RecountAvgAtr.
+ */
+class Callback_IQDatabase_RecountAvgAtr_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_RecountAvgAtr_Base> Callback_IQDatabase_RecountAvgAtrPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RecountAvgAtrFromTimePos.
+ */
+class Callback_IQDatabase_RecountAvgAtrFromTimePos_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_RecountAvgAtrFromTimePos_Base> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_UpdateAvgAtr.
+ */
+class Callback_IQDatabase_UpdateAvgAtr_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_UpdateAvgAtr_Base> Callback_IQDatabase_UpdateAvgAtrPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RemoveAllAvgAtrs.
+ */
+class Callback_IQDatabase_RemoveAllAvgAtrs_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_RemoveAllAvgAtrs_Base> Callback_IQDatabase_RemoveAllAvgAtrsPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RemoveAvgAtrsByRange.
+ */
+class Callback_IQDatabase_RemoveAvgAtrsByRange_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_RemoveAvgAtrsByRange_Base> Callback_IQDatabase_RemoveAvgAtrsByRangePtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetAvgAtrs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetAvgAtrs.
+ */
+class Callback_IQDatabase_GetAvgAtrs_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_GetAvgAtrs_Base> Callback_IQDatabase_GetAvgAtrsPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetOneAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetOneAvgAtr.
+ */
+class Callback_IQDatabase_GetOneAvgAtr_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_GetOneAvgAtr_Base> Callback_IQDatabase_GetOneAvgAtrPtr;
 
 }
 
@@ -4154,6 +4442,280 @@ private:
 
 public:
 
+    void RecountAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_RecountAvgAtr(_iceI_begin_RecountAvgAtr(codeId, timeType, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_RecountAvgAtr(codeId, timeType, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtr(codeId, timeType, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtr(codeId, timeType, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::Callback_IQDatabase_RecountAvgAtrPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtr(codeId, timeType, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_RecountAvgAtrPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtr(codeId, timeType, context, cb, cookie);
+    }
+
+    void end_RecountAvgAtr(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_RecountAvgAtr(const ::std::string&, ::IBTrader::ITimeType, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    void RecountAvgAtrFromTimePos(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_RecountAvgAtrFromTimePos(_iceI_begin_RecountAvgAtrFromTimePos(codeId, timeType, timePos, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtrFromTimePos(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_RecountAvgAtrFromTimePos(codeId, timeType, timePos, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtrFromTimePos(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtrFromTimePos(codeId, timeType, timePos, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtrFromTimePos(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtrFromTimePos(codeId, timeType, timePos, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtrFromTimePos(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::IBTrader::Callback_IQDatabase_RecountAvgAtrFromTimePosPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtrFromTimePos(codeId, timeType, timePos, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RecountAvgAtrFromTimePos(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_RecountAvgAtrFromTimePosPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RecountAvgAtrFromTimePos(codeId, timeType, timePos, context, cb, cookie);
+    }
+
+    void end_RecountAvgAtrFromTimePos(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_RecountAvgAtrFromTimePos(const ::std::string&, ::IBTrader::ITimeType, ::Ice::Long, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    void UpdateAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Double avgAtr, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_UpdateAvgAtr(_iceI_begin_UpdateAvgAtr(codeId, timeType, avgAtr, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Double avgAtr, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_UpdateAvgAtr(codeId, timeType, avgAtr, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Double avgAtr, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateAvgAtr(codeId, timeType, avgAtr, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Double avgAtr, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateAvgAtr(codeId, timeType, avgAtr, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Double avgAtr, const ::IBTrader::Callback_IQDatabase_UpdateAvgAtrPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateAvgAtr(codeId, timeType, avgAtr, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Double avgAtr, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateAvgAtrPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateAvgAtr(codeId, timeType, avgAtr, context, cb, cookie);
+    }
+
+    void end_UpdateAvgAtr(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_UpdateAvgAtr(const ::std::string&, ::IBTrader::ITimeType, ::Ice::Double, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    void RemoveAllAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_RemoveAllAvgAtrs(_iceI_begin_RemoveAllAvgAtrs(codeId, timeType, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAllAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_RemoveAllAvgAtrs(codeId, timeType, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAllAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAllAvgAtrs(codeId, timeType, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAllAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAllAvgAtrs(codeId, timeType, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAllAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::Callback_IQDatabase_RemoveAllAvgAtrsPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAllAvgAtrs(codeId, timeType, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAllAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_RemoveAllAvgAtrsPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAllAvgAtrs(codeId, timeType, context, cb, cookie);
+    }
+
+    void end_RemoveAllAvgAtrs(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_RemoveAllAvgAtrs(const ::std::string&, ::IBTrader::ITimeType, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    void RemoveAvgAtrsByRange(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_RemoveAvgAtrsByRange(_iceI_begin_RemoveAvgAtrsByRange(codeId, timeType, beginTime, endTime, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAvgAtrsByRange(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_RemoveAvgAtrsByRange(codeId, timeType, beginTime, endTime, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAvgAtrsByRange(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAvgAtrsByRange(codeId, timeType, beginTime, endTime, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAvgAtrsByRange(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAvgAtrsByRange(codeId, timeType, beginTime, endTime, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAvgAtrsByRange(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long beginTime, ::Ice::Long endTime, const ::IBTrader::Callback_IQDatabase_RemoveAvgAtrsByRangePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAvgAtrsByRange(codeId, timeType, beginTime, endTime, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_RemoveAvgAtrsByRange(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_RemoveAvgAtrsByRangePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_RemoveAvgAtrsByRange(codeId, timeType, beginTime, endTime, context, cb, cookie);
+    }
+
+    void end_RemoveAvgAtrsByRange(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_RemoveAvgAtrsByRange(const ::std::string&, ::IBTrader::ITimeType, ::Ice::Long, ::Ice::Long, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    void GetAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, ::IBTrader::IAvgAtrs& avgAtrs, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_GetAvgAtrs(avgAtrs, _iceI_begin_GetAvgAtrs(codeId, timeType, query, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_GetAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_GetAvgAtrs(codeId, timeType, query, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetAvgAtrs(codeId, timeType, query, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetAvgAtrs(codeId, timeType, query, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::IBTrader::Callback_IQDatabase_GetAvgAtrsPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetAvgAtrs(codeId, timeType, query, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetAvgAtrs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_GetAvgAtrsPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetAvgAtrs(codeId, timeType, query, context, cb, cookie);
+    }
+
+    void end_GetAvgAtrs(::IBTrader::IAvgAtrs& avgAtrs, const ::Ice::AsyncResultPtr& result);
+    /// \cond INTERNAL
+
+    void _iceI_end_GetAvgAtrs(::IBTrader::IAvgAtrs& iceP_avgAtrs, const ::Ice::AsyncResultPtr&);
+    /// \endcond
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_GetAvgAtrs(const ::std::string&, ::IBTrader::ITimeType, const ::IBTrader::IQuery&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    bool GetOneAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, ::Ice::Double& avgAtr, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return end_GetOneAvgAtr(avgAtr, _iceI_begin_GetOneAvgAtr(codeId, timeType, timePos, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_GetOneAvgAtr(codeId, timeType, timePos, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneAvgAtr(codeId, timeType, timePos, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneAvgAtr(codeId, timeType, timePos, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::IBTrader::Callback_IQDatabase_GetOneAvgAtrPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneAvgAtr(codeId, timeType, timePos, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneAvgAtr(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_GetOneAvgAtrPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneAvgAtr(codeId, timeType, timePos, context, cb, cookie);
+    }
+
+    bool end_GetOneAvgAtr(::Ice::Double& avgAtr, const ::Ice::AsyncResultPtr& result);
+    /// \cond INTERNAL
+
+    void _iceI_end_GetOneAvgAtr(::Ice::Double& iceP_avgAtr, bool& ret, const ::Ice::AsyncResultPtr&);
+    /// \endcond
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_GetOneAvgAtr(const ::std::string&, ::IBTrader::ITimeType, ::Ice::Long, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
     /**
      * Obtains the Slice type ID corresponding to this interface.
      * @return A fully-scoped type ID.
@@ -4460,6 +5022,41 @@ public:
     virtual bool GetOneDivType(const ::std::string& codeId, ITimeType timeType, ::Ice::Long timePos, IDivTypeValue& divtype, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_GetOneDivType(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RecountAvgAtr(const ::std::string& codeId, ITimeType timeType, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RecountAvgAtr(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RecountAvgAtrFromTimePos(const ::std::string& codeId, ITimeType timeType, ::Ice::Long timePos, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void UpdateAvgAtr(const ::std::string& codeId, ITimeType timeType, ::Ice::Double avgAtr, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_UpdateAvgAtr(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RemoveAllAvgAtrs(const ::std::string& codeId, ITimeType timeType, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RemoveAllAvgAtrs(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void RemoveAvgAtrsByRange(const ::std::string& codeId, ITimeType timeType, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void GetAvgAtrs(const ::std::string& codeId, ITimeType timeType, const IQuery& query, IAvgAtrs& avgAtrs, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetAvgAtrs(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual bool GetOneAvgAtr(const ::std::string& codeId, ITimeType timeType, ::Ice::Long timePos, ::Ice::Double& avgAtr, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetOneAvgAtr(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
     /// \cond INTERNAL
@@ -12090,6 +12687,1092 @@ template<class T, typename CT> Callback_IQDatabase_GetOneDivTypePtr
 newCallback_IQDatabase_GetOneDivType(T* instance, void (T::*cb)(bool, const IDivTypeValue&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_IQDatabase_GetOneDivType<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RecountAvgAtr.
+ */
+template<class T>
+class CallbackNC_IQDatabase_RecountAvgAtr : public Callback_IQDatabase_RecountAvgAtr_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_IQDatabase_RecountAvgAtr(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtr<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtr<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtr<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtr<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RecountAvgAtr.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_RecountAvgAtr : public Callback_IQDatabase_RecountAvgAtr_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_IQDatabase_RecountAvgAtr(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtr<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtr<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtr<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrPtr
+newCallback_IQDatabase_RecountAvgAtr(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtr<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RecountAvgAtrFromTimePos.
+ */
+template<class T>
+class CallbackNC_IQDatabase_RecountAvgAtrFromTimePos : public Callback_IQDatabase_RecountAvgAtrFromTimePos_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_IQDatabase_RecountAvgAtrFromTimePos(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtrFromTimePos<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtrFromTimePos<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtrFromTimePos<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RecountAvgAtrFromTimePos<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RecountAvgAtrFromTimePos.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_RecountAvgAtrFromTimePos : public Callback_IQDatabase_RecountAvgAtrFromTimePos_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_IQDatabase_RecountAvgAtrFromTimePos(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtrFromTimePos<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtrFromTimePos<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtrFromTimePos<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RecountAvgAtrFromTimePos.
+ */
+template<class T, typename CT> Callback_IQDatabase_RecountAvgAtrFromTimePosPtr
+newCallback_IQDatabase_RecountAvgAtrFromTimePos(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RecountAvgAtrFromTimePos<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_UpdateAvgAtr.
+ */
+template<class T>
+class CallbackNC_IQDatabase_UpdateAvgAtr : public Callback_IQDatabase_UpdateAvgAtr_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_IQDatabase_UpdateAvgAtr(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateAvgAtr<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateAvgAtr<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateAvgAtr<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateAvgAtr<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_UpdateAvgAtr.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_UpdateAvgAtr : public Callback_IQDatabase_UpdateAvgAtr_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_IQDatabase_UpdateAvgAtr(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateAvgAtr<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateAvgAtr<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateAvgAtr<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateAvgAtrPtr
+newCallback_IQDatabase_UpdateAvgAtr(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateAvgAtr<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RemoveAllAvgAtrs.
+ */
+template<class T>
+class CallbackNC_IQDatabase_RemoveAllAvgAtrs : public Callback_IQDatabase_RemoveAllAvgAtrs_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_IQDatabase_RemoveAllAvgAtrs(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAllAvgAtrs<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAllAvgAtrs<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAllAvgAtrs<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAllAvgAtrs<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RemoveAllAvgAtrs.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_RemoveAllAvgAtrs : public Callback_IQDatabase_RemoveAllAvgAtrs_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_IQDatabase_RemoveAllAvgAtrs(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAllAvgAtrs<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAllAvgAtrs<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAllAvgAtrs<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAllAvgAtrs.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAllAvgAtrsPtr
+newCallback_IQDatabase_RemoveAllAvgAtrs(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAllAvgAtrs<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RemoveAvgAtrsByRange.
+ */
+template<class T>
+class CallbackNC_IQDatabase_RemoveAvgAtrsByRange : public Callback_IQDatabase_RemoveAvgAtrsByRange_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_IQDatabase_RemoveAvgAtrsByRange(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAvgAtrsByRange<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAvgAtrsByRange<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAvgAtrsByRange<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_RemoveAvgAtrsByRange<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RemoveAvgAtrsByRange.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_RemoveAvgAtrsByRange : public Callback_IQDatabase_RemoveAvgAtrsByRange_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_IQDatabase_RemoveAvgAtrsByRange(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAvgAtrsByRange<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAvgAtrsByRange<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAvgAtrsByRange<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_RemoveAvgAtrsByRange.
+ */
+template<class T, typename CT> Callback_IQDatabase_RemoveAvgAtrsByRangePtr
+newCallback_IQDatabase_RemoveAvgAtrsByRange(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_RemoveAvgAtrsByRange<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetAvgAtrs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetAvgAtrs.
+ */
+template<class T>
+class CallbackNC_IQDatabase_GetAvgAtrs : public Callback_IQDatabase_GetAvgAtrs_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(const IAvgAtrs&);
+
+    CallbackNC_IQDatabase_GetAvgAtrs(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        IAvgAtrs iceP_avgAtrs;
+        try
+        {
+            proxy->end_GetAvgAtrs(iceP_avgAtrs, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(iceP_avgAtrs);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetAvgAtrs.
+ */
+template<class T> Callback_IQDatabase_GetAvgAtrsPtr
+newCallback_IQDatabase_GetAvgAtrs(const IceUtil::Handle<T>& instance, void (T::*cb)(const IAvgAtrs&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetAvgAtrs<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetAvgAtrs.
+ */
+template<class T> Callback_IQDatabase_GetAvgAtrsPtr
+newCallback_IQDatabase_GetAvgAtrs(T* instance, void (T::*cb)(const IAvgAtrs&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetAvgAtrs<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetAvgAtrs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetAvgAtrs.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_GetAvgAtrs : public Callback_IQDatabase_GetAvgAtrs_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const IAvgAtrs&, const CT&);
+
+    Callback_IQDatabase_GetAvgAtrs(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        IAvgAtrs iceP_avgAtrs;
+        try
+        {
+            proxy->end_GetAvgAtrs(iceP_avgAtrs, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(iceP_avgAtrs, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetAvgAtrs.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetAvgAtrsPtr
+newCallback_IQDatabase_GetAvgAtrs(const IceUtil::Handle<T>& instance, void (T::*cb)(const IAvgAtrs&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetAvgAtrs<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetAvgAtrs.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetAvgAtrsPtr
+newCallback_IQDatabase_GetAvgAtrs(T* instance, void (T::*cb)(const IAvgAtrs&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetAvgAtrs<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetOneAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetOneAvgAtr.
+ */
+template<class T>
+class CallbackNC_IQDatabase_GetOneAvgAtr : public Callback_IQDatabase_GetOneAvgAtr_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(bool, ::Ice::Double);
+
+    CallbackNC_IQDatabase_GetOneAvgAtr(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        ::Ice::Double iceP_avgAtr;
+        bool ret;
+        try
+        {
+            ret = proxy->end_GetOneAvgAtr(iceP_avgAtr, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(ret, iceP_avgAtr);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneAvgAtr.
+ */
+template<class T> Callback_IQDatabase_GetOneAvgAtrPtr
+newCallback_IQDatabase_GetOneAvgAtr(const IceUtil::Handle<T>& instance, void (T::*cb)(bool, ::Ice::Double), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetOneAvgAtr<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneAvgAtr.
+ */
+template<class T> Callback_IQDatabase_GetOneAvgAtrPtr
+newCallback_IQDatabase_GetOneAvgAtr(T* instance, void (T::*cb)(bool, ::Ice::Double), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetOneAvgAtr<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetOneAvgAtr.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetOneAvgAtr.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_GetOneAvgAtr : public Callback_IQDatabase_GetOneAvgAtr_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(bool, ::Ice::Double, const CT&);
+
+    Callback_IQDatabase_GetOneAvgAtr(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        ::Ice::Double iceP_avgAtr;
+        bool ret;
+        try
+        {
+            ret = proxy->end_GetOneAvgAtr(iceP_avgAtr, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(ret, iceP_avgAtr, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetOneAvgAtrPtr
+newCallback_IQDatabase_GetOneAvgAtr(const IceUtil::Handle<T>& instance, void (T::*cb)(bool, ::Ice::Double, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetOneAvgAtr<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneAvgAtr.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetOneAvgAtrPtr
+newCallback_IQDatabase_GetOneAvgAtr(T* instance, void (T::*cb)(bool, ::Ice::Double, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetOneAvgAtr<T, CT>(instance, cb, excb, sentcb);
 }
 
 }

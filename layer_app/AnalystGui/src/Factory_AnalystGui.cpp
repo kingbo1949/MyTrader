@@ -2,7 +2,6 @@
 #include <Global.h>
 #include <QtGlobal.h>
 #include <HighFrequencyGlobalFunc.h>
-#include <Factory_Calculator.h>
 #include "../tSideTimeHandler/TSideTimeHandler_Future.h"
 #include "../tSideTimeHandler/TSideTimeHandler_Stock.h"
 
@@ -128,43 +127,6 @@ void SetMainY(const QCPRange& xRange, const IBKLinePtrs& klinesInSuit)
 	GetAxisRect(MainOrSub::MainT)->axis(QCPAxis::atRight)->scaleRange(GetYAxisFactor(), range.center());
 
 
-}
-Container_MacdPtr g_pMacdContainer = nullptr;
-Container_MacdPtr MakeAndGet_MacdContainer()
-{
-	if (!g_pMacdContainer)
-	{
-		g_pMacdContainer = Make_Container_Macd();
-	}
-	return g_pMacdContainer;
-}
-Container_AveragePtr g_pEmaContainer = nullptr;
-Container_AveragePtr MakeAndGet_EmaContainer()
-{
-	if (!g_pEmaContainer)
-	{
-		g_pEmaContainer = Make_Container_Ema();
-	}
-	return g_pEmaContainer;
-}
-
-Container_AveragePtr g_pMaContainer = nullptr;
-Container_AveragePtr MakeAndGet_MaContainer()
-{
-	if (!g_pMaContainer)
-	{
-		g_pMaContainer = Make_Container_Ma();
-	}
-	return g_pMaContainer;
-}
-Container_MacdDivPtr g_pMacdDivContainer = nullptr;
-Container_MacdDivPtr MakeAndGet_MacdDivContainer(Container_MacdPtr macdContainer)
-{
-	if (!g_pMacdDivContainer)
-	{
-		g_pMacdDivContainer = Make_Container_MacdDiv(macdContainer);
-	}
-	return g_pMacdDivContainer;
 }
 
 TableViewMouse g_tableViewMouse = TableViewMouse::NoMouse;

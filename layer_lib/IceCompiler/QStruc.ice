@@ -26,7 +26,7 @@ module IBTrader
 		KRW,						//韩元
 	};
 
-
+    sequence<double> IAvgAtrs;
 
 	struct ITimePair
 	{

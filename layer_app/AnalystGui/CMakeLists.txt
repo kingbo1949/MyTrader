@@ -156,7 +156,6 @@ target_link_libraries(${TARGETNAME}
         Qt6::Widgets
         Qt6::PrintSupport
         Factory_AnalystDeal
-        Factory_Calculator
         Factory_QDatabase
         Factory_IBGlobalShare
         ToolLib

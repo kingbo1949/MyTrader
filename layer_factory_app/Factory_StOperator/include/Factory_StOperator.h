@@ -9,7 +9,6 @@
 #include "NeedCancel.h"
 
 #include "OpenPrice.h"
-#include <Factory_Calculator.h>
 
 	// 取得活跃的挂单
 	FACTORY_STOPERATOR_API OneOrderPtr			GetActiveOrder(StrategyIdHashId stHashId, StSubModule stSubModule);
@@ -21,11 +20,6 @@
 
 	FACTORY_STOPERATOR_API OpenPricePtr			MakeAndGet_OpenPrice();
 
-	FACTORY_STOPERATOR_API Container_MacdPtr	MakeAndGet_Container_Macd();
-
-	FACTORY_STOPERATOR_API Container_MacdDivPtr MakeAndGet_Container_MacdDiv();
-
-	FACTORY_STOPERATOR_API Container_AveragePtr MakeAndGet_Container_Ma();
 
 
 

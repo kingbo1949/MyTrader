@@ -80,6 +80,16 @@ module IBTrader
 		void		RemoveDivTypesByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的Ema表数据，区间为[beginTime,endTime)
 		void		GetDivTypes(string codeId, ITimeType timeType, IQuery query,out IDivTypeValues divtypes);
 		bool		GetOneDivType(string codeId, ITimeType timeType, long timePos, out IDivTypeValue divtype);	// 查询单个指定数据
+
+		// atr表
+		void		RecountAvgAtr(string codeId, ITimeType timeType);										    // 重新计算某品种所有Atr, 会删除表重算
+		void		RecountAvgAtrFromTimePos(string codeId, ITimeType timeType, long timePos);				    // 重新计算某品种指定时间点(毫秒)之后的所有Atr
+		void		UpdateAvgAtr(string codeId, ITimeType timeType, double avgAtr);
+		void		RemoveAllAvgAtrs(string codeId, ITimeType timeType);										// 删除某一品种的所有Atr表数据
+		void		RemoveAvgAtrsByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的Atr表数据，区间为[beginTime,endTime)
+		void		GetAvgAtrs(string codeId, ITimeType timeType, IQuery query,out IAvgAtrs avgAtrs);
+		bool		GetOneAvgAtr(string codeId, ITimeType timeType, long timePos, out double avgAtr);	        // 查询单个指定数据
+
 	};
 };
 

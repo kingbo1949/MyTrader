@@ -66,6 +66,5 @@ target_link_libraries(${TARGETNAME}
         Factory_IBJSon
         Factory_QDatabase
         Factory_TShareEnv
-        Factory_Calculator
         Factory_UnifyInterface
 )

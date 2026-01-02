@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) ZeroC, Inc. All rights reserved.
 //
 //
@@ -66,6 +66,8 @@ enum class IMoney : unsigned char
     EUR,
     KRW
 };
+
+using IAvgAtrs = ::std::vector<double>;
 
 struct ITimePair
 {
@@ -569,6 +571,8 @@ enum IMoney
     EUR,
     KRW
 };
+
+typedef ::std::vector< ::Ice::Double> IAvgAtrs;
 
 struct ITimePair
 {

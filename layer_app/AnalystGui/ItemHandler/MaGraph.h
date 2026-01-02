@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "AvgValueGraph.h"
-#include <Factory_Calculator.h>
 class CMaGraph : public CAvgValueGraph
 {
 	Q_OBJECT

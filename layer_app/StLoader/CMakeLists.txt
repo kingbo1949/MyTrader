@@ -47,7 +47,6 @@ target_link_libraries(${TARGETNAME}
         Factory_TShareEnv
         Factory_Monitor
         Factory_StOperator
-        Factory_Calculator
         ToolLib
 )
 

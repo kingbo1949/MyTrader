@@ -6,7 +6,7 @@
 ::E:\IBSys\ThirdParty\ice.3.7\tools
 ::add ice path
 set slice2cpp=%MyIce%\tools;
-set PATH=%PATH%%slice2cpp%
+set PATH=%PATH%;%slice2cpp%
 
 
 ::E:\IBSys\ThirdParty\ice.3.7\slice
@@ -14,8 +14,8 @@ set PATH=%PATH%%slice2cpp%
 set slicePath=%MyIce%\slice;
 ::set PATH=%PATH%%slicePath%
 
-slice2cpp.exe -I. -I%slicePath% --impl-c++11 --output-dir ..\Ice QStruc.ice	
-slice2cpp.exe -I. -I%slicePath% --impl-c++11 --output-dir ..\Ice QDatabase.ice	
+slice2cpp.exe -I. -I%slicePath% --impl-c++11 --output-dir .\src QStruc.ice
+slice2cpp.exe -I. -I%slicePath% --impl-c++11 --output-dir .\src QDatabase.ice
 
 
 

@@ -698,7 +698,7 @@ void CIBSpi::securityDefinitionOptionalParameterEnd(int reqId)
 
 void CIBSpi::softDollarTiers(int reqId, const std::vector<SoftDollarTier>& tiers)
 {
-	printf("Soft dollar tiers (%lu):", tiers.size());
+	printf("Soft dollar tiers (%zu):", tiers.size());
 
 	for (unsigned int i = 0; i < tiers.size(); i++) {
 		printf("%s\n", tiers[i].displayName().c_str());
@@ -709,7 +709,7 @@ void CIBSpi::softDollarTiers(int reqId, const std::vector<SoftDollarTier>& tiers
 
 void CIBSpi::familyCodes(const std::vector<FamilyCode>& familyCodes)
 {
-	printf("Family codes (%lu):\n", familyCodes.size());
+	printf("Family codes (%zu):\n", familyCodes.size());
 
 	for (unsigned int i = 0; i < familyCodes.size(); i++) {
 		printf("Family code [%d] - accountID: %s familyCodeStr: %s\n", i, familyCodes[i].accountID.c_str(), familyCodes[i].familyCodeStr.c_str());
@@ -720,13 +720,13 @@ void CIBSpi::familyCodes(const std::vector<FamilyCode>& familyCodes)
 
 void CIBSpi::symbolSamples(int reqId, const std::vector<ContractDescription>& contractDescriptions)
 {
-	printf("Symbol Samples (total=%lu) reqId: %d\n", contractDescriptions.size(), reqId);
+	printf("Symbol Samples (total=%zu) reqId: %d\n", contractDescriptions.size(), reqId);
 
 	for (unsigned int i = 0; i < contractDescriptions.size(); i++) {
 		Contract contract = contractDescriptions[i].contract;
 		std::vector<std::string> derivativeSecTypes = contractDescriptions[i].derivativeSecTypes;
 		printf("Contract (%u): conId: %ld, symbol: %s, secType: %s, primaryExchange: %s, currency: %s, ", i, contract.conId, contract.symbol.c_str(), contract.secType.c_str(), contract.primaryExchange.c_str(), contract.currency.c_str());
-		printf("Derivative Sec-types (%lu):", derivativeSecTypes.size());
+		printf("Derivative Sec-types (%zu):", derivativeSecTypes.size());
 		for (unsigned int j = 0; j < derivativeSecTypes.size(); j++) {
 			printf(" %s", derivativeSecTypes[j].c_str());
 		}
@@ -777,7 +777,7 @@ void CIBSpi::tickReqParams(int tickerId, double minTick, const std::string& bboE
 
 void CIBSpi::newsProviders(const std::vector<NewsProvider>& newsProviders)
 {
-	printf("News providers (%lu):\n", newsProviders.size());
+	printf("News providers (%zu):\n", newsProviders.size());
 
 	for (unsigned int i = 0; i < newsProviders.size(); i++) {
 		printf("News provider [%d] - providerCode: %s providerName: %s\n", i, newsProviders[i].providerCode.c_str(), newsProviders[i].providerName.c_str());

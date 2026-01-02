@@ -308,6 +308,35 @@ bool CQDatabaseImp::GetOneDivType(::std::string codeId, ITimeType timeType, long
 	return MakeAndGet_Env()->GetDB_DivType()->GetOne(codeId, timeType, timePos, divtype);
 }
 
+void CQDatabaseImp::RecountAvgAtr(std::string codeId, ITimeType timeType, const Ice::Current &current)
+{
+}
+
+void CQDatabaseImp::RecountAvgAtrFromTimePos(std::string codeId, ITimeType timeType, long long int timePos, const Ice::Current &current)
+{
+}
+
+void CQDatabaseImp::UpdateAvgAtr(std::string codeId, ITimeType timeType, double avgAtr, const Ice::Current &current)
+{
+}
+
+void CQDatabaseImp::RemoveAllAvgAtrs(std::string codeId, ITimeType timeType, const Ice::Current &current)
+{
+}
+
+void CQDatabaseImp::RemoveAvgAtrsByRange(std::string codeId, ITimeType timeType, long long int beginTime, long long int endTime, const Ice::Current &current)
+{
+}
+
+void CQDatabaseImp::GetAvgAtrs(std::string codeId, ITimeType timeType, IQuery query, IAvgAtrs &avgAtrs, const Ice::Current &current)
+{
+}
+
+bool CQDatabaseImp::GetOneAvgAtr(std::string codeId, ITimeType timeType, long long int timePos, double &avgAtr, const Ice::Current &current)
+{
+	return false;
+}
+
 
 void CQDatabaseImp::RecountMa(::std::string codeId, ITimeType timetype)
 {

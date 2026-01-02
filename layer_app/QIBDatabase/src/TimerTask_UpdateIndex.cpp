@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include <Factory_Log.h>
 #include "TimerTask_UpdateIndex.h"
 #include "Factory.h"
@@ -17,7 +17,7 @@ void CTimerTask_UpdateIndex::runTimerTask()
 void CTimerTask_UpdateIndex::UpdateIndexWait()
 {
 	Tick_T currentTime = benchmark_milliseconds();
-	if (currentTime - m_lastUpdateWait < 20000) return;		// Ã¿20Ãë¸üÐÂÒ»´Î¼´¿É
+	if (currentTime - m_lastUpdateWait < 20000) return;		// æ¯20ç§’æ›´æ–°ä¸€æ¬¡å³å¯
 
 	std::set<IQKey> needUpdates = GetNeedUpdate(NowOrWait::Wait);
 	if (needUpdates.empty()) return;
@@ -42,7 +42,7 @@ void CTimerTask_UpdateIndex::UpdateIndex(const std::set<IQKey>& keys)
 
 	for (const auto& key : keys)
 	{
-		// ²éÑ¯KÏß
+		// æŸ¥è¯¢Kçº¿
 		IQuery query;
 		query.byReqType = 0;
 		query.dwSubscribeNum = 1;
@@ -50,7 +50,7 @@ void CTimerTask_UpdateIndex::UpdateIndex(const std::set<IQKey>& keys)
 		MakeAndGet_Env()->GetDB_KLine()->GetKLines(key.codeId, key.timeType, query, klines);
 		if (klines.empty()) continue;
 
-		// ¸üÐÂÖ¸±ê
+		// æ›´æ–°æŒ‡æ ‡
 		MakenAndGet_Calculator_Ma()->Update(key.codeId, key.timeType, klines.back());
 		//MakenAndGet_Calculator_VwMa()->Update(key.codeId, key.timeType, klines.back());
 		//MakenAndGet_Calculator_Ema()->Update(key.codeId, key.timeType, klines.back());

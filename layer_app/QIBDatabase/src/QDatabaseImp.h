@@ -119,6 +119,23 @@ public:
 
 	virtual bool GetOneDivType(::std::string codeId, ITimeType timeType, long long int timePos, IDivTypeValue& divtype, const ::Ice::Current& current)  override final;
 
+	// AvgAtr表
+
+	virtual void RecountAvgAtr(::std::string codeId, ITimeType timeType, const ::Ice::Current& current)  override final;
+
+	virtual void RecountAvgAtrFromTimePos(::std::string codeId, ITimeType timeType, long long int timePos, const ::Ice::Current& current)  override final;
+
+	virtual void UpdateAvgAtr(::std::string codeId, ITimeType timeType, double avgAtr, const ::Ice::Current& current)  override final;
+
+	virtual void RemoveAllAvgAtrs(::std::string codeId, ITimeType timeType, const ::Ice::Current& current)  override final;
+
+	virtual void RemoveAvgAtrsByRange(::std::string codeId, ITimeType timeType, long long int beginTime, long long int endTime, const ::Ice::Current& current)  override final;
+
+	virtual void GetAvgAtrs(::std::string codeId, ITimeType timeType, IQuery query, IAvgAtrs& avgAtrs, const ::Ice::Current& current)  override final;
+
+	virtual bool GetOneAvgAtr(::std::string codeId, ITimeType timeType, long long int timePos, double& avgAtr, const ::Ice::Current& current)  override final;
+
+
 
 
 protected:

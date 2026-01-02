@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) ZeroC, Inc. All rights reserved.
 //
 //
@@ -54,6 +54,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ids[2] =
 };
 const ::std::string iceC_IBTrader_IQDatabase_ops[] =
 {
+    "GetAvgAtrs",
     "GetDivTypes",
     "GetEmas",
     "GetInvalidKLines",
@@ -62,6 +63,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "GetLastUpdateTick",
     "GetMacds",
     "GetMas",
+    "GetOneAvgAtr",
     "GetOneDivType",
     "GetOneEma",
     "GetOneKLine",
@@ -71,6 +73,8 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "GetOneVwMa",
     "GetTicks",
     "GetVwMas",
+    "RecountAvgAtr",
+    "RecountAvgAtrFromTimePos",
     "RecountDivType",
     "RecountDivTypeFromTimePos",
     "RecountEma",
@@ -81,6 +85,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "RecountMacdFromTimePos",
     "RecountVwMa",
     "RecountVwMaFromTimePos",
+    "RemoveAllAvgAtrs",
     "RemoveAllDivTypes",
     "RemoveAllEmas",
     "RemoveAllKLines",
@@ -88,6 +93,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "RemoveAllMas",
     "RemoveAllTicks",
     "RemoveAllVwMas",
+    "RemoveAvgAtrsByRange",
     "RemoveDivTypesByRange",
     "RemoveEmasByRange",
     "RemoveKLinesByRange",
@@ -96,6 +102,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "RemoveOneKLine",
     "RemoveTicksByRange",
     "RemoveVwMasByRange",
+    "UpdateAvgAtr",
     "UpdateDivType",
     "UpdateEma",
     "UpdateKLine",
@@ -157,6 +164,13 @@ const ::std::string iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name = "RemoveAll
 const ::std::string iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name = "RemoveDivTypesByRange";
 const ::std::string iceC_IBTrader_IQDatabase_GetDivTypes_name = "GetDivTypes";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneDivType_name = "GetOneDivType";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtr_name = "RecountAvgAtr";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name = "RecountAvgAtrFromTimePos";
+const ::std::string iceC_IBTrader_IQDatabase_UpdateAvgAtr_name = "UpdateAvgAtr";
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name = "RemoveAllAvgAtrs";
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name = "RemoveAvgAtrsByRange";
+const ::std::string iceC_IBTrader_IQDatabase_GetAvgAtrs_name = "GetAvgAtrs";
+const ::std::string iceC_IBTrader_IQDatabase_GetOneAvgAtr_name = "GetOneAvgAtr";
 
 }
 
@@ -1056,9 +1070,133 @@ IBTrader::IQDatabase::_iceD_GetOneDivType(::IceInternal::Incoming& inS, const ::
 
 /// \cond INTERNAL
 bool
+IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    istr->readAll(iceP_codeId, iceP_timeType);
+    inS.endReadParams();
+    this->RecountAvgAtr(::std::move(iceP_codeId), iceP_timeType, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    long long int iceP_timePos;
+    istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
+    inS.endReadParams();
+    this->RecountAvgAtrFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_UpdateAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    double iceP_avgAtr;
+    istr->readAll(iceP_codeId, iceP_timeType, iceP_avgAtr);
+    inS.endReadParams();
+    this->UpdateAvgAtr(::std::move(iceP_codeId), iceP_timeType, iceP_avgAtr, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    istr->readAll(iceP_codeId, iceP_timeType);
+    inS.endReadParams();
+    this->RemoveAllAvgAtrs(::std::move(iceP_codeId), iceP_timeType, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    long long int iceP_beginTime;
+    long long int iceP_endTime;
+    istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
+    inS.endReadParams();
+    this->RemoveAvgAtrsByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    IQuery iceP_query;
+    istr->readAll(iceP_codeId, iceP_timeType, iceP_query);
+    inS.endReadParams();
+    IAvgAtrs iceP_avgAtrs;
+    this->GetAvgAtrs(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_query), iceP_avgAtrs, current);
+    auto ostr = inS.startWriteParams();
+    ostr->writeAll(iceP_avgAtrs);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_GetOneAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    long long int iceP_timePos;
+    istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
+    inS.endReadParams();
+    double iceP_avgAtr;
+    bool ret = this->GetOneAvgAtr(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, iceP_avgAtr, current);
+    auto ostr = inS.startWriteParams();
+    ostr->writeAll(iceP_avgAtr, ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 53, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 60, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -1068,213 +1206,241 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
     {
         case 0:
         {
-            return _iceD_GetDivTypes(in, current);
+            return _iceD_GetAvgAtrs(in, current);
         }
         case 1:
         {
-            return _iceD_GetEmas(in, current);
+            return _iceD_GetDivTypes(in, current);
         }
         case 2:
         {
-            return _iceD_GetInvalidKLines(in, current);
+            return _iceD_GetEmas(in, current);
         }
         case 3:
         {
-            return _iceD_GetKLinePairs(in, current);
+            return _iceD_GetInvalidKLines(in, current);
         }
         case 4:
         {
-            return _iceD_GetKLines(in, current);
+            return _iceD_GetKLinePairs(in, current);
         }
         case 5:
         {
-            return _iceD_GetLastUpdateTick(in, current);
+            return _iceD_GetKLines(in, current);
         }
         case 6:
         {
-            return _iceD_GetMacds(in, current);
+            return _iceD_GetLastUpdateTick(in, current);
         }
         case 7:
         {
-            return _iceD_GetMas(in, current);
+            return _iceD_GetMacds(in, current);
         }
         case 8:
         {
-            return _iceD_GetOneDivType(in, current);
+            return _iceD_GetMas(in, current);
         }
         case 9:
         {
-            return _iceD_GetOneEma(in, current);
+            return _iceD_GetOneAvgAtr(in, current);
         }
         case 10:
         {
-            return _iceD_GetOneKLine(in, current);
+            return _iceD_GetOneDivType(in, current);
         }
         case 11:
         {
-            return _iceD_GetOneMa(in, current);
+            return _iceD_GetOneEma(in, current);
         }
         case 12:
         {
-            return _iceD_GetOneMacd(in, current);
+            return _iceD_GetOneKLine(in, current);
         }
         case 13:
         {
-            return _iceD_GetOneTick(in, current);
+            return _iceD_GetOneMa(in, current);
         }
         case 14:
         {
-            return _iceD_GetOneVwMa(in, current);
+            return _iceD_GetOneMacd(in, current);
         }
         case 15:
         {
-            return _iceD_GetTicks(in, current);
+            return _iceD_GetOneTick(in, current);
         }
         case 16:
         {
-            return _iceD_GetVwMas(in, current);
+            return _iceD_GetOneVwMa(in, current);
         }
         case 17:
         {
-            return _iceD_RecountDivType(in, current);
+            return _iceD_GetTicks(in, current);
         }
         case 18:
         {
-            return _iceD_RecountDivTypeFromTimePos(in, current);
+            return _iceD_GetVwMas(in, current);
         }
         case 19:
         {
-            return _iceD_RecountEma(in, current);
+            return _iceD_RecountAvgAtr(in, current);
         }
         case 20:
         {
-            return _iceD_RecountEmaFromTimePos(in, current);
+            return _iceD_RecountAvgAtrFromTimePos(in, current);
         }
         case 21:
         {
-            return _iceD_RecountMa(in, current);
+            return _iceD_RecountDivType(in, current);
         }
         case 22:
         {
-            return _iceD_RecountMaFromTimePos(in, current);
+            return _iceD_RecountDivTypeFromTimePos(in, current);
         }
         case 23:
         {
-            return _iceD_RecountMacd(in, current);
+            return _iceD_RecountEma(in, current);
         }
         case 24:
         {
-            return _iceD_RecountMacdFromTimePos(in, current);
+            return _iceD_RecountEmaFromTimePos(in, current);
         }
         case 25:
         {
-            return _iceD_RecountVwMa(in, current);
+            return _iceD_RecountMa(in, current);
         }
         case 26:
         {
-            return _iceD_RecountVwMaFromTimePos(in, current);
+            return _iceD_RecountMaFromTimePos(in, current);
         }
         case 27:
         {
-            return _iceD_RemoveAllDivTypes(in, current);
+            return _iceD_RecountMacd(in, current);
         }
         case 28:
         {
-            return _iceD_RemoveAllEmas(in, current);
+            return _iceD_RecountMacdFromTimePos(in, current);
         }
         case 29:
         {
-            return _iceD_RemoveAllKLines(in, current);
+            return _iceD_RecountVwMa(in, current);
         }
         case 30:
         {
-            return _iceD_RemoveAllMacds(in, current);
+            return _iceD_RecountVwMaFromTimePos(in, current);
         }
         case 31:
         {
-            return _iceD_RemoveAllMas(in, current);
+            return _iceD_RemoveAllAvgAtrs(in, current);
         }
         case 32:
         {
-            return _iceD_RemoveAllTicks(in, current);
+            return _iceD_RemoveAllDivTypes(in, current);
         }
         case 33:
         {
-            return _iceD_RemoveAllVwMas(in, current);
+            return _iceD_RemoveAllEmas(in, current);
         }
         case 34:
         {
-            return _iceD_RemoveDivTypesByRange(in, current);
+            return _iceD_RemoveAllKLines(in, current);
         }
         case 35:
         {
-            return _iceD_RemoveEmasByRange(in, current);
+            return _iceD_RemoveAllMacds(in, current);
         }
         case 36:
         {
-            return _iceD_RemoveKLinesByRange(in, current);
+            return _iceD_RemoveAllMas(in, current);
         }
         case 37:
         {
-            return _iceD_RemoveMacdsByRange(in, current);
+            return _iceD_RemoveAllTicks(in, current);
         }
         case 38:
         {
-            return _iceD_RemoveMasByRange(in, current);
+            return _iceD_RemoveAllVwMas(in, current);
         }
         case 39:
         {
-            return _iceD_RemoveOneKLine(in, current);
+            return _iceD_RemoveAvgAtrsByRange(in, current);
         }
         case 40:
         {
-            return _iceD_RemoveTicksByRange(in, current);
+            return _iceD_RemoveDivTypesByRange(in, current);
         }
         case 41:
         {
-            return _iceD_RemoveVwMasByRange(in, current);
+            return _iceD_RemoveEmasByRange(in, current);
         }
         case 42:
         {
-            return _iceD_UpdateDivType(in, current);
+            return _iceD_RemoveKLinesByRange(in, current);
         }
         case 43:
         {
-            return _iceD_UpdateEma(in, current);
+            return _iceD_RemoveMacdsByRange(in, current);
         }
         case 44:
         {
-            return _iceD_UpdateKLine(in, current);
+            return _iceD_RemoveMasByRange(in, current);
         }
         case 45:
         {
-            return _iceD_UpdateMa(in, current);
+            return _iceD_RemoveOneKLine(in, current);
         }
         case 46:
         {
-            return _iceD_UpdateMacd(in, current);
+            return _iceD_RemoveTicksByRange(in, current);
         }
         case 47:
         {
-            return _iceD_UpdateTickToDB(in, current);
+            return _iceD_RemoveVwMasByRange(in, current);
         }
         case 48:
         {
-            return _iceD_UpdateVwMa(in, current);
+            return _iceD_UpdateAvgAtr(in, current);
         }
         case 49:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_UpdateDivType(in, current);
         }
         case 50:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_UpdateEma(in, current);
         }
         case 51:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 52:
+        {
+            return _iceD_UpdateMa(in, current);
+        }
+        case 53:
+        {
+            return _iceD_UpdateMacd(in, current);
+        }
+        case 54:
+        {
+            return _iceD_UpdateTickToDB(in, current);
+        }
+        case 55:
+        {
+            return _iceD_UpdateVwMa(in, current);
+        }
+        case 56:
+        {
+            return _iceD_ice_id(in, current);
+        }
+        case 57:
+        {
+            return _iceD_ice_ids(in, current);
+        }
+        case 58:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 59:
         {
             return _iceD_ice_ping(in, current);
         }
@@ -1987,6 +2153,105 @@ IBTrader::IQDatabasePrx::_iceI_GetOneDivType(const ::std::shared_ptr<::IceIntern
 /// \endcond
 
 /// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_RecountAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
+{
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_RecountAvgAtrFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
+{
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_UpdateAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, double iceP_avgAtr, const ::Ice::Context& context)
+{
+    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateAvgAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_avgAtr);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_RemoveAllAvgAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
+{
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_RemoveAvgAtrsByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
+{
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_GetAvgAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IAvgAtrs>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IQuery& iceP_query, const ::Ice::Context& context)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_GetAvgAtrs_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_query);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_GetOneAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneAvgAtrResult>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
+        },
+        nullptr,
+        [](::Ice::InputStream* istr)
+        {
+            IQDatabase::GetOneAvgAtrResult v;
+            istr->readAll(v.avgAtr, v.returnValue);
+            return v;
+        });
+}
+/// \endcond
+
+/// \cond INTERNAL
 ::std::shared_ptr<::Ice::ObjectPrx>
 IBTrader::IQDatabasePrx::_newInstance() const
 {
@@ -2102,6 +2367,20 @@ const ::std::string iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name = "Remov
 const ::std::string iceC_IBTrader_IQDatabase_GetDivTypes_name = "GetDivTypes";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneDivType_name = "GetOneDivType";
+
+const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtr_name = "RecountAvgAtr";
+
+const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name = "RecountAvgAtrFromTimePos";
+
+const ::std::string iceC_IBTrader_IQDatabase_UpdateAvgAtr_name = "UpdateAvgAtr";
+
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name = "RemoveAllAvgAtrs";
+
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name = "RemoveAvgAtrsByRange";
+
+const ::std::string iceC_IBTrader_IQDatabase_GetAvgAtrs_name = "GetAvgAtrs";
+
+const ::std::string iceC_IBTrader_IQDatabase_GetOneAvgAtr_name = "GetOneAvgAtr";
 
 }
 
@@ -4045,6 +4324,266 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneDivType(::IBTrader::IDivTyp
     result->_endReadParams();
 }
 
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAvgAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAvgAtr_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_RecountAvgAtr_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtr_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+void
+IceProxy::IBTrader::IQDatabase::end_RecountAvgAtr(const ::Ice::AsyncResultPtr& result)
+{
+    _end(result, iceC_IBTrader_IQDatabase_RecountAvgAtr_name);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAvgAtrFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        ostr->write(iceP_timePos);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+void
+IceProxy::IBTrader::IQDatabase::end_RecountAvgAtrFromTimePos(const ::Ice::AsyncResultPtr& result)
+{
+    _end(result, iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateAvgAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Double iceP_avgAtr, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateAvgAtr_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_UpdateAvgAtr_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        ostr->write(iceP_avgAtr);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_UpdateAvgAtr_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+void
+IceProxy::IBTrader::IQDatabase::end_UpdateAvgAtr(const ::Ice::AsyncResultPtr& result)
+{
+    _end(result, iceC_IBTrader_IQDatabase_UpdateAvgAtr_name);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllAvgAtrs(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+void
+IceProxy::IBTrader::IQDatabase::end_RemoveAllAvgAtrs(const ::Ice::AsyncResultPtr& result)
+{
+    _end(result, iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAvgAtrsByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        ostr->write(iceP_beginTime);
+        ostr->write(iceP_endTime);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+void
+IceProxy::IBTrader::IQDatabase::end_RemoveAvgAtrsByRange(const ::Ice::AsyncResultPtr& result)
+{
+    _end(result, iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_GetAvgAtrs(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IQuery& iceP_query, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetAvgAtrs_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetAvgAtrs_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_GetAvgAtrs_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        ostr->write(iceP_query);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+void
+IceProxy::IBTrader::IQDatabase::end_GetAvgAtrs(::IBTrader::IAvgAtrs& iceP_avgAtrs, const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(iceP_avgAtrs);
+    result->_endReadParams();
+}
+
+void IceProxy::IBTrader::IQDatabase::_iceI_end_GetAvgAtrs(::IBTrader::IAvgAtrs& iceP_avgAtrs, const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(iceP_avgAtrs);
+    result->_endReadParams();
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_GetOneAvgAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        ostr->write(iceP_timePos);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+bool
+IceProxy::IBTrader::IQDatabase::end_GetOneAvgAtr(::Ice::Double& iceP_avgAtr, const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
+    bool ret;
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(iceP_avgAtr);
+    istr->read(ret);
+    result->_endReadParams();
+    return ret;
+}
+
+void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneAvgAtr(::Ice::Double& iceP_avgAtr, bool& ret, const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(iceP_avgAtr);
+    istr->read(ret);
+    result->_endReadParams();
+}
+
 /// \cond INTERNAL
 ::IceProxy::Ice::Object*
 IceProxy::IBTrader::IQDatabase::_newInstance() const
@@ -5070,10 +5609,149 @@ IBTrader::IQDatabase::_iceD_GetOneDivType(::IceInternal::Incoming& inS, const ::
 }
 /// \endcond
 
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    inS.endReadParams();
+    this->RecountAvgAtr(iceP_codeId, iceP_timeType, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    ::Ice::Long iceP_timePos;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    istr->read(iceP_timePos);
+    inS.endReadParams();
+    this->RecountAvgAtrFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_UpdateAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    ::Ice::Double iceP_avgAtr;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    istr->read(iceP_avgAtr);
+    inS.endReadParams();
+    this->UpdateAvgAtr(iceP_codeId, iceP_timeType, iceP_avgAtr, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    inS.endReadParams();
+    this->RemoveAllAvgAtrs(iceP_codeId, iceP_timeType, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    ::Ice::Long iceP_beginTime;
+    ::Ice::Long iceP_endTime;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    istr->read(iceP_beginTime);
+    istr->read(iceP_endTime);
+    inS.endReadParams();
+    this->RemoveAvgAtrsByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    IQuery iceP_query;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    istr->read(iceP_query);
+    inS.endReadParams();
+    IAvgAtrs iceP_avgAtrs;
+    this->GetAvgAtrs(iceP_codeId, iceP_timeType, iceP_query, iceP_avgAtrs, current);
+    ::Ice::OutputStream* ostr = inS.startWriteParams();
+    ostr->write(iceP_avgAtrs);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_GetOneAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    ::Ice::Long iceP_timePos;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    istr->read(iceP_timePos);
+    inS.endReadParams();
+    ::Ice::Double iceP_avgAtr;
+    bool ret = this->GetOneAvgAtr(iceP_codeId, iceP_timeType, iceP_timePos, iceP_avgAtr, current);
+    ::Ice::OutputStream* ostr = inS.startWriteParams();
+    ostr->write(iceP_avgAtr);
+    ostr->write(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
 namespace
 {
 const ::std::string iceC_IBTrader_IQDatabase_all[] =
 {
+    "GetAvgAtrs",
     "GetDivTypes",
     "GetEmas",
     "GetInvalidKLines",
@@ -5082,6 +5760,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "GetLastUpdateTick",
     "GetMacds",
     "GetMas",
+    "GetOneAvgAtr",
     "GetOneDivType",
     "GetOneEma",
     "GetOneKLine",
@@ -5091,6 +5770,8 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "GetOneVwMa",
     "GetTicks",
     "GetVwMas",
+    "RecountAvgAtr",
+    "RecountAvgAtrFromTimePos",
     "RecountDivType",
     "RecountDivTypeFromTimePos",
     "RecountEma",
@@ -5101,6 +5782,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "RecountMacdFromTimePos",
     "RecountVwMa",
     "RecountVwMaFromTimePos",
+    "RemoveAllAvgAtrs",
     "RemoveAllDivTypes",
     "RemoveAllEmas",
     "RemoveAllKLines",
@@ -5108,6 +5790,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "RemoveAllMas",
     "RemoveAllTicks",
     "RemoveAllVwMas",
+    "RemoveAvgAtrsByRange",
     "RemoveDivTypesByRange",
     "RemoveEmasByRange",
     "RemoveKLinesByRange",
@@ -5116,6 +5799,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "RemoveOneKLine",
     "RemoveTicksByRange",
     "RemoveVwMasByRange",
+    "UpdateAvgAtr",
     "UpdateDivType",
     "UpdateEma",
     "UpdateKLine",
@@ -5135,7 +5819,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
 bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 53, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 60, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -5145,213 +5829,241 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
     {
         case 0:
         {
-            return _iceD_GetDivTypes(in, current);
+            return _iceD_GetAvgAtrs(in, current);
         }
         case 1:
         {
-            return _iceD_GetEmas(in, current);
+            return _iceD_GetDivTypes(in, current);
         }
         case 2:
         {
-            return _iceD_GetInvalidKLines(in, current);
+            return _iceD_GetEmas(in, current);
         }
         case 3:
         {
-            return _iceD_GetKLinePairs(in, current);
+            return _iceD_GetInvalidKLines(in, current);
         }
         case 4:
         {
-            return _iceD_GetKLines(in, current);
+            return _iceD_GetKLinePairs(in, current);
         }
         case 5:
         {
-            return _iceD_GetLastUpdateTick(in, current);
+            return _iceD_GetKLines(in, current);
         }
         case 6:
         {
-            return _iceD_GetMacds(in, current);
+            return _iceD_GetLastUpdateTick(in, current);
         }
         case 7:
         {
-            return _iceD_GetMas(in, current);
+            return _iceD_GetMacds(in, current);
         }
         case 8:
         {
-            return _iceD_GetOneDivType(in, current);
+            return _iceD_GetMas(in, current);
         }
         case 9:
         {
-            return _iceD_GetOneEma(in, current);
+            return _iceD_GetOneAvgAtr(in, current);
         }
         case 10:
         {
-            return _iceD_GetOneKLine(in, current);
+            return _iceD_GetOneDivType(in, current);
         }
         case 11:
         {
-            return _iceD_GetOneMa(in, current);
+            return _iceD_GetOneEma(in, current);
         }
         case 12:
         {
-            return _iceD_GetOneMacd(in, current);
+            return _iceD_GetOneKLine(in, current);
         }
         case 13:
         {
-            return _iceD_GetOneTick(in, current);
+            return _iceD_GetOneMa(in, current);
         }
         case 14:
         {
-            return _iceD_GetOneVwMa(in, current);
+            return _iceD_GetOneMacd(in, current);
         }
         case 15:
         {
-            return _iceD_GetTicks(in, current);
+            return _iceD_GetOneTick(in, current);
         }
         case 16:
         {
-            return _iceD_GetVwMas(in, current);
+            return _iceD_GetOneVwMa(in, current);
         }
         case 17:
         {
-            return _iceD_RecountDivType(in, current);
+            return _iceD_GetTicks(in, current);
         }
         case 18:
         {
-            return _iceD_RecountDivTypeFromTimePos(in, current);
+            return _iceD_GetVwMas(in, current);
         }
         case 19:
         {
-            return _iceD_RecountEma(in, current);
+            return _iceD_RecountAvgAtr(in, current);
         }
         case 20:
         {
-            return _iceD_RecountEmaFromTimePos(in, current);
+            return _iceD_RecountAvgAtrFromTimePos(in, current);
         }
         case 21:
         {
-            return _iceD_RecountMa(in, current);
+            return _iceD_RecountDivType(in, current);
         }
         case 22:
         {
-            return _iceD_RecountMaFromTimePos(in, current);
+            return _iceD_RecountDivTypeFromTimePos(in, current);
         }
         case 23:
         {
-            return _iceD_RecountMacd(in, current);
+            return _iceD_RecountEma(in, current);
         }
         case 24:
         {
-            return _iceD_RecountMacdFromTimePos(in, current);
+            return _iceD_RecountEmaFromTimePos(in, current);
         }
         case 25:
         {
-            return _iceD_RecountVwMa(in, current);
+            return _iceD_RecountMa(in, current);
         }
         case 26:
         {
-            return _iceD_RecountVwMaFromTimePos(in, current);
+            return _iceD_RecountMaFromTimePos(in, current);
         }
         case 27:
         {
-            return _iceD_RemoveAllDivTypes(in, current);
+            return _iceD_RecountMacd(in, current);
         }
         case 28:
         {
-            return _iceD_RemoveAllEmas(in, current);
+            return _iceD_RecountMacdFromTimePos(in, current);
         }
         case 29:
         {
-            return _iceD_RemoveAllKLines(in, current);
+            return _iceD_RecountVwMa(in, current);
         }
         case 30:
         {
-            return _iceD_RemoveAllMacds(in, current);
+            return _iceD_RecountVwMaFromTimePos(in, current);
         }
         case 31:
         {
-            return _iceD_RemoveAllMas(in, current);
+            return _iceD_RemoveAllAvgAtrs(in, current);
         }
         case 32:
         {
-            return _iceD_RemoveAllTicks(in, current);
+            return _iceD_RemoveAllDivTypes(in, current);
         }
         case 33:
         {
-            return _iceD_RemoveAllVwMas(in, current);
+            return _iceD_RemoveAllEmas(in, current);
         }
         case 34:
         {
-            return _iceD_RemoveDivTypesByRange(in, current);
+            return _iceD_RemoveAllKLines(in, current);
         }
         case 35:
         {
-            return _iceD_RemoveEmasByRange(in, current);
+            return _iceD_RemoveAllMacds(in, current);
         }
         case 36:
         {
-            return _iceD_RemoveKLinesByRange(in, current);
+            return _iceD_RemoveAllMas(in, current);
         }
         case 37:
         {
-            return _iceD_RemoveMacdsByRange(in, current);
+            return _iceD_RemoveAllTicks(in, current);
         }
         case 38:
         {
-            return _iceD_RemoveMasByRange(in, current);
+            return _iceD_RemoveAllVwMas(in, current);
         }
         case 39:
         {
-            return _iceD_RemoveOneKLine(in, current);
+            return _iceD_RemoveAvgAtrsByRange(in, current);
         }
         case 40:
         {
-            return _iceD_RemoveTicksByRange(in, current);
+            return _iceD_RemoveDivTypesByRange(in, current);
         }
         case 41:
         {
-            return _iceD_RemoveVwMasByRange(in, current);
+            return _iceD_RemoveEmasByRange(in, current);
         }
         case 42:
         {
-            return _iceD_UpdateDivType(in, current);
+            return _iceD_RemoveKLinesByRange(in, current);
         }
         case 43:
         {
-            return _iceD_UpdateEma(in, current);
+            return _iceD_RemoveMacdsByRange(in, current);
         }
         case 44:
         {
-            return _iceD_UpdateKLine(in, current);
+            return _iceD_RemoveMasByRange(in, current);
         }
         case 45:
         {
-            return _iceD_UpdateMa(in, current);
+            return _iceD_RemoveOneKLine(in, current);
         }
         case 46:
         {
-            return _iceD_UpdateMacd(in, current);
+            return _iceD_RemoveTicksByRange(in, current);
         }
         case 47:
         {
-            return _iceD_UpdateTickToDB(in, current);
+            return _iceD_RemoveVwMasByRange(in, current);
         }
         case 48:
         {
-            return _iceD_UpdateVwMa(in, current);
+            return _iceD_UpdateAvgAtr(in, current);
         }
         case 49:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_UpdateDivType(in, current);
         }
         case 50:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_UpdateEma(in, current);
         }
         case 51:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 52:
+        {
+            return _iceD_UpdateMa(in, current);
+        }
+        case 53:
+        {
+            return _iceD_UpdateMacd(in, current);
+        }
+        case 54:
+        {
+            return _iceD_UpdateTickToDB(in, current);
+        }
+        case 55:
+        {
+            return _iceD_UpdateVwMa(in, current);
+        }
+        case 56:
+        {
+            return _iceD_ice_id(in, current);
+        }
+        case 57:
+        {
+            return _iceD_ice_ids(in, current);
+        }
+        case 58:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 59:
         {
             return _iceD_ice_ping(in, current);
         }

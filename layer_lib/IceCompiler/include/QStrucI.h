@@ -1,4 +1,4 @@
-﻿#ifndef __QStrucI_h__
+#ifndef __QStrucI_h__
 #define __QStrucI_h__
 
 #include <QStruc.h>

@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "ItemsHandler.h"
-#include <Calculator_Macd.h>
 #include "../src/Factory_AnalystGui.h"
 
 

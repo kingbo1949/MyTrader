@@ -414,8 +414,7 @@ bool CBaseLine_Channel::IsMacdDiv(const HighAndLow& highAndLowTradeIn)
 	return false;
 }
 
-DivergenceType CBaseLine_Channel::GetDivType(Time_Type timeType, const HighAndLow& highAndLowTradeIn)
-{
+DivergenceType CBaseLine_Channel::GetDivType(Time_Type timeType, const HighAndLow& highAndLowTradeIn) {
 	Tick_T time;
 	if (m_pStrategyParam->key.buyOrSell == BuyOrSell::Buy)
 	{
@@ -427,12 +426,17 @@ DivergenceType CBaseLine_Channel::GetDivType(Time_Type timeType, const HighAndLo
 		// 准备卖出开仓，高点必须处于背离位置
 		time = highAndLowTradeIn.highPos;
 	}
-	//if (CGetRecordNo::TimesInSameBar(timeType, time, Get_CurrentTime()->GetCurrentTime_millisecond()))
-	//{
-	//	// 极值点与当前时间处于同一个bar，不可使用
-	//	return DivergenceType::Normal;
-	//}
-	return MakeAndGet_Container_MacdDiv()->GetMacdDivAtTime(timeType, time);
+	IBDivTypePtr pDivtype = MakeAndGet_QDatabase()->GetOneDivType(m_pContract->codeId, timeType, time);
+	if (!pDivtype)
+	{
+		return DivergenceType::Normal;
+	}else
+	{
+		return pDivtype->divType;
+
+	}
+
+
 }
 
 bool CBaseLine_Channel::IsTrain(Time_Type timeType, const HighAndLow& highAndLowTradeIn)
@@ -448,14 +452,13 @@ bool CBaseLine_Channel::IsTrain(Time_Type timeType, const HighAndLow& highAndLow
 		// 准备卖出开仓，高点必须处于背离位置
 		time = highAndLowTradeIn.highPos;
 	}
+	IBMacdPtr pMacd = MakeAndGet_QDatabase()->GetOneMacd(m_pContract->codeId, timeType, time);
 
-	MacdValue macdValue = MakeAndGet_Container_Macd()->GetMacdAtTime(timeType, time);
-
-	if (m_pStrategyParam->key.buyOrSell == BuyOrSell::Buy && macdValue.dif > macdValue.dea)
+	if (m_pStrategyParam->key.buyOrSell == BuyOrSell::Buy && pMacd->dif > pMacd->dea)
 	{
 		return true;
 	}
-	if (m_pStrategyParam->key.buyOrSell == BuyOrSell::Sell && macdValue.dif < macdValue.dea)
+	if (m_pStrategyParam->key.buyOrSell == BuyOrSell::Sell && pMacd->dif < pMacd->dea)
 	{
 		return true;
 	}

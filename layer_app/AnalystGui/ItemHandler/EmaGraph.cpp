@@ -1,5 +1,4 @@
 ﻿#include "EmaGraph.h"
-#include <Factory_Calculator.h>
 #include <Factory_QDatabase.h>
 CEmaGraph::CEmaGraph(QCustomPlot* parent)
 	:CAvgValueGraph(parent)

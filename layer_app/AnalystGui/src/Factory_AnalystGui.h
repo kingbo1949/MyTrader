@@ -5,7 +5,6 @@
 #include <AnalystDealDefine.h>
 #include "../src/ColorManager.h"
 #include "../tSideTimeHandler/TSideTimeHandler.h"
-#include <Factory_Calculator.h>
 
 enum class MainOrSub
 {
@@ -102,11 +101,6 @@ void					SetAxisRect(MainOrSub mainOrSub, QCPAxisRectQPtr axisRect);
 
 // 按主图x轴范围，设置y轴
 void					SetMainY(const QCPRange& xRange, const IBKLinePtrs& klinesInSuit);
-
-Container_MacdPtr		MakeAndGet_MacdContainer();
-Container_AveragePtr	MakeAndGet_EmaContainer();
-Container_AveragePtr	MakeAndGet_MaContainer();
-Container_MacdDivPtr	MakeAndGet_MacdDivContainer(Container_MacdPtr macdContainer);
 
 void					Set_TableViewMouse(TableViewMouse tableViewMouse);
 TableViewMouse			Get_TableViewMouse();
