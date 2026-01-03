@@ -366,6 +366,9 @@ void AnalystGui::on_klineTypeCtrl_currentIndexChanged(int index)
 	// 得到codeId
 
 	std::string codeId = GetSelectCodeId(ui.tabWidget);
+	if (codeId == "") {
+		return ;
+	}
 
 	// 得到timeType
 	Time_Type timeType = GetSelectTimeType();

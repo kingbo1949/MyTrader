@@ -91,28 +91,45 @@ void RequestOneContracts()
 // 从ib接口查询所有品种的K线并更新到数据库
 void TransAllContracts_NoMix()
 {
-	int daysForMinute = 60;
-	TimePair timePair;
-	timePair.beginPos = CGlobal::GetTimeByStr("20191101 00:00:00") * 1000;
-	timePair.endPos = Get_CurrentTime()->GetCurrentTime_millisecond();
-
-
 	IbContractPtrs contracts;
 	MakeAndGet_JSonContracts()->Load_Contracts(contracts, SelectType::True);
 	for (auto onecontract : contracts)
 	{
-
-		klineConverter_nomix.ConvertOneKLineFromIBToDb(onecontract->codeId, timePair);
-		klineConverter_nomix.QueryKLineInDb(onecontract->codeId);
-
-		MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M1);
-		MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M5);
-		MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M15);
-		MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M30);
-		MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::H1);
-		MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::D1);
+		printf("%s begin.....", onecontract->codeId.c_str());
+		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M1);
+		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M5);
+		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M15);
+		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M30);
+		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::H1);
+		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::D1);
+		printf("over\n");
 
 	}
+
+
+
+	// int daysForMinute = 60;
+	// TimePair timePair;
+	// timePair.beginPos = CGlobal::GetTimeByStr("20191101 00:00:00") * 1000;
+	// timePair.endPos = Get_CurrentTime()->GetCurrentTime_millisecond();
+	//
+	//
+	// IbContractPtrs contracts;
+	// MakeAndGet_JSonContracts()->Load_Contracts(contracts, SelectType::True);
+	// for (auto onecontract : contracts)
+	// {
+	//
+	// 	klineConverter_nomix.ConvertOneKLineFromIBToDb(onecontract->codeId, timePair);
+	// 	klineConverter_nomix.QueryKLineInDb(onecontract->codeId);
+	//
+	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M1);
+	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M5);
+	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M15);
+	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M30);
+	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::H1);
+	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::D1);
+	//
+	// }
 
 }
 
@@ -137,7 +154,7 @@ void ConvertOneContractTicks()
 void ConvertOneContractKLines()
 {
 	//std::string targetCodeId = "ETHUSDRR";
-	std::string targetCodeId = "UPST";
+	std::string targetCodeId = "TSLA";
 
 	TimePair timePair;
 	timePair.beginPos = CGlobal::GetTimeByStr("20240101 00:00:00") * 1000;

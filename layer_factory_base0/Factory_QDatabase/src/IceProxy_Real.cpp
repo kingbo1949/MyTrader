@@ -53,6 +53,12 @@ void CIceProxy_Real::ReleaseAllPrx()
 
 std::shared_ptr<Ice::Communicator> CIceProxy_Real::GetCommunicatorDb()
 {
+	char cwd[1024];
+	if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+		std::cout << "Current working directory: " << cwd << std::endl;
+	}
+	std::cout << "Trying to load config file: " << m_iceConfigFileDb << std::endl;
+
 	if (!m_communicatorDb)
 	{
 		// 从配置文件初始化属性

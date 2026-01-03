@@ -53,6 +53,7 @@ void CCmdUpdateDbFromIB::UpdateDbKLineFromIB(const std::string& codeId, Time_Typ
 		//MakeAndGet_QDatabase()->RecountEmaFromTimePos(codeId, timeType, klines[0]->time);
 		MakeAndGet_QDatabase()->RecountMacdFromTimePos(codeId, timeType, klines[0]->time);
 		MakeAndGet_QDatabase()->RecountDivTypeFromTimePos(codeId, timeType, klines[0]->time);
+		MakeAndGet_QDatabase()->RecountAtrFromTimePos(codeId, timeType, klines[0]->time);
 	}
 
 	Log_Print(LogLevel::Info, fmt::format("update {}, {} {} klines",

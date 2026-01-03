@@ -44,7 +44,7 @@ void CDownloadData::UpdateDbKLineFromIB(const std::string& codeId, Time_Type tim
 
 		MakeAndGet_QDatabase()->UpdateKLine(codeId, timeType, kline);
 	}
-	// ¸üÐÂÖ¸±ê
+	// ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
 	if (!klines.empty())
 	{
 		if (timeType != Time_Type::D1)
@@ -52,12 +52,14 @@ void CDownloadData::UpdateDbKLineFromIB(const std::string& codeId, Time_Type tim
 			MakeAndGet_QDatabase()->RecountMaFromTimePos(codeId, timeType, klines[0]->time);
 			MakeAndGet_QDatabase()->RecountMacdFromTimePos(codeId, timeType, klines[0]->time);
 			MakeAndGet_QDatabase()->RecountDivTypeFromTimePos(codeId, timeType, klines[0]->time);
+			MakeAndGet_QDatabase()->RecountAtrFromTimePos(codeId, timeType, klines[0]->time);
 		}
 		else
 		{
 			MakeAndGet_QDatabase()->RecountMa(codeId, Time_Type::D1);
 			MakeAndGet_QDatabase()->RecountMacd(codeId, Time_Type::D1);
 			MakeAndGet_QDatabase()->RecountDivType(codeId, Time_Type::D1);
+			MakeAndGet_QDatabase()->RecountAtr(codeId, timeType);
 		}
 	}
 
