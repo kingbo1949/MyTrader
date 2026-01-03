@@ -1,5 +1,5 @@
 ﻿#include "DbTable_TickHis.h"
-#include "Compare.h"
+#include "../Compare.h"
 
 
 Bdb::CDbTable_TickHis::CDbTable_TickHis(DbEnv* env, const std::string& path, const std::string& dbName)

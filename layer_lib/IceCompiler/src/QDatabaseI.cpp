@@ -424,61 +424,61 @@ IBTrader::IQDatabaseI::GetOneDivType(::std::string /*codeId*/,
 }
 
 void
-IBTrader::IQDatabaseI::RecountAvgAtr(::std::string /*codeId*/,
+IBTrader::IQDatabaseI::RecountAtr(::std::string /*codeId*/,
+                                  ITimeType /*timeType*/,
+                                  const Ice::Current& current)
+{
+}
+
+void
+IBTrader::IQDatabaseI::RecountAtrFromTimePos(::std::string /*codeId*/,
+                                             ITimeType /*timeType*/,
+                                             long long int /*timePos*/,
+                                             const Ice::Current& current)
+{
+}
+
+void
+IBTrader::IQDatabaseI::UpdateAtr(::std::string /*codeId*/,
+                                 ITimeType /*timeType*/,
+                                 IAtrValue /*artValue*/,
+                                 const Ice::Current& current)
+{
+}
+
+void
+IBTrader::IQDatabaseI::RemoveAllAtrs(::std::string /*codeId*/,
                                      ITimeType /*timeType*/,
                                      const Ice::Current& current)
 {
 }
 
 void
-IBTrader::IQDatabaseI::RecountAvgAtrFromTimePos(::std::string /*codeId*/,
-                                                ITimeType /*timeType*/,
-                                                long long int /*timePos*/,
-                                                const Ice::Current& current)
+IBTrader::IQDatabaseI::RemoveAtrsByRange(::std::string /*codeId*/,
+                                         ITimeType /*timeType*/,
+                                         long long int /*beginTime*/,
+                                         long long int /*endTime*/,
+                                         const Ice::Current& current)
 {
 }
 
 void
-IBTrader::IQDatabaseI::UpdateAvgAtr(::std::string /*codeId*/,
-                                    ITimeType /*timeType*/,
-                                    double /*avgAtr*/,
-                                    const Ice::Current& current)
+IBTrader::IQDatabaseI::GetAtrs(::std::string /*codeId*/,
+                               ITimeType /*timeType*/,
+                               IQuery /*query*/,
+                               IAtrValues& avgAtrs,
+                               const Ice::Current& current)
 {
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAllAvgAtrs(::std::string /*codeId*/,
-                                        ITimeType /*timeType*/,
-                                        const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAvgAtrsByRange(::std::string /*codeId*/,
-                                            ITimeType /*timeType*/,
-                                            long long int /*beginTime*/,
-                                            long long int /*endTime*/,
-                                            const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::GetAvgAtrs(::std::string /*codeId*/,
-                                  ITimeType /*timeType*/,
-                                  IQuery /*query*/,
-                                  IAvgAtrs& avgAtrs,
-                                  const Ice::Current& current)
-{
-    avgAtrs = IAvgAtrs();
+    avgAtrs = IAtrValues();
 }
 
 bool
-IBTrader::IQDatabaseI::GetOneAvgAtr(::std::string /*codeId*/,
-                                    ITimeType /*timeType*/,
-                                    long long int /*timePos*/,
-                                    double& avgAtr,
-                                    const Ice::Current& current)
+IBTrader::IQDatabaseI::GetOneAtr(::std::string /*codeId*/,
+                                 ITimeType /*timeType*/,
+                                 long long int /*timePos*/,
+                                 IAtrValue& avgAtr,
+                                 const Ice::Current& current)
 {
-    avgAtr = 0.0;
+    avgAtr = IAtrValue();
     return false;
 }

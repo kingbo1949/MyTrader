@@ -1,6 +1,6 @@
 ﻿#include "Calculator_Ema.h"
 #include <numeric>
-#include "Factory.h"
+#include "../Factory.h"
 #include <Factory_Log.h>
 void CCalculator_Ema::Initialize(const std::string& codeId, ITimeType timeType, const IKLines& klines)
 {

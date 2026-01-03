@@ -42,5 +42,8 @@ public:
 	static IBDivTypePtr					TransDivType(const IDivTypeValue& value);
 	static IDivTypeValue				TransDivType(IBDivTypePtr pValue);
 
+	// 转换Atr
+	static IBAtrPtr						TransAtr(const IAtrValue& value);
+	static IAtrValue					TransAtr(const IBAtrPtr& pValue);
 };
 

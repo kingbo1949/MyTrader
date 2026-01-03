@@ -259,41 +259,41 @@ public:
                                IDivTypeValue&,
                                const Ice::Current&) override;
 
-    virtual void RecountAvgAtr(::std::string,
+    virtual void RecountAtr(::std::string,
+                            ITimeType,
+                            const Ice::Current&) override;
+
+    virtual void RecountAtrFromTimePos(::std::string,
+                                       ITimeType,
+                                       long long int,
+                                       const Ice::Current&) override;
+
+    virtual void UpdateAtr(::std::string,
+                           ITimeType,
+                           IAtrValue,
+                           const Ice::Current&) override;
+
+    virtual void RemoveAllAtrs(::std::string,
                                ITimeType,
                                const Ice::Current&) override;
 
-    virtual void RecountAvgAtrFromTimePos(::std::string,
-                                          ITimeType,
-                                          long long int,
-                                          const Ice::Current&) override;
+    virtual void RemoveAtrsByRange(::std::string,
+                                   ITimeType,
+                                   long long int,
+                                   long long int,
+                                   const Ice::Current&) override;
 
-    virtual void UpdateAvgAtr(::std::string,
-                              ITimeType,
-                              double,
-                              const Ice::Current&) override;
+    virtual void GetAtrs(::std::string,
+                         ITimeType,
+                         IQuery,
+                         IAtrValues&,
+                         const Ice::Current&) override;
 
-    virtual void RemoveAllAvgAtrs(::std::string,
-                                  ITimeType,
-                                  const Ice::Current&) override;
-
-    virtual void RemoveAvgAtrsByRange(::std::string,
-                                      ITimeType,
-                                      long long int,
-                                      long long int,
-                                      const Ice::Current&) override;
-
-    virtual void GetAvgAtrs(::std::string,
-                            ITimeType,
-                            IQuery,
-                            IAvgAtrs&,
-                            const Ice::Current&) override;
-
-    virtual bool GetOneAvgAtr(::std::string,
-                              ITimeType,
-                              long long int,
-                              double&,
-                              const Ice::Current&) override;
+    virtual bool GetOneAtr(::std::string,
+                           ITimeType,
+                           long long int,
+                           IAtrValue&,
+                           const Ice::Current&) override;
 };
 
 }

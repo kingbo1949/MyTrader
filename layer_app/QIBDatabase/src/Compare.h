@@ -41,6 +41,10 @@ namespace Bdb
 		static int Relative(const IDivTypeValue& value1, const IDivTypeValue& value2);
 		static int DivTypeA(Db* dbp, const Dbt* dbt1, const Dbt* dbt2, size_t* locp);
 
+		static int Relative(const IAtrValue& value1, const IAtrValue& value2);
+		static int AtrValueA(Db* dbp, const Dbt* dbt1, const Dbt* dbt2, size_t* locp);
+
+
 
 	};
 

@@ -165,4 +165,21 @@ int Bdb::CCompare::DivTypeA(Db* dbp, const Dbt* dbt1, const Dbt* dbt2, size_t* l
 	return Relative(value1, value2);
 }
 
+int CCompare::Relative(const IAtrValue &value1, const IAtrValue &value2)
+{
+	if (value1.time > value2.time) return 1;
+	if (value1.time < value2.time) return -1;
+	return 0;
+}
+
+int CCompare::AtrValueA(Db *dbp, const Dbt *dbt1, const Dbt *dbt2, size_t *locp)
+{
+	locp = NULL;
+	IAtrValue value1, value2;
+	UnMarshalObject<IAtrValue>(*dbt1, value1);
+	UnMarshalObject<IAtrValue>(*dbt2, value2);
+
+	return Relative(value1, value2);
+}
+
 

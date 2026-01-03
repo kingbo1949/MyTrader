@@ -280,3 +280,24 @@ IDivTypeValue CIceTransfor::TransDivType(IBDivTypePtr pValue)
 	back.isUTurn = pValue->isUTurn;
 	return back;
 }
+
+IBAtrPtr CIceTransfor::TransAtr(const IAtrValue &value)
+{
+	IBAtrPtr back = std::make_shared<CIBAtr>();
+
+	back->time = value.time;
+	back->thisAtr = value.thisAtr;
+	back->avgAtr = value.avgAtr;
+	return back;
+
+}
+
+IAtrValue CIceTransfor::TransAtr(const IBAtrPtr& pValue)
+{
+	IAtrValue back;
+	back.time = pValue->time;
+	back.thisAtr = pValue->thisAtr;
+	back.avgAtr = pValue->avgAtr;
+	return back;
+
+}

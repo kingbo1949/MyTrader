@@ -2,7 +2,7 @@
 #include <Factory_Log.h>
 #include "TimerTask_UpdateIndex.h"
 #include "Factory.h"
-#include "Calculator.h"
+#include "Calculator/Calculator.h"
 CTimerTask_UpdateIndex::CTimerTask_UpdateIndex()
 {
 	m_lastUpdateWait = 0;
@@ -56,6 +56,7 @@ void CTimerTask_UpdateIndex::UpdateIndex(const std::set<IQKey>& keys)
 		//MakenAndGet_Calculator_Ema()->Update(key.codeId, key.timeType, klines.back());
 		MakenAndGet_Calculator_Macd()->Update(key.codeId, key.timeType, klines.back());
 		MakenAndGet_Calculator_DivType()->Update(key.codeId, key.timeType, klines.back());
+		MakenAndGet_Calculator_Atr()->Update(key.codeId, key.timeType, klines.back());
 	}
 	time_t endPos = benchmark_milliseconds();
 	std::string str = fmt::format("needUpdates size = {},  update ma macd DivType used: {}", int(keys.size()), int(endPos - beginPos));

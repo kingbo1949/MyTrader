@@ -54,7 +54,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ids[2] =
 };
 const ::std::string iceC_IBTrader_IQDatabase_ops[] =
 {
-    "GetAvgAtrs",
+    "GetAtrs",
     "GetDivTypes",
     "GetEmas",
     "GetInvalidKLines",
@@ -63,7 +63,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "GetLastUpdateTick",
     "GetMacds",
     "GetMas",
-    "GetOneAvgAtr",
+    "GetOneAtr",
     "GetOneDivType",
     "GetOneEma",
     "GetOneKLine",
@@ -73,8 +73,8 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "GetOneVwMa",
     "GetTicks",
     "GetVwMas",
-    "RecountAvgAtr",
-    "RecountAvgAtrFromTimePos",
+    "RecountAtr",
+    "RecountAtrFromTimePos",
     "RecountDivType",
     "RecountDivTypeFromTimePos",
     "RecountEma",
@@ -85,7 +85,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "RecountMacdFromTimePos",
     "RecountVwMa",
     "RecountVwMaFromTimePos",
-    "RemoveAllAvgAtrs",
+    "RemoveAllAtrs",
     "RemoveAllDivTypes",
     "RemoveAllEmas",
     "RemoveAllKLines",
@@ -93,7 +93,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "RemoveAllMas",
     "RemoveAllTicks",
     "RemoveAllVwMas",
-    "RemoveAvgAtrsByRange",
+    "RemoveAtrsByRange",
     "RemoveDivTypesByRange",
     "RemoveEmasByRange",
     "RemoveKLinesByRange",
@@ -102,7 +102,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "RemoveOneKLine",
     "RemoveTicksByRange",
     "RemoveVwMasByRange",
-    "UpdateAvgAtr",
+    "UpdateAtr",
     "UpdateDivType",
     "UpdateEma",
     "UpdateKLine",
@@ -164,13 +164,13 @@ const ::std::string iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name = "RemoveAll
 const ::std::string iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name = "RemoveDivTypesByRange";
 const ::std::string iceC_IBTrader_IQDatabase_GetDivTypes_name = "GetDivTypes";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneDivType_name = "GetOneDivType";
-const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtr_name = "RecountAvgAtr";
-const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name = "RecountAvgAtrFromTimePos";
-const ::std::string iceC_IBTrader_IQDatabase_UpdateAvgAtr_name = "UpdateAvgAtr";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name = "RemoveAllAvgAtrs";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name = "RemoveAvgAtrsByRange";
-const ::std::string iceC_IBTrader_IQDatabase_GetAvgAtrs_name = "GetAvgAtrs";
-const ::std::string iceC_IBTrader_IQDatabase_GetOneAvgAtr_name = "GetOneAvgAtr";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAtr_name = "RecountAtr";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name = "RecountAtrFromTimePos";
+const ::std::string iceC_IBTrader_IQDatabase_UpdateAtr_name = "UpdateAtr";
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAtrs_name = "RemoveAllAtrs";
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name = "RemoveAtrsByRange";
+const ::std::string iceC_IBTrader_IQDatabase_GetAtrs_name = "GetAtrs";
+const ::std::string iceC_IBTrader_IQDatabase_GetOneAtr_name = "GetOneAtr";
 
 }
 
@@ -1070,7 +1070,7 @@ IBTrader::IQDatabase::_iceD_GetOneDivType(::IceInternal::Incoming& inS, const ::
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RecountAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -1078,7 +1078,7 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::
     ITimeType iceP_timeType;
     istr->readAll(iceP_codeId, iceP_timeType);
     inS.endReadParams();
-    this->RecountAvgAtr(::std::move(iceP_codeId), iceP_timeType, current);
+    this->RecountAtr(::std::move(iceP_codeId), iceP_timeType, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -1086,7 +1086,7 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RecountAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -1095,7 +1095,7 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& in
     long long int iceP_timePos;
     istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
     inS.endReadParams();
-    this->RecountAvgAtrFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
+    this->RecountAtrFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -1103,16 +1103,16 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& in
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_UpdateAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_UpdateAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
     ::std::string iceP_codeId;
     ITimeType iceP_timeType;
-    double iceP_avgAtr;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_avgAtr);
+    IAtrValue iceP_artValue;
+    istr->readAll(iceP_codeId, iceP_timeType, iceP_artValue);
     inS.endReadParams();
-    this->UpdateAvgAtr(::std::move(iceP_codeId), iceP_timeType, iceP_avgAtr, current);
+    this->UpdateAtr(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_artValue), current);
     inS.writeEmptyParams();
     return true;
 }
@@ -1120,7 +1120,7 @@ IBTrader::IQDatabase::_iceD_UpdateAvgAtr(::IceInternal::Incoming& inS, const ::I
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RemoveAllAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -1128,7 +1128,7 @@ IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const
     ITimeType iceP_timeType;
     istr->readAll(iceP_codeId, iceP_timeType);
     inS.endReadParams();
-    this->RemoveAllAvgAtrs(::std::move(iceP_codeId), iceP_timeType, current);
+    this->RemoveAllAtrs(::std::move(iceP_codeId), iceP_timeType, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -1136,7 +1136,7 @@ IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RemoveAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -1146,7 +1146,7 @@ IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, c
     long long int iceP_endTime;
     istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
     inS.endReadParams();
-    this->RemoveAvgAtrsByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
+    this->RemoveAtrsByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -1154,7 +1154,7 @@ IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, c
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_GetAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -1163,8 +1163,8 @@ IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice
     IQuery iceP_query;
     istr->readAll(iceP_codeId, iceP_timeType, iceP_query);
     inS.endReadParams();
-    IAvgAtrs iceP_avgAtrs;
-    this->GetAvgAtrs(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_query), iceP_avgAtrs, current);
+    IAtrValues iceP_avgAtrs;
+    this->GetAtrs(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_query), iceP_avgAtrs, current);
     auto ostr = inS.startWriteParams();
     ostr->writeAll(iceP_avgAtrs);
     inS.endWriteParams();
@@ -1174,7 +1174,7 @@ IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_GetOneAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_GetOneAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -1183,8 +1183,8 @@ IBTrader::IQDatabase::_iceD_GetOneAvgAtr(::IceInternal::Incoming& inS, const ::I
     long long int iceP_timePos;
     istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
     inS.endReadParams();
-    double iceP_avgAtr;
-    bool ret = this->GetOneAvgAtr(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, iceP_avgAtr, current);
+    IAtrValue iceP_avgAtr;
+    bool ret = this->GetOneAtr(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, iceP_avgAtr, current);
     auto ostr = inS.startWriteParams();
     ostr->writeAll(iceP_avgAtr, ret);
     inS.endWriteParams();
@@ -1206,7 +1206,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
     {
         case 0:
         {
-            return _iceD_GetAvgAtrs(in, current);
+            return _iceD_GetAtrs(in, current);
         }
         case 1:
         {
@@ -1242,7 +1242,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 9:
         {
-            return _iceD_GetOneAvgAtr(in, current);
+            return _iceD_GetOneAtr(in, current);
         }
         case 10:
         {
@@ -1282,11 +1282,11 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 19:
         {
-            return _iceD_RecountAvgAtr(in, current);
+            return _iceD_RecountAtr(in, current);
         }
         case 20:
         {
-            return _iceD_RecountAvgAtrFromTimePos(in, current);
+            return _iceD_RecountAtrFromTimePos(in, current);
         }
         case 21:
         {
@@ -1330,7 +1330,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 31:
         {
-            return _iceD_RemoveAllAvgAtrs(in, current);
+            return _iceD_RemoveAllAtrs(in, current);
         }
         case 32:
         {
@@ -1362,7 +1362,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 39:
         {
-            return _iceD_RemoveAvgAtrsByRange(in, current);
+            return _iceD_RemoveAtrsByRange(in, current);
         }
         case 40:
         {
@@ -1398,7 +1398,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 48:
         {
-            return _iceD_UpdateAvgAtr(in, current);
+            return _iceD_UpdateAtr(in, current);
         }
         case 49:
         {
@@ -2154,9 +2154,9 @@ IBTrader::IQDatabasePrx::_iceI_GetOneDivType(const ::std::shared_ptr<::IceIntern
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RecountAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_RecountAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
 {
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType);
@@ -2167,9 +2167,9 @@ IBTrader::IQDatabasePrx::_iceI_RecountAvgAtr(const ::std::shared_ptr<::IceIntern
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RecountAvgAtrFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_RecountAtrFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
 {
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
@@ -2180,12 +2180,12 @@ IBTrader::IQDatabasePrx::_iceI_RecountAvgAtrFromTimePos(const ::std::shared_ptr<
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_UpdateAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, double iceP_avgAtr, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_UpdateAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IAtrValue& iceP_artValue, const ::Ice::Context& context)
 {
-    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateAvgAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_avgAtr);
+            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_artValue);
         },
         nullptr);
 }
@@ -2193,9 +2193,9 @@ IBTrader::IQDatabasePrx::_iceI_UpdateAvgAtr(const ::std::shared_ptr<::IceInterna
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RemoveAllAvgAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_RemoveAllAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
 {
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllAtrs_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType);
@@ -2206,9 +2206,9 @@ IBTrader::IQDatabasePrx::_iceI_RemoveAllAvgAtrs(const ::std::shared_ptr<::IceInt
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RemoveAvgAtrsByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_RemoveAtrsByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
 {
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
@@ -2219,10 +2219,10 @@ IBTrader::IQDatabasePrx::_iceI_RemoveAvgAtrsByRange(const ::std::shared_ptr<::Ic
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_GetAvgAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IAvgAtrs>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IQuery& iceP_query, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_GetAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IAtrValues>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IQuery& iceP_query, const ::Ice::Context& context)
 {
-    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
-    outAsync->invoke(iceC_IBTrader_IQDatabase_GetAvgAtrs_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetAtrs_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_GetAtrs_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType, iceP_query);
@@ -2233,10 +2233,10 @@ IBTrader::IQDatabasePrx::_iceI_GetAvgAtrs(const ::std::shared_ptr<::IceInternal:
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_GetOneAvgAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneAvgAtrResult>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_GetOneAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneAtrResult>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
 {
-    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
-    outAsync->invoke(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetOneAtr_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_GetOneAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
@@ -2244,7 +2244,7 @@ IBTrader::IQDatabasePrx::_iceI_GetOneAvgAtr(const ::std::shared_ptr<::IceInterna
         nullptr,
         [](::Ice::InputStream* istr)
         {
-            IQDatabase::GetOneAvgAtrResult v;
+            IQDatabase::GetOneAtrResult v;
             istr->readAll(v.avgAtr, v.returnValue);
             return v;
         });
@@ -2368,19 +2368,19 @@ const ::std::string iceC_IBTrader_IQDatabase_GetDivTypes_name = "GetDivTypes";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneDivType_name = "GetOneDivType";
 
-const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtr_name = "RecountAvgAtr";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAtr_name = "RecountAtr";
 
-const ::std::string iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name = "RecountAvgAtrFromTimePos";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name = "RecountAtrFromTimePos";
 
-const ::std::string iceC_IBTrader_IQDatabase_UpdateAvgAtr_name = "UpdateAvgAtr";
+const ::std::string iceC_IBTrader_IQDatabase_UpdateAtr_name = "UpdateAtr";
 
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name = "RemoveAllAvgAtrs";
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAtrs_name = "RemoveAllAtrs";
 
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name = "RemoveAvgAtrsByRange";
+const ::std::string iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name = "RemoveAtrsByRange";
 
-const ::std::string iceC_IBTrader_IQDatabase_GetAvgAtrs_name = "GetAvgAtrs";
+const ::std::string iceC_IBTrader_IQDatabase_GetAtrs_name = "GetAtrs";
 
-const ::std::string iceC_IBTrader_IQDatabase_GetOneAvgAtr_name = "GetOneAvgAtr";
+const ::std::string iceC_IBTrader_IQDatabase_GetOneAtr_name = "GetOneAtr";
 
 }
 
@@ -4325,17 +4325,17 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneDivType(::IBTrader::IDivTyp
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAvgAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAvgAtr_name, del, cookie, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAtr_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountAvgAtr_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_RecountAtr_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtr_name);
+        result->invoke(iceC_IBTrader_IQDatabase_RecountAtr_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -4345,24 +4345,24 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAvgAtr(const ::std::string& i
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_RecountAvgAtr(const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_RecountAtr(const ::Ice::AsyncResultPtr& result)
 {
-    _end(result, iceC_IBTrader_IQDatabase_RecountAvgAtr_name);
+    _end(result, iceC_IBTrader_IQDatabase_RecountAtr_name);
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAvgAtrFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAtrFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name, del, cookie, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         ostr->write(iceP_timePos);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name);
+        result->invoke(iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -4372,24 +4372,24 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAvgAtrFromTimePos(const ::std
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_RecountAvgAtrFromTimePos(const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_RecountAtrFromTimePos(const ::Ice::AsyncResultPtr& result)
 {
-    _end(result, iceC_IBTrader_IQDatabase_RecountAvgAtrFromTimePos_name);
+    _end(result, iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name);
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateAvgAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Double iceP_avgAtr, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IAtrValue& iceP_artValue, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateAvgAtr_name, del, cookie, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateAtr_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_UpdateAvgAtr_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_UpdateAtr_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
-        ostr->write(iceP_avgAtr);
+        ostr->write(iceP_artValue);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_UpdateAvgAtr_name);
+        result->invoke(iceC_IBTrader_IQDatabase_UpdateAtr_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -4399,23 +4399,23 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateAvgAtr(const ::std::string& ic
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_UpdateAvgAtr(const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_UpdateAtr(const ::Ice::AsyncResultPtr& result)
 {
-    _end(result, iceC_IBTrader_IQDatabase_UpdateAvgAtr_name);
+    _end(result, iceC_IBTrader_IQDatabase_UpdateAtr_name);
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllAvgAtrs(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllAtrs(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name, del, cookie, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllAtrs_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllAtrs_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name);
+        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllAtrs_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -4425,25 +4425,25 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllAvgAtrs(const ::std::string
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_RemoveAllAvgAtrs(const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_RemoveAllAtrs(const ::Ice::AsyncResultPtr& result)
 {
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAllAvgAtrs_name);
+    _end(result, iceC_IBTrader_IQDatabase_RemoveAllAtrs_name);
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAvgAtrsByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAtrsByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name, del, cookie, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         ostr->write(iceP_beginTime);
         ostr->write(iceP_endTime);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name);
+        result->invoke(iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -4453,25 +4453,25 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAvgAtrsByRange(const ::std::st
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_RemoveAvgAtrsByRange(const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_RemoveAtrsByRange(const ::Ice::AsyncResultPtr& result)
 {
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAvgAtrsByRange_name);
+    _end(result, iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name);
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_GetAvgAtrs(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IQuery& iceP_query, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_GetAtrs(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IQuery& iceP_query, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetAvgAtrs_name, sync);
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetAvgAtrs_name, del, cookie, sync);
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetAtrs_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetAtrs_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_GetAvgAtrs_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_GetAtrs_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         ostr->write(iceP_query);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
+        result->invoke(iceC_IBTrader_IQDatabase_GetAtrs_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -4481,9 +4481,9 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_GetAvgAtrs(const ::std::string& iceP
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_GetAvgAtrs(::IBTrader::IAvgAtrs& iceP_avgAtrs, const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_GetAtrs(::IBTrader::IAtrValues& iceP_avgAtrs, const ::Ice::AsyncResultPtr& result)
 {
-    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetAtrs_name);
     if(!result->_waitForResponse())
     {
         try
@@ -4500,9 +4500,9 @@ IceProxy::IBTrader::IQDatabase::end_GetAvgAtrs(::IBTrader::IAvgAtrs& iceP_avgAtr
     result->_endReadParams();
 }
 
-void IceProxy::IBTrader::IQDatabase::_iceI_end_GetAvgAtrs(::IBTrader::IAvgAtrs& iceP_avgAtrs, const ::Ice::AsyncResultPtr& result)
+void IceProxy::IBTrader::IQDatabase::_iceI_end_GetAtrs(::IBTrader::IAtrValues& iceP_avgAtrs, const ::Ice::AsyncResultPtr& result)
 {
-    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetAvgAtrs_name);
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetAtrs_name);
     if(!result->_waitForResponse())
     {
         try
@@ -4520,19 +4520,19 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetAvgAtrs(::IBTrader::IAvgAtrs& 
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_GetOneAvgAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_GetOneAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, sync);
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, del, cookie, sync);
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetOneAtr_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetOneAtr_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_GetOneAtr_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         ostr->write(iceP_timePos);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
+        result->invoke(iceC_IBTrader_IQDatabase_GetOneAtr_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -4542,9 +4542,9 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_GetOneAvgAtr(const ::std::string& ic
 }
 
 bool
-IceProxy::IBTrader::IQDatabase::end_GetOneAvgAtr(::Ice::Double& iceP_avgAtr, const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_GetOneAtr(::IBTrader::IAtrValue& iceP_avgAtr, const ::Ice::AsyncResultPtr& result)
 {
-    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetOneAtr_name);
     bool ret;
     if(!result->_waitForResponse())
     {
@@ -4564,9 +4564,9 @@ IceProxy::IBTrader::IQDatabase::end_GetOneAvgAtr(::Ice::Double& iceP_avgAtr, con
     return ret;
 }
 
-void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneAvgAtr(::Ice::Double& iceP_avgAtr, bool& ret, const ::Ice::AsyncResultPtr& result)
+void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneAtr(::IBTrader::IAtrValue& iceP_avgAtr, bool& ret, const ::Ice::AsyncResultPtr& result)
 {
-    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetOneAvgAtr_name);
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetOneAtr_name);
     if(!result->_waitForResponse())
     {
         try
@@ -5611,7 +5611,7 @@ IBTrader::IQDatabase::_iceD_GetOneDivType(::IceInternal::Incoming& inS, const ::
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RecountAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -5620,7 +5620,7 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::
     istr->read(iceP_codeId);
     istr->read(iceP_timeType);
     inS.endReadParams();
-    this->RecountAvgAtr(iceP_codeId, iceP_timeType, current);
+    this->RecountAtr(iceP_codeId, iceP_timeType, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -5628,7 +5628,7 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtr(::IceInternal::Incoming& inS, const ::
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RecountAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -5639,7 +5639,7 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& in
     istr->read(iceP_timeType);
     istr->read(iceP_timePos);
     inS.endReadParams();
-    this->RecountAvgAtrFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
+    this->RecountAtrFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -5647,18 +5647,18 @@ IBTrader::IQDatabase::_iceD_RecountAvgAtrFromTimePos(::IceInternal::Incoming& in
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_UpdateAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_UpdateAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
     ::std::string iceP_codeId;
     ITimeType iceP_timeType;
-    ::Ice::Double iceP_avgAtr;
+    IAtrValue iceP_artValue;
     istr->read(iceP_codeId);
     istr->read(iceP_timeType);
-    istr->read(iceP_avgAtr);
+    istr->read(iceP_artValue);
     inS.endReadParams();
-    this->UpdateAvgAtr(iceP_codeId, iceP_timeType, iceP_avgAtr, current);
+    this->UpdateAtr(iceP_codeId, iceP_timeType, iceP_artValue, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -5666,7 +5666,7 @@ IBTrader::IQDatabase::_iceD_UpdateAvgAtr(::IceInternal::Incoming& inS, const ::I
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RemoveAllAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -5675,7 +5675,7 @@ IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const
     istr->read(iceP_codeId);
     istr->read(iceP_timeType);
     inS.endReadParams();
-    this->RemoveAllAvgAtrs(iceP_codeId, iceP_timeType, current);
+    this->RemoveAllAtrs(iceP_codeId, iceP_timeType, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -5683,7 +5683,7 @@ IBTrader::IQDatabase::_iceD_RemoveAllAvgAtrs(::IceInternal::Incoming& inS, const
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RemoveAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -5696,7 +5696,7 @@ IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, c
     istr->read(iceP_beginTime);
     istr->read(iceP_endTime);
     inS.endReadParams();
-    this->RemoveAvgAtrsByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
+    this->RemoveAtrsByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -5704,7 +5704,7 @@ IBTrader::IQDatabase::_iceD_RemoveAvgAtrsByRange(::IceInternal::Incoming& inS, c
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_GetAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -5715,8 +5715,8 @@ IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice
     istr->read(iceP_timeType);
     istr->read(iceP_query);
     inS.endReadParams();
-    IAvgAtrs iceP_avgAtrs;
-    this->GetAvgAtrs(iceP_codeId, iceP_timeType, iceP_query, iceP_avgAtrs, current);
+    IAtrValues iceP_avgAtrs;
+    this->GetAtrs(iceP_codeId, iceP_timeType, iceP_query, iceP_avgAtrs, current);
     ::Ice::OutputStream* ostr = inS.startWriteParams();
     ostr->write(iceP_avgAtrs);
     inS.endWriteParams();
@@ -5726,7 +5726,7 @@ IBTrader::IQDatabase::_iceD_GetAvgAtrs(::IceInternal::Incoming& inS, const ::Ice
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_GetOneAvgAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_GetOneAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -5737,8 +5737,8 @@ IBTrader::IQDatabase::_iceD_GetOneAvgAtr(::IceInternal::Incoming& inS, const ::I
     istr->read(iceP_timeType);
     istr->read(iceP_timePos);
     inS.endReadParams();
-    ::Ice::Double iceP_avgAtr;
-    bool ret = this->GetOneAvgAtr(iceP_codeId, iceP_timeType, iceP_timePos, iceP_avgAtr, current);
+    IAtrValue iceP_avgAtr;
+    bool ret = this->GetOneAtr(iceP_codeId, iceP_timeType, iceP_timePos, iceP_avgAtr, current);
     ::Ice::OutputStream* ostr = inS.startWriteParams();
     ostr->write(iceP_avgAtr);
     ostr->write(ret);
@@ -5751,7 +5751,7 @@ namespace
 {
 const ::std::string iceC_IBTrader_IQDatabase_all[] =
 {
-    "GetAvgAtrs",
+    "GetAtrs",
     "GetDivTypes",
     "GetEmas",
     "GetInvalidKLines",
@@ -5760,7 +5760,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "GetLastUpdateTick",
     "GetMacds",
     "GetMas",
-    "GetOneAvgAtr",
+    "GetOneAtr",
     "GetOneDivType",
     "GetOneEma",
     "GetOneKLine",
@@ -5770,8 +5770,8 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "GetOneVwMa",
     "GetTicks",
     "GetVwMas",
-    "RecountAvgAtr",
-    "RecountAvgAtrFromTimePos",
+    "RecountAtr",
+    "RecountAtrFromTimePos",
     "RecountDivType",
     "RecountDivTypeFromTimePos",
     "RecountEma",
@@ -5782,7 +5782,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "RecountMacdFromTimePos",
     "RecountVwMa",
     "RecountVwMaFromTimePos",
-    "RemoveAllAvgAtrs",
+    "RemoveAllAtrs",
     "RemoveAllDivTypes",
     "RemoveAllEmas",
     "RemoveAllKLines",
@@ -5790,7 +5790,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "RemoveAllMas",
     "RemoveAllTicks",
     "RemoveAllVwMas",
-    "RemoveAvgAtrsByRange",
+    "RemoveAtrsByRange",
     "RemoveDivTypesByRange",
     "RemoveEmasByRange",
     "RemoveKLinesByRange",
@@ -5799,7 +5799,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "RemoveOneKLine",
     "RemoveTicksByRange",
     "RemoveVwMasByRange",
-    "UpdateAvgAtr",
+    "UpdateAtr",
     "UpdateDivType",
     "UpdateEma",
     "UpdateKLine",
@@ -5829,7 +5829,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
     {
         case 0:
         {
-            return _iceD_GetAvgAtrs(in, current);
+            return _iceD_GetAtrs(in, current);
         }
         case 1:
         {
@@ -5865,7 +5865,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 9:
         {
-            return _iceD_GetOneAvgAtr(in, current);
+            return _iceD_GetOneAtr(in, current);
         }
         case 10:
         {
@@ -5905,11 +5905,11 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 19:
         {
-            return _iceD_RecountAvgAtr(in, current);
+            return _iceD_RecountAtr(in, current);
         }
         case 20:
         {
-            return _iceD_RecountAvgAtrFromTimePos(in, current);
+            return _iceD_RecountAtrFromTimePos(in, current);
         }
         case 21:
         {
@@ -5953,7 +5953,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 31:
         {
-            return _iceD_RemoveAllAvgAtrs(in, current);
+            return _iceD_RemoveAllAtrs(in, current);
         }
         case 32:
         {
@@ -5985,7 +5985,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 39:
         {
-            return _iceD_RemoveAvgAtrsByRange(in, current);
+            return _iceD_RemoveAtrsByRange(in, current);
         }
         case 40:
         {
@@ -6021,7 +6021,7 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 48:
         {
-            return _iceD_UpdateAvgAtr(in, current);
+            return _iceD_UpdateAtr(in, current);
         }
         case 49:
         {

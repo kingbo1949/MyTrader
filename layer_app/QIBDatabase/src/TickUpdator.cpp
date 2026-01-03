@@ -1,7 +1,7 @@
 ﻿#include "TickUpdator.h"
 #include "Factory.h"
 #include "GetRecordNoForDb.h"
-#include "Calculator.h"
+#include "Calculator/Calculator.h"
 #include <Factory_Log.h>
 CTickUpdator::CTickUpdator()
 {

@@ -5,7 +5,8 @@
 #include "Calculator_Ema.h"
 #include "Calculator_Macd.h"
 #include "Calculator_DivType.h"
-#include "Factory.h"
+#include "Calculator_Atr.h"
+#include "../Factory.h"
 
 CalculatorPtr g_calculator_ma = nullptr;
 CalculatorPtr MakenAndGet_Calculator_Ma()
@@ -53,6 +54,16 @@ CalculatorPtr MakenAndGet_Calculator_DivType()
 	}
 	return g_calculator_divtype;
 }
+CalculatorPtr g_calculator_atr = nullptr;
+CalculatorPtr MakenAndGet_Calculator_Atr()
+{
+	if (!g_calculator_atr)
+	{
+		g_calculator_atr = std::make_shared<CCalculator_Atr>();
+	}
+	return g_calculator_atr;
+
+}
 
 bool CCalculator::Exist(const std::string& codeId, ITimeType timeType, const IKLine& newKline)
 {
@@ -60,3 +71,20 @@ bool CCalculator::Exist(const std::string& codeId, ITimeType timeType, const IKL
 	return MakeAndGet_Env()->GetDB_KLine()->GetOne(codeId, timeType, newKline.time, kline);
 
 }
+
+bool CCalculator::GetLastBar(const std::string &codeId, ITimeType timeType, const IKLine &newKline, IKLine &lastKline)
+{
+	IQuery query;
+	query.byReqType = 2;
+	query.dwSubscribeNum = 1;
+	query.tTime = newKline.time - 1;
+
+	IKLines values;
+	MakeAndGet_Env()->GetDB_KLine()->GetKLines(codeId, timeType, query, values);
+	if (values.empty()) return false;
+
+	lastKline = values[0];
+	return true;
+
+}
+

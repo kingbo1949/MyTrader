@@ -299,6 +299,17 @@ public:
 };
 typedef std::vector<IBDivTypePtr> IBDivTypePtrs;
 
+class  CIBAtr;
+typedef std::shared_ptr<CIBAtr> IBAtrPtr;
+class  CIBAtr
+{
+public:
+	time_t			time = 0;												// localtime时间(毫秒)
+	double			thisAtr = std::numeric_limits<double>::quiet_NaN();
+	double			avgAtr = std::numeric_limits<double>::quiet_NaN();
+
+};
+typedef std::vector<IBAtrPtr> IBAtrPtrs;
 
 
 enum class TimeZone_Type

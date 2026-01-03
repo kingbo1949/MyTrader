@@ -1,6 +1,6 @@
 ﻿#include "Calculator_VwMa.h"
 #include <numeric>
-#include "Factory.h"
+#include "../Factory.h"
 #include <Factory_Log.h>
 
 void CCalculator_VwMa::Initialize(const std::string& codeId, ITimeType timeType, const IKLines& klines)

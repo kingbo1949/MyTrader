@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-// ³É½»Á¿¼ÓÈ¨¾ùÏß
+// æˆäº¤é‡åŠ æƒå‡çº¿
 #include "Calculator_Average.h"
 class CCalculator_VwMa : public CCalculator_Average
 {
@@ -13,10 +13,10 @@ public:
 	virtual void		Update(const std::string& codeId, ITimeType timeType, const IKLine& newKline) override final;
 
 protected:
-	// Ò»¹²ÓĞ5 20 60 200ËÄÖÖcircle£¬¸ù¾İcircleÌîĞ´valuesÖĞËùÓĞ¶ÔÓ¦circleµÄÖµ
+	// Ò»ï¿½ï¿½ï¿½ï¿½5 20 60 200ï¿½ï¿½ï¿½ï¿½circleï¿½ï¿½ï¿½ï¿½ï¿½ï¿½circleï¿½ï¿½Ğ´valuesï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½Ó¦circleï¿½ï¿½Öµ
 	void				Initialize(const IKLines& klines, int circle, IAvgValues& values);
 
-	// ¼ÆËãÄ©Î²circle¸ùkÏß¾ùÖµ
+	// ï¿½ï¿½ï¿½ï¿½Ä©Î²circleï¿½ï¿½kï¿½ß¾ï¿½Öµ
 	double				CountAverage(const std::string& codeId, ITimeType timeType, const IKLine& newKline, int circle);
 
 	virtual void		UpdateToDb(const std::string& codeId, ITimeType timeType, const IAvgValue& value) override final;

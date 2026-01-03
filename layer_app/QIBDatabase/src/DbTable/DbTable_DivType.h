@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "GlobalDefine.h"
+#include "../GlobalDefine.h"
 
 namespace Bdb
 {

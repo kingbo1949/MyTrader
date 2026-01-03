@@ -625,6 +625,71 @@ IBDivTypePtr CMyQDatabase_Real::GetOneDivType(const CodeStr& codeId, Time_Type t
 
 }
 
+void CMyQDatabase_Real::RecountAtr(const CodeStr &codeId, Time_Type timeType)
+{
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountAtr(codeId, iTimeType);
+
+}
+
+void CMyQDatabase_Real::RecountAtrFromTimePos(const CodeStr &codeId, Time_Type timeType, Tick_T beginTime)
+{
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountAtrFromTimePos(codeId, iTimeType, beginTime);
+
+}
+
+IBAtrPtrs CMyQDatabase_Real::GetAtrs(const CodeStr &codeId, Time_Type timeType, const QQuery &query)
+{
+	IBAtrPtrs back;
+
+	if (Get_CodeIdEnv()->Get_CodeId_Hash(codeId.c_str()) == 0)
+	{
+		Log_Print(LogLevel::Err, fmt::format("codeId = {} can not get hashid", codeId.c_str()));
+		exit(-1);
+	}
+	IQuery queryIce = CIceTransfor::TransQueryMyToIce(query);
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+
+	IAtrValues values;
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->GetAtrs(codeId, iTimeType, queryIce, values);
+
+	for (auto& oneAtr : values)
+	{
+		IBAtrPtr pAtr = CIceTransfor::TransAtr(oneAtr);
+
+		back.push_back(pAtr);
+	}
+	return back;
+
+}
+
+void CMyQDatabase_Real::RemoveAllAtrs(const CodeStr &codeId, Time_Type timeType)
+{
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAllAtrs(codeId, iTimeType);
+
+}
+
+void CMyQDatabase_Real::RemoveAtrsByRange(const CodeStr &codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime)
+{
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAtrsByRange(codeId, iTimeType, beginTime, endTime);
+
+}
+
+IBAtrPtr CMyQDatabase_Real::GetOneAtr(const CodeStr &codeId, Time_Type timeType, time_t timePos)
+{
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+
+	IAtrValue oneValue;
+	bool success = MakeAndGet_IceProxy()->GetQDatabasePrx()->GetOneAtr(codeId, iTimeType, timePos, oneValue);
+	if (!success) return nullptr;
+
+	return CIceTransfor::TransAtr(oneValue);
+
+}
+
 bool CMyQDatabase_Real::ValidFlite(time_t ms, int bigTick, IBTickPtr thisTick, IBTickPtr lastTick, IBTickPtr lastAddedTick)
 {
 	if (thisTick->time - lastAddedTick->time >= ms)

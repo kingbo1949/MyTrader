@@ -1,6 +1,6 @@
 ﻿#include "DbTable_Average.h"
 
-#include "Compare.h"
+#include "../Compare.h"
 Bdb::CDbTable_Average::CDbTable_Average(DbEnv* env, const std::string& path, const std::string& dbName)
 	:CDbTable(env, path, dbName)
 {

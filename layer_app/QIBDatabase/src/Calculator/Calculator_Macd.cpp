@@ -1,5 +1,5 @@
 ﻿#include "Calculator_Macd.h"
-#include "Factory.h"
+#include "../Factory.h"
 #include <numeric>
 #include <Factory_Log.h>
 CCalculator_Macd::CCalculator_Macd()

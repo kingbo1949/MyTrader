@@ -121,19 +121,21 @@ public:
 
 	// AvgAtr表
 
-	virtual void RecountAvgAtr(::std::string codeId, ITimeType timeType, const ::Ice::Current& current)  override final;
+	virtual void RecountAtr(::std::string codeId, ITimeType timeType, const ::Ice::Current& current)  override final;
 
-	virtual void RecountAvgAtrFromTimePos(::std::string codeId, ITimeType timeType, long long int timePos, const ::Ice::Current& current)  override final;
+	virtual void RecountAtrFromTimePos(::std::string codeId, ITimeType timeType, long long int timePos, const ::Ice::Current& current)  override final;
 
-	virtual void UpdateAvgAtr(::std::string codeId, ITimeType timeType, double avgAtr, const ::Ice::Current& current)  override final;
+	virtual void UpdateAtr(::std::string codeId, ITimeType timeType, IAtrValue artValue, const ::Ice::Current& current) final;
 
-	virtual void RemoveAllAvgAtrs(::std::string codeId, ITimeType timeType, const ::Ice::Current& current)  override final;
+	virtual void RemoveAllAtrs(::std::string codeId, ITimeType timeType, const ::Ice::Current& current) final;
 
-	virtual void RemoveAvgAtrsByRange(::std::string codeId, ITimeType timeType, long long int beginTime, long long int endTime, const ::Ice::Current& current)  override final;
+	virtual void RemoveAtrsByRange(::std::string codeId, ITimeType timeType, long long int beginTime, long long int endTime, const ::Ice::Current& current) final;
 
-	virtual void GetAvgAtrs(::std::string codeId, ITimeType timeType, IQuery query, IAvgAtrs& avgAtrs, const ::Ice::Current& current)  override final;
+	virtual void GetAtrs(::std::string codeId, ITimeType timeType, IQuery query, IAtrValues& avgAtrs, const ::Ice::Current& current) final;
 
-	virtual bool GetOneAvgAtr(::std::string codeId, ITimeType timeType, long long int timePos, double& avgAtr, const ::Ice::Current& current)  override final;
+	virtual bool GetOneAtr(::std::string codeId, ITimeType timeType, long long int timePos, IAtrValue& avgAtr, const ::Ice::Current& current) final;
+
+
 
 
 
@@ -149,12 +151,14 @@ protected:
 	void		RecountEma(::std::string codeId, ITimeType timetype);
 	void		RecountMacd(::std::string codeId, ITimeType timetype);
 	void		RecountDivType(::std::string codeId, ITimeType timetype);
+	void		RecountAtr(::std::string codeId, ITimeType timetype);
 
 	void		RecountMaFromTimePos(const ::std::string& codeId, ITimeType timetype, long long int timePos);
 	void		RecountVwMaFromTimePos(const ::std::string& codeId, ITimeType timetype, long long int timePos);
 	void		RecountEmaFromTimePos(const ::std::string& codeId, ITimeType timetype, long long int timePos);
 	void		RecountMacdFromTimePos(const ::std::string& codeId, ITimeType timetype, long long int timePos);
 	void		RecountDivTypeFromTimePos(const ::std::string& codeId, ITimeType timetype, long long int timePos);
+	void		RecountAtrFromTimePos(const ::std::string& codeId, ITimeType timetype, long long int timePos);
 
 	void 		GetKline_RecountQuery_All(const std::string& codeId, ITimeType timetype, IKLines& klines);
 	void		GetKline_RecountQuery_TimePos(const std::string& codeId, ITimeType timetype, long long int timePos, IKLines& klines);

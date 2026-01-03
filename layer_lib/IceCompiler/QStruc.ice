@@ -26,7 +26,7 @@ module IBTrader
 		KRW,						//韩元
 	};
 
-    sequence<double> IAvgAtrs;
+
 
 	struct ITimePair
 	{
@@ -165,6 +165,14 @@ module IBTrader
 		bool			isUTurn = false;	// 是否拐点型
 	}
 	sequence<IDivTypeValue> IDivTypeValues;
+
+	struct IAtrValue
+	{
+		long			time = 0;			// 毫秒
+		double          thisAtr = 0.0;      // 本bar的ATR
+		double		    avgAtr = 0.0;       // 14周期均值
+	}
+	sequence<IAtrValue> IAtrValues;
 
 
 	

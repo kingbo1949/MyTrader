@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DbTable_TickHis.h"
+#include "./DbTable/DbTable_TickHis.h"
 #include <QStruc.h>
 // 数据库测试用例
 

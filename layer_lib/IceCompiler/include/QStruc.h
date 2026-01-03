@@ -67,8 +67,6 @@ enum class IMoney : unsigned char
     KRW
 };
 
-using IAvgAtrs = ::std::vector<double>;
-
 struct ITimePair
 {
     long long int beginPos = 0LL;
@@ -301,6 +299,24 @@ struct IDivTypeValue
 };
 
 using IDivTypeValues = ::std::vector<IDivTypeValue>;
+
+struct IAtrValue
+{
+    long long int time = 0LL;
+    double thisAtr = 0;
+    double avgAtr = 0;
+
+    /**
+     * Obtains a tuple containing all of the struct's data members.
+     * @return The data members in a tuple.
+     */
+    std::tuple<const long long int&, const double&, const double&> ice_tuple() const
+    {
+        return std::tie(time, thisAtr, avgAtr);
+    }
+};
+
+using IAtrValues = ::std::vector<IAtrValue>;
 
 using Ice::operator<;
 using Ice::operator<=;
@@ -542,6 +558,23 @@ struct StreamReader<::IBTrader::IDivTypeValue, S>
     }
 };
 
+template<>
+struct StreamableTraits<::IBTrader::IAtrValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 24;
+    static const bool fixedLength = true;
+};
+
+template<typename S>
+struct StreamReader<::IBTrader::IAtrValue, S>
+{
+    static void read(S* istr, ::IBTrader::IAtrValue& v)
+    {
+        istr->readAll(v.time, v.thisAtr, v.avgAtr);
+    }
+};
+
 }
 /// \endcond
 
@@ -571,8 +604,6 @@ enum IMoney
     EUR,
     KRW
 };
-
-typedef ::std::vector< ::Ice::Double> IAvgAtrs;
 
 struct ITimePair
 {
@@ -1110,6 +1141,31 @@ struct IDivTypeValue
 
 typedef ::std::vector<IDivTypeValue> IDivTypeValues;
 
+struct IAtrValue
+{
+    /** Default constructor that assigns default values to members as specified in the Slice definition. */
+    IAtrValue() :
+        time(ICE_INT64(0)),
+        thisAtr(0),
+        avgAtr(0)
+    {
+    }
+    
+    IAtrValue(::Ice::Long time, ::Ice::Double thisAtr, ::Ice::Double avgAtr) :
+        time(time),
+        thisAtr(thisAtr),
+        avgAtr(avgAtr)
+    {
+    }
+    
+
+    ::Ice::Long time;
+    ::Ice::Double thisAtr;
+    ::Ice::Double avgAtr;
+};
+
+typedef ::std::vector<IAtrValue> IAtrValues;
+
 }
 
 /// \cond STREAM
@@ -1517,6 +1573,36 @@ struct StreamReader< ::IBTrader::IDivTypeValue, S>
         istr->read(v.time);
         istr->read(v.divType);
         istr->read(v.isUTurn);
+    }
+};
+
+template<>
+struct StreamableTraits< ::IBTrader::IAtrValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 24;
+    static const bool fixedLength = true;
+};
+
+template<typename S>
+struct StreamWriter< ::IBTrader::IAtrValue, S>
+{
+    static void write(S* ostr, const ::IBTrader::IAtrValue& v)
+    {
+        ostr->write(v.time);
+        ostr->write(v.thisAtr);
+        ostr->write(v.avgAtr);
+    }
+};
+
+template<typename S>
+struct StreamReader< ::IBTrader::IAtrValue, S>
+{
+    static void read(S* istr, ::IBTrader::IAtrValue& v)
+    {
+        istr->read(v.time);
+        istr->read(v.thisAtr);
+        istr->read(v.avgAtr);
     }
 };
 

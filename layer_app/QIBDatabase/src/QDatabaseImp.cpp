@@ -1,7 +1,7 @@
 ﻿#include "QDatabaseImp.h"
 #include "Factory.h"
 
-#include "Calculator.h"
+#include "Calculator/Calculator.h"
 #include "MakeKlinePairs.h"
 CQDatabaseImp::CQDatabaseImp()
 	:m_updateCount(0), m_recentUpdateSecnd(0)
@@ -308,33 +308,45 @@ bool CQDatabaseImp::GetOneDivType(::std::string codeId, ITimeType timeType, long
 	return MakeAndGet_Env()->GetDB_DivType()->GetOne(codeId, timeType, timePos, divtype);
 }
 
-void CQDatabaseImp::RecountAvgAtr(std::string codeId, ITimeType timeType, const Ice::Current &current)
+void CQDatabaseImp::RecountAtr(std::string codeId, ITimeType timeType, const Ice::Current &current)
 {
+	RecountAtr(codeId, timeType);
+	return;
+
 }
 
-void CQDatabaseImp::RecountAvgAtrFromTimePos(std::string codeId, ITimeType timeType, long long int timePos, const Ice::Current &current)
+void CQDatabaseImp::RecountAtrFromTimePos(std::string codeId, ITimeType timeType, long long int timePos, const Ice::Current &current)
 {
+	RecountAtrFromTimePos(codeId, timeType, timePos);
+	return;
+
 }
 
-void CQDatabaseImp::UpdateAvgAtr(std::string codeId, ITimeType timeType, double avgAtr, const Ice::Current &current)
+void CQDatabaseImp::UpdateAtr(std::string codeId, ITimeType timeType, IAtrValue artValue, const Ice::Current &current)
 {
+	MakeAndGet_Env()->GetDB_Atr()->AddOne(codeId, timeType, artValue);
 }
 
-void CQDatabaseImp::RemoveAllAvgAtrs(std::string codeId, ITimeType timeType, const Ice::Current &current)
+void CQDatabaseImp::RemoveAllAtrs(std::string codeId, ITimeType timeType, const Ice::Current &current)
 {
+	MakeAndGet_Env()->GetDB_Atr()->RemoveKey(codeId, timeType);
 }
 
-void CQDatabaseImp::RemoveAvgAtrsByRange(std::string codeId, ITimeType timeType, long long int beginTime, long long int endTime, const Ice::Current &current)
+void CQDatabaseImp::RemoveAtrsByRange(std::string codeId, ITimeType timeType, long long int beginTime, long long int endTime, const Ice::Current &current)
 {
+	MakeAndGet_Env()->GetDB_Atr()->RemoveByRange(codeId, timeType, beginTime, endTime);
 }
 
-void CQDatabaseImp::GetAvgAtrs(std::string codeId, ITimeType timeType, IQuery query, IAvgAtrs &avgAtrs, const Ice::Current &current)
+void CQDatabaseImp::GetAtrs(std::string codeId, ITimeType timeType, IQuery query, IAtrValues &avgAtrs, 	const Ice::Current &current)
 {
+	MakeAndGet_Env()->GetDB_Atr()->GetValues(codeId, timeType, query, avgAtrs);
+	return;
+
 }
 
-bool CQDatabaseImp::GetOneAvgAtr(std::string codeId, ITimeType timeType, long long int timePos, double &avgAtr, const Ice::Current &current)
+bool CQDatabaseImp::GetOneAtr(std::string codeId, ITimeType timeType, long long int timePos, IAtrValue &avgAtr, const Ice::Current &current)
 {
-	return false;
+	return MakeAndGet_Env()->GetDB_Atr()->GetOne(codeId, timeType, timePos, avgAtr);
 }
 
 
@@ -393,6 +405,19 @@ void CQDatabaseImp::RecountDivType(::std::string codeId, ITimeType timetype)
 	//printf("klines end: %s \n", CGlobal::GetTickTimeStr(klines.back().time).c_str());
 
 	MakenAndGet_Calculator_DivType()->Initialize(codeId, timetype, klines);
+	return;
+}
+
+void CQDatabaseImp::RecountAtr(std::string codeId, ITimeType timetype)
+{
+	MakeAndGet_Env()->GetDB_Atr()->RemoveKey(codeId, timetype);
+
+	IKLines klines;
+	GetKline_RecountQuery_All(codeId, timetype, klines);
+	//printf("klines begin: %s \n", CGlobal::GetTickTimeStr(klines[0].time).c_str());
+	//printf("klines end: %s \n", CGlobal::GetTickTimeStr(klines.back().time).c_str());
+
+	MakenAndGet_Calculator_Atr()->Initialize(codeId, timetype, klines);
 	return;
 }
 
@@ -462,8 +487,21 @@ void CQDatabaseImp::RecountDivTypeFromTimePos(const::std::string& codeId, ITimeT
 	return;
 }
 
+void CQDatabaseImp::RecountAtrFromTimePos(const std::string &codeId, ITimeType timetype, long long int timePos)
+{
+	MakeAndGet_Env()->GetDB_Atr()->RemoveByRange(codeId, timetype, timePos, LLONG_MAX);
+
+	IKLines klines;
+	GetKline_RecountQuery_TimePos(codeId, timetype, timePos, klines);
+	for (const auto& kline : klines)
+	{
+		MakenAndGet_Calculator_DivType()->Update(codeId, timetype, kline);
+	}
+}
+
 void CQDatabaseImp::GetKline_RecountQuery_All(const std::string& codeId, ITimeType timetype, IKLines& klines)
 {
+	// 在数据库内部，没有经过ICE，所以不需要接力
 	IQuery query;
 	query.byReqType = 1;	// 查询全部数据
 
@@ -474,6 +512,7 @@ void CQDatabaseImp::GetKline_RecountQuery_All(const std::string& codeId, ITimeTy
 
 void CQDatabaseImp::GetKline_RecountQuery_TimePos(const std::string& codeId, ITimeType timetype, long long int timePos, IKLines& klines)
 {
+	// 在数据库内部，没有经过ICE，所以不需要接力
 	IQuery query;
 	query.byReqType = 3;		// 查询某时间点之后
 	query.tTime = timePos;

@@ -59,7 +59,7 @@ module IBTrader
 		void		RecountEmaFromTimePos(string codeId, ITimeType timeType, long timePos);					// 重新计算某品种指定时间点(毫秒)之后的所有Ema
 		void		UpdateEma(string codeId, ITimeType timeType, IAvgValue ema);
 		void		RemoveAllEmas(string codeId, ITimeType timeType);										// 删除某一品种的所有Ema表数据
-		void		RemoveEmasByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的Ema表数据，区间为[beginTime,endTime)
+		void		RemoveEmasByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的ema表数据，区间为[beginTime,endTime)
 		void		GetEmas(string codeId, ITimeType timeType, IQuery query,out IAvgValues emas);
 		bool		GetOneEma(string codeId, ITimeType timeType, long timePos, out IAvgValue ema);			// 查询单个指定数据
 
@@ -68,7 +68,7 @@ module IBTrader
 		void		RecountMacdFromTimePos(string codeId, ITimeType timeType, long timePos);				// 重新计算某品种指定时间点(毫秒)之后的所有macd
 		void		UpdateMacd(string codeId, ITimeType timeType, IMacdValue macd);
 		void		RemoveAllMacds(string codeId, ITimeType timeType);										// 删除某一品种的所有Ema表数据
-		void		RemoveMacdsByRange(string codeId, ITimeType timeType, long beginTime, long endTime);	// 按时间区间删除某一品种的Ema表数据，区间为[beginTime,endTime)
+		void		RemoveMacdsByRange(string codeId, ITimeType timeType, long beginTime, long endTime);	// 按时间区间删除某一品种的macd表数据，区间为[beginTime,endTime)
 		void		GetMacds(string codeId, ITimeType timeType, IQuery query,out IMacdValues macds);
 		bool		GetOneMacd(string codeId, ITimeType timeType, long timePos, out IMacdValue ma);			// 查询单个指定数据
 
@@ -77,18 +77,18 @@ module IBTrader
 		void		RecountDivTypeFromTimePos(string codeId, ITimeType timeType, long timePos);				// 重新计算某品种指定时间点(毫秒)之后的所有divType
 		void		UpdateDivType(string codeId, ITimeType timeType, IDivTypeValue divtype);
 		void		RemoveAllDivTypes(string codeId, ITimeType timeType);										// 删除某一品种的所有Ema表数据
-		void		RemoveDivTypesByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的Ema表数据，区间为[beginTime,endTime)
+		void		RemoveDivTypesByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的divType表数据，区间为[beginTime,endTime)
 		void		GetDivTypes(string codeId, ITimeType timeType, IQuery query,out IDivTypeValues divtypes);
 		bool		GetOneDivType(string codeId, ITimeType timeType, long timePos, out IDivTypeValue divtype);	// 查询单个指定数据
 
 		// atr表
-		void		RecountAvgAtr(string codeId, ITimeType timeType);										    // 重新计算某品种所有Atr, 会删除表重算
-		void		RecountAvgAtrFromTimePos(string codeId, ITimeType timeType, long timePos);				    // 重新计算某品种指定时间点(毫秒)之后的所有Atr
-		void		UpdateAvgAtr(string codeId, ITimeType timeType, double avgAtr);
-		void		RemoveAllAvgAtrs(string codeId, ITimeType timeType);										// 删除某一品种的所有Atr表数据
-		void		RemoveAvgAtrsByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的Atr表数据，区间为[beginTime,endTime)
-		void		GetAvgAtrs(string codeId, ITimeType timeType, IQuery query,out IAvgAtrs avgAtrs);
-		bool		GetOneAvgAtr(string codeId, ITimeType timeType, long timePos, out double avgAtr);	        // 查询单个指定数据
+		void		RecountAtr(string codeId, ITimeType timeType);										    // 重新计算某品种所有Atr, 会删除表重算
+		void		RecountAtrFromTimePos(string codeId, ITimeType timeType, long timePos);				    // 重新计算某品种指定时间点(毫秒)之后的所有Atr
+		void		UpdateAtr(string codeId, ITimeType timeType, IAtrValue artValue);
+		void		RemoveAllAtrs(string codeId, ITimeType timeType);										// 删除某一品种的所有Atr表数据
+		void		RemoveAtrsByRange(string codeId, ITimeType timeType, long beginTime, long endTime);		// 按时间区间删除某一品种的Atr表数据，区间为[beginTime,endTime)
+		void		GetAtrs(string codeId, ITimeType timeType, IQuery query,out IAtrValues avgAtrs);
+		bool		GetOneAtr(string codeId, ITimeType timeType, long timePos, out IAtrValue avgAtr);	    // 查询单个指定数据
 
 	};
 };

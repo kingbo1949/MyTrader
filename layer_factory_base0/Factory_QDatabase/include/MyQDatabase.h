@@ -146,13 +146,31 @@ public:
 	// 取单品种数据
 	virtual IBDivTypePtrs	GetDivTypes(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
 
-	// 删除单品种所有tick数据
+	// 删除单品种所有divtype数据
 	virtual void			RemoveAllDivTypes(const CodeStr& codeId, Time_Type timeType) = 0;
 
 	virtual void			RemoveDivTypesByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
 
 	// 查询单个指定数据
 	virtual IBDivTypePtr	GetOneDivType(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
+
+
+	// --------------- atr 表 ---------------------
+	// 重新计算所有atr
+	virtual void			RecountAtr(const CodeStr& codeId, Time_Type timeType) = 0;
+
+	virtual void			RecountAtrFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) = 0;
+
+	// 取单品种数据
+	virtual IBAtrPtrs		GetAtrs(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
+
+	// 删除单品种所有atr数据
+	virtual void			RemoveAllAtrs(const CodeStr& codeId, Time_Type timeType) = 0;
+
+	virtual void			RemoveAtrsByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
+
+	// 查询单个指定数据
+	virtual IBAtrPtr		GetOneAtr(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
 };
 typedef std::shared_ptr<CMyQDatabase> MyQDatabasePtr;
 

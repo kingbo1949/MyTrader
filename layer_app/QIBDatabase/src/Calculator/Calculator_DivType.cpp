@@ -1,5 +1,5 @@
 ﻿#include "Calculator_DivType.h"
-#include "Factory.h"
+#include "../Factory.h"
 #include <Global.h>
 #include <Factory_Log.h>
 CCalculator_DivType::CCalculator_DivType()

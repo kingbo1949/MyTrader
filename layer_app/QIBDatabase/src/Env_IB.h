@@ -1,10 +1,11 @@
 ﻿#pragma once
 #include <Env.h>
-#include "DbTable_TickHis.h"
-#include "DbTable_KLine.h"
-#include "DbTable_Average.h"
-#include "DbTable_DivType.h"
-#include "DbTable_Macd.h"
+#include "./DbTable/DbTable_TickHis.h"
+#include "./DbTable/DbTable_KLine.h"
+#include "./DbTable/DbTable_Average.h"
+#include "./DbTable/DbTable_DivType.h"
+#include "./DbTable/DbTable_Macd.h"
+#include "./DbTable/CDbTable_Atr.h"
 // IB的行情数据库环境
 class CEnv_IB : public CEnv
 {
@@ -25,6 +26,8 @@ public:
 	DbTable_MacdPtr							GetDB_Macd();
 
 	DbTable_DivTypePtr						GetDB_DivType();
+
+	DbTable_AtrPtr							GetDB_Atr();
 
 	void									OpenAllTable();
 };

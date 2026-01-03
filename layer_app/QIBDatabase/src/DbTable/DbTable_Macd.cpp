@@ -1,8 +1,8 @@
-﻿#include "DbTable_DivType.h"
-#include "Compare.h"
+﻿#include "DbTable_Macd.h"
+#include "../Compare.h"
 #include <Global.h>
 
-Bdb::CDbTable_DivType::CDbTable_DivType(DbEnv* env, const std::string& path, const std::string& dbName)
+Bdb::CDbTable_Macd::CDbTable_Macd(DbEnv* env, const std::string& path, const std::string& dbName)
 	:CDbTable(env, path, dbName)
 {
 	ParamForSetupDB param;
@@ -10,59 +10,63 @@ Bdb::CDbTable_DivType::CDbTable_DivType(DbEnv* env, const std::string& path, con
 	param.path = m_path;
 	param.dbName = m_dbName;
 	param.func_key = CCompare::QKeyA;
-	param.func_value = CCompare::DivTypeA;
+	param.func_value = CCompare::MacdA;
 	param.partNum = 0;
 	param.func_partition = NULL;
 
-	m_pDb = new CDb<IQKey, IDivTypeValue>(param);
+	m_pDb = new CDb<IQKey, IMacdValue>(param);
 	m_pDb->Open();
-	printf("CDbTable_DivType open \n");
+	printf("CDbTable_Macd open \n");
+
+
 }
-void Bdb::CDbTable_DivType::AddOne(const std::string& codeId, ITimeType timeType, const IDivTypeValue& value)
+void Bdb::CDbTable_Macd::AddOne(const std::string& codeId, ITimeType timeType, const IMacdValue& value)
 {
 	IQKey key;
 	key.codeId = codeId;
 	key.timeType = timeType;
 	m_pDb->AddOne(key, value);
-
 }
 
-void Bdb::CDbTable_DivType::AddSome(const std::string& codeId, ITimeType timeType, const IDivTypeValues& values)
+void Bdb::CDbTable_Macd::AddSome(const std::string& codeId, ITimeType timeType, const IMacdValues& values)
 {
-	for (IDivTypeValues::const_iterator pos = values.begin(); pos != values.end(); ++pos)
+	for (IMacdValues::const_iterator pos = values.begin(); pos != values.end(); ++pos)
 	{
 		AddOne(codeId, timeType, *pos);
 	}
-
 }
 
-bool Bdb::CDbTable_DivType::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IDivTypeValue& value)
+bool Bdb::CDbTable_Macd::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IMacdValue& value)
 {
 	IQKey key;
 	key.codeId = codeId;
 	key.timeType = timeType;
 
 	value.time = timePos;
-	value.divType = IDivType::NORMAL;
+	value.emaShort = 0;
+	value.emaLong = 0;
+	value.dif = 0;
+	value.dea = 0;
+	value.macd = 0;
 
 	return m_pDb->GetOne(key, value);
 
 }
 
-void Bdb::CDbTable_DivType::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
+void Bdb::CDbTable_Macd::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
 {
 	IQKey key;
 	key.codeId = codeId;
 	key.timeType = timeType;
 
-	IDivTypeValue value;
+	IMacdValue value;
 	value.time = timePos;
 
 	m_pDb->RemoveOne(std::make_pair(key, value));
 
 }
 
-void Bdb::CDbTable_DivType::RemoveKey(const std::string& codeId, ITimeType timeType)
+void Bdb::CDbTable_Macd::RemoveKey(const std::string& codeId, ITimeType timeType)
 {
 	IQKey key;
 	key.codeId = codeId;
@@ -72,19 +76,19 @@ void Bdb::CDbTable_DivType::RemoveKey(const std::string& codeId, ITimeType timeT
 
 }
 
-void Bdb::CDbTable_DivType::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
+void Bdb::CDbTable_Macd::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
 {
 	IQKey key;
 	key.codeId = codeId;
 	key.timeType = timeType;
 
-	IDivTypeValue begin;
+	IMacdValue begin;
 	begin.time = beginTime;
 
-	IDivTypeValue end;
+	IMacdValue end;
 	end.time = endTime;
 
-	CDb<IQKey, IDivTypeValue>::FieldPairRange fieldPairRange;
+	CDb<IQKey, IMacdValue>::FieldPairRange fieldPairRange;
 	fieldPairRange.beginPair = std::make_pair(key, begin);
 	fieldPairRange.endPair = std::make_pair(key, end);
 
@@ -94,12 +98,12 @@ void Bdb::CDbTable_DivType::RemoveByRange(const std::string& codeId, ITimeType t
 
 }
 
-void Bdb::CDbTable_DivType::RemoveAll()
+void Bdb::CDbTable_Macd::RemoveAll()
 {
 	m_pDb->RemoveAll();
 }
 
-void Bdb::CDbTable_DivType::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IDivTypeValues& values)
+void Bdb::CDbTable_Macd::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IMacdValues& values)
 {
 	if (query.byReqType == 0)
 	{
@@ -133,19 +137,19 @@ void Bdb::CDbTable_DivType::GetValues(const std::string& codeId, ITimeType timeT
 
 }
 
-void Bdb::CDbTable_DivType::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IDivTypeValues& values)
+void Bdb::CDbTable_Macd::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IMacdValues& values)
 {
 	IQKey key;
 	key.codeId = codeId;
 	key.timeType = timeType;
 
-	IDivTypeValue begin;
+	IMacdValue begin;
 	begin.time = beginTime;
 
-	IDivTypeValue end;
+	IMacdValue end;
 	end.time = endTime;
 
-	CDb<IQKey, IDivTypeValue>::FieldPairRange fieldPairRange;
+	CDb<IQKey, IMacdValue>::FieldPairRange fieldPairRange;
 	fieldPairRange.beginPair = std::make_pair(key, begin);
 	fieldPairRange.endPair = std::make_pair(key, end);
 
@@ -155,28 +159,28 @@ void Bdb::CDbTable_DivType::GetRange(const std::string& codeId, ITimeType timeTy
 
 }
 
-void Bdb::CDbTable_DivType::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IDivTypeValues& values)
+void Bdb::CDbTable_Macd::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IMacdValues& values)
 {
 	IQKey key;
 	key.codeId = codeId;
 	key.timeType = timeType;
 
-	IDivTypeValue value;
+	IMacdValue value;
 	value.time = beginTime;
-	CDb<IQKey, IDivTypeValue>::FieldPair pair = std::make_pair(key, value);
+	CDb<IQKey, IMacdValue>::FieldPair pair = std::make_pair(key, value);
 	m_pDb->GetForWardInDup(pair, count, values);
 
 }
 
-void Bdb::CDbTable_DivType::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IDivTypeValues& values)
+void Bdb::CDbTable_Macd::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IMacdValues& values)
 {
 	IQKey key;
 	key.codeId = codeId;
 	key.timeType = timeType;
 
-	IDivTypeValue value;
+	IMacdValue value;
 	value.time = endTime;
-	CDb<IQKey, IDivTypeValue>::FieldPair pair = std::make_pair(key, value);
+	CDb<IQKey, IMacdValue>::FieldPair pair = std::make_pair(key, value);
 
 	m_pDb->GetBackWardInDup(pair, count, values);
 

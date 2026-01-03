@@ -114,6 +114,20 @@ DbTable_DivTypePtr CEnv_IB::GetDB_DivType()
 	return pBack;
 }
 
+DbTable_AtrPtr CEnv_IB::GetDB_Atr()
+{
+	const std::string dbName = "atr_his.db";
+
+	DbTablePtr pDb = GetDbFile(dbName);
+	if (!pDb)
+	{
+		pDb = new CDbTable_Atr(&m_Env, m_path + m_dir + "\\", dbName);
+		AddDbFile(pDb);
+	}
+	DbTable_AtrPtr pBack = DbTable_AtrPtr::dynamicCast(pDb);
+	return pBack;
+}
+
 void CEnv_IB::OpenAllTable()
 {
 	GetDB_TickHis();
@@ -123,6 +137,7 @@ void CEnv_IB::OpenAllTable()
 	GetDB_Ema();
 	GetDB_Macd();
 	GetDB_DivType();
+	GetDB_Atr();
 
 
 	return;

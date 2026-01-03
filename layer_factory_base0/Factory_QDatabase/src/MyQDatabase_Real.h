@@ -154,6 +154,24 @@ public:
 	// 查询单个指定数据
 	virtual IBDivTypePtr	GetOneDivType(const CodeStr& codeId, Time_Type timeType, time_t timePos) override final;
 
+	// --------------- atr 表 ---------------------
+	// 重新计算所有atr
+	virtual void			RecountAtr(const CodeStr& codeId, Time_Type timeType) override final;
+
+	virtual void			RecountAtrFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) override final;
+
+	// 取单品种数据
+	virtual IBAtrPtrs		GetAtrs(const CodeStr& codeId, Time_Type timeType, const QQuery& query) override final;
+
+	// 删除单品种所有atr数据
+	virtual void			RemoveAllAtrs(const CodeStr& codeId, Time_Type timeType) override final;
+
+	virtual void			RemoveAtrsByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) override final;
+
+	// 查询单个指定数据
+	virtual IBAtrPtr		GetOneAtr(const CodeStr& codeId, Time_Type timeType, time_t timePos) override final;
+
+
 
 protected:
 

@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "GlobalDefine.h"
+#include "../GlobalDefine.h"
 class CCalculator
 {
 public:
@@ -15,6 +15,9 @@ public:
 	// 检查传入的K线是否已经存在于数据库
 	bool				Exist(const std::string& codeId, ITimeType timeType, const IKLine& newKline);
 
+	// 按传入的K线返回其上一根K线
+	bool				GetLastBar(const std::string& codeId, ITimeType timeType, const IKLine& newKline, IKLine& lastKline);
+
 };
 typedef std::shared_ptr<CCalculator> CalculatorPtr;
 
@@ -24,3 +27,4 @@ CalculatorPtr MakenAndGet_Calculator_VwMa();
 CalculatorPtr MakenAndGet_Calculator_Ema();
 CalculatorPtr MakenAndGet_Calculator_Macd();
 CalculatorPtr MakenAndGet_Calculator_DivType();
+CalculatorPtr MakenAndGet_Calculator_Atr();
