@@ -21,7 +21,7 @@ void CCloseTag::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChgC
 }
 
 
-AxisTagQPtr CCloseTag::MakeAndGet_AxisTag()
+QPointer<AxisTag> CCloseTag::MakeAndGet_AxisTag()
 {
 	if (!m_axisTag)
 	{

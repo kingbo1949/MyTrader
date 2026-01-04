@@ -17,17 +17,18 @@ void CCloseTag_Sub::DrawTag(const KlinePlotSuit& klinePlotSuit)
 {
 	if (klinePlotSuit.klines.empty()) return;
 
-	QQuery query;
-	query.query_type = QQueryType::FROM_CURRENT;
-	query.query_number = 1;
-	IBMacdPtrs macds = MakeAndGet_QDatabase()->GetMacds(klinePlotSuit.codeId, klinePlotSuit.timeType, query);
-	if (macds.empty()) return;
-	if (macds.back()->time != klinePlotSuit.klines.back()->time) return;
-
-
 	double showNum = GetShowNumber(klinePlotSuit.codeId, klinePlotSuit.timeType, klinePlotSuit.klines.back()->time);
 	MakeAndGet_AxisTag()->updatePosition(showNum);
 	MakeAndGet_AxisTag()->setText(QString::number(showNum, 'f', 2));
+
+	if (Get_SubVisible() == SubVisible::Show)
+	{
+		MakeAndGet_AxisTag()->setVisible(true);
+	}else
+	{
+		MakeAndGet_AxisTag()->setVisible(false);
+	}
+
 	return;
 }
 

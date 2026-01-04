@@ -33,9 +33,9 @@ public:
 	virtual QCPAxisQPtr		GetY() override = 0;
 
 protected:
-	AxisTagQPtr				m_axisTag = nullptr;
+	QPointer<AxisTag>		m_axisTag = nullptr;
 
-	AxisTagQPtr				MakeAndGet_AxisTag();
+	QPointer<AxisTag>		MakeAndGet_AxisTag();
 
 	virtual void			DrawTag(const KlinePlotSuit& klinePlotSuit) = 0;
 

@@ -90,6 +90,12 @@ void AxisTag::setText(const QString& text)
 	mLabel->setText(text);
 }
 
+void AxisTag::setVisible(bool visible)
+{
+	if (mArrow) mArrow->setVisible(visible);
+	if (mLabel) mLabel->setVisible(visible);
+}
+
 void AxisTag::updatePosition(double value)
 {
 	// since both the arrow and the text label are chained to the dummy tracer (via anchor

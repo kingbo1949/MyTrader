@@ -40,6 +40,7 @@ public:
 	void setPen(const QPen& pen);
 	void setBrush(const QBrush& brush);
 	void setText(const QString& text);
+	void setVisible(bool visible);
 
 	// getters:
 	QPen pen() const { return mLabel->pen(); }
