@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "ItemsHandler.h"
+#include "SubGraph.h"
 #include <Factory_IBGlobalShare.h>
 
 struct DivergenceArrow
@@ -10,12 +10,12 @@ struct DivergenceArrow
 };
 
 // macd 背离
-class CMacdDivergenceItem : public CItemsHandler
+class CMacdDivergenceItem : public CSubGraph
 {
 	Q_OBJECT
 
 public:
-	CMacdDivergenceItem(QCustomPlot* parent);
+	CMacdDivergenceItem(QCustomPlot* parent, SubType subType);
 	virtual ~CMacdDivergenceItem() { ; };
 
 	// 鼠标移动
@@ -33,9 +33,6 @@ public:
 	// 全部更新回合
 	virtual void			SetMatches(const KlinePlotSuit& klinePlotSuit) override { ; };
 
-	// 得到坐标系
-	virtual QCPAxisQPtr		GetX() override;
-	virtual QCPAxisQPtr		GetY() override;
 
 protected:
 	// 索引到标注背离的箭头的map

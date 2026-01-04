@@ -9,7 +9,7 @@ class CCloseTag_Sub : public CCloseTag
 
 public:
 	CCloseTag_Sub(QCustomPlot* parent);
-	virtual ~CCloseTag_Sub() { ; };
+	virtual ~CCloseTag_Sub() override = default;
 
 
 	// 得到坐标系
@@ -19,6 +19,9 @@ public:
 protected:
 
 	virtual void			DrawTag(const KlinePlotSuit& klinePlotSuit) override final;
+
+	// 得到需要显示的值
+	double					GetShowNumber(const CodeStr& codeId, Time_Type timeType, Tick_T lastTime);
 
 };
 

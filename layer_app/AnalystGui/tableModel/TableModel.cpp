@@ -1,6 +1,5 @@
 #include "TableModel.h"
 #include "TableModel_Ma.h"
-#include "TableModel_Ma_Mouse.h"
 #include "TableModel_Macd.h"
 #include "../src/Factory_AnalystGui.h"
 CTableModel::CTableModel()
@@ -17,35 +16,19 @@ void CTableModel::SetCodeId(const CodeStr& codeId)
 }
 
 
-TableModelQSPtr g_pTableModel_ma_nomouse = nullptr;
-TableModelQSPtr g_pTableModel_ma_mouse = nullptr;
+TableModelQSPtr g_pTableModel_ma = nullptr;
 TableModelQSPtr g_pTableModel_macd = nullptr;
 
 TableModelQSPtr	MakeAndGet_TableModel(TableViewType type)
 {
 	if (type == TableViewType::Ma)
 	{
-		if (Get_TableViewMouse() == TableViewMouse::NoMouse)
+		if (!g_pTableModel_ma)
 		{
-			if (!g_pTableModel_ma_nomouse)
-			{
-				g_pTableModel_ma_nomouse = QSharedPointer<CTableModel_Ma>(new CTableModel_Ma());
-
-			}
-			return g_pTableModel_ma_nomouse;
+			g_pTableModel_ma = QSharedPointer<CTableModel_Ma>(new CTableModel_Ma());
 
 		}
-		else
-		{
-			if (!g_pTableModel_ma_mouse)
-			{
-				g_pTableModel_ma_mouse = QSharedPointer<CTableModel_Ma_Mouse>(new CTableModel_Ma_Mouse());
-
-			}
-			return g_pTableModel_ma_mouse;
-
-		}
-
+		return g_pTableModel_ma;
 
 	}
 

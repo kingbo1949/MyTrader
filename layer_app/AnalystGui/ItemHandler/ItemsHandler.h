@@ -28,6 +28,9 @@ public:
 	// 全部更新回合
 	virtual void			SetMatches(const KlinePlotSuit& klinePlotSuit) = 0;
 
+	// 副图类别改变
+	virtual void			SubTypeChg(const KlinePlotSuit& klinePlotSuit) {;};
+
 	// 得到坐标系
 	virtual QCPAxisQPtr		GetX() = 0;
 	virtual QCPAxisQPtr		GetY() = 0;

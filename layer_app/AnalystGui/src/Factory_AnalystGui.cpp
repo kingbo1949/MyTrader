@@ -129,16 +129,24 @@ void SetMainY(const QCPRange& xRange, const IBKLinePtrs& klinesInSuit)
 
 }
 
-TableViewMouse g_tableViewMouse = TableViewMouse::NoMouse;
-void Set_TableViewMouse(TableViewMouse tableViewMouse)
+SubType g_subType = SubType::Macd;
+void Set_SubType(SubType subMain)
 {
-	g_tableViewMouse = tableViewMouse;
+	g_subType = subMain;
 }
 
-TableViewMouse Get_TableViewMouse()
+SubType Get_SubType()
 {
-	return g_tableViewMouse;
+	return g_subType;
+}
+SubVisible g_subVisible = SubVisible::Show;
+void Set_SubVisible(SubVisible subVisible)
+{
+	g_subVisible = subVisible;
 }
 
-
+SubVisible Get_SubVisible()
+{
+	return g_subVisible;
+}
 

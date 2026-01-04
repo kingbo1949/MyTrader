@@ -16,6 +16,7 @@
 #include "../ItemHandler/EmaGraph.h"
 #include "../ItemHandler/MacdDivergenceItem.h"
 #include "../ItemHandler/LineDrawer.h"
+#include "../ItemHandler/AtrGraph.h"
 CPlotContainer::CPlotContainer(QCustomPlot* parent)
 	:CPlotObject(parent)
 {
@@ -59,8 +60,9 @@ void CPlotContainer::InitItems()
 	m_items.push_back(new CMaGraph(m_customPlot));
 	//m_items.push_back(new CVwMaGraph(m_customPlot));
 	//m_items.push_back(new CEmaGraph(m_customPlot));
-	m_items.push_back(new CMacdGraph(m_customPlot, m_textTicker));
-	m_items.push_back(new CMacdDivergenceItem(m_customPlot));
+	m_items.push_back(new CAtrGraph(m_customPlot, SubType::Atr));
+	m_items.push_back(new CMacdGraph(m_customPlot, SubType::Macd));
+	m_items.push_back(new CMacdDivergenceItem(m_customPlot, SubType::Macd));
 	m_items.push_back(new CCloseTag_Sub(m_customPlot)); 
 	m_items.push_back(new CLineDrawer(m_customPlot));
 
@@ -125,6 +127,17 @@ void CPlotContainer::onMouseMove(QMouseEvent* event)
 		item->MouseMoveEvent(event, m_klinePlotSuit);
 	}
 	m_customPlot->layer("overlay")->replot();
+
+}
+
+void CPlotContainer::SubTypeChg()
+{
+	if (m_klinePlotSuit.klines.empty()) return;;
+	for (auto item : m_items)
+	{
+		item->SubTypeChg(m_klinePlotSuit);
+	}
+	return;
 
 }
 
@@ -233,6 +246,5 @@ void CPlotContainer::PlusSetMatches()
 	}
 	return;
 }
-
 
 

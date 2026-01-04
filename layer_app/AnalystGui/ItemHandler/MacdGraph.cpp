@@ -3,11 +3,9 @@
 #include <Global.h>
 #include <QtGlobal.h>
 #include <Factory_QDatabase.h>
-CMacdGraph::CMacdGraph(QCustomPlot* parent, XTickerQSPtr textTicker)
-	:CItemsHandler(parent), m_textTicker(textTicker)
+CMacdGraph::CMacdGraph(QCustomPlot* parent, SubType subType)
+	:CSubGraph(parent, subType)
 {
-	InitAxis();
-
 	m_macd = m_customPlot->addGraph(GetX(), GetY());
 	m_macd->setPen(QColor(41, 98, 255));
 
@@ -32,12 +30,17 @@ CMacdGraph::CMacdGraph(QCustomPlot* parent, XTickerQSPtr textTicker)
 
 void CMacdGraph::AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit)
 {
+	if (!IsMyType()) return ;
+
 	double high, low;
 	int xBeginPos, xEndPos;
 	GetWindowsPos(xBeginPos, xEndPos);
+
 	if (xBeginPos < 0) xBeginPos = 0;
 	if (xEndPos >= klinePlotSuit.klines.size()) xEndPos = int(klinePlotSuit.klines.size() - 1);
+
 	GetHighLow(klinePlotSuit.klines[xBeginPos]->time, klinePlotSuit.klines[xEndPos]->time + 10, high, low);
+
 	QCPRange yRange(low, high);
 	GetY()->setRange(yRange);
 	GetY()->scaleRange(GetYAxisFactor(), GetY()->range().center());
@@ -56,6 +59,10 @@ void CMacdGraph::SetKLines(const KlinePlotSuit& klinePlotSuit)
 	m_macdBarNegative->data()->clear();
 
 	m_mapMacdValue.clear();
+
+	// 一旦切换底图类别，必定最先调用本函数
+	if (!IsMyType()) return ;
+
 
 	while (!MakeMap(klinePlotSuit.codeId, klinePlotSuit.timeType, klinePlotSuit.klines, 0))
 	{
@@ -104,6 +111,8 @@ void CMacdGraph::SetKLines(const KlinePlotSuit& klinePlotSuit)
 
 void CMacdGraph::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChgCount& klineChgCount)
 {
+	if (!IsMyType()) return ;
+
 	int addcount = klineChgCount.addcount;
 	int chgcount = klineChgCount.chgcount;
 
@@ -113,9 +122,6 @@ void CMacdGraph::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChg
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
-
-	int beginPosChg = beginPos;
-	int beginPosAdd = int(klinePlotSuit.klines.size()) - addcount;
 
 	// 删除脏数据
 	DelData(beginPos, m_macd);
@@ -153,16 +159,7 @@ void CMacdGraph::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChg
 
 }
 
-QCPAxisQPtr CMacdGraph::GetX()
-{
-	return GetAxisRect(MainOrSub::SubT)->axis(QCPAxis::atBottom);
 
-}
-
-QCPAxisQPtr CMacdGraph::GetY()
-{
-	return GetAxisRect(MainOrSub::SubT)->axis(QCPAxis::atRight);
-}
 
 bool CMacdGraph::MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLinePtrs& klines, int beginPos)
 {
@@ -187,25 +184,8 @@ bool CMacdGraph::MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLin
 
 }
 
-void CMacdGraph::InitAxis()
-{
-	// 用自定义类来设置横轴刻度
-	GetX()->setTicker(m_textTicker);
-
-	// 设置刻度的值的数量，如果数量太多，轴的刻度会显示的密密麻麻不美观
-	m_textTicker->setTickCount(10);
-	GetY()->ticker()->setTickCount(5);
-
-}
 
 
-void CMacdGraph::GetWindowsPos(int& beginPos, int& endPos)
-{
-	QCPRange xRange = GetX()->range();
-
-	beginPos = std::floor(xRange.lower);
-	endPos = std::ceil(xRange.upper);
-}
 
 void CMacdGraph::GetHighLow(Tick_T xBeginPos, Tick_T xEndPos, double& high, double& low)
 {

@@ -8,6 +8,10 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
 
 
 set(ITEMHANDLER_LIST
+        ItemHandler/AtrGraph.h
+        ItemHandler/AtrGraph.cpp
+        ItemHandler/SubGraph.h
+        ItemHandler/SubGraph.cpp
         ItemHandler/AvgValueGraph.cpp
         ItemHandler/AvgValueGraph.h
         ItemHandler/CloseTag.cpp
@@ -65,8 +69,6 @@ set(TABLEMODEL_LIST
         tableModel/TableModel.h
         tableModel/TableModel_Ma.cpp
         tableModel/TableModel_Ma.h
-        tableModel/TableModel_Ma_Mouse.cpp
-        tableModel/TableModel_Ma_Mouse.h
         tableModel/TableModel_Macd.cpp
         tableModel/TableModel_Macd.h
 )

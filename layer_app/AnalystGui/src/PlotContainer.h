@@ -27,6 +27,10 @@ public:
 
 	void									onMouseMove(QMouseEvent* event);
 
+	// 副图类别改变事件
+	void									SubTypeChg() ;
+
+
 	void									GoHome();
 	void									GoEnd();
 
@@ -55,8 +59,5 @@ protected:
 
 	// 触发更新回合事件
 	void									PlusSetMatches();
-
-
-
 };
 typedef CPlotContainer* PlotContainerQPtr;

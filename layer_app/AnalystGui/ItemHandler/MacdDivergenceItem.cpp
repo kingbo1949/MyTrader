@@ -2,12 +2,14 @@
 #include <algorithm>
 #include <Factory_IBGlobalShare.h>
 #include <Factory_QDatabase.h>
-CMacdDivergenceItem::CMacdDivergenceItem(QCustomPlot* parent)
-	:CItemsHandler(parent)
+CMacdDivergenceItem::CMacdDivergenceItem(QCustomPlot* parent, SubType subType)
+	:CSubGraph(parent, subType)
 {
 }
 void CMacdDivergenceItem::AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit)
 {
+	if (!IsMyType()) return ;
+
 	// 坐标变化需要移动顶部箭头
 	QCPRange yRange = GetY()->range();
 	// 箭头长度
@@ -43,8 +45,10 @@ void CMacdDivergenceItem::AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit)
 void CMacdDivergenceItem::SetKLines(const KlinePlotSuit& klinePlotSuit)
 {
 	ClearItems();
-
 	m_mapDivTypeValue.clear();
+	if (!IsMyType()) return ;
+
+
 	while (!MakeMap(klinePlotSuit.codeId, klinePlotSuit.timeType, klinePlotSuit.klines, 0))
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -66,6 +70,8 @@ void CMacdDivergenceItem::SetKLines(const KlinePlotSuit& klinePlotSuit)
 }
 void CMacdDivergenceItem::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChgCount& klineChgCount)
 {
+	if (!IsMyType()) return ;
+
 	// 本回合数据
 	int beginPos = int(klinePlotSuit.klines.size()) - (klineChgCount.chgcount + klineChgCount.addcount);
 	while (!MakeMap(klinePlotSuit.codeId, klinePlotSuit.timeType, klinePlotSuit.klines, beginPos))
@@ -79,16 +85,6 @@ void CMacdDivergenceItem::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const
 	return;
 
 
-}
-QCPAxisQPtr CMacdDivergenceItem::GetX()
-{
-	return GetAxisRect(MainOrSub::SubT)->axis(QCPAxis::atBottom);
-
-}
-
-QCPAxisQPtr CMacdDivergenceItem::GetY()
-{
-	return GetAxisRect(MainOrSub::SubT)->axis(QCPAxis::atRight);
 }
 
 bool CMacdDivergenceItem::MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLinePtrs& klines, int beginPos)

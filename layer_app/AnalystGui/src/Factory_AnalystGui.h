@@ -73,10 +73,17 @@ struct KlinePlotSuit
 	SimpleMatchPtrs		tMatches;
 };
 
-enum class TableViewMouse
+enum class SubVisible
 {
-	Mouse = 0,
-	NoMouse = 1
+	Hide = 0,
+	Show = 1
+};
+
+// 副图类别
+enum class SubType
+{
+	Macd = 0,
+	Atr = 1
 };
 
 
@@ -102,8 +109,12 @@ void					SetAxisRect(MainOrSub mainOrSub, QCPAxisRectQPtr axisRect);
 // 按主图x轴范围，设置y轴
 void					SetMainY(const QCPRange& xRange, const IBKLinePtrs& klinesInSuit);
 
-void					Set_TableViewMouse(TableViewMouse tableViewMouse);
-TableViewMouse			Get_TableViewMouse();
+void					Set_SubType(SubType subMain);
+SubType					Get_SubType();
+
+void					Set_SubVisible(SubVisible subVisible);
+SubVisible				Get_SubVisible();
+
 
 
 

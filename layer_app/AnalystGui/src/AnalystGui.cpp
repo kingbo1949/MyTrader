@@ -14,7 +14,7 @@
 
 
 AnalystGui::AnalystGui(QWidget* parent)
-	: QMainWindow(parent), m_subAxisVisible(true)
+	: QMainWindow(parent)
 {
 	//setAttribute(Qt::WA_DeleteOnClose);
 
@@ -244,7 +244,7 @@ void AnalystGui::MakeLayout()
 		ui.qCustomPlot->plotLayout()->simplify();
 	}
 
-	if (m_subAxisVisible)
+	if (Get_SubVisible() == SubVisible::Show)
 	{
 		// 设置布局：将主图放在第 0 行，附图放在第 1 行
 		ui.qCustomPlot->plotLayout()->addElement(0, 0, GetAxisRect(MainOrSub::MainT));  // 添加主图
@@ -260,6 +260,7 @@ void AnalystGui::MakeLayout()
 	}
 	else
 	{
+		// 子图不可见
 		ui.qCustomPlot->plotLayout()->addElement(0, 0, GetAxisRect(MainOrSub::MainT));  // 添加主图
 		ui.qCustomPlot->plotLayout()->setRowStretchFactor(0, 1); // 主图占 4 份
 
@@ -331,52 +332,39 @@ IBKLinePtrs AnalystGui::GetKLines(const CodeStr& codeId, Time_Type timeType)
 	return klines;
 }
 
+void AnalystGui::FreshAll()
+{
+	std::string codeId = GetSelectCodeId(ui.tabWidget);
+	if (codeId == "")
+	{
+		return ;
+	}
 
+	Time_Type timeType = GetSelectTimeType();
+	IBKLinePtrs klines = GetKLines(codeId, timeType);;
 
+	ShowKlines(codeId, timeType, klines);
+
+}
 
 
 void AnalystGui::on_allCodeIdView_clicked(const QModelIndex& index)
 {
 	if (!index.isValid()) return;
 
-	std::string codeId = GetSelectCodeId(ui.tabWidget);
+	FreshAll();
 
-	Time_Type timeType = GetSelectTimeType();
-
-	IBKLinePtrs klines = GetKLines(codeId, timeType);;
-	ShowKlines(codeId, timeType, klines);
-
-	
 }
 
 void AnalystGui::on_positionCodeIdView_clicked(const QModelIndex& index)
 {
-	std::string codeId = GetSelectCodeId(ui.tabWidget);
-
-	Time_Type timeType = GetSelectTimeType();
-
-	IBKLinePtrs klines = GetKLines(codeId, timeType);;
-	ShowKlines(codeId, timeType, klines);
-
+	FreshAll();
 }
 
 void AnalystGui::on_klineTypeCtrl_currentIndexChanged(int index)
 {
 	if (index < 0) return;
-	// 得到codeId
-
-	std::string codeId = GetSelectCodeId(ui.tabWidget);
-	if (codeId == "") {
-		return ;
-	}
-
-	// 得到timeType
-	Time_Type timeType = GetSelectTimeType();
-
-	IBKLinePtrs klines = GetKLines(codeId, timeType);;
-	ShowKlines(codeId, timeType, klines);
-
-
+	FreshAll();
 
 }
 
@@ -443,25 +431,32 @@ void AnalystGui::keyPressEvent(QKeyEvent* event)
 	else if (event->key() == Qt::Key_H)
 	{
 		// 按下 'H' 键
-		m_subAxisVisible = !m_subAxisVisible; // 切换可见状态
-		GetAxisRect(MainOrSub::SubT)->setVisible(m_subAxisVisible); // 设置附图的可见性
-
+		// 切换副图可见状态
+		SubVisible currentSubVisible = Get_SubVisible();
+		if (currentSubVisible == SubVisible::Show)
+		{
+			Set_SubVisible(SubVisible::Hide);
+			GetAxisRect(MainOrSub::SubT)->setVisible(false); // 设置附图的可见性
+		}else
+		{
+			Set_SubVisible(SubVisible::Show);
+			GetAxisRect(MainOrSub::SubT)->setVisible(true); // 设置附图的可见性
+		}
+		m_plotContainer->SubTypeChg();
 		MakeLayout();
 
 	}
-	else if (event->key() == Qt::Key_T)
+	else if (event->key() == Qt::Key_A)
 	{
-		// 按下 'T' 键
-		if (Get_TableViewMouse() == TableViewMouse::Mouse)
-		{
-			Set_TableViewMouse(TableViewMouse::NoMouse);
-		}
-		else
-		{
-			Set_TableViewMouse(TableViewMouse::Mouse);
-		}
-
-		
+		// 按下 'A' 键
+		Set_SubType(SubType::Atr);
+		m_plotContainer->SubTypeChg();
+	}
+	else if (event->key() == Qt::Key_M)
+	{
+		// 按下 'M' 键
+		Set_SubType(SubType::Macd);
+		m_plotContainer->SubTypeChg();
 	}
 
 

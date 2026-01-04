@@ -7,30 +7,30 @@ class CCloseTag : public CItemsHandler
 
 public:
 	CCloseTag(QCustomPlot* parent);
-	virtual ~CCloseTag() { ; };
+	virtual ~CCloseTag() ;
 
 	// 鼠标移动
-	virtual void			MouseMoveEvent(QMouseEvent* event, const KlinePlotSuit& klinePlotSuit) override final { ; };
+	virtual void			MouseMoveEvent(QMouseEvent* event, const KlinePlotSuit& klinePlotSuit) final { ; };
 
 	// 坐标变化事件
-	virtual void			AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit) override final { ; };
+	virtual void			AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit) final { ; };
 
 	// K线改变或者回合改变事件
-	virtual void			SetKLines(const KlinePlotSuit& klinePlotSuit) override final ;
+	virtual void			SetKLines(const KlinePlotSuit& klinePlotSuit) final ;
 
 	// 盘中K线更新
-	virtual void			UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChgCount& klineChgCount) override final ;
+	virtual void			UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChgCount& klineChgCount) final ;
 
 	// 全部更新回合
-	virtual void			SetMatches(const KlinePlotSuit& klinePlotSuit) override final { ; };
+	virtual void			SetMatches(const KlinePlotSuit& klinePlotSuit) final { ; };
+
+	// 副图类别改变
+	virtual void			SubTypeChg(const KlinePlotSuit& klinePlotSuit) final { DrawTag(klinePlotSuit) ;};
+
 
 	// 得到坐标系
 	virtual QCPAxisQPtr		GetX() override = 0 ;
 	virtual QCPAxisQPtr		GetY() override = 0;
-
-
-
-
 
 protected:
 	AxisTagQPtr				m_axisTag = nullptr;

@@ -5,6 +5,11 @@ CCloseTag::CCloseTag(QCustomPlot* parent)
 {
 }
 
+CCloseTag::~CCloseTag()
+{
+	;
+}
+
 void CCloseTag::SetKLines(const KlinePlotSuit& klinePlotSuit)
 {
 	DrawTag(klinePlotSuit);

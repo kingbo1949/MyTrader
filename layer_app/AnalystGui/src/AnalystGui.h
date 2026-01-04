@@ -21,7 +21,7 @@ public slots:
 	void				on_isRealCtrl_clicked();
 	void				on_allCodeIdView_clicked(const QModelIndex &index);			// 选择品种 
 	void				on_positionCodeIdView_clicked(const QModelIndex& index);	// 选择品种 
-	void				on_klineTypeCtrl_currentIndexChanged(int index);	// 选择周期
+	void				on_klineTypeCtrl_currentIndexChanged(int index);			// 选择周期
 
 protected:
 	void				onTimerRealQuote();
@@ -43,7 +43,6 @@ private:
 	PlotContainerQPtr		m_plotContainer;
 	QTimer					m_timer_realCtrl;				// 刷新实时数据定时器
 	QTimer					m_timer_klineShape;				// 刷新k线形态定时器
-	bool					m_subAxisVisible;
 	QStandardItemModel*		m_model_allCodeId;
 	QStandardItemModel*		m_model_positionCodeId;
 	ScanKShapePtr			m_pScanKShape_future;
@@ -71,6 +70,10 @@ private:
 
 	// 得到KLINES 选中品种和周期时使用
 	IBKLinePtrs			GetKLines(const CodeStr& codeId, Time_Type timeType);
+
+	// 全部刷新 包括K线数据和图
+	void				FreshAll();
+
 
 
 };

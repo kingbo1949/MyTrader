@@ -8,7 +8,7 @@ class CCloseTag_Main : public CCloseTag
 
 public:
 	CCloseTag_Main(QCustomPlot* parent);
-	virtual ~CCloseTag_Main() { ; };
+	virtual ~CCloseTag_Main() override = default;
 
 
 	// 得到坐标系
