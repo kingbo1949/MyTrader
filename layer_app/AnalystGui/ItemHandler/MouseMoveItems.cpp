@@ -114,18 +114,22 @@ void CMouseMoveItems::DrawToolTip(const CodeStr& codeId, Time_Type timeType, QMo
 
 	IBKLinePtr kline = klines[dictX];
 
-	IBMacdPtr pvalue = MakeAndGet_QDatabase()->GetOneMacd(codeId, timeType, kline->time);
-	if (!pvalue) return;
+	IBMacdPtr pMacd = MakeAndGet_QDatabase()->GetOneMacd(codeId, timeType, kline->time);
+	if (!pMacd) return;
 
-	QString info = QString("Index: %1\nOpen: %2\nClose: %3\nLow: %4\nHigh: %5\nMacd_Diff: %6\nMacd_Dea: %7\nMacd_Bar: %8")
+	IBAtrPtr pAtr = MakeAndGet_QDatabase()->GetOneAtr(codeId, timeType, kline->time);
+	if (!pAtr) return;
+
+	QString info = QString("Index: %1\nOpen: %2\nClose: %3\nLow: %4\nHigh: %5\nMacd_Diff: %6\nMacd_Dea: %7\nMacd_Bar: %8\nAtr: %9")
 		.arg(dictX)
 		.arg(QString::number(kline->open, 'f', 2))
 		.arg(QString::number(kline->close, 'f', 2))
 		.arg(QString::number(kline->low, 'f', 2))
 		.arg(QString::number(kline->high, 'f', 2))
-		.arg(QString::number(pvalue->dif, 'f', 2))
-		.arg(QString::number(pvalue->dea, 'f', 2))
-		.arg(QString::number(pvalue->macd, 'f', 2))
+		.arg(QString::number(pMacd->dif, 'f', 2))
+		.arg(QString::number(pMacd->dea, 'f', 2))
+		.arg(QString::number(pMacd->macd, 'f', 2))
+		.arg(QString::number(pAtr->avgAtr, 'f', 2))
 		;
 	QToolTip::showText(event->globalPosition().toPoint(), info, m_customPlot);
 
