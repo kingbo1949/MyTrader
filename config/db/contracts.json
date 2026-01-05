@@ -27,7 +27,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "MBTZ5",
+		"localSymbol" : "MBTF6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"
@@ -38,7 +38,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "ETHZ5",
+		"localSymbol" : "ETHF6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"

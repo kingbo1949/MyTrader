@@ -33,7 +33,8 @@
         "ICE_ROOT": "${sourceDir}/ThirdParty/ice.3.7/build",
         "BOOST_ROOT": "${sourceDir}/ThirdParty/boost_1_90_0",
         "INTERRDFPMATH_ROOT": "${sourceDir}/ThirdParty/intelrdfpmathlib",
-        "BZIP2_ROOT": "${sourceDir}/ThirdParty/bzip2"
+        "BZIP2_ROOT": "${sourceDir}/ThirdParty/bzip2",
+        "QT_ROOT": "C:/Qt/6.8.2/msvc2022_64"
 
 
       }

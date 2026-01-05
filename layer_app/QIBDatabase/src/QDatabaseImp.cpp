@@ -495,7 +495,7 @@ void CQDatabaseImp::RecountAtrFromTimePos(const std::string &codeId, ITimeType t
 	GetKline_RecountQuery_TimePos(codeId, timetype, timePos, klines);
 	for (const auto& kline : klines)
 	{
-		MakenAndGet_Calculator_DivType()->Update(codeId, timetype, kline);
+		MakenAndGet_Calculator_Atr()->Update(codeId, timetype, kline);
 	}
 }
 

@@ -117,8 +117,12 @@ void CMouseMoveItems::DrawToolTip(const CodeStr& codeId, Time_Type timeType, QMo
 	IBMacdPtr pMacd = MakeAndGet_QDatabase()->GetOneMacd(codeId, timeType, kline->time);
 	if (!pMacd) return;
 
+	double avgatr = -1;
 	IBAtrPtr pAtr = MakeAndGet_QDatabase()->GetOneAtr(codeId, timeType, kline->time);
-	if (!pAtr) return;
+	if (pAtr)
+	{
+		avgatr = pAtr->avgAtr;
+	}
 
 	QString info = QString("Index: %1\nOpen: %2\nClose: %3\nLow: %4\nHigh: %5\nMacd_Diff: %6\nMacd_Dea: %7\nMacd_Bar: %8\nAtr: %9")
 		.arg(dictX)
@@ -129,7 +133,8 @@ void CMouseMoveItems::DrawToolTip(const CodeStr& codeId, Time_Type timeType, QMo
 		.arg(QString::number(pMacd->dif, 'f', 2))
 		.arg(QString::number(pMacd->dea, 'f', 2))
 		.arg(QString::number(pMacd->macd, 'f', 2))
-		.arg(QString::number(pAtr->avgAtr, 'f', 2))
+		// .arg(QString::number(pAtr->avgAtr, 'f', 2))
+		.arg(QString::number(avgatr, 'f', 2))
 		;
 	QToolTip::showText(event->globalPosition().toPoint(), info, m_customPlot);
 

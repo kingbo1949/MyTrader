@@ -71,6 +71,7 @@ void CPlotContainer::InitItems()
 
 void CPlotContainer::SetKlines(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs& klines)
 {
+
 	m_klinePlotSuit.time_index.clear();
 	m_klinePlotSuit.klines.clear();
 
@@ -94,6 +95,7 @@ void CPlotContainer::SetKlines(const CodeStr& codeId, Time_Type timeType, const 
 
 void CPlotContainer::AddKlines(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs& klines)
 {
+
 	// ontime查了末尾的两根线来更新m_klinePlotSuit
 	if (codeId != m_klinePlotSuit.codeId) return;
 	if (timeType != m_klinePlotSuit.timeType) return;
@@ -111,6 +113,7 @@ void CPlotContainer::AddKlines(const CodeStr& codeId, Time_Type timeType, const 
 
 void CPlotContainer::SetTMatches(SimpleMatchPtrs matches)
 {
+
 	m_klinePlotSuit.tMatches = matches;
 	PlusSetMatches();
 	m_customPlot->layer("overlay")->replot();
@@ -132,6 +135,7 @@ void CPlotContainer::onMouseMove(QMouseEvent* event)
 
 void CPlotContainer::SubTypeChg()
 {
+
 	if (m_klinePlotSuit.klines.empty()) return;;
 	for (auto item : m_items)
 	{

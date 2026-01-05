@@ -90,6 +90,7 @@ endif()
 include(GNUInstallDirs)
 
 # 你现有 run 目录布局：bin/run/QIBDatabase/...
+set(_install_bin_dir "${CMAKE_INSTALL_BINDIR}")                 # bin
 set(_install_run_dir "${CMAKE_INSTALL_BINDIR}/run/${TARGETNAME}")
 
 # 1) 安装可执行文件到 <prefix>/bin
@@ -106,17 +107,16 @@ install(FILES "${CMAKE_SOURCE_DIR}/config/config.server"
         DESTINATION "${_install_run_dir}"
 )
 
-# 4) 安装 QIBDatabase 运行所需第三方 DLL 到 <prefix>/bin/run/QIBDatabase
+# 4) 安装 QIBDatabase 运行所需第三方 DLL 到 <prefix>/bin/
 #    （与当前你调试工作目录保持一致）
 if(WIN32)
     install(FILES $<TARGET_RUNTIME_DLLS:${TARGETNAME}>
-            DESTINATION "${_install_run_dir}"
+            DESTINATION "${_install_bin_dir}"
     )
-endif()
-
-if(WIN32)
     install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/packaging/run_QIBDatabase.bat"
             DESTINATION "${_install_run_dir}"
     )
+
 endif()
+
 

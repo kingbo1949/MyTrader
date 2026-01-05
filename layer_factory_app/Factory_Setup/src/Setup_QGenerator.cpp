@@ -114,7 +114,8 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 		//MakeAndGet_QDatabase()->RecountEmaFromTimePos(codeId, timeType, klines[0]->time);
 		MakeAndGet_QDatabase()->RecountMacdFromTimePos(codeId, timeType, klines[0]->time);
 		MakeAndGet_QDatabase()->RecountDivTypeFromTimePos(codeId, timeType, klines[0]->time);
-		MakeAndGet_QDatabase()->RecountMaFromTimePos(codeId, timeType, klines[0]->time);
+		MakeAndGet_QDatabase()->RecountAtrFromTimePos(codeId, timeType, klines[0]->time);
+
 	}
 
 

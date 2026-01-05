@@ -200,4 +200,64 @@ if (WIN32)
 
 endif ()
 
+# 开始安装
+include(GNUInstallDirs)
+
+set(_install_bin_dir "${CMAKE_INSTALL_BINDIR}")                 # bin
+set(_install_plugins_dir "${CMAKE_INSTALL_BINDIR}/plugins")     # bin/plugins
+set(_install_run_dir "${CMAKE_INSTALL_BINDIR}/run/${TARGETNAME}") # bin/run/AnalystGui
+
+# 安装可执行文件到 <prefix>/bin
+install(TARGETS ${TARGETNAME} RUNTIME DESTINATION "${_install_bin_dir}")
+
+# 安装运行目录需要的子目录（可选，但建议）
+install(DIRECTORY DESTINATION "${_install_run_dir}/db")
+install(DIRECTORY DESTINATION "${_install_run_dir}/log")
+
+# 安装 config.server 到 <prefix>/bin/run/AnalystGui/config.server
+install(FILES "${CMAKE_SOURCE_DIR}/config/config.server" DESTINATION "${_install_run_dir}")
+
+# 安装json文件到<prefix>/bin/run/AnalystGui/db目录
+install(FILES "${CMAKE_SOURCE_DIR}/config/db/contracts.json" DESTINATION "${_install_run_dir}/db")
+install(FILES "${CMAKE_SOURCE_DIR}/config/db/tradePoints.json" DESTINATION "${_install_run_dir}/db")
+install(FILES "${CMAKE_SOURCE_DIR}/config/db/strategyParams.json" DESTINATION "${_install_run_dir}/db")
+install(FILES "${CMAKE_SOURCE_DIR}/config/db/Simulator_TimeZone.json" DESTINATION "${_install_run_dir}/db")
+
+
+
+# 安装 AnalystGui 运行所需第三方 DLL 到 <prefix>/bin
+#    （与当前你调试工作目录保持一致）
+if(WIN32)
+    install(FILES $<TARGET_RUNTIME_DLLS:${TARGETNAME}>
+            DESTINATION "${_install_bin_dir}" OPTIONAL
+    )
+
+    get_target_property(_qt_qmake_exe Qt6::qmake IMPORTED_LOCATION)
+    get_filename_component(_qt_bin_dir "${_qt_qmake_exe}" DIRECTORY)
+    set(_windeployqt "${_qt_bin_dir}/windeployqt.exe")
+
+    # 安装时执行：把Qt运行库/插件部署到 <prefix>/bin
+    install(CODE
+            "execute_process(
+            COMMAND \"${_windeployqt}\"
+                    --no-translations
+                    --no-opengl-sw
+                    --plugindir \"\${CMAKE_INSTALL_PREFIX}/${_install_plugins_dir}\"
+                    \"\${CMAKE_INSTALL_PREFIX}/${_install_bin_dir}/$<TARGET_FILE_NAME:${TARGETNAME}>\"
+            RESULT_VARIABLE _res
+        )
+        if(NOT _res EQUAL 0)
+            message(FATAL_ERROR \"windeployqt failed with code: \${_res}\")
+        endif()
+        "
+    )
+
+
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/packaging/run_AnalystGui.bat"
+            DESTINATION "${_install_run_dir}"
+    )
+
+endif()
+
+
 
