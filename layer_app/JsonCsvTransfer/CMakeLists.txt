@@ -74,3 +74,38 @@ if (WIN32)
 
 endif ()
 
+# 开始安装
+include(GNUInstallDirs)
+
+# 你现有 run 目录布局：bin/run/QuoteGenerator/...
+set(_install_bin_dir "${CMAKE_INSTALL_BINDIR}")                 # bin
+set(_install_run_dir "${CMAKE_INSTALL_BINDIR}/run/${TARGETNAME}")
+
+# 安装可执行文件到 <prefix>/bin
+install(TARGETS ${TARGETNAME}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# 安装运行目录需要的子目录（可选，但建议）
+install(DIRECTORY DESTINATION "${_install_run_dir}/db")
+install(DIRECTORY DESTINATION "${_install_run_dir}/csv")
+
+# 安装csv文件到<prefix>/bin/run/JsonCsvTransfer/csv目录
+install(FILES "${CMAKE_SOURCE_DIR}/config/csv/contracts.csv" DESTINATION "${_install_run_dir}/csv")
+install(FILES "${CMAKE_SOURCE_DIR}/config/csv/tradePoints.csv" DESTINATION "${_install_run_dir}/csv")
+install(FILES "${CMAKE_SOURCE_DIR}/config/csv/strategyParams.csv" DESTINATION "${_install_run_dir}/csv")
+
+
+
+# 安装 JsonCsvTransfer 运行所需第三方 DLL 到 <prefix>/bin/
+#    （与当前你调试工作目录保持一致）
+if(WIN32)
+    install(FILES $<TARGET_RUNTIME_DLLS:${TARGETNAME}>
+            DESTINATION "${_install_bin_dir}"
+    )
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/packaging/run_JsonCsvTransfer.bat"
+            DESTINATION "${_install_run_dir}"
+    )
+
+endif()
+
