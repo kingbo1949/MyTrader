@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+﻿#include "../stdafx.h"
 #include "TableModel.h"
 #include "TableModel_Kline.h"
 #include "TableModel_Tick_Future.h"

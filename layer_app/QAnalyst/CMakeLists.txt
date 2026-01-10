@@ -16,16 +16,16 @@ set(SRC_LIST
         src/SaveData_Klines.cpp
         src/StatisTick.cpp
         src/stdafx.cpp
-        src/TableModel.h
-        src/TableModel.cpp
-        src/TableModel_Kline.h
-        src/TableModel_Kline.cpp
-        src/TableModel_Tick.h
-        src/TableModel_Tick.cpp
-        src/TableModel_Tick_Future.h
-        src/TableModel_Tick_Future.cpp
-        src/TableModel_Tick_Stock.h
-        src/TableModel_Tick_Stock.cpp
+        src/TableModel/TableModel.h
+        src/TableModel/TableModel.cpp
+        src/TableModel/TableModel_Kline.h
+        src/TableModel/TableModel_Kline.cpp
+        src/TableModel/TableModel_Tick.h
+        src/TableModel/TableModel_Tick.cpp
+        src/TableModel/TableModel_Tick_Future.h
+        src/TableModel/TableModel_Tick_Future.cpp
+        src/TableModel/TableModel_Tick_Stock.h
+        src/TableModel/TableModel_Tick_Stock.cpp
         src/Tick_BigGap.cpp
         src/TradeDay.cpp
         ui/QAnalyst.ui

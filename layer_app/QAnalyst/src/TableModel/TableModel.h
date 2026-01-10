@@ -1,6 +1,6 @@
 ﻿#pragma once
+#include "../stdafx.h"
 #include <qabstractitemmodel.h>
-#include <base_struc.h>
 class CTableModel : public QAbstractTableModel
 {
 	Q_OBJECT

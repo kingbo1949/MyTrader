@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+﻿#include "../stdafx.h"
 #include "TableModel_Tick.h"
 #include <Factory_QDatabase.h>
 #include <Log.h>

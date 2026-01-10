@@ -5,9 +5,14 @@
 #include <Global.h>
 #include <Log.h>
 #include <Factory_QDatabase.h>
-CSaveData_Klines::CSaveData_Klines(const CodeStr& codeId, IBKLinePtrs klines)
-	:m_codeId(codeId), m_klines(klines)
+CSaveData_Klines::CSaveData_Klines(const CodeStr& codeId, const KLine4Tables& kline4Tables)
+	:m_codeId(codeId), m_kline4Tables(kline4Tables)
 {
+	IBKLinePtrs klines;
+	for (auto kline4Table : m_kline4Tables)
+	{
+		klines.push_back(kline4Table.pkline);
+	}
 	m_pTradeDay = std::make_shared<CTradeDay>(klines);
 }
 
@@ -18,14 +23,14 @@ void CSaveData_Klines::Go(const std::string& fileName)
 	std::string klinetitle = GetTitle();
 	CLog::Instance()->PrintStrToFile(fileName, klinetitle + "\n");
 
-	std::string klineStr = "";
-	for (size_t i = 0; i < m_klines.size(); ++i)
+	std::string all_lineStr = "";
+	for (size_t i = 0; i < m_kline4Tables.size(); ++i)
 	{
-		std::string str = GetKlineStr(m_klines[i]) + "\n";
-		klineStr += str;
+		std::string str = GetKlineStr(m_kline4Tables[i]) + "\n";
+		all_lineStr += str;
 
 	}
-	CLog::Instance()->PrintStrToFile(fileName, klineStr + "\n");
+	CLog::Instance()->PrintStrToFile(fileName, all_lineStr + "\n");
 
 	return;
 
@@ -37,39 +42,51 @@ void CSaveData_Klines::Go(const std::string& fileName)
 
 std::string CSaveData_Klines::GetTitle()
 {
-	return "time,open,high,low,close,vol,daySession,tradeDay";
+	return "time,open,high,low,close,vol,daySession,tradeDay,dif,dea,macd,divType,isUTurn,atr";
 }
 
-std::string CSaveData_Klines::GetKlineStr(IBKLinePtr kline)
+std::string CSaveData_Klines::GetKlineStr(const KLine4Table &kline4Table)
 {
-	bool daySession = CHighFrequencyGlobalFunc::IsDaySession(kline->time);
+	bool daySession = CHighFrequencyGlobalFunc::IsDaySession(kline4Table.pkline->time);
 	std::string daySessionStr = daySession ? "1" : "0";
 
 	Tick_T tradeDay = 0;
-	if (!m_pTradeDay->GetTradeDay(kline->time, tradeDay))
+	if (!m_pTradeDay->GetTradeDay(kline4Table.pkline->time, tradeDay))
 	{
-		tradeDay = CHighFrequencyGlobalFunc::GetDayMillisec(kline->time) + 24 * 60 * 60 * 1000;
+		tradeDay = CHighFrequencyGlobalFunc::GetDayMillisec(kline4Table.pkline->time) + 24 * 60 * 60 * 1000;
 	}
 
 
 	std::string temstr = fmt::format(
-		"{},"						// 时间
+		"{},"					// 时间
 		"{:.2f},"					// 开盘
 		"{:.2f},"					// 最高
 		"{:.2f},"					// 最低
 		"{:.2f},"					// close
 		"{},"						// vol
 		"{},"						// daySession
-		"{}"						// 交易日
+		"{},"						// 交易日
+		"{:.2f},"					// dif
+		"{:.2f},"					// dea
+		"{:.2f},"					// macd
+		"{},"						// divType
+		"{},"						// isUTurn
+		"{:.2f}"					// atr
 		,
-		CGlobal::GetTickTimeStr(kline->time).substr(0, 17).c_str(),			// 取时间字符串不要毫秒部分
-		kline->open,
-		kline->high,
-		kline->low,
-		kline->close,
-		kline->vol,
+		CGlobal::GetTickTimeStr(kline4Table.pkline->time).substr(0, 17).c_str(),			// 取时间字符串不要毫秒部分
+		kline4Table.pkline->open,
+		kline4Table.pkline->high,
+		kline4Table.pkline->low,
+		kline4Table.pkline->close,
+		kline4Table.pkline->vol,
 		daySessionStr.c_str(),
-		CGlobal::GetTickTimeStr(tradeDay).substr(0, 8).c_str()				// 仅取时间字符串日期部分
+		CGlobal::GetTickTimeStr(tradeDay).substr(0, 8).c_str(),				// 仅取时间字符串日期部分
+		kline4Table.pmacd->dif,
+		kline4Table.pmacd->dea,
+		kline4Table.pmacd->macd,
+		CTransToStr::Get_DivergenceType(kline4Table.pDivType->divType).c_str(),
+		kline4Table.pDivType->isUTurn ? "1" : "0",
+		kline4Table.pAtr->avgAtr
 	);
 
 	return temstr;

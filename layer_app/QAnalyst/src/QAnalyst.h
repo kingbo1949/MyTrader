@@ -2,7 +2,7 @@
 
 #include <QtWidgets/QWidget>
 // #include "ui_QAnalyst.h"
-#include "TableModel.h"
+#include "./TableModel/TableModel.h"
 
 namespace Ui { class QAnalystClass; }
 

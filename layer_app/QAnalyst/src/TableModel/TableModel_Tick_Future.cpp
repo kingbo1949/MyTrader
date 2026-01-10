@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+﻿#include "../stdafx.h"
 #include "TableModel_Tick_Future.h"
 #include <Global.h>
 #include <QtGlobal.h>

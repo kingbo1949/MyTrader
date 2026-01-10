@@ -6,14 +6,22 @@ class CTableModel_Kline : public CTableModel
 
 public:
 	// 顺序必须与m_headers一样
-	enum class KLineRole {
+	enum class KLineRole
+	{
 		Time = 0,
 		Open = 1,
 		High = 2,
 		Low = 3,
 		Close = 4,
-		Vol = 5
+		Vol = 5,
+		Dif = 6,			// CIBMacd中的dif
+		Dea = 7,			// CIBMacd中的dea
+		Macd = 8,			// CIBMacd中的macd
+		DivType = 9,		// CIBDivType中的divType
+		IsUTurn = 10,		// CIBDivType中的isUTurn
+		Atr = 11			// CIBAtr中的avgAtr
 	};
+
 
 	CTableModel_Kline(IbContractPtr pContract);
 	virtual ~CTableModel_Kline() { qDebug() << "CTableModel_Kline realse"; }
@@ -32,9 +40,11 @@ public:
 
 
 protected:
-	IBKLinePtrs						m_klines;
+	KLine4Tables					m_kline4Tables;
 
 	virtual std::string				GetFileName(const CodeStr& codeId) override;
+
+	void							FillKline4Tables(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs &klines);
 
 
 };
