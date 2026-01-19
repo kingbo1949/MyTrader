@@ -15,6 +15,7 @@ set(SRC_LIST
         src/Trans.cpp
         src/TransDataToStr.cpp
         src/TransToStr.cpp
+        src/TradeDay_Real.cpp
 
 
 )

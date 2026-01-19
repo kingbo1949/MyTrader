@@ -109,25 +109,6 @@ std::string CLog::ReadFileToString(std::string filename)
 	}
 	throw std::runtime_error("Failed to read file: " + filename);
 
-
-
-	//std::string back = "";
-	//const int BUFFLEN = 5000;
-	////建立文件输入流
-	//std::locale loc = std::locale::global(std::locale(""));//要打开的文件路径含中文，设置全局locale为本地环境
-	//std::ifstream ifs(fileName.c_str());
-	//if (ifs)
-	//{
-	//	char buff[BUFFLEN];
-	//	while (!ifs.eof())
-	//	{
-	//		ifs.getline(buff, BUFFLEN);
-	//		back = back + std::string(buff) + "\r\n";
-	//	}
-	//}
-	//std::locale::global(loc);//恢复全局locale
-	//return back;
-
 }
 
 std::string CLog::vformat_string(const char *fmt, va_list args)

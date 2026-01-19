@@ -1,13 +1,15 @@
 
 set(TARGETNAME "Factory_StOperator")
 set(SRC_LIST
+        src/UTurn/MakePrice_UTurn.cpp
+        src/UTurn/NeedCancel_UTurn.cpp
         src/Factory_StOperator.cpp
         src/KLineAndMaTool.cpp
         src/MakePrice.cpp
-        src/MakePrice_Manual.cpp
+        src/manual/MakePrice_Manual.cpp
         src/MakePrice_Real.cpp
         src/NeedCancel.cpp
-        src/NeedCancel_Manual.cpp
+        src/manual/NeedCancel_Manual.cpp
         src/NeedCancel_Real.cpp
         src/OpenPrice.cpp
         src/OpenPrice_Real.cpp

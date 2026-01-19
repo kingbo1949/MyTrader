@@ -37,6 +37,17 @@ bool CHighFrequencyGlobalFunc::IsDaySession(Tick_T tickTime)
 	return false;
 }
 
+bool CHighFrequencyGlobalFunc::IsAfter16(Tick_T tickTime)
+{
+	Tick_T dayTime = GetDayMillisec(tickTime);
+	Tick_T nextTime = dayTime + 24 * 60 * 60 * 1000;
+
+	Tick_T beginTime = dayTime + MakeMilliSecondPart("16:00:00", 0);
+	if (tickTime >= beginTime && tickTime < nextTime) return true;
+	return false;
+
+}
+
 int CHighFrequencyGlobalFunc::GetPriceStatus(IBTickPtr tick, BuyOrSell buyOrSell, int priceIn)
 {
 	int priceStep = priceIn;

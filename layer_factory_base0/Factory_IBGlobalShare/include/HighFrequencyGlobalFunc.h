@@ -21,6 +21,9 @@ public:
 	// 判断是否是日盘
 	static bool						IsDaySession(Tick_T tickTime);
 
+	// 判断是否是16:00:00之后的时间
+	static bool						IsAfter16(Tick_T tickTime);
+
 	// hms的格式为HH:MM:SS, millis是毫秒零头
 	inline static Tick_T			MakeMilliSecondPart(const char* hms, Tick_T millis)
 	{

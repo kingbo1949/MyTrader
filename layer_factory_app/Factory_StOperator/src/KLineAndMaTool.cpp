@@ -6,39 +6,7 @@
 #include <Factory_Log.h>
 #include <Factory_IBJSon.h>
 
-double CKLineAndMaTool::GetMa(const IBKLinePtrs& klines)
-{
-	double ret = 0.0;
-	if (klines.size() == 0) return ret;
 
-	for (auto kline : klines)
-	{
-		ret += kline->close;
-	}
-	ret = ret / klines.size();
-
-	return ret;
-}
-
-IBMaPtr CKLineAndMaTool::GetLastMa(const std::string& codeId, Time_Type timeType, time_t currentTickTime)
-{
-	// 当前时点
-	time_t recordNo = CGetRecordNo::GetRecordNo(timeType, currentTickTime);
-
-	QQuery query;
-	query.query_type = QQueryType::BEFORE_TIME;
-	query.time_ms = recordNo - 1;		// 不包括指定时点
-	query.query_number = 1;				// 只取一个数据即可
-
-	IBMaPtrs mas = MakeAndGet_QDatabase()->GetMas(codeId, timeType, query);
-	if (mas.empty())
-	{
-		Log_Print(LogLevel::Err, "last MA is null");
-		return nullptr;
-	}
-
-	return mas[0];
-}
 
 IBKLinePtr CKLineAndMaTool::GetLastKline(const std::string& codeId, Time_Type timeType, time_t tickTime)
 {
@@ -71,6 +39,22 @@ IBKLinePtr CKLineAndMaTool::GetOneKLine(const std::string& codeId, Time_Type tim
 		//));
 
 	}
+	return ret;
+}
+
+IBMacdPtr CKLineAndMaTool::GetOneMacd(const std::string &codeId, Time_Type timeType, time_t ticktime)
+{
+	time_t kline_time = CGetRecordNo::GetRecordNo(timeType, ticktime);
+
+	IBMacdPtr ret = MakeAndGet_QDatabase()->GetOneMacd(codeId, timeType, kline_time);
+	return ret;
+}
+
+IBDivTypePtr CKLineAndMaTool::GetOneDivType(const std::string &codeId, Time_Type timeType, time_t ticktime)
+{
+	time_t kline_time = CGetRecordNo::GetRecordNo(timeType, ticktime);
+
+	IBDivTypePtr ret = MakeAndGet_QDatabase()->GetOneDivType(codeId, timeType, kline_time);
 	return ret;
 }
 
@@ -146,16 +130,6 @@ IBKLinePtrs CKLineAndMaTool::GetKLines_MoreDay(const std::string& codeId, Time_T
 
 }
 
-HighAndLow CKLineAndMaTool::MakeHighAndLow(const std::string& codeId, Time_Type timeType, time_t ticktime, size_t count, bool useOpenAndClose)
-{
-	HighAndLow highAndLow;
-	IBKLinePtrs klines = GetKLines_MoreDay(codeId, timeType, ticktime, count);
-	if (klines.size() == 0) return highAndLow;
-
-	highAndLow = CHighFrequencyGlobalFunc::MakeHighAndLow(klines, useOpenAndClose);
-
-	return highAndLow;
-}
 
 
 IBKLinePtrs CKLineAndMaTool::GetKLines_MoreDay(const std::string& codeId, Time_Type timeType, const TimePair& timePair)
@@ -208,44 +182,6 @@ std::string CKLineAndMaTool::GetKLineStr(IBKLinePtr kline)
 }
 
 
-bool CKLineAndMaTool::CheckMaForOpen(const CodeStr& codeId, Time_Type timeType, time_t tickTime, BuyOrSell open_buyorsell)
-{
-	IBMaPtr lastMa = GetLastMa(codeId, timeType, tickTime);
-	if (!lastMa) return false;
-
-	IBKLinePtr  kline = GetOneKLine(codeId, timeType, tickTime);
-	if (!kline) return false;
-
-	double rate = 0.0;
-	if (open_buyorsell == BuyOrSell::Buy && kline->open < lastMa->v20)
-	{
-		rate = (lastMa->v20 - kline->open) / kline->open;
-		Log_Print(LogLevel::Critical, fmt::format("{} open buy, open < ma -------- {}",
-			CGlobal::GetTickTimeStr(tickTime).c_str(),
-			rate
-
-		));
-		return true;
-	}
-
-	if (open_buyorsell == BuyOrSell::Sell && kline->open > lastMa->v20)
-	{
-		rate = (kline->open - lastMa->v20) / kline->open;
-		Log_Print(LogLevel::Critical, fmt::format("{} open sell, open > ma -------- {}",
-			CGlobal::GetTickTimeStr(tickTime).c_str(),
-			rate
-
-
-		));
-		return true;
-	}
-
-	//if (CGlobal::IsZero(rate)) return false;
-	//if (rate < 0.03) return false;
-
-	return false;
-
-}
 
 bool CKLineAndMaTool::IsFirstKline(const CodeStr& codeId, Time_Type timeType, time_t tickTime)
 {
@@ -270,17 +206,6 @@ bool CKLineAndMaTool::IsFirstKline(const CodeStr& codeId, Time_Type timeType, ti
 
 }
 
-BoolType CKLineAndMaTool::FirstKlineAndJump(const CodeStr& codeId, Time_Type timeType, time_t tickTime, double& jumpRate)
-{
-	if (!IsFirstKline(codeId, timeType, tickTime)) return BoolType::False;
-
-
-	IBKLinePtr thisKline = CKLineAndMaTool::GetOneKLine(codeId, timeType, tickTime);
-	IBKLinePtr lastKline = CKLineAndMaTool::GetLastKline(codeId, timeType, tickTime);
-
-	jumpRate = (thisKline->open - lastKline->close) / lastKline->close;
-	return BoolType::True;
-}
 
 time_t CKLineAndMaTool::GetFirstKline(const CodeStr& codeId, Time_Type timeType, time_t tickTime)
 {
@@ -312,87 +237,9 @@ time_t CKLineAndMaTool::GetLastDayFirstKline(const CodeStr& codeId, Time_Type ti
 	return GetFirstKline(codeId, timeType, lastDayCloseKline->time);
 }
 
-BuyOrSell CKLineAndMaTool::GetMaTrend(const std::string& codeId, Time_Type timeType, time_t currentTickTime)
-{
-	// 当前时点
-	time_t recordNo = CGetRecordNo::GetRecordNo(timeType, currentTickTime);
-
-	QQuery query;
-	query.query_type = QQueryType::BEFORE_TIME;
-	query.time_ms = recordNo - 1;		// 不包括指定时点
-	query.query_number = 5;				// 取5个数据
-
-	IBMaPtrs mas = MakeAndGet_QDatabase()->GetMas(codeId, timeType, query);
-	if (mas.empty())
-	{
-		Log_Print(LogLevel::Err, "GetMaTrend MA is null");
-		exit(-1);
-	}
-
-	if (mas[0]->v20 > mas.back()->v20) return BuyOrSell::Sell;
-	return BuyOrSell::Buy;
-
-}
 
 
-bool CKLineAndMaTool::JumpDay_Unfavorable(const std::string& codeId, Time_Type timeType, time_t tickTime, double jumpRate, BuyOrSell wantoToBuyOrSell)
-{
-	time_t firstbar = CKLineAndMaTool::GetFirstKline(codeId, timeType, tickTime);
 
-	// 检查跳空幅度，需要足够大
-	double realJumpRate = 0.0;
-	BoolType boolType = CKLineAndMaTool::FirstKlineAndJump(codeId, timeType, firstbar, realJumpRate);
-	if (boolType != BoolType::True) return false;
-
-	if (abs(realJumpRate) < jumpRate)
-	{
-		// 跳空幅度太小
-		return false;
-	}
-	// 检查是否不利
-	if (realJumpRate > 0 && wantoToBuyOrSell == BuyOrSell::Sell)
-	{
-		// 上跳空且准备卖出 这是有利跳空
-		return false;
-	}
-	if (realJumpRate < 0 && wantoToBuyOrSell == BuyOrSell::Buy)
-	{
-		// 下跳空且准备买入 这是有利跳空
-		return false;
-	}
-	return true;
-
-}
-
-bool CKLineAndMaTool::JumpDay_Favorable(const std::string& codeId, Time_Type timeType, time_t tickTime, double jumpRate, BuyOrSell wantoToBuyOrSell)
-{
-	time_t firstbar = CKLineAndMaTool::GetFirstKline(codeId, timeType, tickTime);
-
-	// 检查跳空幅度，需要足够大
-	double realJumpRate = 0.0;
-	BoolType boolType = CKLineAndMaTool::FirstKlineAndJump(codeId, timeType, firstbar, realJumpRate);
-	if (boolType != BoolType::True) return false;
-
-
-	if (abs(realJumpRate) < jumpRate)
-	{
-		// 跳空幅度太小
-		return false;
-	}
-	// 检查是否有利
-	if (realJumpRate > 0 && wantoToBuyOrSell == BuyOrSell::Buy)
-	{
-		// 上跳空且准备买入 这是不利跳空
-		return false;
-	}
-	if (realJumpRate < 0 && wantoToBuyOrSell == BuyOrSell::Sell)
-	{
-		// 下跳空且准备卖出 这是不利跳空
-		return false;
-	}
-	return true;
-
-}
 
 bool CKLineAndMaTool::GetTodayExtremePrice(const std::string& codeId, Time_Type timeType, time_t ticktime, HighAndLow& highlow)
 {

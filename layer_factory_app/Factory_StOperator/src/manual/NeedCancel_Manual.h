@@ -1,5 +1,5 @@
 #pragma once
-#include "NeedCancel_Real.h"
+#include "../NeedCancel_Real.h"
 class CNeedCancel_Manual : 	public CNeedCancel_Real
 {
 public:

@@ -1,13 +1,19 @@
 ﻿#include "ScanKShape_Future.h"
 #include <Factory_IBGlobalShare.h>
+#include <Factory_IBJSon.h>
+#include "MakeScanPacket_Div.h"
+
 CScanKShape_Future::CScanKShape_Future(QTableView* pTableView)
 	:CScanKShape(pTableView)
 {
 }
-void CScanKShape_Future::Package(MakeScanPacketPtr pMakeScanPacket)
+
+KLineShapePtrs CScanKShape_Future::MakeKLineShapes()
 {
-	IbContractPtrs contracts = pMakeScanPacket->GetContracts(SecurityType::FUT);
+	IbContractPtrs contracts = MakeAndGet_JSonContracts()->GetContracts(SelectType::True, SecurityType::FUT);
 	Tick_T endTime = Get_CurrentTime()->GetCurrentTime_millisecond();
+
+	MakeScanPacketPtr pMakeScanPacket = std::make_shared<CMakeScanPacket_Div>();
 
 	// 日线全部
 	pMakeScanPacket->Packet(contracts, Time_Type::D1, TopOrBottom::Top, endTime, { KShape::Div, KShape::DblDiv, KShape::DblDivPlus, KShape::TrainDiv });
@@ -33,6 +39,9 @@ void CScanKShape_Future::Package(MakeScanPacketPtr pMakeScanPacket)
 	pMakeScanPacket->Packet(contracts, Time_Type::M1, TopOrBottom::Top, endTime, { KShape::DblDivPlus, KShape::TrainDiv });
 	pMakeScanPacket->Packet(contracts, Time_Type::M1, TopOrBottom::Bottom, endTime, { KShape::DblDivPlus, KShape::TrainDiv });
 
-	return;
+	return pMakeScanPacket->GetResult();
+
+
 
 }
+

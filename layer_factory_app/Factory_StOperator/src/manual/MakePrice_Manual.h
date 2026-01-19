@@ -1,5 +1,5 @@
 #pragma once
-#include "MakePrice_Real.h"
+#include "../MakePrice_Real.h"
 class CMakePrice_Manual : public CMakePrice_Real
 {
 public:

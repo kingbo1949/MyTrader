@@ -61,7 +61,7 @@ void CSetup_Real::Close()
 	// 关闭行情数据连接
 	ReleaseQDatabase();
 
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	// 关闭日志系统
 	Log_Close();

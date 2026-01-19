@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "../klineShape/ScanKShape.h"
+#include "ScanKShape.h"
 class CScanKShape_Future : public CScanKShape
 {
 public:
@@ -9,7 +9,7 @@ public:
 
 protected:
 
-	virtual void				Package(MakeScanPacketPtr pMakeScanPacket) override final;
+	KLineShapePtrs				MakeKLineShapes() final;
 
 };
 

@@ -5,6 +5,7 @@
 #include <Factory_Log.h>
 #include <Log.h>
 #include "SeriesNoMaker_Real.h"
+#include "TradeDay_Real.h"
 
 
 MyThreadPoolPtr g_pThreadPool = NULL;
@@ -94,5 +95,10 @@ FACTORY_IBGLOBALSHARE_API void DefaultLogFunc(LogLevel logLevel, const std::stri
 		CLog::Instance()->PrintStrToFile("error.log", str);
 	}
 	return;
+}
+
+TradeDayPtr Make_TradeDayObj(IBKLinePtrs klines)
+{
+	return std::make_shared<CTradeDay_Real>(klines);
 }
 

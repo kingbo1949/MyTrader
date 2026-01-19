@@ -27,11 +27,9 @@ public:
 	CKLineShape_Div(const KShapeInput& kShapeInput);
 	virtual ~CKLineShape_Div() { ; };
 
-	virtual KShapeOutputs		Execute() override final;
-
 protected:
 	// 检查单个品种的背离形态
-	KShape						checkOneCodeId(IbContractPtr contract, int& pos);
+	KShape						CheckOneCodeId(IbContractPtr contract, int& pos) final;
 
 	// 查询指定时间之前的N个数据
 	IBDivTypePtrs				QueryDivTypeValues(IbContractPtr contract, Time_Type timeType, Tick_T endTime);

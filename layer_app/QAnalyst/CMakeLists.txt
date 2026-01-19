@@ -27,7 +27,6 @@ set(SRC_LIST
         src/TableModel/TableModel_Tick_Stock.h
         src/TableModel/TableModel_Tick_Stock.cpp
         src/Tick_BigGap.cpp
-        src/TradeDay.cpp
         ui/QAnalyst.ui
         resources/QAnalyst.qrc
 )

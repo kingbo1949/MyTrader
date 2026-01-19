@@ -9,6 +9,7 @@
 #include <Factory_AnalystDeal.h>
 #include "../tableModel/TableModel.h"
 #include "Factory_AnalystGui.h"
+#include "../klineShape/ScanKShape_BreakMix.h"
 #include "../klineShape/ScanKShape_Future.h"
 #include "../klineShape/ScanKShape_Stock.h"
 
@@ -114,7 +115,7 @@ void AnalystGui::Init()
 	InitForSimulator();
 
 	ui.splitter_3->setSizes({100, 1, 300});
-	ui.splitter->setSizes({300, 100});
+	ui.splitter->setSizes({300, 90, 100});
 
 	StartKlineShapeTimer();
 
@@ -412,8 +413,15 @@ void AnalystGui::onTimerKlineShape()
 		ui.stockView->verticalHeader()->hide();
 		m_pScanKShape_stock = std::make_shared<CScanKShape_Stock>(ui.stockView);
 	}
+	if (!m_pScanKShape_breakMix)
+	{
+		ui.macdAlertView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+		ui.macdAlertView->verticalHeader()->hide();
+		m_pScanKShape_breakMix = std::make_shared<CScanKShape_BreakMix>(ui.macdAlertView);
+	}
 	m_pScanKShape_future->Go();
 	m_pScanKShape_stock->Go();
+	m_pScanKShape_breakMix->Go();
 	return;
 
 }

@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "../pch.h"
 #include "NeedCancel_Manual.h"
 #include <Factory_UnifyInterface.h>
 CNeedCancel_Manual::CNeedCancel_Manual(const SubModuleParams& stParams)

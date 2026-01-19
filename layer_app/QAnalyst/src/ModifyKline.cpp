@@ -7,7 +7,7 @@
 CModifyKline::CModifyKline(const CodeStr& codeId, Time_Type timeType, IBKLinePtrs klines)
 	:m_codeId(codeId), m_timeType(timeType), m_klines(klines)
 {
-	m_pTradeDay = std::make_shared<CTradeDay>(klines);
+	m_pTradeDay = Make_TradeDayObj(klines);
 }
 
 void CModifyKline::CheckHoliday()

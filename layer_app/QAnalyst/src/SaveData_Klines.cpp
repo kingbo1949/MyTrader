@@ -13,7 +13,8 @@ CSaveData_Klines::CSaveData_Klines(const CodeStr& codeId, const KLine4Tables& kl
 	{
 		klines.push_back(kline4Table.pkline);
 	}
-	m_pTradeDay = std::make_shared<CTradeDay>(klines);
+	m_pTradeDay = Make_TradeDayObj(klines);
+
 }
 
 void CSaveData_Klines::Go(const std::string& fileName)

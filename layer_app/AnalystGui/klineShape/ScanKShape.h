@@ -28,7 +28,8 @@ protected:
 	// 转换记录
 	TableViewRecord				TransToTableRecord(const KShapeOutput& kShapeOutput);
 
-	virtual void				Package(MakeScanPacketPtr pMakeScanPacket) = 0;
+
+	virtual KLineShapePtrs		MakeKLineShapes() = 0;
 
 
 };

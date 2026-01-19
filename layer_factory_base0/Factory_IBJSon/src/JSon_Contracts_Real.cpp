@@ -46,10 +46,42 @@ void CJSon_Contracts_Real::Load_Contracts(IbContractPtrs& contracts, SelectType 
 			contracts.push_back(onecontract);
 		}
 	}
-
-	//contracts = Make_Contracts(contractsValue);
-
 	return;
+
+}
+
+IbContractPtrs CJSon_Contracts_Real::GetContracts(SelectType selectType, const std::set<CodeStr> &codeIds)
+{
+	IbContractPtrs selectContracts;
+	Load_Contracts(selectContracts, selectType);
+
+	IbContractPtrs ret;
+	for (auto contract : selectContracts)
+	{
+		if (codeIds.find(contract->codeId) != codeIds.end())
+		{
+			ret.push_back(contract);
+		}
+	}
+	return ret;
+
+}
+
+IbContractPtrs CJSon_Contracts_Real::GetContracts(SelectType selectType, SecurityType securityType)
+{
+	IbContractPtrs selectContracts;
+	Load_Contracts(selectContracts, selectType);
+
+	IbContractPtrs ret;
+	for (auto contract : selectContracts)
+	{
+		if (contract->securityType == securityType)
+		{
+			ret.push_back(contract);
+		}
+	}
+
+	return ret;
 
 }
 

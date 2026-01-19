@@ -12,6 +12,7 @@
 #include "Trans.h"
 #include "Reverse.h"
 #include "HighFrequencyGlobalFunc.h"
+#include "TradeDay.h"
 
 #include "SeriesNoMaker.h"
 
@@ -40,6 +41,12 @@ typedef void(*PFunc_Print)(LogLevel logLevel, const std::string& str);
 	FACTORY_IBGLOBALSHARE_API void								Make_LogFunc(PFunc_Print pFunc_Print);
 	FACTORY_IBGLOBALSHARE_API PFunc_Print						Get_LogFunc();
 	FACTORY_IBGLOBALSHARE_API void								DefaultLogFunc(LogLevel logLevel, const std::string& str);
+
+	FACTORY_IBGLOBALSHARE_API TradeDayPtr						Make_TradeDayObj(IBKLinePtrs klines);
+
+
+
+
 
 
 	class   							CTransToStr;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "JSon_Contracts.h"
 class CJSon_Contracts_Real : public CJSon_Contracts
 {
@@ -6,9 +6,16 @@ public:
 	CJSon_Contracts_Real();
 	virtual ~CJSon_Contracts_Real();
 
-	virtual void							Save_Contracts(const IbContractPtrs& contracts) override final;
+	void							Save_Contracts(const IbContractPtrs& contracts) final;
 
-	virtual void							Load_Contracts(IbContractPtrs& contracts, SelectType selectType) override final;
+	void							Load_Contracts(IbContractPtrs& contracts, SelectType selectType) final;
+
+	// 获取指定品种的合约指针
+	IbContractPtrs					GetContracts(SelectType selectType, const std::set<CodeStr>& codeIds) final;
+
+	// 获取股票或者期货的合约指针
+	IbContractPtrs					GetContracts(SelectType selectType, SecurityType securityType) final;
+
 
 
 protected:

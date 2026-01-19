@@ -20,10 +20,14 @@ public:
 	CKLineShape(const KShapeInput& kShapeInput) ;
 	virtual ~CKLineShape() { ; };
 
-	virtual KShapeOutputs		Execute() = 0;
+	KShapeOutputs				Execute();
 
 protected:
 	KShapeInput					m_kShapeInput;
+
+	// 检查单个品种的背离形态 pos是该形态的位置
+	virtual KShape				CheckOneCodeId(IbContractPtr contract, int& pos) = 0;
+
 
 };
 typedef std::shared_ptr<CKLineShape> KLineShapePtr;

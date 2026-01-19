@@ -47,11 +47,16 @@ set(ITEMHANDLER_LIST
 set(KLINESHAPE_LIST
         klineShape/KLineShape.cpp
         klineShape/KLineShape.h
+        klineShape/KLineShape_BreakUTurn.cpp
+        klineShape/KLineShape_BreakUTurn.h
         klineShape/KLineShape_Div.cpp
         klineShape/KLineShape_Div.h
         klineShape/KShapeDefine.cpp
         klineShape/KShapeDefine.h
-        klineShape/MakeScanPacket.cpp
+        klineShape/MakeScanPacket_Div.cpp
+        klineShape/MakeScanPacket_Div.h
+        klineShape/MakeScanPacket_BreakUTurn.cpp
+        klineShape/MakeScanPacket_BreakUTurn.h
         klineShape/MakeScanPacket.h
         klineShape/ScanKShape.cpp
         klineShape/ScanKShape.h
@@ -59,6 +64,8 @@ set(KLINESHAPE_LIST
         klineShape/ScanKShape_Future.h
         klineShape/ScanKShape_Stock.cpp
         klineShape/ScanKShape_Stock.h
+        klineShape/ScanKShape_BreakMix.cpp
+        klineShape/ScanKShape_BreakMix.h
 )
 set(QCUSTOMPLOT_LIST
         qcustomplot/qcustomplot.h

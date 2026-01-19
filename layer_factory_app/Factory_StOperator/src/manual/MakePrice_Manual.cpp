@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+﻿#include "../pch.h"
 #include "MakePrice_Manual.h"
 #include <Factory_UnifyInterface.h>
 #include <Factory_IBGlobalShare.h>

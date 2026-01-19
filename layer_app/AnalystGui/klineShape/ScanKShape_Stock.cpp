@@ -1,13 +1,20 @@
 ﻿#include "ScanKShape_Stock.h"
 #include <Factory_IBGlobalShare.h>
+#include <Factory_IBJSon.h>
+
+#include "MakeScanPacket_Div.h"
+
 CScanKShape_Stock::CScanKShape_Stock(QTableView* pTableView)
 	:CScanKShape(pTableView)
 {
 }
-void CScanKShape_Stock::Package(MakeScanPacketPtr pMakeScanPacket)
+
+KLineShapePtrs CScanKShape_Stock::MakeKLineShapes()
 {
-	IbContractPtrs contracts = pMakeScanPacket->GetContracts(SecurityType::STK);
+	IbContractPtrs contracts = MakeAndGet_JSonContracts()->GetContracts(SelectType::True, SecurityType::STK);
 	Tick_T endTime = Get_CurrentTime()->GetCurrentTime_millisecond();
+
+	MakeScanPacketPtr pMakeScanPacket = std::make_shared<CMakeScanPacket_Div>();
 
 	// 日线全部
 	pMakeScanPacket->Packet(contracts, Time_Type::D1, TopOrBottom::Top, endTime, { KShape::Div, KShape::DblDiv, KShape::DblDivPlus, KShape::TrainDiv });
@@ -25,14 +32,7 @@ void CScanKShape_Stock::Package(MakeScanPacketPtr pMakeScanPacket)
 	pMakeScanPacket->Packet(contracts, Time_Type::M15, TopOrBottom::Top, endTime, { KShape::DblDivPlus, KShape::TrainDiv });
 	pMakeScanPacket->Packet(contracts, Time_Type::M15, TopOrBottom::Bottom, endTime, { KShape::DblDivPlus, KShape::TrainDiv });
 
-	//// M5线 不要普通信号
-	//pMakeScanPacket->Packet(contracts, Time_Type::M5, TopOrBottom::Top, endTime, { KShape::DblDiv, KShape::DblDivPlus, KShape::TrainDiv });
-	//pMakeScanPacket->Packet(contracts, Time_Type::M5, TopOrBottom::Bottom, endTime, { KShape::DblDiv, KShape::DblDivPlus, KShape::TrainDiv });
-
-	//// M1线 只要DblDivPlus
-	//pMakeScanPacket->Packet(contracts, Time_Type::M1, TopOrBottom::Top, endTime, { KShape::DblDivPlus, KShape::TrainDiv });
-	//pMakeScanPacket->Packet(contracts, Time_Type::M1, TopOrBottom::Bottom, endTime, { KShape::DblDivPlus, KShape::TrainDiv });
-
-	return;
+	return pMakeScanPacket->GetResult();
 
 }
+

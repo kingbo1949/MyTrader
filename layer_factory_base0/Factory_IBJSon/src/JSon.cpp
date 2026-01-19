@@ -69,9 +69,9 @@ Json::Value CJSon::MakeValue_TradeKey(const TradeKey& tradekey)
 
 TradeKey CJSon::Make_TradeKey(const Json::Value& tradekeyValue)
 {
-	TradeKey back;
-	back.strategyIdHashId = Get_StrategyParamEnv()->Get_StrategyParam_Hash(tradekeyValue["strategyIdHashId"].asString());
-	back.stSubModule = CTransToStr::Get_StSubModule(tradekeyValue["stSubModule"].asString());
+	StrategyIdHashId strategyIdHashId = Get_StrategyParamEnv()->Get_StrategyParam_Hash(tradekeyValue["strategyIdHashId"].asString());
+	StSubModule stSubModule = CTransToStr::Get_StSubModule(tradekeyValue["stSubModule"].asString());
+
+	TradeKey back(strategyIdHashId, stSubModule);
 	return back;
 }
-

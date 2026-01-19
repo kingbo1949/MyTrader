@@ -47,6 +47,7 @@ private:
 	QStandardItemModel*		m_model_positionCodeId;
 	ScanKShapePtr			m_pScanKShape_future;
 	ScanKShapePtr			m_pScanKShape_stock;
+	ScanKShapePtr			m_pScanKShape_breakMix;			// 突破昨日最高最低点的形态
 
 	// 初始化控件
 	void				Init();

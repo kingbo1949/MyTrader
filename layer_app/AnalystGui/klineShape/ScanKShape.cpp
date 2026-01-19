@@ -16,11 +16,7 @@ void CScanKShape::Go()
 }
 KShapeOutputs CScanKShape::Scan()
 {
-	MakeScanPacketPtr makeScanPacket = std::make_shared<CMakeScanPacket>();
-
-	Package(makeScanPacket);
-
-	KLineShapePtrs kLineShapePackets = makeScanPacket->GetResult();
+	KLineShapePtrs kLineShapePackets = MakeKLineShapes();
 
 	KShapeOutputs outputs;
 	for (const auto& kLineShapePacket : kLineShapePackets)
@@ -72,7 +68,13 @@ TableViewRecord CScanKShape::TransToTableRecord(const KShapeOutput& kShapeOutput
 	record.push_back(new QStandardItem(CTransToStr::Get_TimeType(kShapeOutput.timeType).c_str()));
 	record.push_back(new QStandardItem(Trans_Str(kShapeOutput.topOrBottom).c_str()));
 	record.push_back(new QStandardItem(Trans_Str(kShapeOutput.kShape).c_str()));
-	record.push_back(new QStandardItem(std::to_string(kShapeOutput.signalPosition).c_str()));
+
+	auto positionItem = new QStandardItem(std::to_string(kShapeOutput.signalPosition).c_str()) ;
+	if (kShapeOutput.signalPosition < 3)
+	{
+		positionItem->setBackground(QBrush(QColor(255, 192, 203)));	// 粉红色
+	}
+	record.push_back(positionItem);
 
 	return record;
 }

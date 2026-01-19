@@ -10,14 +10,17 @@
 #include "AppDefine.h"
 
 
-#include "NeedCancel_Manual.h"
-#include "MakePrice_Manual.h"
+#include "./manual/NeedCancel_Manual.h"
+#include "./manual/MakePrice_Manual.h"
 
 
 #include "OpenPrice_Real.h"
+#include "UTurn/MakePrice_UTurn.h"
+#include "UTurn/NeedCancel_UTurn.h"
 
 
-FACTORY_STOPERATOR_API	OneOrderPtr GetActiveOrder(StrategyIdHashId stHashId, StSubModule stSubModule)
+
+FACTORY_STOPERATOR_API OneOrderPtr GetActiveOrder(StrategyIdHashId stHashId, StSubModule stSubModule)
 {
 	OrderKey key;
 	key.strategyIdHashId = stHashId;
@@ -54,6 +57,10 @@ FACTORY_STOPERATOR_API NeedCancelPtr MakeAndGet_NeedCancel(const SubModuleParams
 	{
 		back = std::make_shared<CNeedCancel_Manual>(subModuleParams);
 	}
+	if (pStrategyParam->key.strategyName == UTurnName)
+	{
+		back = std::make_shared<CNeedCancel_UTurn>(subModuleParams);
+	}
 
 	if (!back)
 	{
@@ -73,6 +80,11 @@ FACTORY_STOPERATOR_API MakePricePtr MakeAndGet_MakePrice(const SubModuleParams& 
 	{
 		back = std::make_shared<CMakePrice_Manual>(subModuleParams);
 	}
+	if (pStrategyParam->key.strategyName == UTurnName)
+	{
+		back = std::make_shared<CMakePrice_UTurn>(subModuleParams);
+	}
+
 
 	if (!back)
 	{
