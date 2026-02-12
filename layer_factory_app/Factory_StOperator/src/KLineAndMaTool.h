@@ -13,6 +13,9 @@ public:
 	// 得到指定时点(毫秒)的K线
 	static IBKLinePtr			GetOneKLine(const std::string& codeId, Time_Type timeType, time_t ticktime);
 
+	// 得到指定时点(毫秒)的atr
+	static IBAtrPtr				GetOneAtr(const std::string& codeId, Time_Type timeType, time_t ticktime);
+
 	// 得到指定时点(毫秒)的macd线
 	static IBMacdPtr			GetOneMacd(const std::string& codeId, Time_Type timeType, time_t ticktime);
 
@@ -22,6 +25,9 @@ public:
 	// 得到指定时点的上一个BAR
 	static IBKLinePtr			GetLastKline(const std::string& codeId, Time_Type timeType, time_t tickTime);
 
+
+	// 得到指定时点(毫秒)的上一日的日盘klines 09:30-16:00
+	static IBKLinePtrs			GetLastDayKLines(const std::string& codeId, Time_Type timeType, Tick_T ticktime);
 
 	// 得到指定时点(毫秒)的上一日的收盘K线
 	static IBKLinePtr			GetLastDayCloseKLine(const std::string& codeId, Time_Type timeType, time_t ticktime);

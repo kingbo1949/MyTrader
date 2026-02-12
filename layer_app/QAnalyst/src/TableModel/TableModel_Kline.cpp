@@ -9,7 +9,7 @@
 CTableModel_Kline::CTableModel_Kline(IbContractPtr pContract)
 	:CTableModel(pContract)
 {
-	m_headers = { "Time", "Open", "High", "Low", "Close", "Vol", "Dif", "Dea", "Macd", "DivType", "IsUTurn", "Atr" };
+	m_headers = { "Time", "Open", "High", "Low", "Close", "Vol", "Dif", "Dea", "Macd", "DivType", "IsUTurn", "Atr", "Ma5", "Ma20", "Ma60", "Ma200"  };
 }
 
 void CTableModel_Kline::QueryData(const TimeZoneOfCodeId& timeZone)
@@ -99,6 +99,22 @@ QVariant CTableModel_Kline::data(const QModelIndex& index, int role) const
 	{
 		return QString::number(kline4Table.pAtr->avgAtr, 'f', 2);
 	}
+	if (klineRole == KLineRole::Ma5)
+	{
+		return QString::number(kline4Table.pMa->v5, 'f', 2);
+	}
+	if (klineRole == KLineRole::Ma20)
+	{
+		return QString::number(kline4Table.pMa->v20, 'f', 2);
+	}
+	if (klineRole == KLineRole::Ma60)
+	{
+		return QString::number(kline4Table.pMa->v60, 'f', 2);
+	}
+	if (klineRole == KLineRole::Ma200)
+	{
+		return QString::number(kline4Table.pMa->v200, 'f', 2);
+	}
 
 
 	return QVariant();
@@ -122,6 +138,7 @@ void CTableModel_Kline::FillKline4Tables(const CodeStr& codeId, Time_Type timeTy
 		kLine4Table.pmacd = MakeAndGet_QDatabase()->GetOneMacd(codeId, timeType, kline->time);
 		kLine4Table.pDivType = MakeAndGet_QDatabase()->GetOneDivType(codeId, timeType, kline->time);
 		kLine4Table.pAtr = MakeAndGet_QDatabase()->GetOneAtr(codeId, timeType, kline->time);
+		kLine4Table.pMa = MakeAndGet_QDatabase()->GetOneMa(codeId, timeType, kline->time);
 		m_kline4Tables.push_back(kLine4Table);
 	}
 	return ;

@@ -15,8 +15,10 @@
 
 
 #include "OpenPrice_Real.h"
-#include "UTurn/MakePrice_UTurn.h"
-#include "UTurn/NeedCancel_UTurn.h"
+#include "./Break4Week/MakePrice_Break4Week.h"
+#include "./Break4Week/NeedCancel_Break4Week.h"
+#include "./UTurn/MakePrice_UTurn.h"
+#include "./UTurn/NeedCancel_UTurn.h"
 
 
 
@@ -61,6 +63,10 @@ FACTORY_STOPERATOR_API NeedCancelPtr MakeAndGet_NeedCancel(const SubModuleParams
 	{
 		back = std::make_shared<CNeedCancel_UTurn>(subModuleParams);
 	}
+	if (pStrategyParam->key.strategyName == Break4WeekName)
+	{
+		back = std::make_shared<CNeedCancel_Break4Week>(subModuleParams);
+	}
 
 	if (!back)
 	{
@@ -84,6 +90,12 @@ FACTORY_STOPERATOR_API MakePricePtr MakeAndGet_MakePrice(const SubModuleParams& 
 	{
 		back = std::make_shared<CMakePrice_UTurn>(subModuleParams);
 	}
+	if (pStrategyParam->key.strategyName == Break4WeekName)
+	{
+		back = std::make_shared<CMakePrice_Break4Week>(subModuleParams);
+	}
+
+
 
 
 	if (!back)

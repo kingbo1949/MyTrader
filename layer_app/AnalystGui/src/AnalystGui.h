@@ -16,9 +16,9 @@ public:
 
 public slots:
 	// 通过命名规则自动链接的槽函数不需要connect指定 on_objectName_signalName
-	void				on_analystTradeBtn_clicked();
-	void				on_clearTradeBtn_clicked();
-	void				on_isRealCtrl_clicked();
+	void				on_analystTradeBtn_clicked();								// 加载回撤
+	void				on_clearTradeBtn_clicked();									// 清除回撤
+	void				on_isRealCtrl_clicked();									// 实时行情复选框
 	void				on_allCodeIdView_clicked(const QModelIndex &index);			// 选择品种 
 	void				on_positionCodeIdView_clicked(const QModelIndex& index);	// 选择品种 
 	void				on_klineTypeCtrl_currentIndexChanged(int index);			// 选择周期

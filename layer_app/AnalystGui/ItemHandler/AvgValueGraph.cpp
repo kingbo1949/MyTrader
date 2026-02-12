@@ -33,10 +33,10 @@ void CAvgValueGraph::SetKLines(const KlinePlotSuit& klinePlotSuit)
 	}
 	;
 
-	SetKLines(klinePlotSuit.timeType, klinePlotSuit.klines, 5);
-	SetKLines(klinePlotSuit.timeType, klinePlotSuit.klines, 20);
-	SetKLines(klinePlotSuit.timeType, klinePlotSuit.klines, 60);
-	SetKLines(klinePlotSuit.timeType, klinePlotSuit.klines, 200);
+	SetKLines(klinePlotSuit.klines, 5);
+	SetKLines(klinePlotSuit.klines, 20);
+	SetKLines(klinePlotSuit.klines, 60);
+	SetKLines(klinePlotSuit.klines, 200);
 
 }
 
@@ -53,10 +53,10 @@ void CAvgValueGraph::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const Klin
 
 
 	// 本回合数据
-	UpdateKlines(klinePlotSuit.timeType, klinePlotSuit.klines, 5, addcount, chgcount);
-	UpdateKlines(klinePlotSuit.timeType, klinePlotSuit.klines, 20, addcount, chgcount);
-	UpdateKlines(klinePlotSuit.timeType, klinePlotSuit.klines, 60, addcount, chgcount);
-	UpdateKlines(klinePlotSuit.timeType, klinePlotSuit.klines, 200, addcount, chgcount);
+	UpdateKlines(klinePlotSuit.klines, 5, addcount, chgcount);
+	UpdateKlines(klinePlotSuit.klines, 20, addcount, chgcount);
+	UpdateKlines(klinePlotSuit.klines, 60, addcount, chgcount);
+	UpdateKlines(klinePlotSuit.klines, 200, addcount, chgcount);
 
 }
 
@@ -71,7 +71,7 @@ QCPAxisQPtr CAvgValueGraph::GetY()
 	return GetAxisRect(MainOrSub::MainT)->axis(QCPAxis::atRight);
 }
 
-void CAvgValueGraph::SetKLines(Time_Type timeType, const IBKLinePtrs& klines, int maCircle)
+void CAvgValueGraph::SetKLines(const IBKLinePtrs& klines, int maCircle)
 {
 	QCPGraphQPtr pMaGraph = GetGraphLine(maCircle);
 	pMaGraph->data()->clear();
@@ -87,13 +87,13 @@ void CAvgValueGraph::SetKLines(Time_Type timeType, const IBKLinePtrs& klines, in
 
 }
 
-void CAvgValueGraph::UpdateKlines(Time_Type timeType, const IBKLinePtrs& klines, int maCircle, int addcount, int chgcount)
+void CAvgValueGraph::UpdateKlines(const IBKLinePtrs& klines, int maCircle, int addcount, int chgcount)
 {
 	// 本回合数据
 	int beginPos = int(klines.size()) - (chgcount + addcount);
 
-	// 删除chgcount个脏数据
-	DelCurveData(maCircle, chgcount);
+	// 删除脏数据
+	DelData(beginPos, GetGraphLine(maCircle));
 
 	for (auto i = beginPos; i < klines.size(); ++i)
 	{
@@ -121,14 +121,3 @@ QCPGraphQPtr CAvgValueGraph::GetGraphLine(int circle)
 }
 
 
-void CAvgValueGraph::DelCurveData(int circle, int count)
-{
-	auto dataContainer = GetGraphLine(circle)->data();
-	if (count == 0 || dataContainer->size() < count) return;
-
-	int beginPos = int(dataContainer->size()) - count;
-	dataContainer->removeAfter(beginPos - 0.000001);
-
-	return;
-
-}

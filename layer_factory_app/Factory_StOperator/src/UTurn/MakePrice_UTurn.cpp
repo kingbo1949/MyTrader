@@ -38,6 +38,7 @@ bool CMakePrice_UTurn::GetOpenPrice(double &price, RealPriceType &priceType)
     if (m_stParams.buyOrSell == BuyOrSell::Buy)
     {
         if (thisKline->close > last1D->low) return false;
+        // if (thisKline->close > last1D->close) return false;
         if (thisDivType->isUTurn && thisMacd->dif < -50)
         {
             price = thisKline->close;

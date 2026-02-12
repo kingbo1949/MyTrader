@@ -27,7 +27,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "MBTF6",
+		"localSymbol" : "MBTG6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"
@@ -38,7 +38,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "ETHF6",
+		"localSymbol" : "ETHG6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"
@@ -49,7 +49,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "GCG6",
+		"localSymbol" : "GCJ6",
 		"minMove" : 0.1,
 		"primaryExchangePl" : "COMEX",
 		"securityType" : "FUT"

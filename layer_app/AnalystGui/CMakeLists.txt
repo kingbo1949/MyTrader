@@ -26,6 +26,8 @@ set(ITEMHANDLER_LIST
         ItemHandler/ItemsHandler.h
         ItemHandler/KLinePlot.cpp
         ItemHandler/KLinePlot.h
+        ItemHandler/Break4WeekGraph.cpp
+        ItemHandler/Break4WeekGraph.h
         ItemHandler/LineDrawer.cpp
         ItemHandler/LineDrawer.h
         ItemHandler/MacdDivergenceItem.cpp

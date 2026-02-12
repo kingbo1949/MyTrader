@@ -25,6 +25,19 @@ IBKLinePtr CKLineAndMaTool::GetLastKline(const std::string& codeId, Time_Type ti
 
 }
 
+IBKLinePtrs CKLineAndMaTool::GetLastDayKLines(const std::string &codeId, Time_Type timeType, Tick_T ticktime)
+{
+	IBKLinePtr last1D = GetLastKline(codeId, Time_Type::D1, ticktime);
+
+	IBKLinePtrs klines;
+	QQuery query;
+	query.query_type = QQueryType::BETWEEN_TIME;
+	query.time_pair.beginPos = last1D->time + CHighFrequencyGlobalFunc::MakeMilliSecondPart("09:30:00", 0);
+	query.time_pair.endPos = last1D->time + CHighFrequencyGlobalFunc::MakeMilliSecondPart("16:00:00", 0);
+	klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	return klines;
+}
+
 IBKLinePtr CKLineAndMaTool::GetOneKLine(const std::string& codeId, Time_Type timeType, time_t ticktime)
 {
 	time_t kline_time = CGetRecordNo::GetRecordNo(timeType, ticktime);
@@ -39,6 +52,14 @@ IBKLinePtr CKLineAndMaTool::GetOneKLine(const std::string& codeId, Time_Type tim
 		//));
 
 	}
+	return ret;
+}
+
+IBAtrPtr CKLineAndMaTool::GetOneAtr(const std::string &codeId, Time_Type timeType, time_t ticktime)
+{
+	time_t kline_time = CGetRecordNo::GetRecordNo(timeType, ticktime);
+
+	IBAtrPtr ret = MakeAndGet_QDatabase()->GetOneAtr(codeId, timeType, kline_time);
 	return ret;
 }
 

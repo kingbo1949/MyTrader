@@ -15,7 +15,7 @@ KLineShapePtrs CScanKShape_BreakMix::MakeKLineShapes()
 
 	//IbContractPtrs contracts = MakeAndGet_JSonContracts()->GetContracts(SelectType::True, std::set<CodeStr>({"NQ"}));
 
-	//Tick_T endTime = CGlobal::GetTimeByStr("20260118 23:00:00") * 1000;
+	//Tick_T endTime = CGlobal::GetTimeByStr("20260116 14:30:00") * 1000;
 
 	Tick_T endTime = Get_CurrentTime()->GetCurrentTime_millisecond();
 

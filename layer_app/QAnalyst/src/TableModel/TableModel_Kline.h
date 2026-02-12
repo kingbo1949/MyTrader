@@ -19,7 +19,11 @@ public:
 		Macd = 8,			// CIBMacd中的macd
 		DivType = 9,		// CIBDivType中的divType
 		IsUTurn = 10,		// CIBDivType中的isUTurn
-		Atr = 11			// CIBAtr中的avgAtr
+		Atr = 11,			// CIBAtr中的avgAtr
+		Ma5 = 12,			// 5周期均线
+		Ma20 = 13,			// 20周期均线
+		Ma60 = 14,			// 60周期均线
+		Ma200 = 15			// 200周期均线
 	};
 
 

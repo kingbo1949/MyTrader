@@ -44,10 +44,14 @@ KShape Cmd_CheckOneCodeId_BreakUTurn::Go(int &pos)
         // 是否uturn
         if (!divTypeValues[i]->isUTurn) continue;
 
-        // 过滤突破昨日高低价个bar
-        if (kline->low > lastday_highlow.low && kline->high < lastday_highlow.high) continue;
-
-        return KShape::Div;
+        if (divTypeValues[i]->divType == DivergenceType::Top || divTypeValues[i]->divType == DivergenceType::TopSub)
+        {
+            if (kline->low > lastday_highlow.high) return KShape::Div;
+        }
+        if (divTypeValues[i]->divType == DivergenceType::Bottom || divTypeValues[i]->divType == DivergenceType::BottomSub)
+        {
+            if (kline->low < lastday_highlow.low) return KShape::Div;
+        }
     }
     return ret;
 }

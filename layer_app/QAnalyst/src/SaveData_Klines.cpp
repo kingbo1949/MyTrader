@@ -43,7 +43,7 @@ void CSaveData_Klines::Go(const std::string& fileName)
 
 std::string CSaveData_Klines::GetTitle()
 {
-	return "time,open,high,low,close,vol,daySession,tradeDay,dif,dea,macd,divType,isUTurn,atr";
+	return "time,open,high,low,close,vol,daySession,tradeDay,dif,dea,macd,divType,isUTurn,atr,ma5,ma20,ma60,ma200";
 }
 
 std::string CSaveData_Klines::GetKlineStr(const KLine4Table &kline4Table)
@@ -72,7 +72,11 @@ std::string CSaveData_Klines::GetKlineStr(const KLine4Table &kline4Table)
 		"{:.2f},"					// macd
 		"{},"						// divType
 		"{},"						// isUTurn
-		"{:.2f}"					// atr
+		"{:.2f}, "					// atr
+		"{:.2f}, "					// ma5
+		"{:.2f}, "					// ma20
+		"{:.2f}, "					// ma60
+		"{:.2f}"					// ma200
 		,
 		CGlobal::GetTickTimeStr(kline4Table.pkline->time).substr(0, 17).c_str(),			// 取时间字符串不要毫秒部分
 		kline4Table.pkline->open,
@@ -87,7 +91,11 @@ std::string CSaveData_Klines::GetKlineStr(const KLine4Table &kline4Table)
 		kline4Table.pmacd->macd,
 		CTransToStr::Get_DivergenceType(kline4Table.pDivType->divType).c_str(),
 		kline4Table.pDivType->isUTurn ? "1" : "0",
-		kline4Table.pAtr->avgAtr
+		kline4Table.pAtr->avgAtr,
+		kline4Table.pMa->v5,
+		kline4Table.pMa->v20,
+		kline4Table.pMa->v60,
+		kline4Table.pMa->v200
 	);
 
 	return temstr;

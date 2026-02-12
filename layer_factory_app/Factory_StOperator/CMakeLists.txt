@@ -1,6 +1,8 @@
 
 set(TARGETNAME "Factory_StOperator")
 set(SRC_LIST
+        src/Break4Week/MakePrice_Break4Week.cpp
+        src/Break4Week/NeedCancel_Break4Week.cpp
         src/UTurn/MakePrice_UTurn.cpp
         src/UTurn/NeedCancel_UTurn.cpp
         src/Factory_StOperator.cpp

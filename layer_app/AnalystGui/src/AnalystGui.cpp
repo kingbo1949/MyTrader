@@ -150,7 +150,8 @@ void AnalystGui::InitAllCodeId()
 
 void AnalystGui::InitPositionCodeId()
 {
-	QStringList codeIds = { "NQ", "GC", "TSLA", "HOOD", "MU", "CLS", "SOFI", "BMNR", "ORCL", "COIN", "STX", "AVGO", "MSTR", "INTC", "TSM"};
+	QStringList codeIds = { "NQ", "GC", "TSLA", "HOOD", "MU", "CLS", "SOFI", "BMNR", "ORCL",
+		"COIN", "STX", "AVGO", "MSTR", "INTC", "TSM", "MSFT", "META", "UPST", "RKLB", "CRCL"};
 
 	m_model_positionCodeId = new QStandardItemModel(int(codeIds.size()), 1, ui.positionCodeIdView);
 
@@ -435,6 +436,9 @@ void AnalystGui::keyPressEvent(QKeyEvent* event)
 	else if (event->key() == Qt::Key_Home)
 	{
 		m_plotContainer->GoHome();
+	}else if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9 )
+	{
+		m_plotContainer->NumberKey(event->key());
 	}
 	else if (event->key() == Qt::Key_H)
 	{

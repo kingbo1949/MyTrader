@@ -9,6 +9,7 @@ struct KLine4Table
     IBMacdPtr		pmacd;
     IBDivTypePtr	pDivType;
     IBAtrPtr		pAtr;
+    IBAvgValuePtr   pMa;
 };
 typedef std::vector<KLine4Table> KLine4Tables;
 

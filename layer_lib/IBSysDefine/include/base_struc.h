@@ -194,6 +194,11 @@ enum class Time_Type
 	D1							// 1天
 
 };
+enum class HighOrLow
+{
+	High = 0,
+	Low = 1,
+};
 
 struct HighAndLow
 {
@@ -208,8 +213,8 @@ struct HighAndLow
 
 struct HighLowPair
 {
-	double			high = -999999999.0;
-	double			low = 999999999.0;
+	double			high = std::numeric_limits<double>::quiet_NaN();
+	double			low = std::numeric_limits<double>::quiet_NaN();
 };
 
 

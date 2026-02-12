@@ -30,6 +30,9 @@ public:
 	// 副图类别改变事件
 	void									SubTypeChg() ;
 
+	// 接受数字key
+	void									NumberKey(int key);
+
 
 	void									GoHome();
 	void									GoEnd();

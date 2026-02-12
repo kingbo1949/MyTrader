@@ -31,6 +31,9 @@ public:
 	// 副图类别改变
 	virtual void			SubTypeChg(const KlinePlotSuit& klinePlotSuit) {;};
 
+	// 接受数字key
+	virtual void			NumberKey(int key) {;};
+
 	// 得到坐标系
 	virtual QCPAxisQPtr		GetX() = 0;
 	virtual QCPAxisQPtr		GetY() = 0;
@@ -41,11 +44,6 @@ protected:
 
 	// 比较两个点的高低，把高点移动到新高，低点移动到新低
 	void					MovePoints(QPointF& point1, QPointF& point2, double upper, double lower);
-
-
-
-
-
 };
 
 typedef CItemsHandler* ItemsHandlerQPtr;

@@ -232,13 +232,13 @@ bool CCalculator_DivType::IsUTurn(const std::string& codeId, ITimeType timeType,
 	if (divType == IDivType::NORMAL) return false;
 
 	IMacdValues maceValues = GetMacdValues(codeId, timeType, klines);
-	HighAndLow highLowPair = GetHighLow_MacdDif(maceValues);
+	HighAndLow highAndLow = GetHighLow_MacdDif(maceValues);
 
 	time_t extreamTime = klines[klines.size() - 2].time;	// 极值点的时间
 	if (divType == IDivType::BOTTOM || divType == IDivType::BOTTOMSUB)
 	{
 		// 底背离
-		if (highLowPair.lowPos == extreamTime)
+		if (highAndLow.lowPos == extreamTime)
 		{
 			return true;
 		}
@@ -246,7 +246,7 @@ bool CCalculator_DivType::IsUTurn(const std::string& codeId, ITimeType timeType,
 	if (divType == IDivType::TOP || divType == IDivType::TOPSUB)
 	{
 		// 顶背离
-		if (highLowPair.highPos == extreamTime)
+		if (highAndLow.highPos == extreamTime)
 		{
 			return true;
 		}
@@ -273,14 +273,14 @@ std::optional<bool> CCalculator_DivType::CountDivType(const std::string& codeId,
 	}
 
 	IMacdValues maceValues = GetMacdValues(codeId, timeType, klines);
-	HighAndLow highLowPair = GetHighLow_MacdDif(maceValues);
+	HighAndLow highAndLow = GetHighLow_MacdDif(maceValues);
 
 	IMacdValue valueIndex = GetMacdValue(codeId, timeType, kline);
 
 	if (highLow.high < kline.high)
 	{
 		// 价格创新高
-		if (highLowPair.high > valueIndex.dif)
+		if (highAndLow.high > valueIndex.dif)
 		{
 			// 价格创新高dif却没有创新高 顶背离
 			// 顶背离要求两线大于零
@@ -295,7 +295,7 @@ std::optional<bool> CCalculator_DivType::CountDivType(const std::string& codeId,
 	if (highLow.low > kline.low)
 	{
 		// 价格创新低
-		if (highLowPair.low < valueIndex.dif)
+		if (highAndLow.low < valueIndex.dif)
 		{
 			// 价格创新高dif却没有创新低 底背离
 			// 底背离要求两线小于零

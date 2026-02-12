@@ -17,6 +17,7 @@
 #include "../ItemHandler/MacdDivergenceItem.h"
 #include "../ItemHandler/LineDrawer.h"
 #include "../ItemHandler/AtrGraph.h"
+#include "../ItemHandler/Break4WeekGraph.h"
 CPlotContainer::CPlotContainer(QCustomPlot* parent)
 	:CPlotObject(parent)
 {
@@ -58,6 +59,7 @@ void CPlotContainer::InitItems()
 	m_items.push_back(new CTradeSideRect(m_customPlot));
 	m_items.push_back(new CCloseTag_Main(m_customPlot));
 	m_items.push_back(new CMaGraph(m_customPlot));
+	m_items.push_back(new CBreak4WeekGraph(m_customPlot));
 	//m_items.push_back(new CVwMaGraph(m_customPlot));
 	//m_items.push_back(new CEmaGraph(m_customPlot));
 	m_items.push_back(new CAtrGraph(m_customPlot, SubType::Atr));
@@ -135,11 +137,21 @@ void CPlotContainer::onMouseMove(QMouseEvent* event)
 
 void CPlotContainer::SubTypeChg()
 {
-
 	if (m_klinePlotSuit.klines.empty()) return;;
 	for (auto item : m_items)
 	{
 		item->SubTypeChg(m_klinePlotSuit);
+	}
+	return;
+
+}
+
+void CPlotContainer::NumberKey(int key)
+{
+	if (m_klinePlotSuit.klines.empty()) return;;
+	for (auto item : m_items)
+	{
+		item->NumberKey(key);
 	}
 	return;
 

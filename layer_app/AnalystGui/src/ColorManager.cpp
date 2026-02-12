@@ -45,6 +45,9 @@ PlotColor CColorManager::GetColor_Material()
 	ret.line60 = QColor(156, 39, 176);			// 紫色
 	ret.line200 = QColor(255, 87, 34);			// 橙色
 
+	ret.upper = QColor(242, 54, 69);			// 番茄红
+	ret.lower = QColor(8, 153, 129);			// 蓝绿
+
 	return ret;
 }
 

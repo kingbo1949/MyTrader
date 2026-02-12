@@ -21,6 +21,9 @@ struct PlotColor
 	QColor lineLoss;
 	QColor arrowBuy;
 	QColor arrowSell;
+
+	QColor upper;
+	QColor lower;
 };
 class CColorManager
 {
