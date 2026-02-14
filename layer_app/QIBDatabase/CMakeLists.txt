@@ -35,6 +35,9 @@ add_executable(${TARGETNAME} ${SRC_LIST})
 
 target_link_libraries(${TARGETNAME} PRIVATE MyTrader::build_options)
 
+if(NOT WIN32)
+    find_package(Iconv REQUIRED)
+endif()
 
 # 关键：只在构建本动态库时定义 FACTORY_CALCULATOR_EXPORTS
 #target_compile_definitions(${TARGETNAME}
@@ -56,6 +59,12 @@ target_link_libraries(${TARGETNAME} PRIVATE
         Factory_Log
         ZeroIce::all
 )
+if(NOT WIN32)
+    target_link_libraries(${TARGETNAME}
+            PRIVATE
+            Iconv::Iconv
+    )
+endif()
 
 # 开始建立调试目录
 set(TARGET_RUN_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/run/${TARGETNAME}")

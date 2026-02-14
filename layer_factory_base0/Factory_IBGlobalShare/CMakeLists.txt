@@ -24,6 +24,10 @@ add_library(${TARGETNAME} SHARED ${SRC_LIST})
 
 target_link_libraries(${TARGETNAME} PRIVATE MyTrader::build_options)
 
+if(NOT WIN32)
+    find_package(Iconv REQUIRED)
+endif()
+
 
 # 关键：只在构建本动态库时定义 FACTORY_IBGLOBALSHARE_EXPORTS
 target_compile_definitions(${TARGETNAME}
@@ -52,4 +56,10 @@ target_link_libraries(${TARGETNAME}
         ToolLib
 
 )
+if(NOT WIN32)
+    target_link_libraries(${TARGETNAME}
+            PRIVATE
+            Iconv::Iconv
+    )
+endif()
 

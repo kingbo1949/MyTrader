@@ -1,0 +1,70 @@
+1、数据库需求
+
+我在使用c++开发一个行情数据库存储k线行情和一些固化的重要的指标有如下数据结构：
+typedef time_t Tick_T;			// 毫秒时间类型
+typedef std::string CodeStr;
+
+struct TimePair
+{
+	time_t		beginPos = 0;		// 请求开始时间(毫秒)
+	time_t		endPos = 0;			// 请求结束时间(毫秒)
+};
+typedef std::vector<TimePair> TimePairs;
+
+enum class ITimeType
+{
+    S15,
+    M1,
+    M5,
+    M15,
+    M30,
+    H1,
+    D1
+};
+
+struct IQKey
+{
+    ::std::string codeId;
+    ITimeType timeType = ITimeType::D1;
+};
+
+using IKLines = ::std::vector<IKLine>;
+
+
+enum class QQueryType
+{
+	ALL_DATA = 0,				// 查询所有数据
+	FROM_CURRENT = 1,			// 表示请求最近多少个单位的数据
+	BEFORE_TIME = 2,			// 表示请求某个时间以前(包括该时间)query_number个单位的数据
+	AFTER_TIME = 3,				// 表示请求某个时间以后query_number个单位的数据
+	BETWEEN_TIME				// 表示请求一个时间段的数据
+};
+
+struct QQuery
+{
+	QQueryType				query_type = QQueryType::FROM_CURRENT;
+	size_t					query_number = 0;
+	time_t					time_ms = 0;        // 毫秒
+	TimePair				time_pair;
+};
+
+需要实现的数据库接口
+
+	virtual void			UpdateKLine(const IQKey& key, const IKLine& kline) = 0;
+
+	// 查询批量数据
+	virtual IKLines		    GetKLine(const IQKey& key, const QQuery& query) = 0;
+
+	// 查询单个数据
+	virtual bool		    GetOneKLine(const IQKey& key, time_t timePos, IKLine& kline) = 0;
+
+	// 删除批量数据
+	virtual void			RemoveAllKLine(const IQKey& key) = 0;
+
+	// 批量删除区间数据 区间为[beginTime,endTime]
+	virtual void			RemoveKLines(const IQKey& key, const TimePair& timePair) = 0;
+
+	// 删除指定记录
+	virtual void			RemoveOneKLine(const IQKey& key, time_t timePos) = 0;
+
+
