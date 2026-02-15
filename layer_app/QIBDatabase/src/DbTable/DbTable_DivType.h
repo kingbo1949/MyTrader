@@ -1,45 +1,36 @@
-﻿#pragma once
-#include "../GlobalDefine.h"
-
-namespace Bdb
+#pragma once
+#include <RocksTable.h>
+#include <QStruc.h>
+#include "../RocksTypes.h"
+#include <map>
+#include <memory>
+using namespace IBTrader;
+using namespace Ice;
+class CDbTable_DivType
 {
-	class CDbTable_DivType : public CDbTable
-	{
-	public:
-		CDbTable_DivType(DbEnv* env, const std::string& path, const std::string& dbName);
-		virtual ~CDbTable_DivType(void) { ; };
+public:
+	CDbTable_DivType(CRocksEnv& env, const std::string& prefix);
+	~CDbTable_DivType() = default;
 
-		virtual	int				Flush()
-		{
-			return m_pDb->Flush();
-		}
-		virtual	bool	SelfCheck()
-		{
-			return m_pDb->SelfCheck(m_dbName);
-		}
+	void		AddOne(const std::string& codeId, ITimeType timeType, const IDivTypeValue& value);
+	void		AddSome(const std::string& codeId, ITimeType timeType, const IDivTypeValues& values);
+	bool		GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IDivTypeValue& value);
 
-		void		AddOne(const std::string& codeId, ITimeType timeType, const IDivTypeValue& value);
-		void		AddSome(const std::string& codeId, ITimeType timeType, const IDivTypeValues& values);
-		bool		GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IDivTypeValue& value);
+	void		RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos);
+	void		RemoveKey(const std::string& codeId, ITimeType timeType);
+	void		RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime);
+	void		RemoveAll();
 
-		void		RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos);
-		void		RemoveKey(const std::string& codeId, ITimeType timeType);
-		void		RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime);
-		void		RemoveAll();
+	void		GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IDivTypeValues& values);
 
-		void		GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IDivTypeValues& values);
+private:
+	CRocksEnv& m_env;
+	std::string m_prefix;
+	std::map<ITimeType, std::unique_ptr<CRocksTable<IDivTypeValue>>> m_tables;
 
-	protected:
-		CDb<IQKey, IDivTypeValue>::DbPtr	m_pDb;
+	CRocksTable<IDivTypeValue>& GetTable(ITimeType timeType);
 
-		// 取值范围[beginDayTime,endDayTime)
-		void		GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IDivTypeValues& values);
-		void		GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IDivTypeValues& values);
-		void		GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IDivTypeValues& values);
-
-
-	};
-	typedef IceUtil::Handle<CDbTable_DivType> DbTable_DivTypePtr;
-
-}
-
+	void		GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IDivTypeValues& values);
+	void		GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IDivTypeValues& values);
+	void		GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IDivTypeValues& values);
+};

@@ -10,7 +10,6 @@ set(SRC_LIST
         src/Calculator/Calculator_Macd.cpp
         src/Calculator/Calculator_VwMa.cpp
         src/Calculator/Calculator_Atr.cpp
-        src/Compare.cpp
         src/DbTable/DbTable_Average.cpp
         src/DbTable/DbTable_DivType.cpp
         src/DbTable/DbTable_KLine.cpp
@@ -26,7 +25,6 @@ set(SRC_LIST
         src/QIBDatabase.cpp
         src/Shell.cpp
         src/TickUpdator.cpp
-        src/TimerTask_CheckPoint.cpp
         src/TimerTask_UpdateIndex.cpp
 
 )
@@ -53,7 +51,7 @@ target_include_directories(${TARGETNAME}
 )
 target_link_libraries(${TARGETNAME} PRIVATE
         IceCompiler
-        BdbLib
+        RocksDbLib
         IBSysDefine
         ToolLib
         Factory_Log
@@ -70,7 +68,7 @@ endif()
 set(TARGET_RUN_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/run/${TARGETNAME}")
 message(STATUS "TARGET_RUN_PATH = ${TARGET_RUN_PATH}")
 
-setup_makedir(${TARGETNAME} "${TARGET_RUN_PATH}/history")
+setup_makedir(${TARGETNAME} "${TARGET_RUN_PATH}/history_rocksdb")
 setup_makedir(${TARGETNAME} "${TARGET_RUN_PATH}/log")
 
 setup_cp(${TARGETNAME} "${CMAKE_SOURCE_DIR}/config/config.server" "${TARGET_RUN_PATH}/config.server")

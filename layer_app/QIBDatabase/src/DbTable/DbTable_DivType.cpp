@@ -1,183 +1,138 @@
-﻿#include "DbTable_DivType.h"
-#include "../Compare.h"
-#include <Global.h>
+#include "DbTable_DivType.h"
+#include "../Factory.h"
+#include <RocksWriteBatch.h>
+#include <climits>
 
-Bdb::CDbTable_DivType::CDbTable_DivType(DbEnv* env, const std::string& path, const std::string& dbName)
-	:CDbTable(env, path, dbName)
+CDbTable_DivType::CDbTable_DivType(CRocksEnv& env, const std::string& prefix)
+	: m_env(env), m_prefix(prefix)
 {
-	ParamForSetupDB param;
-	param.env = m_env;
-	param.path = m_path;
-	param.dbName = m_dbName;
-	param.func_key = CCompare::QKeyA;
-	param.func_value = CCompare::DivTypeA;
-	param.partNum = 0;
-	param.func_partition = NULL;
-
-	m_pDb = new CDb<IQKey, IDivTypeValue>(param);
-	m_pDb->Open();
-	printf("CDbTable_DivType open \n");
-}
-void Bdb::CDbTable_DivType::AddOne(const std::string& codeId, ITimeType timeType, const IDivTypeValue& value)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-	m_pDb->AddOne(key, value);
-
-}
-
-void Bdb::CDbTable_DivType::AddSome(const std::string& codeId, ITimeType timeType, const IDivTypeValues& values)
-{
-	for (IDivTypeValues::const_iterator pos = values.begin(); pos != values.end(); ++pos)
+	for (auto tt : ALL_TIME_TYPES)
 	{
-		AddOne(codeId, timeType, *pos);
+		GetTable(tt);
 	}
-
+	printf("CDbTable_DivType open, %zu column families ready\n", m_tables.size());
 }
 
-bool Bdb::CDbTable_DivType::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IDivTypeValue& value)
+CRocksTable<IDivTypeValue>& CDbTable_DivType::GetTable(ITimeType timeType)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	value.time = timePos;
-	value.divType = IDivType::NORMAL;
-
-	return m_pDb->GetOne(key, value);
-
+	auto it = m_tables.find(timeType);
+	if (it != m_tables.end()) {
+		return *it->second;
+	}
+	std::string cfName = m_prefix + "_" + Trans_Str(timeType);
+	auto table = std::make_unique<CRocksTable<IDivTypeValue>>(m_env, cfName);
+	auto& ref = *table;
+	m_tables[timeType] = std::move(table);
+	return ref;
 }
 
-void Bdb::CDbTable_DivType::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
+void CDbTable_DivType::AddOne(const std::string& codeId, ITimeType timeType, const IDivTypeValue& value)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IDivTypeValue value;
-	value.time = timePos;
-
-	m_pDb->RemoveOne(std::make_pair(key, value));
-
+	CRocksKey key(codeId, value.time);
+	GetTable(timeType).Put(key, value);
 }
 
-void Bdb::CDbTable_DivType::RemoveKey(const std::string& codeId, ITimeType timeType)
+void CDbTable_DivType::AddSome(const std::string& codeId, ITimeType timeType, const IDivTypeValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	m_pDb->RemoveOneKey(key);
-
-}
-
-void Bdb::CDbTable_DivType::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IDivTypeValue begin;
-	begin.time = beginTime;
-
-	IDivTypeValue end;
-	end.time = endTime;
-
-	CDb<IQKey, IDivTypeValue>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(key, begin);
-	fieldPairRange.endPair = std::make_pair(key, end);
-
-	m_pDb->RemoveRange(fieldPairRange);
-	return;
-
-
-}
-
-void Bdb::CDbTable_DivType::RemoveAll()
-{
-	m_pDb->RemoveAll();
-}
-
-void Bdb::CDbTable_DivType::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IDivTypeValues& values)
-{
-	if (query.byReqType == 0)
+	CRocksWriteBatch batch(m_env);
+	auto* cfHandle = GetTable(timeType).GetCFHandle();
+	for (const auto& v : values)
 	{
+		CRocksKey key(codeId, v.time);
+		std::string data = RocksSerializer<IDivTypeValue>::Serialize(v);
+		batch.Put(cfHandle, key, data);
+	}
+	batch.Commit();
+}
+
+bool CDbTable_DivType::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IDivTypeValue& value)
+{
+	CRocksKey key(codeId, timePos);
+	return GetTable(timeType).Get(key, &value);
+}
+
+void CDbTable_DivType::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
+{
+	CRocksKey key(codeId, timePos);
+	GetTable(timeType).Delete(key);
+}
+
+void CDbTable_DivType::RemoveKey(const std::string& codeId, ITimeType timeType)
+{
+	GetTable(timeType).DeleteRange(codeId, 0, LLONG_MAX);
+}
+
+void CDbTable_DivType::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
+{
+	GetTable(timeType).DeleteRange(codeId, beginTime, endTime);
+}
+
+void CDbTable_DivType::RemoveAll()
+{
+	for (auto& [timeType, table] : m_tables) {
+		CRocksKey beginKey("", 0);
+		CRocksKey endKey("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff",
+		                 LLONG_MAX);
+		rocksdb::WriteOptions wo;
+		m_env.GetDB()->DeleteRange(wo, table->GetCFHandle(), beginKey.ToSlice(), endKey.ToSlice());
+	}
+}
+
+void CDbTable_DivType::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IDivTypeValues& values)
+{
+	if (query.byReqType == 0) {
 		GetBackWard(codeId, timeType, LLONG_MAX, query.dwSubscribeNum, values);
 		return;
 	}
-	if (query.byReqType == 1)
-	{
+	if (query.byReqType == 1) {
 		GetRange(codeId, timeType, 0, LLONG_MAX, values);
 		return;
 	}
-	if (query.byReqType == 2)
-	{
+	if (query.byReqType == 2) {
 		GetBackWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 3)
-	{
+	if (query.byReqType == 3) {
 		GetForWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 4)
-	{
+	if (query.byReqType == 4) {
 		GetRange(codeId, timeType, query.timePair.beginPos, query.timePair.endPos, values);
 		return;
-
 	}
-	return;
-
 }
 
-void Bdb::CDbTable_DivType::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IDivTypeValues& values)
+void CDbTable_DivType::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IDivTypeValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IDivTypeValue begin;
-	begin.time = beginTime;
-
-	IDivTypeValue end;
-	end.time = endTime;
-
-	CDb<IQKey, IDivTypeValue>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(key, begin);
-	fieldPairRange.endPair = std::make_pair(key, end);
-
-	m_pDb->GetRange(fieldPairRange, values);
-
-	return;
-
+	values.clear();
+	GetTable(timeType).ScanByRange(codeId, beginTime, endTime,
+		[&values](const CRocksKey& k, const IDivTypeValue& v) {
+			values.push_back(v);
+			return true;
+		});
 }
 
-void Bdb::CDbTable_DivType::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IDivTypeValues& values)
+void CDbTable_DivType::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IDivTypeValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IDivTypeValue value;
-	value.time = beginTime;
-	CDb<IQKey, IDivTypeValue>::FieldPair pair = std::make_pair(key, value);
-	m_pDb->GetForWardInDup(pair, count, values);
-
+	values.clear();
+	Long remaining = count;
+	GetTable(timeType).ScanByRange(codeId, beginTime, LLONG_MAX,
+		[&values, &remaining](const CRocksKey& k, const IDivTypeValue& v) {
+			values.push_back(v);
+			return (--remaining > 0);
+		});
 }
 
-void Bdb::CDbTable_DivType::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IDivTypeValues& values)
+void CDbTable_DivType::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IDivTypeValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IDivTypeValue value;
-	value.time = endTime;
-	CDb<IQKey, IDivTypeValue>::FieldPair pair = std::make_pair(key, value);
-
-	m_pDb->GetBackWardInDup(pair, count, values);
-
+	values.clear();
+	std::vector<std::pair<CRocksKey, IDivTypeValue>> results;
+	GetTable(timeType).ScanBackwardN(codeId, endTime, static_cast<size_t>(count), results);
+	values.reserve(results.size());
+	for (auto& [k, v] : results) {
+		values.push_back(std::move(v));
+	}
 }

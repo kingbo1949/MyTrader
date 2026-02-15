@@ -2,6 +2,7 @@
 #include <numeric>
 #include "../Factory.h"
 #include <Factory_Log.h>
+#include <Global.h>
 
 void CCalculator_VwMa::Initialize(const std::string& codeId, ITimeType timeType, const IKLines& klines)
 {

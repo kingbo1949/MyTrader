@@ -1,144 +1,29 @@
-﻿#include "Env_IB.h"
+#include "Env_IB.h"
 
-CEnv_IB::CEnv_IB(const std::string& path, const std::string& dir, int sizeG, int sizeM, u_int32_t mutexInit, u_int32_t mutexIncrement)
-	:CEnv(path, dir, sizeG, sizeM, mutexInit, mutexIncrement)
+CEnv_IB::CEnv_IB(const std::string& dbPath)
+	: m_env(dbPath)
 {
-
 }
 
-CEnv_IB::~CEnv_IB(void)
+CEnv_IB::~CEnv_IB()
 {
-
-}
-
-Bdb::DbTable_TickHisPtr CEnv_IB::GetDB_TickHis()
-{
-	const std::string dbName = "tick_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_TickHis(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_TickHisPtr pBack = DbTable_TickHisPtr::dynamicCast(pDb);
-	return pBack;
-
-
-}
-
-Bdb::DbTable_KLinePtr CEnv_IB::GetDB_KLine()
-{
-	const std::string dbName = "kline_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_KLine(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_KLinePtr pBack = DbTable_KLinePtr::dynamicCast(pDb);
-	return pBack;
-
-}
-
-Bdb::DbTable_AveragePtr CEnv_IB::GetDB_Ma()
-{
-	const std::string dbName = "ma_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_Average(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_AveragePtr pBack = DbTable_AveragePtr::dynamicCast(pDb);
-	return pBack;
-
-
-}
-
-DbTable_AveragePtr CEnv_IB::GetDB_VwMa()
-{
-	const std::string dbName = "vwma_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_Average(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_AveragePtr pBack = DbTable_AveragePtr::dynamicCast(pDb);
-	return pBack;
-}
-
-DbTable_AveragePtr CEnv_IB::GetDB_Ema()
-{
-	const std::string dbName = "ema_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_Average(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_AveragePtr pBack = DbTable_AveragePtr::dynamicCast(pDb);
-	return pBack;
-}
-
-DbTable_MacdPtr CEnv_IB::GetDB_Macd()
-{
-	const std::string dbName = "macd_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_Macd(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_MacdPtr pBack = DbTable_MacdPtr::dynamicCast(pDb);
-	return pBack;
-}
-
-DbTable_DivTypePtr CEnv_IB::GetDB_DivType()
-{
-	const std::string dbName = "divtype_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_DivType(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_DivTypePtr pBack = DbTable_DivTypePtr::dynamicCast(pDb);
-	return pBack;
-}
-
-DbTable_AtrPtr CEnv_IB::GetDB_Atr()
-{
-	const std::string dbName = "atr_his.db";
-
-	DbTablePtr pDb = GetDbFile(dbName);
-	if (!pDb)
-	{
-		pDb = new CDbTable_Atr(&m_Env, m_path + m_dir + "\\", dbName);
-		AddDbFile(pDb);
-	}
-	DbTable_AtrPtr pBack = DbTable_AtrPtr::dynamicCast(pDb);
-	return pBack;
 }
 
 void CEnv_IB::OpenAllTable()
 {
-	GetDB_TickHis();
-	GetDB_KLine();
-	GetDB_Ma();
-	GetDB_VwMa(); 
-	GetDB_Ema();
-	GetDB_Macd();
-	GetDB_DivType();
-	GetDB_Atr();
+	m_tickHis = std::make_unique<CDbTable_TickHis>(m_env, "TICK");
+	m_kline   = std::make_unique<CDbTable_KLine>(m_env, "KLINE");
+	m_ma      = std::make_unique<CDbTable_Average>(m_env, "MA");
+	m_vwma    = std::make_unique<CDbTable_Average>(m_env, "VWMA");
+	m_ema     = std::make_unique<CDbTable_Average>(m_env, "EMA");
+	m_macd    = std::make_unique<CDbTable_Macd>(m_env, "MACD");
+	m_divType = std::make_unique<CDbTable_DivType>(m_env, "DIVTYPE");
+	m_atr     = std::make_unique<CDbTable_Atr>(m_env, "ATR");
 
+	printf("All RocksDB tables opened\n");
+}
 
-	return;
+void CEnv_IB::Flush()
+{
+	m_env.Flush();
 }

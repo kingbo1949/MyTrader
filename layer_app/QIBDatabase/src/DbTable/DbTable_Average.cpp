@@ -1,181 +1,138 @@
-﻿#include "DbTable_Average.h"
+#include "DbTable_Average.h"
+#include "../Factory.h"
+#include <RocksWriteBatch.h>
+#include <climits>
 
-#include "../Compare.h"
-Bdb::CDbTable_Average::CDbTable_Average(DbEnv* env, const std::string& path, const std::string& dbName)
-	:CDbTable(env, path, dbName)
+CDbTable_Average::CDbTable_Average(CRocksEnv& env, const std::string& prefix)
+	: m_env(env), m_prefix(prefix)
 {
-	ParamForSetupDB param;
-	param.env = m_env;
-	param.path = m_path;
-	param.dbName = m_dbName;
-	param.func_key = CCompare::QKeyA;
-	param.func_value = CCompare::AvgValueA;
-	param.partNum = 0;
-	param.func_partition = NULL;
-
-	m_pDb = new CDb<IQKey, IAvgValue>(param);
-	m_pDb->Open();
-	printf("CDbTable_MA open \n");
-}
-
-void Bdb::CDbTable_Average::AddOne(const std::string& codeId, ITimeType timeType, const IAvgValue& value)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-	m_pDb->AddOne(key, value);
-
-}
-
-void Bdb::CDbTable_Average::AddSome(const std::string& codeId, ITimeType timeType, const IAvgValues& values)
-{
-	for (const auto& onevalue : values)
+	for (auto tt : ALL_TIME_TYPES)
 	{
-		AddOne(codeId, timeType, onevalue);
+		GetTable(tt);
+	}
+	printf("CDbTable_Average open, %zu column families ready\n", m_tables.size());
+}
+
+CRocksTable<IAvgValue>& CDbTable_Average::GetTable(ITimeType timeType)
+{
+	auto it = m_tables.find(timeType);
+	if (it != m_tables.end()) {
+		return *it->second;
+	}
+	std::string cfName = m_prefix + "_" + Trans_Str(timeType);
+	auto table = std::make_unique<CRocksTable<IAvgValue>>(m_env, cfName);
+	auto& ref = *table;
+	m_tables[timeType] = std::move(table);
+	return ref;
+}
+
+void CDbTable_Average::AddOne(const std::string& codeId, ITimeType timeType, const IAvgValue& value)
+{
+	CRocksKey key(codeId, value.time);
+	GetTable(timeType).Put(key, value);
+}
+
+void CDbTable_Average::AddSome(const std::string& codeId, ITimeType timeType, const IAvgValues& values)
+{
+	CRocksWriteBatch batch(m_env);
+	auto* cfHandle = GetTable(timeType).GetCFHandle();
+	for (const auto& v : values)
+	{
+		CRocksKey key(codeId, v.time);
+		std::string data = RocksSerializer<IAvgValue>::Serialize(v);
+		batch.Put(cfHandle, key, data);
+	}
+	batch.Commit();
+}
+
+bool CDbTable_Average::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IAvgValue& value)
+{
+	CRocksKey key(codeId, timePos);
+	return GetTable(timeType).Get(key, &value);
+}
+
+void CDbTable_Average::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
+{
+	CRocksKey key(codeId, timePos);
+	GetTable(timeType).Delete(key);
+}
+
+void CDbTable_Average::RemoveKey(const std::string& codeId, ITimeType timeType)
+{
+	GetTable(timeType).DeleteRange(codeId, 0, LLONG_MAX);
+}
+
+void CDbTable_Average::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
+{
+	GetTable(timeType).DeleteRange(codeId, beginTime, endTime);
+}
+
+void CDbTable_Average::RemoveAll()
+{
+	for (auto& [timeType, table] : m_tables) {
+		CRocksKey beginKey("", 0);
+		CRocksKey endKey("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff",
+		                 LLONG_MAX);
+		rocksdb::WriteOptions wo;
+		m_env.GetDB()->DeleteRange(wo, table->GetCFHandle(), beginKey.ToSlice(), endKey.ToSlice());
 	}
 }
 
-bool Bdb::CDbTable_Average::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IAvgValue& value)
+void CDbTable_Average::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IAvgValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	value.time = timePos;
-	return m_pDb->GetOne(key, value);
-
-}
-
-void Bdb::CDbTable_Average::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IAvgValue value;
-	value.time = timePos;
-
-	m_pDb->RemoveOne(std::make_pair(key, value));
-
-}
-
-void Bdb::CDbTable_Average::RemoveKey(const std::string& codeId, ITimeType timeType)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	m_pDb->RemoveOneKey(key);
-
-}
-
-void Bdb::CDbTable_Average::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IAvgValue begin;
-	begin.time = beginTime;
-
-	IAvgValue end;
-	end.time = endTime;
-
-	CDb<IQKey, IAvgValue>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(key, begin);
-	fieldPairRange.endPair = std::make_pair(key, end);
-
-	m_pDb->RemoveRange(fieldPairRange);
-	return;
-
-
-}
-
-void Bdb::CDbTable_Average::RemoveAll()
-{
-	m_pDb->RemoveAll();
-}
-
-void Bdb::CDbTable_Average::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IAvgValues& values)
-{
-	if (query.byReqType == 0)
-	{
+	if (query.byReqType == 0) {
 		GetBackWard(codeId, timeType, LLONG_MAX, query.dwSubscribeNum, values);
 		return;
 	}
-	if (query.byReqType == 1)
-	{
+	if (query.byReqType == 1) {
 		GetRange(codeId, timeType, 0, LLONG_MAX, values);
 		return;
 	}
-	if (query.byReqType == 2)
-	{
+	if (query.byReqType == 2) {
 		GetBackWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 3)
-	{
+	if (query.byReqType == 3) {
 		GetForWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 4)
-	{
+	if (query.byReqType == 4) {
 		GetRange(codeId, timeType, query.timePair.beginPos, query.timePair.endPos, values);
 		return;
-
 	}
-	return;
-
 }
 
-void Bdb::CDbTable_Average::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IAvgValues& values)
+void CDbTable_Average::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IAvgValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IAvgValue begin;
-	begin.time = beginTime;
-
-	IAvgValue end;
-	end.time = endTime;
-
-	CDb<IQKey, IAvgValue>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(key, begin);
-	fieldPairRange.endPair = std::make_pair(key, end);
-
-	m_pDb->GetRange(fieldPairRange, values);
-
-	return;
-
+	values.clear();
+	GetTable(timeType).ScanByRange(codeId, beginTime, endTime,
+		[&values](const CRocksKey& k, const IAvgValue& v) {
+			values.push_back(v);
+			return true;
+		});
 }
 
-void Bdb::CDbTable_Average::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IAvgValues& values)
+void CDbTable_Average::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IAvgValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IAvgValue kline;
-	kline.time = beginTime;
-	CDb<IQKey, IAvgValue>::FieldPair pair = std::make_pair(key, kline);
-	m_pDb->GetForWardInDup(pair, count, values);
-
-
+	values.clear();
+	Long remaining = count;
+	GetTable(timeType).ScanByRange(codeId, beginTime, LLONG_MAX,
+		[&values, &remaining](const CRocksKey& k, const IAvgValue& v) {
+			values.push_back(v);
+			return (--remaining > 0);
+		});
 }
 
-void Bdb::CDbTable_Average::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IAvgValues& values)
+void CDbTable_Average::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IAvgValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IAvgValue kline;
-	kline.time = endTime;
-	CDb<IQKey, IAvgValue>::FieldPair pair = std::make_pair(key, kline);
-
-	m_pDb->GetBackWardInDup(pair, count, values);
-
+	values.clear();
+	std::vector<std::pair<CRocksKey, IAvgValue>> results;
+	GetTable(timeType).ScanBackwardN(codeId, endTime, static_cast<size_t>(count), results);
+	values.reserve(results.size());
+	for (auto& [k, v] : results) {
+		values.push_back(std::move(v));
+	}
 }

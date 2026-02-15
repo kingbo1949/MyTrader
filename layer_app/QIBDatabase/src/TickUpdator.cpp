@@ -3,6 +3,7 @@
 #include "GetRecordNoForDb.h"
 #include "Calculator/Calculator.h"
 #include <Factory_Log.h>
+#include <Global.h>
 CTickUpdator::CTickUpdator()
 {
 }

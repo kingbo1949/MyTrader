@@ -2,6 +2,7 @@
 #include "../Factory.h"
 #include <numeric>
 #include <Factory_Log.h>
+#include <Global.h>
 CCalculator_Macd::CCalculator_Macd()
 {
 	m_shortPeriod = 12;

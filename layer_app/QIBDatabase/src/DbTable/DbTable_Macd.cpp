@@ -1,187 +1,138 @@
-﻿#include "DbTable_Macd.h"
-#include "../Compare.h"
-#include <Global.h>
+#include "DbTable_Macd.h"
+#include "../Factory.h"
+#include <RocksWriteBatch.h>
+#include <climits>
 
-Bdb::CDbTable_Macd::CDbTable_Macd(DbEnv* env, const std::string& path, const std::string& dbName)
-	:CDbTable(env, path, dbName)
+CDbTable_Macd::CDbTable_Macd(CRocksEnv& env, const std::string& prefix)
+	: m_env(env), m_prefix(prefix)
 {
-	ParamForSetupDB param;
-	param.env = m_env;
-	param.path = m_path;
-	param.dbName = m_dbName;
-	param.func_key = CCompare::QKeyA;
-	param.func_value = CCompare::MacdA;
-	param.partNum = 0;
-	param.func_partition = NULL;
-
-	m_pDb = new CDb<IQKey, IMacdValue>(param);
-	m_pDb->Open();
-	printf("CDbTable_Macd open \n");
-
-
-}
-void Bdb::CDbTable_Macd::AddOne(const std::string& codeId, ITimeType timeType, const IMacdValue& value)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-	m_pDb->AddOne(key, value);
-}
-
-void Bdb::CDbTable_Macd::AddSome(const std::string& codeId, ITimeType timeType, const IMacdValues& values)
-{
-	for (IMacdValues::const_iterator pos = values.begin(); pos != values.end(); ++pos)
+	for (auto tt : ALL_TIME_TYPES)
 	{
-		AddOne(codeId, timeType, *pos);
+		GetTable(tt);
+	}
+	printf("CDbTable_Macd open, %zu column families ready\n", m_tables.size());
+}
+
+CRocksTable<IMacdValue>& CDbTable_Macd::GetTable(ITimeType timeType)
+{
+	auto it = m_tables.find(timeType);
+	if (it != m_tables.end()) {
+		return *it->second;
+	}
+	std::string cfName = m_prefix + "_" + Trans_Str(timeType);
+	auto table = std::make_unique<CRocksTable<IMacdValue>>(m_env, cfName);
+	auto& ref = *table;
+	m_tables[timeType] = std::move(table);
+	return ref;
+}
+
+void CDbTable_Macd::AddOne(const std::string& codeId, ITimeType timeType, const IMacdValue& value)
+{
+	CRocksKey key(codeId, value.time);
+	GetTable(timeType).Put(key, value);
+}
+
+void CDbTable_Macd::AddSome(const std::string& codeId, ITimeType timeType, const IMacdValues& values)
+{
+	CRocksWriteBatch batch(m_env);
+	auto* cfHandle = GetTable(timeType).GetCFHandle();
+	for (const auto& v : values)
+	{
+		CRocksKey key(codeId, v.time);
+		std::string data = RocksSerializer<IMacdValue>::Serialize(v);
+		batch.Put(cfHandle, key, data);
+	}
+	batch.Commit();
+}
+
+bool CDbTable_Macd::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IMacdValue& value)
+{
+	CRocksKey key(codeId, timePos);
+	return GetTable(timeType).Get(key, &value);
+}
+
+void CDbTable_Macd::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
+{
+	CRocksKey key(codeId, timePos);
+	GetTable(timeType).Delete(key);
+}
+
+void CDbTable_Macd::RemoveKey(const std::string& codeId, ITimeType timeType)
+{
+	GetTable(timeType).DeleteRange(codeId, 0, LLONG_MAX);
+}
+
+void CDbTable_Macd::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
+{
+	GetTable(timeType).DeleteRange(codeId, beginTime, endTime);
+}
+
+void CDbTable_Macd::RemoveAll()
+{
+	for (auto& [timeType, table] : m_tables) {
+		CRocksKey beginKey("", 0);
+		CRocksKey endKey("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff",
+		                 LLONG_MAX);
+		rocksdb::WriteOptions wo;
+		m_env.GetDB()->DeleteRange(wo, table->GetCFHandle(), beginKey.ToSlice(), endKey.ToSlice());
 	}
 }
 
-bool Bdb::CDbTable_Macd::GetOne(const std::string& codeId, ITimeType timeType, Long timePos, IMacdValue& value)
+void CDbTable_Macd::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IMacdValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	value.time = timePos;
-	value.emaShort = 0;
-	value.emaLong = 0;
-	value.dif = 0;
-	value.dea = 0;
-	value.macd = 0;
-
-	return m_pDb->GetOne(key, value);
-
-}
-
-void Bdb::CDbTable_Macd::RemoveOne(const std::string& codeId, ITimeType timeType, Long timePos)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IMacdValue value;
-	value.time = timePos;
-
-	m_pDb->RemoveOne(std::make_pair(key, value));
-
-}
-
-void Bdb::CDbTable_Macd::RemoveKey(const std::string& codeId, ITimeType timeType)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	m_pDb->RemoveOneKey(key);
-
-}
-
-void Bdb::CDbTable_Macd::RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IMacdValue begin;
-	begin.time = beginTime;
-
-	IMacdValue end;
-	end.time = endTime;
-
-	CDb<IQKey, IMacdValue>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(key, begin);
-	fieldPairRange.endPair = std::make_pair(key, end);
-
-	m_pDb->RemoveRange(fieldPairRange);
-	return;
-
-
-}
-
-void Bdb::CDbTable_Macd::RemoveAll()
-{
-	m_pDb->RemoveAll();
-}
-
-void Bdb::CDbTable_Macd::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IMacdValues& values)
-{
-	if (query.byReqType == 0)
-	{
+	if (query.byReqType == 0) {
 		GetBackWard(codeId, timeType, LLONG_MAX, query.dwSubscribeNum, values);
 		return;
 	}
-	if (query.byReqType == 1)
-	{
+	if (query.byReqType == 1) {
 		GetRange(codeId, timeType, 0, LLONG_MAX, values);
 		return;
 	}
-	if (query.byReqType == 2)
-	{
+	if (query.byReqType == 2) {
 		GetBackWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 3)
-	{
+	if (query.byReqType == 3) {
 		GetForWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 4)
-	{
+	if (query.byReqType == 4) {
 		GetRange(codeId, timeType, query.timePair.beginPos, query.timePair.endPos, values);
 		return;
-
 	}
-	return;
-
 }
 
-void Bdb::CDbTable_Macd::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IMacdValues& values)
+void CDbTable_Macd::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IMacdValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IMacdValue begin;
-	begin.time = beginTime;
-
-	IMacdValue end;
-	end.time = endTime;
-
-	CDb<IQKey, IMacdValue>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(key, begin);
-	fieldPairRange.endPair = std::make_pair(key, end);
-
-	m_pDb->GetRange(fieldPairRange, values);
-
-	return;
-
+	values.clear();
+	GetTable(timeType).ScanByRange(codeId, beginTime, endTime,
+		[&values](const CRocksKey& k, const IMacdValue& v) {
+			values.push_back(v);
+			return true;
+		});
 }
 
-void Bdb::CDbTable_Macd::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IMacdValues& values)
+void CDbTable_Macd::GetForWard(const std::string& codeId, ITimeType timeType, Long beginTime, Long count, IMacdValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IMacdValue value;
-	value.time = beginTime;
-	CDb<IQKey, IMacdValue>::FieldPair pair = std::make_pair(key, value);
-	m_pDb->GetForWardInDup(pair, count, values);
-
+	values.clear();
+	Long remaining = count;
+	GetTable(timeType).ScanByRange(codeId, beginTime, LLONG_MAX,
+		[&values, &remaining](const CRocksKey& k, const IMacdValue& v) {
+			values.push_back(v);
+			return (--remaining > 0);
+		});
 }
 
-void Bdb::CDbTable_Macd::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IMacdValues& values)
+void CDbTable_Macd::GetBackWard(const std::string& codeId, ITimeType timeType, Long endTime, Long count, IMacdValues& values)
 {
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-
-	IMacdValue value;
-	value.time = endTime;
-	CDb<IQKey, IMacdValue>::FieldPair pair = std::make_pair(key, value);
-
-	m_pDb->GetBackWardInDup(pair, count, values);
-
+	values.clear();
+	std::vector<std::pair<CRocksKey, IMacdValue>> results;
+	GetTable(timeType).ScanBackwardN(codeId, endTime, static_cast<size_t>(count), results);
+	values.reserve(results.size());
+	for (auto& [k, v] : results) {
+		values.push_back(std::move(v));
+	}
 }

@@ -15,7 +15,6 @@ protected:
 	void						SetupEnv();
 
 protected:
-	TimerPtr					m_pTimerJob_CheckPoint;
 	TimerPtr					m_pTimerJob_UpdateIndex;
 
 

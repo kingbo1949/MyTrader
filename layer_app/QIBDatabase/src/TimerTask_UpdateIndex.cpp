@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include <Factory_Log.h>
+#include <Global.h>
 #include "TimerTask_UpdateIndex.h"
 #include "Factory.h"
 #include "Calculator/Calculator.h"

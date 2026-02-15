@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include "Shell.h"
 #include "QDatabaseImp.h"
-#include "TimerTask_CheckPoint.h"
 #include "Factory.h"
 #include <Factory_Log.h>
 CShell::CShell(void)
@@ -43,9 +42,6 @@ int CShell::run(int, char* [])
 		printf("\n.....adapter activate err.....\n\n%s\n\n", e.what());
 		exit(-1);
 	}
-	m_pTimerJob_CheckPoint = new Timer();
-	m_pTimerJob_CheckPoint->scheduleRepeated(std::make_shared<CTimerTask_CheckPoint>(), Time::seconds(30));
-
 	m_pTimerJob_UpdateIndex = new Timer();
 	m_pTimerJob_UpdateIndex->scheduleRepeated(MakeAndGet_TimerTask_UpdateIndex(), Time::milliSeconds(1000));
 
@@ -60,20 +56,14 @@ void CShell::interruptCallback(int signal)
 {
 	printf("Will Exit: \n");
 
-	// 关闭checkpoint工作线程
-	if (m_pTimerJob_CheckPoint)
-	{
-		m_pTimerJob_CheckPoint->destroy();
-	}
-	printf("m_pTimerJob_CheckPoint destroy: \n");
-
 	if (m_pTimerJob_UpdateIndex)
 	{
 		m_pTimerJob_UpdateIndex->destroy();
 	}
-	printf("m_pTimerJob_UpdateIndex destroy: \n");
+	printf("m_pTimerJob_UpdateIndex destroy\n");
 
-
+	MakeAndGet_Env()->Flush();
+	printf("RocksDB flushed\n");
 
 	communicator()->shutdown();
 

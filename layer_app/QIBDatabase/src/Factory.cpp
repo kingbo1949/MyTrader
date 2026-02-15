@@ -9,12 +9,7 @@ Env_IBPtr MakeAndGet_Env()
 {
 	if (!g_pEnvIb)
 	{
-		PropertiesPtr properties = createProperties();
-		properties->load(CONFIG_FILE);
-		int sizeG = properties->getPropertyAsInt("QDatabaseHis.SizeG");
-		int sizeM = properties->getPropertyAsInt("QDatabaseHis.SizeM");
-
-		g_pEnvIb = std::make_shared<CEnv_IB>(".\\", "history", sizeG, sizeM, 400000, 100000);
+		g_pEnvIb = std::make_shared<CEnv_IB>("history_rocksdb");
 	}
 	return g_pEnvIb;
 }

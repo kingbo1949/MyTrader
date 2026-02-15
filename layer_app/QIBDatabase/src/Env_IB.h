@@ -1,35 +1,43 @@
-﻿#pragma once
-#include <Env.h>
+#pragma once
+#include <RocksEnv.h>
 #include "./DbTable/DbTable_TickHis.h"
 #include "./DbTable/DbTable_KLine.h"
 #include "./DbTable/DbTable_Average.h"
 #include "./DbTable/DbTable_DivType.h"
 #include "./DbTable/DbTable_Macd.h"
 #include "./DbTable/CDbTable_Atr.h"
-// IB的行情数据库环境
-class CEnv_IB : public CEnv
+
+// IB的行情数据库环境（RocksDB 版本）
+class CEnv_IB
 {
 public:
-	CEnv_IB(const std::string& path, const std::string& dir, int sizeG, int sizeM, u_int32_t mutexInit, u_int32_t mutexIncrement);
-	virtual ~CEnv_IB(void);
+	explicit CEnv_IB(const std::string& dbPath);
+	~CEnv_IB();
 
-	DbTable_TickHisPtr						GetDB_TickHis();
+	CRocksEnv&		GetEnv() { return m_env; }
 
-	DbTable_KLinePtr						GetDB_KLine();
+	CDbTable_TickHis*	GetDB_TickHis()  { return m_tickHis.get(); }
+	CDbTable_KLine*		GetDB_KLine()    { return m_kline.get(); }
+	CDbTable_Average*	GetDB_Ma()       { return m_ma.get(); }
+	CDbTable_Average*	GetDB_VwMa()     { return m_vwma.get(); }
+	CDbTable_Average*	GetDB_Ema()      { return m_ema.get(); }
+	CDbTable_Macd*		GetDB_Macd()     { return m_macd.get(); }
+	CDbTable_DivType*	GetDB_DivType()  { return m_divType.get(); }
+	CDbTable_Atr*		GetDB_Atr()      { return m_atr.get(); }
 
-	DbTable_AveragePtr						GetDB_Ma();
+	void			OpenAllTable();
+	void			Flush();
 
-	DbTable_AveragePtr						GetDB_VwMa();
+private:
+	CRocksEnv m_env;
 
-	DbTable_AveragePtr						GetDB_Ema();
-
-	DbTable_MacdPtr							GetDB_Macd();
-
-	DbTable_DivTypePtr						GetDB_DivType();
-
-	DbTable_AtrPtr							GetDB_Atr();
-
-	void									OpenAllTable();
+	std::unique_ptr<CDbTable_TickHis>	m_tickHis;
+	std::unique_ptr<CDbTable_KLine>		m_kline;
+	std::unique_ptr<CDbTable_Average>	m_ma;
+	std::unique_ptr<CDbTable_Average>	m_vwma;
+	std::unique_ptr<CDbTable_Average>	m_ema;
+	std::unique_ptr<CDbTable_Macd>		m_macd;
+	std::unique_ptr<CDbTable_DivType>	m_divType;
+	std::unique_ptr<CDbTable_Atr>		m_atr;
 };
 typedef std::shared_ptr<CEnv_IB> Env_IBPtr;
-

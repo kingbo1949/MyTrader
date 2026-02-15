@@ -1,5 +1,4 @@
-﻿#pragma once
-#include <DbTable.h>
+#pragma once
 #include <QStruc.h>
 using namespace IBTrader;
 typedef IAvgValue IMaVaue;

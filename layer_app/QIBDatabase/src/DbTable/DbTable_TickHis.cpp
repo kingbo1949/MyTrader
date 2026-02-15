@@ -1,180 +1,136 @@
-﻿#include "DbTable_TickHis.h"
-#include "../Compare.h"
+#include "DbTable_TickHis.h"
+#include <RocksWriteBatch.h>
+#include <climits>
+#include <chrono>
 
-
-Bdb::CDbTable_TickHis::CDbTable_TickHis(DbEnv* env, const std::string& path, const std::string& dbName)
-	:CDbTable(env, path, dbName)
+CDbTable_TickHis::CDbTable_TickHis(CRocksEnv& env, const std::string& cfName)
+	: m_env(env)
 {
-	ParamForSetupDB param;
-	param.env = m_env;
-	param.path = m_path;
-	param.dbName = m_dbName;
-	param.func_key = CCompare::CodeIdA;
-	param.func_value = CCompare::TickA;
-	param.partNum = 0;
-	param.func_partition = NULL;
-
-	m_pDb = new CDb<std::string, ITick>(param);
-	m_pDb->Open();
-	printf("CDbTable_TickHis open \n");
-
+	m_table = std::make_unique<CRocksTable<ITick>>(env, cfName);
+	printf("CDbTable_TickHis open\n");
 }
 
-Bdb::CDbTable_TickHis::~CDbTable_TickHis(void)
+void CDbTable_TickHis::AddOne(const ITick& value)
 {
-
+	CRocksKey key(value.codeId, value.time);
+	m_table->Put(key, value);
 }
 
-void Bdb::CDbTable_TickHis::AddOne(const ITick& value)
+void CDbTable_TickHis::AddSome(const ITicks& values)
 {
-	m_pDb->AddOne(value.codeId, value);
-}
-
-void Bdb::CDbTable_TickHis::AddSome(const ITicks& values)
-{
-	for (ITicks::const_iterator pos = values.begin(); pos != values.end(); ++pos)
+	CRocksWriteBatch batch(m_env);
+	auto* cfHandle = m_table->GetCFHandle();
+	for (const auto& v : values)
 	{
-		AddOne(*pos);
+		CRocksKey key(v.codeId, v.time);
+		std::string data = RocksSerializer<ITick>::Serialize(v);
+		batch.Put(cfHandle, key, data);
 	}
+	batch.Commit();
 }
 
-bool Bdb::CDbTable_TickHis::GetOne(const std::string& codeId, Long timePos, ITick& value)
+bool CDbTable_TickHis::GetOne(const std::string& codeId, Long timePos, ITick& value)
 {
-	value.time = timePos;
-	return m_pDb->GetOne(codeId, value);
-
+	CRocksKey key(codeId, timePos);
+	return m_table->Get(key, &value);
 }
 
-void Bdb::CDbTable_TickHis::RemoveOne(const std::string& codeId, Long timePos)
+void CDbTable_TickHis::RemoveOne(const std::string& codeId, Long timePos)
 {
-	ITick value;
-	value.codeId = codeId;
-	value.time = timePos;
-
-	m_pDb->RemoveOne(std::make_pair(codeId, value));
-
+	CRocksKey key(codeId, timePos);
+	m_table->Delete(key);
 }
 
-void Bdb::CDbTable_TickHis::RemoveKey(const std::string& codeId)
+void CDbTable_TickHis::RemoveKey(const std::string& codeId)
 {
-	m_pDb->RemoveOneKey(codeId);
+	m_table->DeleteRange(codeId, 0, LLONG_MAX);
 }
 
-void Bdb::CDbTable_TickHis::RemoveByRange(const std::string& codeId, Long beginTime, Long endTime)
+void CDbTable_TickHis::RemoveByRange(const std::string& codeId, Long beginTime, Long endTime)
 {
-	ITick begin;
-	begin.codeId = codeId;
-	begin.time = beginTime;
-
-	ITick end;
-	end.codeId = codeId;
-	end.time = endTime;
-
-	CDb<std::string, ITick>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(codeId, begin);
-	fieldPairRange.endPair = std::make_pair(codeId, end);
-
-	m_pDb->RemoveRange(fieldPairRange);
-	return;
-
+	m_table->DeleteRange(codeId, beginTime, endTime);
 }
 
-void Bdb::CDbTable_TickHis::GetTicks(const std::string& codeId, const IQuery& query, ITicks& values)
+void CDbTable_TickHis::RemoveAll()
 {
-	if (query.byReqType == 0)
-	{
+	CRocksKey beginKey("", 0);
+	CRocksKey endKey("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+	                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+	                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+	                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff",
+	                 LLONG_MAX);
+	rocksdb::WriteOptions wo;
+	m_env.GetDB()->DeleteRange(wo, m_table->GetCFHandle(), beginKey.ToSlice(), endKey.ToSlice());
+}
+
+void CDbTable_TickHis::GetTicks(const std::string& codeId, const IQuery& query, ITicks& values)
+{
+	if (query.byReqType == 0) {
 		GetBackWard(codeId, LLONG_MAX, query.dwSubscribeNum, values);
 		return;
 	}
-	if (query.byReqType == 1)
-	{
+	if (query.byReqType == 1) {
 		GetRange(codeId, 0, LLONG_MAX, values);
 		return;
 	}
-	if (query.byReqType == 2)
-	{
+	if (query.byReqType == 2) {
 		GetBackWard(codeId, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 3)
-	{
+	if (query.byReqType == 3) {
 		GetForWard(codeId, query.tTime, query.dwSubscribeNum, values);
 		return;
-
 	}
-	if (query.byReqType == 4)
-	{
+	if (query.byReqType == 4) {
 		GetRange(codeId, query.timePair.beginPos, query.timePair.endPos, values);
 		return;
-
 	}
-	return;
-
 }
 
-void Bdb::CDbTable_TickHis::RemoveAll()
-{
-	m_pDb->RemoveAll();
-}
-
-bool Bdb::CDbTable_TickHis::GetLastTick(const std::string& codeId, ITick& value)
+bool CDbTable_TickHis::GetLastTick(const std::string& codeId, ITick& value)
 {
 	IQuery query;
 	query.byReqType = 2;
 	query.dwSubscribeNum = 1;
-	query.tTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() + 1;
+	query.tTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+		std::chrono::system_clock::now().time_since_epoch()).count() + 1;
 
 	ITicks values;
 	GetTicks(codeId, query, values);
-	if (values.size() == 0) return false;
+	if (values.empty()) return false;
 
 	value = values.back();
 	return true;
-
-
-
 }
 
-void Bdb::CDbTable_TickHis::GetRange(const std::string& codeId, Long beginTime, Long endTime, ITicks& values)
+void CDbTable_TickHis::GetRange(const std::string& codeId, Long beginTime, Long endTime, ITicks& values)
 {
-	ITick begin;
-	begin.codeId = codeId;
-	begin.time = beginTime;
-
-	ITick end;
-	end.codeId = codeId;
-	end.time = endTime;
-
-	CDb<std::string, ITick>::FieldPairRange fieldPairRange;
-	fieldPairRange.beginPair = std::make_pair(codeId, begin);
-	fieldPairRange.endPair = std::make_pair(codeId, end);
-
-	m_pDb->GetRange(fieldPairRange, values);
-
-
-	return;
-
+	values.clear();
+	m_table->ScanByRange(codeId, beginTime, endTime,
+		[&values](const CRocksKey& k, const ITick& v) {
+			values.push_back(v);
+			return true;
+		});
 }
 
-void Bdb::CDbTable_TickHis::GetForWard(const std::string& codeId, Long beginTime, Long count, ITicks& values)
+void CDbTable_TickHis::GetForWard(const std::string& codeId, Long beginTime, Long count, ITicks& values)
 {
-	ITick value;
-	value.codeId = codeId;
-	value.time = beginTime;
-	CDb<std::string, ITick>::FieldPair pair = std::make_pair(codeId, value);
-	m_pDb->GetForWardInDup(pair, count, values);
-
+	values.clear();
+	Long remaining = count;
+	m_table->ScanByRange(codeId, beginTime, LLONG_MAX,
+		[&values, &remaining](const CRocksKey& k, const ITick& v) {
+			values.push_back(v);
+			return (--remaining > 0);
+		});
 }
 
-void Bdb::CDbTable_TickHis::GetBackWard(const std::string& codeId, Long endTime, Long count, ITicks& values)
+void CDbTable_TickHis::GetBackWard(const std::string& codeId, Long endTime, Long count, ITicks& values)
 {
-	ITick value;
-	value.codeId = codeId;
-	value.time = endTime;
-	CDb<std::string, ITick>::FieldPair pair = std::make_pair(codeId, value);
-
-	m_pDb->GetBackWardInDup(pair, count, values);
-
+	values.clear();
+	std::vector<std::pair<CRocksKey, ITick>> results;
+	m_table->ScanBackwardN(codeId, endTime, static_cast<size_t>(count), results);
+	values.reserve(results.size());
+	for (auto& [k, v] : results) {
+		values.push_back(std::move(v));
+	}
 }
-
