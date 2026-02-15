@@ -56,6 +56,14 @@ target_link_libraries(${TARGETNAME} PRIVATE
         ToolLib
         Factory_Log
         ZeroIce::all
+        Zstd::zstd
+        Lz4::lz4
+        Snappy::snappy
+        Zlib::zlib
+        rpcrt4.lib      # UUID 函数
+        shlwapi.lib     # Path* 函数
+
+
 )
 if(NOT WIN32)
     target_link_libraries(${TARGETNAME}

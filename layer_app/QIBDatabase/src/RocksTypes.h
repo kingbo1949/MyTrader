@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <RocksSerializer.h>
 #include <QStruc.h>

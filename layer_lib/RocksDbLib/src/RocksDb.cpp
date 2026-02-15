@@ -1,4 +1,4 @@
-#include "RocksDb.h"
+﻿#include "RocksDb.h"
 #include <stdexcept>
 
 CRocksDb::CRocksDb(CRocksEnv& env, const std::string& cfName)

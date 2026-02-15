@@ -10,6 +10,10 @@ include(Boost)
 include(Intelrdfpmathlib)
 include(bzip2)
 include(RocksDB)
+include(Zstd)
+include(Lz4)
+include(Snappy)
+include(Zlib)
 
 
 

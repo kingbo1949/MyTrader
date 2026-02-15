@@ -33,6 +33,12 @@
         "BOOST_ROOT": "${sourceDir}/ThirdParty/boost_1_90_0",
         "INTERRDFPMATH_ROOT": "${sourceDir}/ThirdParty/intelrdfpmathlib",
         "BZIP2_ROOT": "${sourceDir}/ThirdParty/bzip2",
+        "ROCKSDB_ROOT": "${sourceDir}/ThirdParty/rocksdb_x64-windows",
+        "ZSTD_ROOT": "${sourceDir}/ThirdParty/zstd_x64-windows",
+        "LZ4_ROOT": "${sourceDir}/ThirdParty/lz4_x64-windows",
+        "SNAPPY_ROOT": "${sourceDir}/ThirdParty/snappy_x64-windows",
+        "ZLIB_ROOT": "${sourceDir}/ThirdParty/zlib_x64-windows",
+
         "QT_ROOT": "C:/Qt/6.8.2/msvc2022_64"
 
 

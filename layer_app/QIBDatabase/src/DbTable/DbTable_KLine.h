@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <RocksTable.h>
 #include <QStruc.h>
 #include "../RocksTypes.h"

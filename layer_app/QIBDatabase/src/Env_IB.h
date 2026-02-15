@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <RocksEnv.h>
 #include "./DbTable/DbTable_TickHis.h"
 #include "./DbTable/DbTable_KLine.h"

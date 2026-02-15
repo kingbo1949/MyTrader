@@ -1,4 +1,4 @@
-#include "DbTable_KLine.h"
+﻿#include "DbTable_KLine.h"
 #include "../Factory.h"
 #include <RocksWriteBatch.h>
 #include <climits>
