@@ -7,11 +7,12 @@ if(TARGET Zlib::zlib)
     return()
 endif()
 
-if(NOT DEFINED ZLIB_ROOT)
-    message(FATAL_ERROR "ZLIB_ROOT is not set. Define it via CMakePresets.json or -DZLIB_ROOT=...")
-endif()
 
 if(WIN32)
+    if(NOT DEFINED ZLIB_ROOT)
+        message(FATAL_ERROR "ZLIB_ROOT is not set. Define it via CMakePresets.json or -DZLIB_ROOT=...")
+    endif()
+
     # Windows：强制使用**静态库**
     add_library(Zlib::zlib STATIC IMPORTED GLOBAL)
 

@@ -5,11 +5,12 @@ if(TARGET Snappy::snappy)
     return()
 endif()
 
-if(NOT DEFINED SNAPPY_ROOT)
-    message(FATAL_ERROR "SNAPPY_ROOT is not set. Define it via CMakePresets.json or -DSNAPPY_ROOT=...")
-endif()
 
 if(WIN32)
+    if(NOT DEFINED SNAPPY_ROOT)
+        message(FATAL_ERROR "SNAPPY_ROOT is not set. Define it via CMakePresets.json or -DSNAPPY_ROOT=...")
+    endif()
+
     # Windows：强制使用**静态库**（zstd.lib）
     add_library(Snappy::snappy STATIC IMPORTED GLOBAL)
 

@@ -7,11 +7,12 @@ if(TARGET Zstd::zstd)
     return()
 endif()
 
-if(NOT DEFINED ZSTD_ROOT)
-    message(FATAL_ERROR "ZSTD_ROOT is not set. Define it via CMakePresets.json or -DZSTD_ROOT=...")
-endif()
 
 if(WIN32)
+    if(NOT DEFINED ZSTD_ROOT)
+        message(FATAL_ERROR "ZSTD_ROOT is not set. Define it via CMakePresets.json or -DZSTD_ROOT=...")
+    endif()
+
     # Windows：强制使用**静态库**（zstd.lib）
     add_library(Zstd::zstd STATIC IMPORTED GLOBAL)
 
