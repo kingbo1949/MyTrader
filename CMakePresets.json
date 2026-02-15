@@ -13,9 +13,8 @@
         "ICE_ROOT": "/Users/fantang/local/ice.3.7.9",
         "JSONCPP_ROOT": "/Users/fantang/local/jsoncpp.1.9.5",
         "SPDLOG_ROOT": "/Users/fantang/local/spdlog",
-        "CONCURRENTQUEUE_ROOT": "/Users/fantang/local/concurrentqueue"
-
-
+        "CONCURRENTQUEUE_ROOT": "/Users/fantang/local/concurrentqueue",
+        "ROCKSDB_ROOT": "/Users/fantang/local/rocksdb"
 
       }
     },

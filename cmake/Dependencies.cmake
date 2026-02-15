@@ -9,6 +9,7 @@ include(ZeroIce)
 include(Boost)
 include(Intelrdfpmathlib)
 include(bzip2)
+include(RocksDB)
 
 
 
