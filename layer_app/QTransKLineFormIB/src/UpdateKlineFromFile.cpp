@@ -9,11 +9,11 @@ using namespace boost::algorithm;
 
 void CUpdateKlineFromFile::Go()
 {
-	UpdateOneCode("TSLA");
+	// UpdateOneCode("TSLA");
 	UpdateOneCode("NQ");
-	UpdateOneCode("ES");
-	UpdateOneCode("NVDA");
-	UpdateOneCode("AAPL");
+	// UpdateOneCode("ES");
+	// UpdateOneCode("NVDA");
+	// UpdateOneCode("AAPL");
 	
 }
 
@@ -27,7 +27,7 @@ std::string CUpdateKlineFromFile::GetFileName(const CodeStr& codeId, Time_Type t
 
 void CUpdateKlineFromFile::UpdateOneCode(const CodeStr& codeId)
 {
-	UpdateFile(codeId, Time_Type::S15);
+	// UpdateFile(codeId, Time_Type::S15);
 	UpdateFile(codeId, Time_Type::M1);
 	UpdateFile(codeId, Time_Type::M5);
 	UpdateFile(codeId, Time_Type::M15);
