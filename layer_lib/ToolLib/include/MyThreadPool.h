@@ -99,6 +99,12 @@ public:
 		return idlThrNum == pool.size() && tasks.empty();
 	}
 
+	int taskCount()
+	{
+		std::lock_guard<std::mutex> lock{ m_lock };
+		return tasks.size();
+	}
+
 
 protected:
 

@@ -126,10 +126,7 @@ IMacdValue CCalculator_Macd::GetLastValue(const std::string& codeId, ITimeType t
 
 void CCalculator_Macd::UpdateValuesToDb(const std::string& codeId, ITimeType timeType, const IMacdValues& values)
 {
-	for (const auto& value : values)
-	{
-		UpdateToDb(codeId, timeType, value);
-	}
+	MakeAndGet_Env()->GetDB_Macd()->AddSome(codeId, timeType, values);
 
 }
 

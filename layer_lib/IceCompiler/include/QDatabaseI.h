@@ -14,6 +14,8 @@ public:
 
     virtual bool IsAllIdle(const Ice::Current&) override;
 
+    virtual int TaskCount(const Ice::Current&) override;
+
     virtual void UpdateTickToDB(ITick,
                                 const Ice::Current&) override;
 
@@ -43,6 +45,11 @@ public:
                              ITimeType,
                              IKLine,
                              const Ice::Current&) override;
+
+    virtual void UpdateKLines(::std::string,
+                              ITimeType,
+                              IKLines,
+                              const Ice::Current&) override;
 
     virtual void RemoveAllKLines(::std::string,
                                  ITimeType,

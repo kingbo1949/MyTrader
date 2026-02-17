@@ -33,4 +33,5 @@ MyThreadPoolPtr				MakeAndGet_MyThreadPool();
 
 void 						GetKline_RecountQuery_All(const std::string& codeId, ITimeType timetype, IKLines& klines);
 void						GetKline_RecountQuery_TimePos(const std::string& codeId, ITimeType timetype, long long int timePos, IKLines& klines);
+std::string					GetKlineStr(const IKLine& kline);
 

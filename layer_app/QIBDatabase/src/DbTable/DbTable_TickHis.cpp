@@ -63,7 +63,7 @@ void CDbTable_TickHis::RemoveAll()
 	m_env.GetDB()->DeleteRange(wo, m_table->GetCFHandle(), beginKey.ToSlice(), endKey.ToSlice());
 }
 
-void CDbTable_TickHis::GetTicks(const std::string& codeId, const IQuery& query, ITicks& values)
+void CDbTable_TickHis::GetTicks(const std::string& codeId, IQuery query, ITicks& values)
 {
 	if (query.byReqType == 0) {
 		GetBackWard(codeId, LLONG_MAX, query.dwSubscribeNum, values);
@@ -74,10 +74,14 @@ void CDbTable_TickHis::GetTicks(const std::string& codeId, const IQuery& query, 
 		return;
 	}
 	if (query.byReqType == 2) {
+		// 表示请求某个时间以前(包括该时间)多少个单位的数据(dwSubscribeNum为0时表示该时间前所有的数据)
+		if (query.dwSubscribeNum == 0) query.dwSubscribeNum = LLONG_MAX;
 		GetBackWard(codeId, query.tTime, query.dwSubscribeNum, values);
 		return;
 	}
 	if (query.byReqType == 3) {
+		// 表示请求某个时间以后多少个单位的数据(dwSubscribeNum为0时表示该时间后所有的数据)
+		if (query.dwSubscribeNum == 0) query.dwSubscribeNum = LLONG_MAX;
 		GetForWard(codeId, query.tTime, query.dwSubscribeNum, values);
 		return;
 	}

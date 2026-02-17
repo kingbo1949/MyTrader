@@ -29,7 +29,12 @@ void CCmd_RecountAllIndex::operator()()
 
     time_t endPos = benchmark_milliseconds();
 
-    Log_Print(LogLevel::Info, fmt::format("{} over, used = {}", GetThreadName().c_str(), endPos - beginPos));
+    LogLevel level = LogLevel::Info;
+    if (m_timeType == ITimeType::M1)
+    {
+        level = LogLevel::Warn;
+    }
+    Log_Print(level, fmt::format("{} over, used = {}", GetThreadName().c_str(), endPos - beginPos));
     return ;
 }
 

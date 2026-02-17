@@ -86,25 +86,34 @@ void CDbTable_KLine::RemoveAll()
 	}
 }
 
-void CDbTable_KLine::GetKLines(const std::string& codeId, ITimeType timeType, const IQuery& query, IKLines& values)
+void CDbTable_KLine::GetKLines(const std::string& codeId, ITimeType timeType, IQuery query, IKLines& values)
 {
-	if (query.byReqType == 0) {
+	if (query.byReqType == 0)
+	{
 		GetBackWard(codeId, timeType, LLONG_MAX, query.dwSubscribeNum, values);
 		return;
 	}
-	if (query.byReqType == 1) {
+	if (query.byReqType == 1)
+	{
 		GetRange(codeId, timeType, 0, LLONG_MAX, values);
 		return;
 	}
-	if (query.byReqType == 2) {
+	if (query.byReqType == 2)
+	{
+		// 表示请求某个时间以前(包括该时间)多少个单位的数据(dwSubscribeNum为0时表示该时间前所有的数据)
+		if (query.dwSubscribeNum == 0) query.dwSubscribeNum = LLONG_MAX;
 		GetBackWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
 	}
-	if (query.byReqType == 3) {
+	if (query.byReqType == 3)
+	{
+		// 表示请求某个时间以后多少个单位的数据(dwSubscribeNum为0时表示该时间后所有的数据)
+		if (query.dwSubscribeNum == 0) query.dwSubscribeNum = LLONG_MAX;
 		GetForWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
 	}
-	if (query.byReqType == 4) {
+	if (query.byReqType == 4)
+	{
 		GetRange(codeId, timeType, query.timePair.beginPos, query.timePair.endPos, values);
 		return;
 	}

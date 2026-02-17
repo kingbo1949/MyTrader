@@ -67,20 +67,8 @@ void CAppFuncs::UpdateToDb(const std::string& codeId, Time_Type timeType, const 
 		MakeAndGet_QDatabase()->RemoveKLines(codeId, timeType, timePair);
 
 	}
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, klines);
 
-	for (auto onekline : klines)
-	{
-		//std::string klinestr = fmt::format("{} open = {:.2f}, high = {:.2f}, low = {:.2f}, close = {:.2f}",
-		//	CGlobal::GetTickTimeStr(onekline->time).c_str(),
-		//	onekline->open,
-		//	onekline->high,
-		//	onekline->low,
-		//	onekline->close
-
-		//);
-		//Log_Print(LogLevel::Info, klinestr);
-		MakeAndGet_QDatabase()->UpdateKLine(codeId, timeType, onekline);
-	}
 	return;
 
 }

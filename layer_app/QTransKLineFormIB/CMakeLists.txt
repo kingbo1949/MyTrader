@@ -12,6 +12,7 @@ set(SRC_LIST
         src/TickConverter.cpp
         src/UpdateKlineFromFile.cpp
         src/SaveKlineToFile.cpp
+        src/QueryThreadPoolStatus.cpp
 
 
 )

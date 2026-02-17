@@ -18,7 +18,7 @@ public:
 	void		RemoveKey(const std::string& codeId);
 
 	void		RemoveByRange(const std::string& codeId, Long beginTime, Long endTime);
-	void		GetTicks(const std::string& codeId, const IQuery& query, ITicks& values);
+	void		GetTicks(const std::string& codeId, IQuery query, ITicks& values);
 	void		RemoveAll();
 	bool		GetLastTick(const std::string& codeId, ITick& value);
 

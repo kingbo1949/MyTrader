@@ -40,12 +40,13 @@ void CCmdUpdateDbFromIB::UpdateDbKLineFromIB(const std::string& codeId, Time_Typ
 	time_t now = CGetRecordNo::GetRecordNo(timeType, Get_CurrentTime()->GetCurrentTime_millisecond());
 	int days = 1;
 	IBKLinePtrs klines = Get_IBApi()->QueryKLine(codeId, timeType, Get_CurrentTime()->GetCurrentTime_second(), days, onlyRegularTime, m_useType);
+	IBKLinePtrs temKlines;
 	for (const auto& kline : klines)
 	{
 		if (kline->time >= now) continue;
-
-		MakeAndGet_QDatabase()->UpdateKLine(codeId, timeType, kline);
+		temKlines.push_back(kline);
 	}
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, temKlines);
 	// 更新指标
 	if (!klines.empty())
 	{

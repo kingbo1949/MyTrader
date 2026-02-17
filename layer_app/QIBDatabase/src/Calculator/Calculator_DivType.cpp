@@ -106,10 +106,7 @@ void CCalculator_DivType::Update(const std::string& codeId, ITimeType timeType, 
 }
 void CCalculator_DivType::UpdateValuesToDb(const std::string& codeId, ITimeType timeType, const IDivTypeValues& values)
 {
-	for (const auto& value : values)
-	{
-		UpdateToDb(codeId, timeType, value);
-	}
+	MakeAndGet_Env()->GetDB_DivType()->AddSome(codeId, timeType, values);
 
 }
 

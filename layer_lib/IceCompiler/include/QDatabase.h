@@ -104,6 +104,11 @@ public:
     bool _iceD_IsAllIdle(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual int TaskCount(const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_TaskCount(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     virtual void UpdateTickToDB(ITick tick, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateTickToDB(::IceInternal::Incoming&, const ::Ice::Current&);
@@ -156,6 +161,11 @@ public:
     virtual void UpdateKLine(::std::string codeId, ITimeType timeType, IKLine kline, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateKLine(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void UpdateKLines(::std::string codeId, ITimeType timeType, IKLines klines, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_UpdateKLines(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
     virtual void RemoveAllKLines(::std::string codeId, ITimeType timeType, const ::Ice::Current& current) = 0;
@@ -390,6 +400,31 @@ public:
     void _iceI_IsAllIdle(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<bool>>&, const ::Ice::Context&);
     /// \endcond
 
+    int TaskCount(const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makePromiseOutgoing<int>(true, this, &IQDatabasePrx::_iceI_TaskCount, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto TaskCountAsync(const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<int>>().get_future())
+    {
+        return _makePromiseOutgoing<int, P>(false, this, &IQDatabasePrx::_iceI_TaskCount, context);
+    }
+
+    ::std::function<void()>
+    TaskCountAsync(::std::function<void(int)> response,
+                   ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                   ::std::function<void(bool)> sent = nullptr,
+                   const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<int>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_TaskCount, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_TaskCount(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<int>>&, const ::Ice::Context&);
+    /// \endcond
+
     void UpdateTickToDB(const ITick& tick, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
         _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateTickToDB, tick, context).get();
@@ -582,6 +617,32 @@ public:
 
     /// \cond INTERNAL
     void _iceI_UpdateKLine(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, const IKLine&, const ::Ice::Context&);
+    /// \endcond
+
+    void UpdateKLines(const ::std::string& codeId, ITimeType timeType, const IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateKLines, codeId, timeType, klines, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto UpdateKLinesAsync(const ::std::string& codeId, ITimeType timeType, const IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<void>>().get_future())
+    {
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateKLines, codeId, timeType, klines, context);
+    }
+
+    ::std::function<void()>
+    UpdateKLinesAsync(const ::std::string& codeId, ITimeType timeType, const IKLines& klines,
+                      ::std::function<void()> response,
+                      ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                      ::std::function<void(bool)> sent = nullptr,
+                      const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateKLines, codeId, timeType, klines, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_UpdateKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, const IKLines&, const ::Ice::Context&);
     /// \endcond
 
     void RemoveAllKLines(const ::std::string& codeId, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
@@ -1262,6 +1323,14 @@ typedef ::IceUtil::Handle< Callback_IQDatabase_IsAllIdle_Base> Callback_IQDataba
 
 /**
  * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_TaskCount.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_TaskCount.
+ */
+class Callback_IQDatabase_TaskCount_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_TaskCount_Base> Callback_IQDatabase_TaskCountPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
  * IceProxy::IBTrader::IQDatabase::begin_UpdateTickToDB.
  * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_UpdateTickToDB.
  */
@@ -1315,6 +1384,14 @@ typedef ::IceUtil::Handle< Callback_IQDatabase_GetOneTick_Base> Callback_IQDatab
  */
 class Callback_IQDatabase_UpdateKLine_Base : public virtual ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_IQDatabase_UpdateKLine_Base> Callback_IQDatabase_UpdateKLinePtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_UpdateKLines.
+ */
+class Callback_IQDatabase_UpdateKLines_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_UpdateKLines_Base> Callback_IQDatabase_UpdateKLinesPtr;
 
 /**
  * Base class for asynchronous callback wrapper classes used for calls to
@@ -1569,6 +1646,44 @@ public:
 private:
 
     ::Ice::AsyncResultPtr _iceI_begin_IsAllIdle(const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    ::Ice::Int TaskCount(const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return end_TaskCount(_iceI_begin_TaskCount(context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_TaskCount(const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_TaskCount(context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_TaskCount(const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_TaskCount(::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_TaskCount(const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_TaskCount(context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_TaskCount(const ::IBTrader::Callback_IQDatabase_TaskCountPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_TaskCount(::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_TaskCount(const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_TaskCountPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_TaskCount(context, cb, cookie);
+    }
+
+    ::Ice::Int end_TaskCount(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_TaskCount(const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -1847,6 +1962,44 @@ public:
 private:
 
     ::Ice::AsyncResultPtr _iceI_begin_UpdateKLine(const ::std::string&, ::IBTrader::ITimeType, const ::IBTrader::IKLine&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    void UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_UpdateKLines(_iceI_begin_UpdateKLines(codeId, timeType, klines, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_UpdateKLines(codeId, timeType, klines, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateKLines(codeId, timeType, klines, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateKLines(codeId, timeType, klines, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::IBTrader::Callback_IQDatabase_UpdateKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateKLines(codeId, timeType, klines, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_UpdateKLines(codeId, timeType, klines, context, cb, cookie);
+    }
+
+    void end_UpdateKLines(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_UpdateKLines(const ::std::string&, ::IBTrader::ITimeType, const ::IBTrader::IKLines&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -2785,6 +2938,11 @@ public:
     bool _iceD_IsAllIdle(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual ::Ice::Int TaskCount(const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_TaskCount(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     virtual void UpdateTickToDB(const ITick& tick, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateTickToDB(::IceInternal::Incoming&, const ::Ice::Current&);
@@ -2818,6 +2976,11 @@ public:
     virtual void UpdateKLine(const ::std::string& codeId, ITimeType timeType, const IKLine& kline, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateKLine(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void UpdateKLines(const ::std::string& codeId, ITimeType timeType, const IKLines& klines, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_UpdateKLines(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
     virtual void RemoveAllKLines(const ::std::string& codeId, ITimeType timeType, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
@@ -3263,6 +3426,158 @@ template<class T, typename CT> Callback_IQDatabase_IsAllIdlePtr
 newCallback_IQDatabase_IsAllIdle(T* instance, void (T::*cb)(bool, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_IQDatabase_IsAllIdle<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_TaskCount.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_TaskCount.
+ */
+template<class T>
+class CallbackNC_IQDatabase_TaskCount : public Callback_IQDatabase_TaskCount_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(::Ice::Int);
+
+    CallbackNC_IQDatabase_TaskCount(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        ::Ice::Int ret;
+        try
+        {
+            ret = proxy->end_TaskCount(result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(ret);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_TaskCount.
+ */
+template<class T> Callback_IQDatabase_TaskCountPtr
+newCallback_IQDatabase_TaskCount(const IceUtil::Handle<T>& instance, void (T::*cb)(::Ice::Int), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_TaskCount<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_TaskCount.
+ */
+template<class T> Callback_IQDatabase_TaskCountPtr
+newCallback_IQDatabase_TaskCount(T* instance, void (T::*cb)(::Ice::Int), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_TaskCount<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_TaskCount.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_TaskCount.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_TaskCount : public Callback_IQDatabase_TaskCount_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(::Ice::Int, const CT&);
+
+    Callback_IQDatabase_TaskCount(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        ::Ice::Int ret;
+        try
+        {
+            ret = proxy->end_TaskCount(result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(ret, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_TaskCount.
+ */
+template<class T, typename CT> Callback_IQDatabase_TaskCountPtr
+newCallback_IQDatabase_TaskCount(const IceUtil::Handle<T>& instance, void (T::*cb)(::Ice::Int, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_TaskCount<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_TaskCount.
+ */
+template<class T, typename CT> Callback_IQDatabase_TaskCountPtr
+newCallback_IQDatabase_TaskCount(T* instance, void (T::*cb)(::Ice::Int, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_TaskCount<T, CT>(instance, cb, excb, sentcb);
 }
 
 /**
@@ -4349,6 +4664,162 @@ template<class T, typename CT> Callback_IQDatabase_UpdateKLinePtr
 newCallback_IQDatabase_UpdateKLine(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_IQDatabase_UpdateKLine<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_UpdateKLines.
+ */
+template<class T>
+class CallbackNC_IQDatabase_UpdateKLines : public Callback_IQDatabase_UpdateKLines_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_IQDatabase_UpdateKLines(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateKLines<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateKLines<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateKLines<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_UpdateKLines<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_UpdateKLines.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_UpdateKLines : public Callback_IQDatabase_UpdateKLines_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_IQDatabase_UpdateKLines(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateKLines<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateKLines<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateKLines<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_UpdateKLines.
+ */
+template<class T, typename CT> Callback_IQDatabase_UpdateKLinesPtr
+newCallback_IQDatabase_UpdateKLines(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_UpdateKLines<T, CT>(instance, 0, excb, sentcb);
 }
 
 /**

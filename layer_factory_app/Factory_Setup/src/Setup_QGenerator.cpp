@@ -106,10 +106,7 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 		MakeAndGet_QDatabase()->RemoveKLines(codeId, timeType, timePair);
 	}
 
-	for (auto onekline : klines)
-	{
-		MakeAndGet_QDatabase()->UpdateKLine(codeId, timeType, onekline);
-	}
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, klines);
 
 	// 更新指标
 	if (!klines.empty())

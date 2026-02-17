@@ -10,10 +10,17 @@
 void CSaveKlineToFile::Go()
 {
     QueryAndSaveKLines("NQ");
-    // QueryAndSaveKLines("ES");
-    // QueryAndSaveKLines("GC");
-    // QueryAndSaveKLines("MBT");
-    // QueryAndSaveKLines("ETHUSDRR");
+    QueryAndSaveKLines("ES");
+    QueryAndSaveKLines("GC");
+    QueryAndSaveKLines("MBT");
+    QueryAndSaveKLines("ETHUSDRR");
+
+    QueryAndSaveKLines("AAPL");
+    QueryAndSaveKLines("TSLA");
+    QueryAndSaveKLines("ORCL");
+    QueryAndSaveKLines("SOXX");
+    QueryAndSaveKLines("AVGO");
+
 
 
     // QueryAndSaveKLines("NVDA");

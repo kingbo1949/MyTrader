@@ -13,6 +13,10 @@ public:
 	// 是否全部空闲
 	virtual bool IsAllIdle() final;
 
+	// 积压任务数量
+	virtual int TaskCount() final;
+
+
 
 	// 更新行情数据库
 	virtual void			UpdateTicks(IBTickPtr tick) override final;
@@ -44,6 +48,9 @@ public:
 
 	// --------------- kline 表 ---------------------
 	virtual void			UpdateKLine(const CodeStr& codeId, Time_Type timeType, IBKLinePtr kline) override final;
+
+	// 更新单品种数据
+	virtual void			UpdateKLinesByLoop(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs& klines) final;
 
 	// 不算当前K线，计算ma的值
 	virtual double			MakeMa(const CodeStr& codeId, Time_Type timeType, int circle, Tick_T currentTime) override final;

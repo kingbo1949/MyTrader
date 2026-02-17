@@ -95,10 +95,7 @@ void CCalculator_Atr::Update(const std::string &codeId, ITimeType timeType, cons
 
 void CCalculator_Atr::UpdateValuesToDb(const std::string &codeId, ITimeType timeType, const IAtrValues& values)
 {
-    for (const auto& value : values)
-    {
-        MakeAndGet_Env()->GetDB_Atr()->AddOne(codeId, timeType, value);
-    }
+    MakeAndGet_Env()->GetDB_Atr()->AddSome(codeId, timeType, values);
     return;
 
 }

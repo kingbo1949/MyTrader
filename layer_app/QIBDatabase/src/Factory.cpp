@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Factory.h"
 #include <Global.h>
-
+#include <Factory_Log.h>
 
 
 Env_IBPtr g_pEnvIb = nullptr;
@@ -113,7 +113,29 @@ void GetKline_RecountQuery_TimePos(const std::string& codeId, ITimeType timetype
 	IQuery query;
 	query.byReqType = 3;		// 查询某时间点之后
 	query.tTime = timePos;
-	query.dwSubscribeNum = 0;	// 为0表示查询某时点之后全部数据
+	query.dwSubscribeNum = LLONG_MAX;	// 查询某时点之后全部数据
 	MakeAndGet_Env()->GetDB_KLine()->GetKLines(codeId, timetype, query, klines);
 	return;
+}
+
+std::string GetKlineStr(const IKLine &kline)
+{
+	std::string temstr = fmt::format(
+	"{},"					    // 时间
+	"{:.2f},"					// 开盘
+	"{:.2f},"					// 最高
+	"{:.2f},"					// 最低
+	"{:.2f},"					// close
+	"{},"						// vol
+	,
+	CGlobal::GetTickTimeStr(kline.time).substr(0, 17).c_str(),			// 取时间字符串不要毫秒部分
+	kline.open,
+	kline.high,
+	kline.low,
+	kline.close,
+	kline.vol
+	);
+
+	return temstr;
+
 }

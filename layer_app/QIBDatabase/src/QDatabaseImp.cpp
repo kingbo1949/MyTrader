@@ -1,6 +1,6 @@
 ﻿#include "QDatabaseImp.h"
 #include "Factory.h"
-
+#include <Factory_Log.h>
 #include "Calculator/Calculator.h"
 #include "MakeKlinePairs.h"
 #include "../cmd/Cmd_RecountAllIndex.h"
@@ -20,6 +20,10 @@ int CQDatabaseImp::IdlCount(const Ice::Current &current)
 bool CQDatabaseImp::IsAllIdle(const Ice::Current &current)
 {
 	return MakeAndGet_MyThreadPool()->isAllIdle();
+}
+int CQDatabaseImp::TaskCount(const ::Ice::Current& current)
+{
+	return MakeAndGet_MyThreadPool()->taskCount();
 }
 
 void CQDatabaseImp::UpdateTickToDB(ITick tick, const::Ice::Current& current)
@@ -71,6 +75,19 @@ void CQDatabaseImp::UpdateKLine(::std::string codeId, ITimeType timeType, IKLine
 {
 	if (!ValidKline(codeId, timeType, kline)) return;
 	MakeAndGet_Env()->GetDB_KLine()->AddOne(codeId, timeType, kline);
+	// Log_Print(LogLevel::Info, fmt::format("{}", GetKlineStr(kline).c_str() ));
+}
+
+void CQDatabaseImp::UpdateKLines(std::string codeId, ITimeType timeType, IKLines klines, const Ice::Current &current)
+{
+	IKLines temKines;
+	for (const auto& kline : klines)
+	{
+		if (!ValidKline(codeId, timeType, kline)) continue;
+		temKines.push_back(kline);
+	}
+	MakeAndGet_Env()->GetDB_KLine()->AddSome(codeId, timeType, temKines);
+
 }
 
 

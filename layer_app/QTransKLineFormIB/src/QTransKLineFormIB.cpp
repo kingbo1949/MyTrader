@@ -18,6 +18,7 @@
 #include "UpdateKlineFromFile.h"
 #include "CleanUpKline.h"
 #include "SaveKlineToFile.h"
+#include "QueryThreadPoolStatus.h"
 
 CSetupEnv setupEnv;
 CKLineConverter_NoMix klineConverter_nomix;
@@ -34,6 +35,7 @@ void ShowMenu()
 		"b: update database from files \n"
 		"c: clean up klines \n"
 		"d: save klines to files \n"
+		"e: threadpool status \n"
 		"0: convert one contract \n"
 		"1: query all contracts  \n"
 		"2: recount MA for all contracts  \n"
@@ -276,6 +278,11 @@ int main()
 		{
 			CSaveKlineToFile saveKlineToFile;
 			saveKlineToFile.Go();
+		}
+		if (cmd == "e" || cmd == "E")
+		{
+			CQueryThreadPoolStatus queryThreadPoolStatus;
+			queryThreadPoolStatus.Go();
 		}
 		else if (cmd == "0")
 		{

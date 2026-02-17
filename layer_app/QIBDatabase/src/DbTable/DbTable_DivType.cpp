@@ -81,7 +81,7 @@ void CDbTable_DivType::RemoveAll()
 	}
 }
 
-void CDbTable_DivType::GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IDivTypeValues& values)
+void CDbTable_DivType::GetValues(const std::string& codeId, ITimeType timeType, IQuery query, IDivTypeValues& values)
 {
 	if (query.byReqType == 0) {
 		GetBackWard(codeId, timeType, LLONG_MAX, query.dwSubscribeNum, values);
@@ -92,10 +92,14 @@ void CDbTable_DivType::GetValues(const std::string& codeId, ITimeType timeType, 
 		return;
 	}
 	if (query.byReqType == 2) {
+		// 表示请求某个时间以前(包括该时间)多少个单位的数据(dwSubscribeNum为0时表示该时间前所有的数据)
+		if (query.dwSubscribeNum == 0) query.dwSubscribeNum = LLONG_MAX;
 		GetBackWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
 	}
 	if (query.byReqType == 3) {
+		// 表示请求某个时间以后多少个单位的数据(dwSubscribeNum为0时表示该时间后所有的数据)
+		if (query.dwSubscribeNum == 0) query.dwSubscribeNum = LLONG_MAX;
 		GetForWard(codeId, timeType, query.tTime, query.dwSubscribeNum, values);
 		return;
 	}

@@ -5,16 +5,23 @@
 #include <Factory_IBGlobalShare.h>
 #include <Factory_QDatabase.h>
 #include <Factory_Log.h>
+#include <Global.h>
 using namespace boost::algorithm;
 
 void CUpdateKlineFromFile::Go()
 {
-	UpdateOneCode("NQ");
+	// UpdateOneCode("NQ");
 	// UpdateOneCode("ES");
 	// UpdateOneCode("GC");
 	// UpdateOneCode("MBT");
 	// UpdateOneCode("ETHUSDRR");
 
+	// UpdateOneCode("AAPL");
+	// UpdateOneCode("TSLA");
+	// UpdateOneCode("ORCL");
+	// UpdateOneCode("SOXX");
+	// UpdateOneCode("AVGO");
+	//
 	// UpdateOneCode("NVDA");
 	// UpdateOneCode("AMD");
 	// UpdateOneCode("META");
@@ -34,6 +41,7 @@ void CUpdateKlineFromFile::Go()
 	// UpdateOneCode("MU");
 	// UpdateOneCode("WDC");
 	// UpdateOneCode("STX");
+
 	// UpdateOneCode("SOFI");
 	// UpdateOneCode("VRT");
 	// UpdateOneCode("GLXY");
@@ -44,7 +52,7 @@ void CUpdateKlineFromFile::Go()
 	// UpdateOneCode("CLS");
 	// UpdateOneCode("SNDK");
 	// UpdateOneCode("KTOS");
-	// UpdateOneCode("UPST");
+	UpdateOneCode("UPST");
 
 
 }
@@ -61,17 +69,18 @@ void CUpdateKlineFromFile::UpdateOneCode(const CodeStr& codeId)
 {
 	// UpdateFile(codeId, Time_Type::S15);
 
-	// UpdateFile(codeId, Time_Type::M1);
-	// UpdateFile(codeId, Time_Type::M5);
-	// UpdateFile(codeId, Time_Type::M15);
+	UpdateFile(codeId, Time_Type::M1);
+	UpdateFile(codeId, Time_Type::M5);
+	UpdateFile(codeId, Time_Type::M15);
 	UpdateFile(codeId, Time_Type::M30);
-	// UpdateFile(codeId, Time_Type::H1);
-	// UpdateFile(codeId, Time_Type::D1);
+	UpdateFile(codeId, Time_Type::H1);
+	UpdateFile(codeId, Time_Type::D1);
 
 }
 
 void CUpdateKlineFromFile::UpdateFile(const CodeStr& codeId, Time_Type timeType)
 {
+	time_t beginPos = benchmark_milliseconds();
 	std::string filename = GetFileName(codeId, timeType);
 
 	std::string str = CLog::Instance()->ReadFileToString(filename);
@@ -84,19 +93,15 @@ void CUpdateKlineFromFile::UpdateFile(const CodeStr& codeId, Time_Type timeType)
 		if (!kline) continue;
 		klines.push_back(kline);
 	}
-	// 更新到数据库
-	for (auto kline : klines)
+	time_t endPos = benchmark_milliseconds();
+	if (timeType == Time_Type::M1)
 	{
-		MakeAndGet_QDatabase()->UpdateKLine(codeId, timeType, kline);
+		Log_Print(LogLevel::Info, fmt::format("{} M1 read file over, get {}, used = {}", codeId.c_str(), klines.size(), endPos - beginPos));
 	}
+
+	// 更新到数据库
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, klines);
 	MakeAndGet_QDatabase()->RecountAllIndex(codeId, timeType);
-
-
-	printf("%s %s update over \n", codeId.c_str(), CTransToStr::Get_TimeType(timeType).c_str());
-
-	CheckServerData(codeId, timeType);
-
-
 }
 
 void CUpdateKlineFromFile::CheckServerData(const CodeStr &codeId, Time_Type timeType)

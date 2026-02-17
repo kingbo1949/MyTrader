@@ -13,6 +13,12 @@ IBTrader::IQDatabaseI::IsAllIdle(const Ice::Current& current)
     return false;
 }
 
+int
+IBTrader::IQDatabaseI::TaskCount(const Ice::Current& current)
+{
+    return 0;
+}
+
 void
 IBTrader::IQDatabaseI::UpdateTickToDB(ITick /*tick*/,
                                       const Ice::Current& current)
@@ -67,6 +73,14 @@ IBTrader::IQDatabaseI::UpdateKLine(::std::string /*codeId*/,
                                    ITimeType /*timeType*/,
                                    IKLine /*kline*/,
                                    const Ice::Current& current)
+{
+}
+
+void
+IBTrader::IQDatabaseI::UpdateKLines(::std::string /*codeId*/,
+                                    ITimeType /*timeType*/,
+                                    IKLines /*klines*/,
+                                    const Ice::Current& current)
 {
 }
 

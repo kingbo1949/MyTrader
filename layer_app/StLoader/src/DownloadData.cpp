@@ -38,12 +38,14 @@ void CDownloadData::UpdateDbKLineFromIB(const std::string& codeId, Time_Type tim
 	}
 
 	IBKLinePtrs klines = Get_IBApi()->QueryKLine(codeId, timeType, Get_CurrentTime()->GetCurrentTime_second(), days, onlyRegularTime, UseType::RealTrader);
+	IBKLinePtrs temKlines;
 	for (const auto& kline : klines)
 	{
 		if (kline->time >= now) continue;
-
-		MakeAndGet_QDatabase()->UpdateKLine(codeId, timeType, kline);
+		temKlines.push_back(kline);
 	}
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, temKlines);
+
 	// ����ָ��
 	if (!klines.empty())
 	{

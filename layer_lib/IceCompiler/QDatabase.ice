@@ -8,8 +8,9 @@ module IBTrader
 	interface IQDatabase
 	{
 	    // 线程池
-        int IdlCount();             // 空闲线程数量
-        bool IsAllIdle();           // 是否全部空闲
+        int         IdlCount();             // 空闲线程数量
+        bool        IsAllIdle();            // 是否全部空闲
+        int         TaskCount();            // 积压的任务数量
 
 
 
@@ -34,6 +35,7 @@ module IBTrader
 
 		// KLine表
 		void		UpdateKLine(string codeId, ITimeType timeType, IKLine kline);
+		void		UpdateKLines(string codeId, ITimeType timeType, IKLines klines);
 		void		RemoveAllKLines(string codeId, ITimeType timeType);										// 删除某一品种的所有kline表数据
 		void		RemoveKLinesByRange(string codeId, ITimeType timeType, long beginTime, long endTime);	// 按时间区间删除某一品种kline表数据，区间为[beginTime,endTime)
 		void		RemoveOneKLine(string codeId, ITimeType timeType, long timePos);						// 删除某一品种一条kline记录

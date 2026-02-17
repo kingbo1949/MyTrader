@@ -10,11 +10,9 @@ CTimerTask_UpdateIndex::CTimerTask_UpdateIndex()
 }
 void CTimerTask_UpdateIndex::runTimerTask()
 {
-	// 等待线程池空闲
-	while (!MakeAndGet_MyThreadPool()->isAllIdle())
-	{
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
-	}
+	// 线程池必须全部空闲
+	if (!MakeAndGet_MyThreadPool()->isAllIdle()) return ;
+
 	std::set<IQKey> keys = GetNeedUpdate();
 	UpdateIndex(keys);
 
@@ -23,6 +21,8 @@ void CTimerTask_UpdateIndex::runTimerTask()
 
 void CTimerTask_UpdateIndex::UpdateIndex(const std::set<IQKey>& keys)
 {
+	if (keys.empty()) return ;
+
 	time_t beginPos = benchmark_milliseconds();
 	for (const auto& key : keys)
 	{

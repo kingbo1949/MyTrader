@@ -22,7 +22,7 @@ void CCmd_UpdateAllIndexFromTimePos::operator()()
     Update_Macd(klines);
     Update_DivType(klines);
 
-    Log_Print(LogLevel::Info, fmt::format("{} over", GetThreadName().c_str()));
+    // Log_Print(LogLevel::Info, fmt::format("{} over", GetThreadName().c_str()));
     return ;
 }
 

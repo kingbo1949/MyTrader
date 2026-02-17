@@ -21,7 +21,7 @@ public:
 	void		RemoveByRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime);
 	void		RemoveAll();
 
-	void		GetValues(const std::string& codeId, ITimeType timeType, const IQuery& query, IDivTypeValues& values);
+	void		GetValues(const std::string& codeId, ITimeType timeType, IQuery query, IDivTypeValues& values);
 
 private:
 	CRocksEnv& m_env;

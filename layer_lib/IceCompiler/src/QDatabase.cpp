@@ -81,8 +81,10 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "RemoveKLinesByRange",
     "RemoveOneKLine",
     "RemoveTicksByRange",
+    "TaskCount",
     "UpdateAllIndexFromTimePos",
     "UpdateKLine",
+    "UpdateKLines",
     "UpdateTickToDB",
     "ice_id",
     "ice_ids",
@@ -91,6 +93,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
 };
 const ::std::string iceC_IBTrader_IQDatabase_IdlCount_name = "IdlCount";
 const ::std::string iceC_IBTrader_IQDatabase_IsAllIdle_name = "IsAllIdle";
+const ::std::string iceC_IBTrader_IQDatabase_TaskCount_name = "TaskCount";
 const ::std::string iceC_IBTrader_IQDatabase_UpdateTickToDB_name = "UpdateTickToDB";
 const ::std::string iceC_IBTrader_IQDatabase_GetLastUpdateTick_name = "GetLastUpdateTick";
 const ::std::string iceC_IBTrader_IQDatabase_RemoveAllTicks_name = "RemoveAllTicks";
@@ -98,6 +101,7 @@ const ::std::string iceC_IBTrader_IQDatabase_RemoveTicksByRange_name = "RemoveTi
 const ::std::string iceC_IBTrader_IQDatabase_GetTicks_name = "GetTicks";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneTick_name = "GetOneTick";
 const ::std::string iceC_IBTrader_IQDatabase_UpdateKLine_name = "UpdateKLine";
+const ::std::string iceC_IBTrader_IQDatabase_UpdateKLines_name = "UpdateKLines";
 const ::std::string iceC_IBTrader_IQDatabase_RemoveAllKLines_name = "RemoveAllKLines";
 const ::std::string iceC_IBTrader_IQDatabase_RemoveKLinesByRange_name = "RemoveKLinesByRange";
 const ::std::string iceC_IBTrader_IQDatabase_RemoveOneKLine_name = "RemoveOneKLine";
@@ -168,6 +172,20 @@ IBTrader::IQDatabase::_iceD_IsAllIdle(::IceInternal::Incoming& inS, const ::Ice:
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     inS.readEmptyParams();
     bool ret = this->IsAllIdle(current);
+    auto ostr = inS.startWriteParams();
+    ostr->writeAll(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_TaskCount(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    inS.readEmptyParams();
+    int ret = this->TaskCount(current);
     auto ostr = inS.startWriteParams();
     ostr->writeAll(ret);
     inS.endWriteParams();
@@ -288,6 +306,23 @@ IBTrader::IQDatabase::_iceD_UpdateKLine(::IceInternal::Incoming& inS, const ::Ic
     istr->readAll(iceP_codeId, iceP_timeType, iceP_kline);
     inS.endReadParams();
     this->UpdateKLine(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_kline), current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_UpdateKLines(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    IKLines iceP_klines;
+    istr->readAll(iceP_codeId, iceP_timeType, iceP_klines);
+    inS.endReadParams();
+    this->UpdateKLines(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_klines), current);
     inS.writeEmptyParams();
     return true;
 }
@@ -701,7 +736,7 @@ IBTrader::IQDatabase::_iceD_GetOneAtr(::IceInternal::Incoming& inS, const ::Ice:
 bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 34, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 36, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -819,29 +854,37 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 27:
         {
-            return _iceD_UpdateAllIndexFromTimePos(in, current);
+            return _iceD_TaskCount(in, current);
         }
         case 28:
         {
-            return _iceD_UpdateKLine(in, current);
+            return _iceD_UpdateAllIndexFromTimePos(in, current);
         }
         case 29:
         {
-            return _iceD_UpdateTickToDB(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 30:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_UpdateKLines(in, current);
         }
         case 31:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_UpdateTickToDB(in, current);
         }
         case 32:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 33:
+        {
+            return _iceD_ice_ids(in, current);
+        }
+        case 34:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 35:
         {
             return _iceD_ice_ping(in, current);
         }
@@ -871,6 +914,17 @@ IBTrader::IQDatabasePrx::_iceI_IsAllIdle(const ::std::shared_ptr<::IceInternal::
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_IsAllIdle_name);
     outAsync->invoke(iceC_IBTrader_IQDatabase_IsAllIdle_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        nullptr,
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_TaskCount(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<int>>& outAsync, const ::Ice::Context& context)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_TaskCount_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_TaskCount_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         nullptr,
         nullptr);
 }
@@ -974,6 +1028,19 @@ IBTrader::IQDatabasePrx::_iceI_UpdateKLine(const ::std::shared_ptr<::IceInternal
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType, iceP_kline);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_UpdateKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IKLines& iceP_klines, const ::Ice::Context& context)
+{
+    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateKLines_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_klines);
         },
         nullptr);
 }
@@ -1333,6 +1400,8 @@ const ::std::string iceC_IBTrader_IQDatabase_IdlCount_name = "IdlCount";
 
 const ::std::string iceC_IBTrader_IQDatabase_IsAllIdle_name = "IsAllIdle";
 
+const ::std::string iceC_IBTrader_IQDatabase_TaskCount_name = "TaskCount";
+
 const ::std::string iceC_IBTrader_IQDatabase_UpdateTickToDB_name = "UpdateTickToDB";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetLastUpdateTick_name = "GetLastUpdateTick";
@@ -1346,6 +1415,8 @@ const ::std::string iceC_IBTrader_IQDatabase_GetTicks_name = "GetTicks";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneTick_name = "GetOneTick";
 
 const ::std::string iceC_IBTrader_IQDatabase_UpdateKLine_name = "UpdateKLine";
+
+const ::std::string iceC_IBTrader_IQDatabase_UpdateKLines_name = "UpdateKLines";
 
 const ::std::string iceC_IBTrader_IQDatabase_RemoveAllKLines_name = "RemoveAllKLines";
 
@@ -1474,6 +1545,46 @@ IceProxy::IBTrader::IQDatabase::end_IsAllIdle(const ::Ice::AsyncResultPtr& resul
 {
     ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_IsAllIdle_name);
     bool ret;
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(ret);
+    result->_endReadParams();
+    return ret;
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_TaskCount(const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_TaskCount_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_TaskCount_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_TaskCount_name, ::Ice::Normal, context);
+        result->writeEmptyParams();
+        result->invoke(iceC_IBTrader_IQDatabase_TaskCount_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+::Ice::Int
+IceProxy::IBTrader::IQDatabase::end_TaskCount(const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_TaskCount_name);
+    ::Ice::Int ret;
     if(!result->_waitForResponse())
     {
         try
@@ -1780,6 +1891,33 @@ void
 IceProxy::IBTrader::IQDatabase::end_UpdateKLine(const ::Ice::AsyncResultPtr& result)
 {
     _end(result, iceC_IBTrader_IQDatabase_UpdateKLine_name);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateKLines(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IKLines& iceP_klines, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateKLines_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_UpdateKLines_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        ostr->write(iceP_timeType);
+        ostr->write(iceP_klines);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_UpdateKLines_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+void
+IceProxy::IBTrader::IQDatabase::end_UpdateKLines(const ::Ice::AsyncResultPtr& result)
+{
+    _end(result, iceC_IBTrader_IQDatabase_UpdateKLines_name);
 }
 
 ::Ice::AsyncResultPtr
@@ -3012,6 +3150,20 @@ IBTrader::IQDatabase::_iceD_IsAllIdle(::IceInternal::Incoming& inS, const ::Ice:
 
 /// \cond INTERNAL
 bool
+IBTrader::IQDatabase::_iceD_TaskCount(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    inS.readEmptyParams();
+    ::Ice::Int ret = this->TaskCount(current);
+    ::Ice::OutputStream* ostr = inS.startWriteParams();
+    ostr->write(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
 IBTrader::IQDatabase::_iceD_UpdateTickToDB(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
@@ -3132,6 +3284,25 @@ IBTrader::IQDatabase::_iceD_UpdateKLine(::IceInternal::Incoming& inS, const ::Ic
     istr->read(iceP_kline);
     inS.endReadParams();
     this->UpdateKLine(iceP_codeId, iceP_timeType, iceP_kline, current);
+    inS.writeEmptyParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_UpdateKLines(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    ITimeType iceP_timeType;
+    IKLines iceP_klines;
+    istr->read(iceP_codeId);
+    istr->read(iceP_timeType);
+    istr->read(iceP_klines);
+    inS.endReadParams();
+    this->UpdateKLines(iceP_codeId, iceP_timeType, iceP_klines, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -3620,8 +3791,10 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "RemoveKLinesByRange",
     "RemoveOneKLine",
     "RemoveTicksByRange",
+    "TaskCount",
     "UpdateAllIndexFromTimePos",
     "UpdateKLine",
+    "UpdateKLines",
     "UpdateTickToDB",
     "ice_id",
     "ice_ids",
@@ -3635,7 +3808,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
 bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 34, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 36, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -3753,29 +3926,37 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 27:
         {
-            return _iceD_UpdateAllIndexFromTimePos(in, current);
+            return _iceD_TaskCount(in, current);
         }
         case 28:
         {
-            return _iceD_UpdateKLine(in, current);
+            return _iceD_UpdateAllIndexFromTimePos(in, current);
         }
         case 29:
         {
-            return _iceD_UpdateTickToDB(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 30:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_UpdateKLines(in, current);
         }
         case 31:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_UpdateTickToDB(in, current);
         }
         case 32:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 33:
+        {
+            return _iceD_ice_ids(in, current);
+        }
+        case 34:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 35:
         {
             return _iceD_ice_ping(in, current);
         }

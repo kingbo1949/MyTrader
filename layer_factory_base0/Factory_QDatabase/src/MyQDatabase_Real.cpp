@@ -20,6 +20,11 @@ bool CMyQDatabase_Real::IsAllIdle()
 	return MakeAndGet_IceProxy()->GetQDatabasePrx()->IsAllIdle();
 }
 
+int CMyQDatabase_Real::TaskCount()
+{
+	return MakeAndGet_IceProxy()->GetQDatabasePrx()->TaskCount();
+}
+
 void CMyQDatabase_Real::UpdateTicks(IBTickPtr tick)
 {
 	ITick iTick = CIceTransfor::TransTickMyToIce(tick);
@@ -162,6 +167,34 @@ void CMyQDatabase_Real::UpdateKLine(const CodeStr& codeId, Time_Type timeType, I
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
 	IKLine ikline = CIceTransfor::TransKLineMyToIce(kline);
 	MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateKLine(codeId, iTimeType, ikline);
+}
+
+void CMyQDatabase_Real::UpdateKLinesByLoop(const CodeStr &codeId, Time_Type timeType, const IBKLinePtrs &klines)
+{
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+	IKLines ikines;
+	for (const auto& kline : klines)
+	{
+		IKLine ikline = CIceTransfor::TransKLineMyToIce(kline);
+		ikines.push_back(ikline);
+	}
+
+	size_t batchSize = 4000;
+	std::vector<IKLines> batches;
+
+	for (size_t i = 0; i < ikines.size(); i += batchSize)
+	{
+		auto last = std::min(ikines.size(), i + batchSize);
+		batches.emplace_back(ikines.begin() + i, ikines.begin() + last);
+	}
+
+	for (const auto& batche : batches)
+	{
+		if (batche.empty()) continue ;
+		MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateKLines(codeId, iTimeType, batche);
+
+	}
+
 }
 
 double CMyQDatabase_Real::MakeMa(const CodeStr& codeId, Time_Type timeType, int circle, Tick_T currentTime)

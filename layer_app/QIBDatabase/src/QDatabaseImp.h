@@ -13,6 +13,8 @@ public:
 
 	virtual bool IsAllIdle(const ::Ice::Current& current) final;
 
+	virtual int TaskCount(const ::Ice::Current& current) final;
+
 
 	virtual void UpdateTickToDB(ITick tick, const ::Ice::Current& current) override final;
 
@@ -31,6 +33,8 @@ public:
 
 	// kline表
 	virtual void UpdateKLine(::std::string codeId, ITimeType timeType, IKLine kline, const ::Ice::Current& current) override final;
+
+	virtual void UpdateKLines(::std::string codeId, ITimeType timeType, IKLines klines, const ::Ice::Current& current) final;
 
 	virtual void RemoveAllKLines(::std::string codeId, ITimeType timeType, const ::Ice::Current& current) override final;
 
