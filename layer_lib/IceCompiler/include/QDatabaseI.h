@@ -10,6 +10,10 @@ class IQDatabaseI : public virtual IQDatabase
 {
 public:
 
+    virtual int IdlCount(const Ice::Current&) override;
+
+    virtual bool IsAllIdle(const Ice::Current&) override;
+
     virtual void UpdateTickToDB(ITick,
                                 const Ice::Current&) override;
 
@@ -79,29 +83,14 @@ public:
                                   IKLines&,
                                   const Ice::Current&) override;
 
-    virtual void RecountMa(::std::string,
-                           ITimeType,
-                           const Ice::Current&) override;
+    virtual void RecountAllIndex(::std::string,
+                                 ITimeType,
+                                 const Ice::Current&) override;
 
-    virtual void RecountMaFromTimePos(::std::string,
-                                      ITimeType,
-                                      long long int,
-                                      const Ice::Current&) override;
-
-    virtual void UpdateMa(::std::string,
-                          ITimeType,
-                          IAvgValue,
-                          const Ice::Current&) override;
-
-    virtual void RemoveAllMas(::std::string,
-                              ITimeType,
-                              const Ice::Current&) override;
-
-    virtual void RemoveMasByRange(::std::string,
-                                  ITimeType,
-                                  long long int,
-                                  long long int,
-                                  const Ice::Current&) override;
+    virtual void UpdateAllIndexFromTimePos(::std::string,
+                                           ITimeType,
+                                           long long int,
+                                           const Ice::Current&) override;
 
     virtual void GetMas(::std::string,
                         ITimeType,
@@ -115,30 +104,6 @@ public:
                           IAvgValue&,
                           const Ice::Current&) override;
 
-    virtual void RecountVwMa(::std::string,
-                             ITimeType,
-                             const Ice::Current&) override;
-
-    virtual void RecountVwMaFromTimePos(::std::string,
-                                        ITimeType,
-                                        long long int,
-                                        const Ice::Current&) override;
-
-    virtual void UpdateVwMa(::std::string,
-                            ITimeType,
-                            IAvgValue,
-                            const Ice::Current&) override;
-
-    virtual void RemoveAllVwMas(::std::string,
-                                ITimeType,
-                                const Ice::Current&) override;
-
-    virtual void RemoveVwMasByRange(::std::string,
-                                    ITimeType,
-                                    long long int,
-                                    long long int,
-                                    const Ice::Current&) override;
-
     virtual void GetVwMas(::std::string,
                           ITimeType,
                           IQuery,
@@ -150,30 +115,6 @@ public:
                             long long int,
                             IAvgValue&,
                             const Ice::Current&) override;
-
-    virtual void RecountEma(::std::string,
-                            ITimeType,
-                            const Ice::Current&) override;
-
-    virtual void RecountEmaFromTimePos(::std::string,
-                                       ITimeType,
-                                       long long int,
-                                       const Ice::Current&) override;
-
-    virtual void UpdateEma(::std::string,
-                           ITimeType,
-                           IAvgValue,
-                           const Ice::Current&) override;
-
-    virtual void RemoveAllEmas(::std::string,
-                               ITimeType,
-                               const Ice::Current&) override;
-
-    virtual void RemoveEmasByRange(::std::string,
-                                   ITimeType,
-                                   long long int,
-                                   long long int,
-                                   const Ice::Current&) override;
 
     virtual void GetEmas(::std::string,
                          ITimeType,
@@ -187,30 +128,6 @@ public:
                            IAvgValue&,
                            const Ice::Current&) override;
 
-    virtual void RecountMacd(::std::string,
-                             ITimeType,
-                             const Ice::Current&) override;
-
-    virtual void RecountMacdFromTimePos(::std::string,
-                                        ITimeType,
-                                        long long int,
-                                        const Ice::Current&) override;
-
-    virtual void UpdateMacd(::std::string,
-                            ITimeType,
-                            IMacdValue,
-                            const Ice::Current&) override;
-
-    virtual void RemoveAllMacds(::std::string,
-                                ITimeType,
-                                const Ice::Current&) override;
-
-    virtual void RemoveMacdsByRange(::std::string,
-                                    ITimeType,
-                                    long long int,
-                                    long long int,
-                                    const Ice::Current&) override;
-
     virtual void GetMacds(::std::string,
                           ITimeType,
                           IQuery,
@@ -223,30 +140,6 @@ public:
                             IMacdValue&,
                             const Ice::Current&) override;
 
-    virtual void RecountDivType(::std::string,
-                                ITimeType,
-                                const Ice::Current&) override;
-
-    virtual void RecountDivTypeFromTimePos(::std::string,
-                                           ITimeType,
-                                           long long int,
-                                           const Ice::Current&) override;
-
-    virtual void UpdateDivType(::std::string,
-                               ITimeType,
-                               IDivTypeValue,
-                               const Ice::Current&) override;
-
-    virtual void RemoveAllDivTypes(::std::string,
-                                   ITimeType,
-                                   const Ice::Current&) override;
-
-    virtual void RemoveDivTypesByRange(::std::string,
-                                       ITimeType,
-                                       long long int,
-                                       long long int,
-                                       const Ice::Current&) override;
-
     virtual void GetDivTypes(::std::string,
                              ITimeType,
                              IQuery,
@@ -258,30 +151,6 @@ public:
                                long long int,
                                IDivTypeValue&,
                                const Ice::Current&) override;
-
-    virtual void RecountAtr(::std::string,
-                            ITimeType,
-                            const Ice::Current&) override;
-
-    virtual void RecountAtrFromTimePos(::std::string,
-                                       ITimeType,
-                                       long long int,
-                                       const Ice::Current&) override;
-
-    virtual void UpdateAtr(::std::string,
-                           ITimeType,
-                           IAtrValue,
-                           const Ice::Current&) override;
-
-    virtual void RemoveAllAtrs(::std::string,
-                               ITimeType,
-                               const Ice::Current&) override;
-
-    virtual void RemoveAtrsByRange(::std::string,
-                                   ITimeType,
-                                   long long int,
-                                   long long int,
-                                   const Ice::Current&) override;
 
     virtual void GetAtrs(::std::string,
                          ITimeType,

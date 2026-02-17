@@ -8,10 +8,10 @@ set(SRC_LIST
         src/FixOneDayQuote.cpp
         src/KLineConverter_NoMix.cpp
         src/QTransKLineFormIB.cpp
-        src/RecountKline.cpp
         src/SetupEnv.cpp
         src/TickConverter.cpp
         src/UpdateKlineFromFile.cpp
+        src/SaveKlineToFile.cpp
 
 
 )

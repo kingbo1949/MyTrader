@@ -73,48 +73,24 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "GetOneVwMa",
     "GetTicks",
     "GetVwMas",
-    "RecountAtr",
-    "RecountAtrFromTimePos",
-    "RecountDivType",
-    "RecountDivTypeFromTimePos",
-    "RecountEma",
-    "RecountEmaFromTimePos",
-    "RecountMa",
-    "RecountMaFromTimePos",
-    "RecountMacd",
-    "RecountMacdFromTimePos",
-    "RecountVwMa",
-    "RecountVwMaFromTimePos",
-    "RemoveAllAtrs",
-    "RemoveAllDivTypes",
-    "RemoveAllEmas",
+    "IdlCount",
+    "IsAllIdle",
+    "RecountAllIndex",
     "RemoveAllKLines",
-    "RemoveAllMacds",
-    "RemoveAllMas",
     "RemoveAllTicks",
-    "RemoveAllVwMas",
-    "RemoveAtrsByRange",
-    "RemoveDivTypesByRange",
-    "RemoveEmasByRange",
     "RemoveKLinesByRange",
-    "RemoveMacdsByRange",
-    "RemoveMasByRange",
     "RemoveOneKLine",
     "RemoveTicksByRange",
-    "RemoveVwMasByRange",
-    "UpdateAtr",
-    "UpdateDivType",
-    "UpdateEma",
+    "UpdateAllIndexFromTimePos",
     "UpdateKLine",
-    "UpdateMa",
-    "UpdateMacd",
     "UpdateTickToDB",
-    "UpdateVwMa",
     "ice_id",
     "ice_ids",
     "ice_isA",
     "ice_ping"
 };
+const ::std::string iceC_IBTrader_IQDatabase_IdlCount_name = "IdlCount";
+const ::std::string iceC_IBTrader_IQDatabase_IsAllIdle_name = "IsAllIdle";
 const ::std::string iceC_IBTrader_IQDatabase_UpdateTickToDB_name = "UpdateTickToDB";
 const ::std::string iceC_IBTrader_IQDatabase_GetLastUpdateTick_name = "GetLastUpdateTick";
 const ::std::string iceC_IBTrader_IQDatabase_RemoveAllTicks_name = "RemoveAllTicks";
@@ -129,46 +105,18 @@ const ::std::string iceC_IBTrader_IQDatabase_GetKLines_name = "GetKLines";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneKLine_name = "GetOneKLine";
 const ::std::string iceC_IBTrader_IQDatabase_GetKLinePairs_name = "GetKLinePairs";
 const ::std::string iceC_IBTrader_IQDatabase_GetInvalidKLines_name = "GetInvalidKLines";
-const ::std::string iceC_IBTrader_IQDatabase_RecountMa_name = "RecountMa";
-const ::std::string iceC_IBTrader_IQDatabase_RecountMaFromTimePos_name = "RecountMaFromTimePos";
-const ::std::string iceC_IBTrader_IQDatabase_UpdateMa_name = "UpdateMa";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllMas_name = "RemoveAllMas";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveMasByRange_name = "RemoveMasByRange";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAllIndex_name = "RecountAllIndex";
+const ::std::string iceC_IBTrader_IQDatabase_UpdateAllIndexFromTimePos_name = "UpdateAllIndexFromTimePos";
 const ::std::string iceC_IBTrader_IQDatabase_GetMas_name = "GetMas";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneMa_name = "GetOneMa";
-const ::std::string iceC_IBTrader_IQDatabase_RecountVwMa_name = "RecountVwMa";
-const ::std::string iceC_IBTrader_IQDatabase_RecountVwMaFromTimePos_name = "RecountVwMaFromTimePos";
-const ::std::string iceC_IBTrader_IQDatabase_UpdateVwMa_name = "UpdateVwMa";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllVwMas_name = "RemoveAllVwMas";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveVwMasByRange_name = "RemoveVwMasByRange";
 const ::std::string iceC_IBTrader_IQDatabase_GetVwMas_name = "GetVwMas";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneVwMa_name = "GetOneVwMa";
-const ::std::string iceC_IBTrader_IQDatabase_RecountEma_name = "RecountEma";
-const ::std::string iceC_IBTrader_IQDatabase_RecountEmaFromTimePos_name = "RecountEmaFromTimePos";
-const ::std::string iceC_IBTrader_IQDatabase_UpdateEma_name = "UpdateEma";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllEmas_name = "RemoveAllEmas";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveEmasByRange_name = "RemoveEmasByRange";
 const ::std::string iceC_IBTrader_IQDatabase_GetEmas_name = "GetEmas";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneEma_name = "GetOneEma";
-const ::std::string iceC_IBTrader_IQDatabase_RecountMacd_name = "RecountMacd";
-const ::std::string iceC_IBTrader_IQDatabase_RecountMacdFromTimePos_name = "RecountMacdFromTimePos";
-const ::std::string iceC_IBTrader_IQDatabase_UpdateMacd_name = "UpdateMacd";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllMacds_name = "RemoveAllMacds";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveMacdsByRange_name = "RemoveMacdsByRange";
 const ::std::string iceC_IBTrader_IQDatabase_GetMacds_name = "GetMacds";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneMacd_name = "GetOneMacd";
-const ::std::string iceC_IBTrader_IQDatabase_RecountDivType_name = "RecountDivType";
-const ::std::string iceC_IBTrader_IQDatabase_RecountDivTypeFromTimePos_name = "RecountDivTypeFromTimePos";
-const ::std::string iceC_IBTrader_IQDatabase_UpdateDivType_name = "UpdateDivType";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name = "RemoveAllDivTypes";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name = "RemoveDivTypesByRange";
 const ::std::string iceC_IBTrader_IQDatabase_GetDivTypes_name = "GetDivTypes";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneDivType_name = "GetOneDivType";
-const ::std::string iceC_IBTrader_IQDatabase_RecountAtr_name = "RecountAtr";
-const ::std::string iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name = "RecountAtrFromTimePos";
-const ::std::string iceC_IBTrader_IQDatabase_UpdateAtr_name = "UpdateAtr";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAtrs_name = "RemoveAllAtrs";
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name = "RemoveAtrsByRange";
 const ::std::string iceC_IBTrader_IQDatabase_GetAtrs_name = "GetAtrs";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneAtr_name = "GetOneAtr";
 
@@ -198,6 +146,34 @@ IBTrader::IQDatabase::ice_staticId()
     static const ::std::string typeId = "::IBTrader::IQDatabase";
     return typeId;
 }
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_IdlCount(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    inS.readEmptyParams();
+    int ret = this->IdlCount(current);
+    auto ostr = inS.startWriteParams();
+    ostr->writeAll(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_IsAllIdle(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    inS.readEmptyParams();
+    bool ret = this->IsAllIdle(current);
+    auto ostr = inS.startWriteParams();
+    ostr->writeAll(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
 
 /// \cond INTERNAL
 bool
@@ -450,7 +426,7 @@ IBTrader::IQDatabase::_iceD_GetInvalidKLines(::IceInternal::Incoming& inS, const
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RecountAllIndex(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -458,7 +434,7 @@ IBTrader::IQDatabase::_iceD_RecountMa(::IceInternal::Incoming& inS, const ::Ice:
     ITimeType iceP_timeType;
     istr->readAll(iceP_codeId, iceP_timeType);
     inS.endReadParams();
-    this->RecountMa(::std::move(iceP_codeId), iceP_timeType, current);
+    this->RecountAllIndex(::std::move(iceP_codeId), iceP_timeType, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -466,7 +442,7 @@ IBTrader::IQDatabase::_iceD_RecountMa(::IceInternal::Incoming& inS, const ::Ice:
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountMaFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_UpdateAllIndexFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
@@ -475,58 +451,7 @@ IBTrader::IQDatabase::_iceD_RecountMaFromTimePos(::IceInternal::Incoming& inS, c
     long long int iceP_timePos;
     istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
     inS.endReadParams();
-    this->RecountMaFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAvgValue iceP_ma;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_ma);
-    inS.endReadParams();
-    this->UpdateMa(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_ma), current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllMas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllMas(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveMasByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_beginTime;
-    long long int iceP_endTime;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-    inS.endReadParams();
-    this->RemoveMasByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
+    this->UpdateAllIndexFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -574,90 +499,6 @@ IBTrader::IQDatabase::_iceD_GetOneMa(::IceInternal::Incoming& inS, const ::Ice::
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountVwMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RecountVwMa(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountVwMaFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_timePos;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
-    inS.endReadParams();
-    this->RecountVwMaFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateVwMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAvgValue iceP_ma;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_ma);
-    inS.endReadParams();
-    this->UpdateVwMa(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_ma), current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllVwMas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllVwMas(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveVwMasByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_beginTime;
-    long long int iceP_endTime;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-    inS.endReadParams();
-    this->RemoveVwMasByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
 IBTrader::IQDatabase::_iceD_GetVwMas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
@@ -692,90 +533,6 @@ IBTrader::IQDatabase::_iceD_GetOneVwMa(::IceInternal::Incoming& inS, const ::Ice
     auto ostr = inS.startWriteParams();
     ostr->writeAll(iceP_ma, ret);
     inS.endWriteParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountEma(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RecountEma(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountEmaFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_timePos;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
-    inS.endReadParams();
-    this->RecountEmaFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateEma(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAvgValue iceP_ema;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_ema);
-    inS.endReadParams();
-    this->UpdateEma(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_ema), current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllEmas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllEmas(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveEmasByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_beginTime;
-    long long int iceP_endTime;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-    inS.endReadParams();
-    this->RemoveEmasByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
     return true;
 }
 /// \endcond
@@ -822,90 +579,6 @@ IBTrader::IQDatabase::_iceD_GetOneEma(::IceInternal::Incoming& inS, const ::Ice:
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountMacd(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RecountMacd(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountMacdFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_timePos;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
-    inS.endReadParams();
-    this->RecountMacdFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateMacd(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IMacdValue iceP_macd;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_macd);
-    inS.endReadParams();
-    this->UpdateMacd(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_macd), current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllMacds(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllMacds(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveMacdsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_beginTime;
-    long long int iceP_endTime;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-    inS.endReadParams();
-    this->RemoveMacdsByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
 IBTrader::IQDatabase::_iceD_GetMacds(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
@@ -946,90 +619,6 @@ IBTrader::IQDatabase::_iceD_GetOneMacd(::IceInternal::Incoming& inS, const ::Ice
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountDivType(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RecountDivType(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountDivTypeFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_timePos;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
-    inS.endReadParams();
-    this->RecountDivTypeFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateDivType(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IDivTypeValue iceP_divtype;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_divtype);
-    inS.endReadParams();
-    this->UpdateDivType(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_divtype), current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllDivTypes(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllDivTypes(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveDivTypesByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_beginTime;
-    long long int iceP_endTime;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-    inS.endReadParams();
-    this->RemoveDivTypesByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
 IBTrader::IQDatabase::_iceD_GetDivTypes(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
@@ -1064,90 +653,6 @@ IBTrader::IQDatabase::_iceD_GetOneDivType(::IceInternal::Incoming& inS, const ::
     auto ostr = inS.startWriteParams();
     ostr->writeAll(iceP_divtype, ret);
     inS.endWriteParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RecountAtr(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_timePos;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_timePos);
-    inS.endReadParams();
-    this->RecountAtrFromTimePos(::std::move(iceP_codeId), iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAtrValue iceP_artValue;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_artValue);
-    inS.endReadParams();
-    this->UpdateAtr(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_artValue), current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllAtrs(::std::move(iceP_codeId), iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
-    auto istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    long long int iceP_beginTime;
-    long long int iceP_endTime;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-    inS.endReadParams();
-    this->RemoveAtrsByRange(::std::move(iceP_codeId), iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
     return true;
 }
 /// \endcond
@@ -1196,7 +701,7 @@ IBTrader::IQDatabase::_iceD_GetOneAtr(::IceInternal::Incoming& inS, const ::Ice:
 bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 60, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 34, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -1282,165 +787,61 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 19:
         {
-            return _iceD_RecountAtr(in, current);
+            return _iceD_IdlCount(in, current);
         }
         case 20:
         {
-            return _iceD_RecountAtrFromTimePos(in, current);
+            return _iceD_IsAllIdle(in, current);
         }
         case 21:
         {
-            return _iceD_RecountDivType(in, current);
+            return _iceD_RecountAllIndex(in, current);
         }
         case 22:
         {
-            return _iceD_RecountDivTypeFromTimePos(in, current);
+            return _iceD_RemoveAllKLines(in, current);
         }
         case 23:
         {
-            return _iceD_RecountEma(in, current);
+            return _iceD_RemoveAllTicks(in, current);
         }
         case 24:
         {
-            return _iceD_RecountEmaFromTimePos(in, current);
+            return _iceD_RemoveKLinesByRange(in, current);
         }
         case 25:
         {
-            return _iceD_RecountMa(in, current);
+            return _iceD_RemoveOneKLine(in, current);
         }
         case 26:
         {
-            return _iceD_RecountMaFromTimePos(in, current);
+            return _iceD_RemoveTicksByRange(in, current);
         }
         case 27:
         {
-            return _iceD_RecountMacd(in, current);
+            return _iceD_UpdateAllIndexFromTimePos(in, current);
         }
         case 28:
         {
-            return _iceD_RecountMacdFromTimePos(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 29:
         {
-            return _iceD_RecountVwMa(in, current);
+            return _iceD_UpdateTickToDB(in, current);
         }
         case 30:
         {
-            return _iceD_RecountVwMaFromTimePos(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 31:
         {
-            return _iceD_RemoveAllAtrs(in, current);
+            return _iceD_ice_ids(in, current);
         }
         case 32:
         {
-            return _iceD_RemoveAllDivTypes(in, current);
-        }
-        case 33:
-        {
-            return _iceD_RemoveAllEmas(in, current);
-        }
-        case 34:
-        {
-            return _iceD_RemoveAllKLines(in, current);
-        }
-        case 35:
-        {
-            return _iceD_RemoveAllMacds(in, current);
-        }
-        case 36:
-        {
-            return _iceD_RemoveAllMas(in, current);
-        }
-        case 37:
-        {
-            return _iceD_RemoveAllTicks(in, current);
-        }
-        case 38:
-        {
-            return _iceD_RemoveAllVwMas(in, current);
-        }
-        case 39:
-        {
-            return _iceD_RemoveAtrsByRange(in, current);
-        }
-        case 40:
-        {
-            return _iceD_RemoveDivTypesByRange(in, current);
-        }
-        case 41:
-        {
-            return _iceD_RemoveEmasByRange(in, current);
-        }
-        case 42:
-        {
-            return _iceD_RemoveKLinesByRange(in, current);
-        }
-        case 43:
-        {
-            return _iceD_RemoveMacdsByRange(in, current);
-        }
-        case 44:
-        {
-            return _iceD_RemoveMasByRange(in, current);
-        }
-        case 45:
-        {
-            return _iceD_RemoveOneKLine(in, current);
-        }
-        case 46:
-        {
-            return _iceD_RemoveTicksByRange(in, current);
-        }
-        case 47:
-        {
-            return _iceD_RemoveVwMasByRange(in, current);
-        }
-        case 48:
-        {
-            return _iceD_UpdateAtr(in, current);
-        }
-        case 49:
-        {
-            return _iceD_UpdateDivType(in, current);
-        }
-        case 50:
-        {
-            return _iceD_UpdateEma(in, current);
-        }
-        case 51:
-        {
-            return _iceD_UpdateKLine(in, current);
-        }
-        case 52:
-        {
-            return _iceD_UpdateMa(in, current);
-        }
-        case 53:
-        {
-            return _iceD_UpdateMacd(in, current);
-        }
-        case 54:
-        {
-            return _iceD_UpdateTickToDB(in, current);
-        }
-        case 55:
-        {
-            return _iceD_UpdateVwMa(in, current);
-        }
-        case 56:
-        {
-            return _iceD_ice_id(in, current);
-        }
-        case 57:
-        {
-            return _iceD_ice_ids(in, current);
-        }
-        case 58:
-        {
             return _iceD_ice_isA(in, current);
         }
-        case 59:
+        case 33:
         {
             return _iceD_ice_ping(in, current);
         }
@@ -1450,6 +851,28 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
             throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
         }
     }
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_IdlCount(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<int>>& outAsync, const ::Ice::Context& context)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_IdlCount_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_IdlCount_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        nullptr,
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_IsAllIdle(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<bool>>& outAsync, const ::Ice::Context& context)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_IsAllIdle_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_IsAllIdle_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        nullptr,
+        nullptr);
 }
 /// \endcond
 
@@ -1659,9 +1082,9 @@ IBTrader::IQDatabasePrx::_iceI_GetInvalidKLines(const ::std::shared_ptr<::IceInt
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RecountMa(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_RecountAllIndex(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
 {
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountMa_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAllIndex_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType);
@@ -1672,51 +1095,12 @@ IBTrader::IQDatabasePrx::_iceI_RecountMa(const ::std::shared_ptr<::IceInternal::
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RecountMaFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_UpdateAllIndexFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
 {
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountMaFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateAllIndexFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
             ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_UpdateMa(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IAvgValue& iceP_ma, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateMa_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_ma);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveAllMas(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllMas_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveMasByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveMasByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
         },
         nullptr);
 }
@@ -1758,71 +1142,6 @@ IBTrader::IQDatabasePrx::_iceI_GetOneMa(const ::std::shared_ptr<::IceInternal::O
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RecountVwMa(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountVwMa_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RecountVwMaFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountVwMaFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_UpdateVwMa(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IAvgValue& iceP_ma, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateVwMa_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_ma);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveAllVwMas(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllVwMas_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveVwMasByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveVwMasByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
 IBTrader::IQDatabasePrx::_iceI_GetVwMas(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IAvgValues>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IQuery& iceP_query, const ::Ice::Context& context)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetVwMas_name);
@@ -1852,71 +1171,6 @@ IBTrader::IQDatabasePrx::_iceI_GetOneVwMa(const ::std::shared_ptr<::IceInternal:
             istr->readAll(v.ma, v.returnValue);
             return v;
         });
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RecountEma(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountEma_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RecountEmaFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountEmaFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_UpdateEma(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IAvgValue& iceP_ema, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateEma_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_ema);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveAllEmas(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllEmas_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveEmasByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveEmasByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-        },
-        nullptr);
 }
 /// \endcond
 
@@ -1956,71 +1210,6 @@ IBTrader::IQDatabasePrx::_iceI_GetOneEma(const ::std::shared_ptr<::IceInternal::
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RecountMacd(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountMacd_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RecountMacdFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountMacdFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_UpdateMacd(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IMacdValue& iceP_macd, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateMacd_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_macd);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveAllMacds(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllMacds_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveMacdsByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveMacdsByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
 IBTrader::IQDatabasePrx::_iceI_GetMacds(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IMacdValues>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IQuery& iceP_query, const ::Ice::Context& context)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetMacds_name);
@@ -2055,71 +1244,6 @@ IBTrader::IQDatabasePrx::_iceI_GetOneMacd(const ::std::shared_ptr<::IceInternal:
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_RecountDivType(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountDivType_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RecountDivTypeFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountDivTypeFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_UpdateDivType(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IDivTypeValue& iceP_divtype, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateDivType_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_divtype);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveAllDivTypes(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveDivTypesByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
 IBTrader::IQDatabasePrx::_iceI_GetDivTypes(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IDivTypeValues>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IQuery& iceP_query, const ::Ice::Context& context)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetDivTypes_name);
@@ -2149,71 +1273,6 @@ IBTrader::IQDatabasePrx::_iceI_GetOneDivType(const ::std::shared_ptr<::IceIntern
             istr->readAll(v.divtype, v.returnValue);
             return v;
         });
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RecountAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RecountAtrFromTimePos(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_timePos, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_timePos);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_UpdateAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IAtrValue& iceP_artValue, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateAtr_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_artValue);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveAllAtrs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAllAtrs_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
-        },
-        nullptr);
-}
-/// \endcond
-
-/// \cond INTERNAL
-void
-IBTrader::IQDatabasePrx::_iceI_RemoveAtrsByRange(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, long long int iceP_beginTime, long long int iceP_endTime, const ::Ice::Context& context)
-{
-    outAsync->invoke(iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
-        [&](::Ice::OutputStream* ostr)
-        {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime);
-        },
-        nullptr);
 }
 /// \endcond
 
@@ -2270,6 +1329,10 @@ IBTrader::IQDatabasePrx::ice_staticId()
 namespace
 {
 
+const ::std::string iceC_IBTrader_IQDatabase_IdlCount_name = "IdlCount";
+
+const ::std::string iceC_IBTrader_IQDatabase_IsAllIdle_name = "IsAllIdle";
+
 const ::std::string iceC_IBTrader_IQDatabase_UpdateTickToDB_name = "UpdateTickToDB";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetLastUpdateTick_name = "GetLastUpdateTick";
@@ -2298,85 +1361,29 @@ const ::std::string iceC_IBTrader_IQDatabase_GetKLinePairs_name = "GetKLinePairs
 
 const ::std::string iceC_IBTrader_IQDatabase_GetInvalidKLines_name = "GetInvalidKLines";
 
-const ::std::string iceC_IBTrader_IQDatabase_RecountMa_name = "RecountMa";
+const ::std::string iceC_IBTrader_IQDatabase_RecountAllIndex_name = "RecountAllIndex";
 
-const ::std::string iceC_IBTrader_IQDatabase_RecountMaFromTimePos_name = "RecountMaFromTimePos";
-
-const ::std::string iceC_IBTrader_IQDatabase_UpdateMa_name = "UpdateMa";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllMas_name = "RemoveAllMas";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveMasByRange_name = "RemoveMasByRange";
+const ::std::string iceC_IBTrader_IQDatabase_UpdateAllIndexFromTimePos_name = "UpdateAllIndexFromTimePos";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetMas_name = "GetMas";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneMa_name = "GetOneMa";
 
-const ::std::string iceC_IBTrader_IQDatabase_RecountVwMa_name = "RecountVwMa";
-
-const ::std::string iceC_IBTrader_IQDatabase_RecountVwMaFromTimePos_name = "RecountVwMaFromTimePos";
-
-const ::std::string iceC_IBTrader_IQDatabase_UpdateVwMa_name = "UpdateVwMa";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllVwMas_name = "RemoveAllVwMas";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveVwMasByRange_name = "RemoveVwMasByRange";
-
 const ::std::string iceC_IBTrader_IQDatabase_GetVwMas_name = "GetVwMas";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneVwMa_name = "GetOneVwMa";
-
-const ::std::string iceC_IBTrader_IQDatabase_RecountEma_name = "RecountEma";
-
-const ::std::string iceC_IBTrader_IQDatabase_RecountEmaFromTimePos_name = "RecountEmaFromTimePos";
-
-const ::std::string iceC_IBTrader_IQDatabase_UpdateEma_name = "UpdateEma";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllEmas_name = "RemoveAllEmas";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveEmasByRange_name = "RemoveEmasByRange";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetEmas_name = "GetEmas";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneEma_name = "GetOneEma";
 
-const ::std::string iceC_IBTrader_IQDatabase_RecountMacd_name = "RecountMacd";
-
-const ::std::string iceC_IBTrader_IQDatabase_RecountMacdFromTimePos_name = "RecountMacdFromTimePos";
-
-const ::std::string iceC_IBTrader_IQDatabase_UpdateMacd_name = "UpdateMacd";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllMacds_name = "RemoveAllMacds";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveMacdsByRange_name = "RemoveMacdsByRange";
-
 const ::std::string iceC_IBTrader_IQDatabase_GetMacds_name = "GetMacds";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneMacd_name = "GetOneMacd";
 
-const ::std::string iceC_IBTrader_IQDatabase_RecountDivType_name = "RecountDivType";
-
-const ::std::string iceC_IBTrader_IQDatabase_RecountDivTypeFromTimePos_name = "RecountDivTypeFromTimePos";
-
-const ::std::string iceC_IBTrader_IQDatabase_UpdateDivType_name = "UpdateDivType";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name = "RemoveAllDivTypes";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name = "RemoveDivTypesByRange";
-
 const ::std::string iceC_IBTrader_IQDatabase_GetDivTypes_name = "GetDivTypes";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneDivType_name = "GetOneDivType";
-
-const ::std::string iceC_IBTrader_IQDatabase_RecountAtr_name = "RecountAtr";
-
-const ::std::string iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name = "RecountAtrFromTimePos";
-
-const ::std::string iceC_IBTrader_IQDatabase_UpdateAtr_name = "UpdateAtr";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAllAtrs_name = "RemoveAllAtrs";
-
-const ::std::string iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name = "RemoveAtrsByRange";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetAtrs_name = "GetAtrs";
 
@@ -2403,6 +1410,86 @@ void
     }
 }
 /// \endcond
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_IdlCount(const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_IdlCount_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_IdlCount_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_IdlCount_name, ::Ice::Normal, context);
+        result->writeEmptyParams();
+        result->invoke(iceC_IBTrader_IQDatabase_IdlCount_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+::Ice::Int
+IceProxy::IBTrader::IQDatabase::end_IdlCount(const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_IdlCount_name);
+    ::Ice::Int ret;
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(ret);
+    result->_endReadParams();
+    return ret;
+}
+
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_IsAllIdle(const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_IsAllIdle_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_IsAllIdle_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_IsAllIdle_name, ::Ice::Normal, context);
+        result->writeEmptyParams();
+        result->invoke(iceC_IBTrader_IQDatabase_IsAllIdle_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+bool
+IceProxy::IBTrader::IQDatabase::end_IsAllIdle(const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_IsAllIdle_name);
+    bool ret;
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(ret);
+    result->_endReadParams();
+    return ret;
+}
 
 ::Ice::AsyncResultPtr
 IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateTickToDB(const ::IBTrader::ITick& iceP_tick, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
@@ -3025,17 +2112,17 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetInvalidKLines(::IBTrader::IKLi
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountMa(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAllIndex(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountMa_name, del, cookie, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAllIndex_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountMa_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_RecountAllIndex_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountMa_name);
+        result->invoke(iceC_IBTrader_IQDatabase_RecountAllIndex_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -3045,24 +2132,24 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountMa(const ::std::string& iceP_
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_RecountMa(const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_RecountAllIndex(const ::Ice::AsyncResultPtr& result)
 {
-    _end(result, iceC_IBTrader_IQDatabase_RecountMa_name);
+    _end(result, iceC_IBTrader_IQDatabase_RecountAllIndex_name);
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountMaFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateAllIndexFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountMaFromTimePos_name, del, cookie, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateAllIndexFromTimePos_name, del, cookie, sync);
     try
     {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountMaFromTimePos_name, ::Ice::Normal, context);
+        result->prepare(iceC_IBTrader_IQDatabase_UpdateAllIndexFromTimePos_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
         ostr->write(iceP_timeType);
         ostr->write(iceP_timePos);
         result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountMaFromTimePos_name);
+        result->invoke(iceC_IBTrader_IQDatabase_UpdateAllIndexFromTimePos_name);
     }
     catch(const ::Ice::Exception& ex)
     {
@@ -3072,90 +2159,9 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountMaFromTimePos(const ::std::st
 }
 
 void
-IceProxy::IBTrader::IQDatabase::end_RecountMaFromTimePos(const ::Ice::AsyncResultPtr& result)
+IceProxy::IBTrader::IQDatabase::end_UpdateAllIndexFromTimePos(const ::Ice::AsyncResultPtr& result)
 {
-    _end(result, iceC_IBTrader_IQDatabase_RecountMaFromTimePos_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateMa(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IAvgValue& iceP_ma, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateMa_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_UpdateMa_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_ma);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_UpdateMa_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_UpdateMa(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_UpdateMa_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllMas(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllMas_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllMas_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllMas_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveAllMas(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAllMas_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveMasByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveMasByRange_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveMasByRange_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_beginTime);
-        ostr->write(iceP_endTime);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveMasByRange_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveMasByRange(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveMasByRange_name);
+    _end(result, iceC_IBTrader_IQDatabase_UpdateAllIndexFromTimePos_name);
 }
 
 ::Ice::AsyncResultPtr
@@ -3285,140 +2291,6 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneMa(::IBTrader::IAvgValue& i
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountVwMa(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountVwMa_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountVwMa_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountVwMa_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountVwMa(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountVwMa_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountVwMaFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountVwMaFromTimePos_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountVwMaFromTimePos_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_timePos);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountVwMaFromTimePos_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountVwMaFromTimePos(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountVwMaFromTimePos_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateVwMa(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IAvgValue& iceP_ma, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateVwMa_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_UpdateVwMa_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_ma);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_UpdateVwMa_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_UpdateVwMa(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_UpdateVwMa_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllVwMas(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllVwMas_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllVwMas_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllVwMas_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveAllVwMas(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAllVwMas_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveVwMasByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveVwMasByRange_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveVwMasByRange_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_beginTime);
-        ostr->write(iceP_endTime);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveVwMasByRange_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveVwMasByRange(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveVwMasByRange_name);
-}
-
-::Ice::AsyncResultPtr
 IceProxy::IBTrader::IQDatabase::_iceI_begin_GetVwMas(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IQuery& iceP_query, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetVwMas_name, sync);
@@ -3542,140 +2414,6 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneVwMa(::IBTrader::IAvgValue&
     istr->read(iceP_ma);
     istr->read(ret);
     result->_endReadParams();
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountEma(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountEma_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountEma_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountEma_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountEma(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountEma_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountEmaFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountEmaFromTimePos_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountEmaFromTimePos_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_timePos);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountEmaFromTimePos_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountEmaFromTimePos(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountEmaFromTimePos_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateEma(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IAvgValue& iceP_ema, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateEma_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_UpdateEma_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_ema);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_UpdateEma_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_UpdateEma(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_UpdateEma_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllEmas(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllEmas_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllEmas_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllEmas_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveAllEmas(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAllEmas_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveEmasByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveEmasByRange_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveEmasByRange_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_beginTime);
-        ostr->write(iceP_endTime);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveEmasByRange_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveEmasByRange(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveEmasByRange_name);
 }
 
 ::Ice::AsyncResultPtr
@@ -3805,140 +2543,6 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneEma(::IBTrader::IAvgValue& 
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountMacd(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountMacd_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountMacd_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountMacd_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountMacd(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountMacd_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountMacdFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountMacdFromTimePos_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountMacdFromTimePos_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_timePos);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountMacdFromTimePos_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountMacdFromTimePos(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountMacdFromTimePos_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateMacd(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IMacdValue& iceP_macd, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateMacd_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_UpdateMacd_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_macd);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_UpdateMacd_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_UpdateMacd(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_UpdateMacd_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllMacds(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllMacds_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllMacds_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllMacds_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveAllMacds(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAllMacds_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveMacdsByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveMacdsByRange_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveMacdsByRange_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_beginTime);
-        ostr->write(iceP_endTime);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveMacdsByRange_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveMacdsByRange(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveMacdsByRange_name);
-}
-
-::Ice::AsyncResultPtr
 IceProxy::IBTrader::IQDatabase::_iceI_begin_GetMacds(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IQuery& iceP_query, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetMacds_name, sync);
@@ -4065,140 +2669,6 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneMacd(::IBTrader::IMacdValue
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountDivType(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountDivType_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountDivType_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountDivType_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountDivType(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountDivType_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountDivTypeFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountDivTypeFromTimePos_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountDivTypeFromTimePos_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_timePos);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountDivTypeFromTimePos_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountDivTypeFromTimePos(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountDivTypeFromTimePos_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateDivType(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IDivTypeValue& iceP_divtype, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateDivType_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_UpdateDivType_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_divtype);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_UpdateDivType_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_UpdateDivType(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_UpdateDivType_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllDivTypes(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveAllDivTypes(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAllDivTypes_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveDivTypesByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_beginTime);
-        ostr->write(iceP_endTime);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveDivTypesByRange(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveDivTypesByRange_name);
-}
-
-::Ice::AsyncResultPtr
 IceProxy::IBTrader::IQDatabase::_iceI_begin_GetDivTypes(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IQuery& iceP_query, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetDivTypes_name, sync);
@@ -4322,140 +2792,6 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneDivType(::IBTrader::IDivTyp
     istr->read(iceP_divtype);
     istr->read(ret);
     result->_endReadParams();
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAtr_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountAtr_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountAtr_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountAtr(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountAtr_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RecountAtrFromTimePos(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_timePos, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_timePos);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RecountAtrFromTimePos(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RecountAtrFromTimePos_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateAtr(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IAtrValue& iceP_artValue, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateAtr_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_UpdateAtr_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_artValue);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_UpdateAtr_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_UpdateAtr(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_UpdateAtr_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAllAtrs(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAllAtrs_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAllAtrs_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAllAtrs_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveAllAtrs(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAllAtrs_name);
-}
-
-::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_RemoveAtrsByRange(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, ::Ice::Long iceP_beginTime, ::Ice::Long iceP_endTime, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
-{
-    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name, del, cookie, sync);
-    try
-    {
-        result->prepare(iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name, ::Ice::Normal, context);
-        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
-        ostr->write(iceP_codeId);
-        ostr->write(iceP_timeType);
-        ostr->write(iceP_beginTime);
-        ostr->write(iceP_endTime);
-        result->endWriteParams();
-        result->invoke(iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name);
-    }
-    catch(const ::Ice::Exception& ex)
-    {
-        result->abort(ex);
-    }
-    return result;
-}
-
-void
-IceProxy::IBTrader::IQDatabase::end_RemoveAtrsByRange(const ::Ice::AsyncResultPtr& result)
-{
-    _end(result, iceC_IBTrader_IQDatabase_RemoveAtrsByRange_name);
 }
 
 ::Ice::AsyncResultPtr
@@ -4645,6 +2981,34 @@ IBTrader::IQDatabase::ice_staticId()
     return iceC_IBTrader_IQDatabase_ids[0];
 #endif
 }
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_IdlCount(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    inS.readEmptyParams();
+    ::Ice::Int ret = this->IdlCount(current);
+    ::Ice::OutputStream* ostr = inS.startWriteParams();
+    ostr->write(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_IsAllIdle(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    inS.readEmptyParams();
+    bool ret = this->IsAllIdle(current);
+    ::Ice::OutputStream* ostr = inS.startWriteParams();
+    ostr->write(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
 
 /// \cond INTERNAL
 bool
@@ -4921,7 +3285,7 @@ IBTrader::IQDatabase::_iceD_GetInvalidKLines(::IceInternal::Incoming& inS, const
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_RecountAllIndex(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -4930,7 +3294,7 @@ IBTrader::IQDatabase::_iceD_RecountMa(::IceInternal::Incoming& inS, const ::Ice:
     istr->read(iceP_codeId);
     istr->read(iceP_timeType);
     inS.endReadParams();
-    this->RecountMa(iceP_codeId, iceP_timeType, current);
+    this->RecountAllIndex(iceP_codeId, iceP_timeType, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -4938,7 +3302,7 @@ IBTrader::IQDatabase::_iceD_RecountMa(::IceInternal::Incoming& inS, const ::Ice:
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountMaFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+IBTrader::IQDatabase::_iceD_UpdateAllIndexFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
@@ -4949,64 +3313,7 @@ IBTrader::IQDatabase::_iceD_RecountMaFromTimePos(::IceInternal::Incoming& inS, c
     istr->read(iceP_timeType);
     istr->read(iceP_timePos);
     inS.endReadParams();
-    this->RecountMaFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAvgValue iceP_ma;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_ma);
-    inS.endReadParams();
-    this->UpdateMa(iceP_codeId, iceP_timeType, iceP_ma, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllMas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllMas(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveMasByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_beginTime;
-    ::Ice::Long iceP_endTime;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_beginTime);
-    istr->read(iceP_endTime);
-    inS.endReadParams();
-    this->RemoveMasByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
+    this->UpdateAllIndexFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -5059,99 +3366,6 @@ IBTrader::IQDatabase::_iceD_GetOneMa(::IceInternal::Incoming& inS, const ::Ice::
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountVwMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RecountVwMa(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountVwMaFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_timePos;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_timePos);
-    inS.endReadParams();
-    this->RecountVwMaFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateVwMa(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAvgValue iceP_ma;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_ma);
-    inS.endReadParams();
-    this->UpdateVwMa(iceP_codeId, iceP_timeType, iceP_ma, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllVwMas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllVwMas(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveVwMasByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_beginTime;
-    ::Ice::Long iceP_endTime;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_beginTime);
-    istr->read(iceP_endTime);
-    inS.endReadParams();
-    this->RemoveVwMasByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
 IBTrader::IQDatabase::_iceD_GetVwMas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
@@ -5191,99 +3405,6 @@ IBTrader::IQDatabase::_iceD_GetOneVwMa(::IceInternal::Incoming& inS, const ::Ice
     ostr->write(iceP_ma);
     ostr->write(ret);
     inS.endWriteParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountEma(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RecountEma(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountEmaFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_timePos;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_timePos);
-    inS.endReadParams();
-    this->RecountEmaFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateEma(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAvgValue iceP_ema;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_ema);
-    inS.endReadParams();
-    this->UpdateEma(iceP_codeId, iceP_timeType, iceP_ema, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllEmas(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllEmas(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveEmasByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_beginTime;
-    ::Ice::Long iceP_endTime;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_beginTime);
-    istr->read(iceP_endTime);
-    inS.endReadParams();
-    this->RemoveEmasByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
     return true;
 }
 /// \endcond
@@ -5335,99 +3456,6 @@ IBTrader::IQDatabase::_iceD_GetOneEma(::IceInternal::Incoming& inS, const ::Ice:
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountMacd(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RecountMacd(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountMacdFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_timePos;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_timePos);
-    inS.endReadParams();
-    this->RecountMacdFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateMacd(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IMacdValue iceP_macd;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_macd);
-    inS.endReadParams();
-    this->UpdateMacd(iceP_codeId, iceP_timeType, iceP_macd, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllMacds(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllMacds(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveMacdsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_beginTime;
-    ::Ice::Long iceP_endTime;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_beginTime);
-    istr->read(iceP_endTime);
-    inS.endReadParams();
-    this->RemoveMacdsByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
 IBTrader::IQDatabase::_iceD_GetMacds(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
@@ -5473,99 +3501,6 @@ IBTrader::IQDatabase::_iceD_GetOneMacd(::IceInternal::Incoming& inS, const ::Ice
 
 /// \cond INTERNAL
 bool
-IBTrader::IQDatabase::_iceD_RecountDivType(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RecountDivType(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountDivTypeFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_timePos;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_timePos);
-    inS.endReadParams();
-    this->RecountDivTypeFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateDivType(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IDivTypeValue iceP_divtype;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_divtype);
-    inS.endReadParams();
-    this->UpdateDivType(iceP_codeId, iceP_timeType, iceP_divtype, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllDivTypes(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllDivTypes(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveDivTypesByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_beginTime;
-    ::Ice::Long iceP_endTime;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_beginTime);
-    istr->read(iceP_endTime);
-    inS.endReadParams();
-    this->RemoveDivTypesByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
 IBTrader::IQDatabase::_iceD_GetDivTypes(::IceInternal::Incoming& inS, const ::Ice::Current& current)
 {
     _iceCheckMode(::Ice::Normal, current.mode);
@@ -5605,99 +3540,6 @@ IBTrader::IQDatabase::_iceD_GetOneDivType(::IceInternal::Incoming& inS, const ::
     ostr->write(iceP_divtype);
     ostr->write(ret);
     inS.endWriteParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RecountAtr(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RecountAtrFromTimePos(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_timePos;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_timePos);
-    inS.endReadParams();
-    this->RecountAtrFromTimePos(iceP_codeId, iceP_timeType, iceP_timePos, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_UpdateAtr(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    IAtrValue iceP_artValue;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_artValue);
-    inS.endReadParams();
-    this->UpdateAtr(iceP_codeId, iceP_timeType, iceP_artValue, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAllAtrs(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    inS.endReadParams();
-    this->RemoveAllAtrs(iceP_codeId, iceP_timeType, current);
-    inS.writeEmptyParams();
-    return true;
-}
-/// \endcond
-
-/// \cond INTERNAL
-bool
-IBTrader::IQDatabase::_iceD_RemoveAtrsByRange(::IceInternal::Incoming& inS, const ::Ice::Current& current)
-{
-    _iceCheckMode(::Ice::Normal, current.mode);
-    ::Ice::InputStream* istr = inS.startReadParams();
-    ::std::string iceP_codeId;
-    ITimeType iceP_timeType;
-    ::Ice::Long iceP_beginTime;
-    ::Ice::Long iceP_endTime;
-    istr->read(iceP_codeId);
-    istr->read(iceP_timeType);
-    istr->read(iceP_beginTime);
-    istr->read(iceP_endTime);
-    inS.endReadParams();
-    this->RemoveAtrsByRange(iceP_codeId, iceP_timeType, iceP_beginTime, iceP_endTime, current);
-    inS.writeEmptyParams();
     return true;
 }
 /// \endcond
@@ -5770,43 +3612,17 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "GetOneVwMa",
     "GetTicks",
     "GetVwMas",
-    "RecountAtr",
-    "RecountAtrFromTimePos",
-    "RecountDivType",
-    "RecountDivTypeFromTimePos",
-    "RecountEma",
-    "RecountEmaFromTimePos",
-    "RecountMa",
-    "RecountMaFromTimePos",
-    "RecountMacd",
-    "RecountMacdFromTimePos",
-    "RecountVwMa",
-    "RecountVwMaFromTimePos",
-    "RemoveAllAtrs",
-    "RemoveAllDivTypes",
-    "RemoveAllEmas",
+    "IdlCount",
+    "IsAllIdle",
+    "RecountAllIndex",
     "RemoveAllKLines",
-    "RemoveAllMacds",
-    "RemoveAllMas",
     "RemoveAllTicks",
-    "RemoveAllVwMas",
-    "RemoveAtrsByRange",
-    "RemoveDivTypesByRange",
-    "RemoveEmasByRange",
     "RemoveKLinesByRange",
-    "RemoveMacdsByRange",
-    "RemoveMasByRange",
     "RemoveOneKLine",
     "RemoveTicksByRange",
-    "RemoveVwMasByRange",
-    "UpdateAtr",
-    "UpdateDivType",
-    "UpdateEma",
+    "UpdateAllIndexFromTimePos",
     "UpdateKLine",
-    "UpdateMa",
-    "UpdateMacd",
     "UpdateTickToDB",
-    "UpdateVwMa",
     "ice_id",
     "ice_ids",
     "ice_isA",
@@ -5819,7 +3635,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
 bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 60, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 34, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -5905,165 +3721,61 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 19:
         {
-            return _iceD_RecountAtr(in, current);
+            return _iceD_IdlCount(in, current);
         }
         case 20:
         {
-            return _iceD_RecountAtrFromTimePos(in, current);
+            return _iceD_IsAllIdle(in, current);
         }
         case 21:
         {
-            return _iceD_RecountDivType(in, current);
+            return _iceD_RecountAllIndex(in, current);
         }
         case 22:
         {
-            return _iceD_RecountDivTypeFromTimePos(in, current);
+            return _iceD_RemoveAllKLines(in, current);
         }
         case 23:
         {
-            return _iceD_RecountEma(in, current);
+            return _iceD_RemoveAllTicks(in, current);
         }
         case 24:
         {
-            return _iceD_RecountEmaFromTimePos(in, current);
+            return _iceD_RemoveKLinesByRange(in, current);
         }
         case 25:
         {
-            return _iceD_RecountMa(in, current);
+            return _iceD_RemoveOneKLine(in, current);
         }
         case 26:
         {
-            return _iceD_RecountMaFromTimePos(in, current);
+            return _iceD_RemoveTicksByRange(in, current);
         }
         case 27:
         {
-            return _iceD_RecountMacd(in, current);
+            return _iceD_UpdateAllIndexFromTimePos(in, current);
         }
         case 28:
         {
-            return _iceD_RecountMacdFromTimePos(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 29:
         {
-            return _iceD_RecountVwMa(in, current);
+            return _iceD_UpdateTickToDB(in, current);
         }
         case 30:
         {
-            return _iceD_RecountVwMaFromTimePos(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 31:
         {
-            return _iceD_RemoveAllAtrs(in, current);
+            return _iceD_ice_ids(in, current);
         }
         case 32:
         {
-            return _iceD_RemoveAllDivTypes(in, current);
-        }
-        case 33:
-        {
-            return _iceD_RemoveAllEmas(in, current);
-        }
-        case 34:
-        {
-            return _iceD_RemoveAllKLines(in, current);
-        }
-        case 35:
-        {
-            return _iceD_RemoveAllMacds(in, current);
-        }
-        case 36:
-        {
-            return _iceD_RemoveAllMas(in, current);
-        }
-        case 37:
-        {
-            return _iceD_RemoveAllTicks(in, current);
-        }
-        case 38:
-        {
-            return _iceD_RemoveAllVwMas(in, current);
-        }
-        case 39:
-        {
-            return _iceD_RemoveAtrsByRange(in, current);
-        }
-        case 40:
-        {
-            return _iceD_RemoveDivTypesByRange(in, current);
-        }
-        case 41:
-        {
-            return _iceD_RemoveEmasByRange(in, current);
-        }
-        case 42:
-        {
-            return _iceD_RemoveKLinesByRange(in, current);
-        }
-        case 43:
-        {
-            return _iceD_RemoveMacdsByRange(in, current);
-        }
-        case 44:
-        {
-            return _iceD_RemoveMasByRange(in, current);
-        }
-        case 45:
-        {
-            return _iceD_RemoveOneKLine(in, current);
-        }
-        case 46:
-        {
-            return _iceD_RemoveTicksByRange(in, current);
-        }
-        case 47:
-        {
-            return _iceD_RemoveVwMasByRange(in, current);
-        }
-        case 48:
-        {
-            return _iceD_UpdateAtr(in, current);
-        }
-        case 49:
-        {
-            return _iceD_UpdateDivType(in, current);
-        }
-        case 50:
-        {
-            return _iceD_UpdateEma(in, current);
-        }
-        case 51:
-        {
-            return _iceD_UpdateKLine(in, current);
-        }
-        case 52:
-        {
-            return _iceD_UpdateMa(in, current);
-        }
-        case 53:
-        {
-            return _iceD_UpdateMacd(in, current);
-        }
-        case 54:
-        {
-            return _iceD_UpdateTickToDB(in, current);
-        }
-        case 55:
-        {
-            return _iceD_UpdateVwMa(in, current);
-        }
-        case 56:
-        {
-            return _iceD_ice_id(in, current);
-        }
-        case 57:
-        {
-            return _iceD_ice_ids(in, current);
-        }
-        case 58:
-        {
             return _iceD_ice_isA(in, current);
         }
-        case 59:
+        case 33:
         {
             return _iceD_ice_ping(in, current);
         }

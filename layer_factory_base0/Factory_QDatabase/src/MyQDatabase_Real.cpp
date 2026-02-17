@@ -9,6 +9,17 @@
 #include <Factory_IBGlobalShare.h>
 #include <Factory_Log.h>
 #include <Factory_HashEnv.h>
+
+int CMyQDatabase_Real::IdlCount()
+{
+	return MakeAndGet_IceProxy()->GetQDatabasePrx()->IdlCount();
+}
+
+bool CMyQDatabase_Real::IsAllIdle()
+{
+	return MakeAndGet_IceProxy()->GetQDatabasePrx()->IsAllIdle();
+}
+
 void CMyQDatabase_Real::UpdateTicks(IBTickPtr tick)
 {
 	ITick iTick = CIceTransfor::TransTickMyToIce(tick);
@@ -299,18 +310,16 @@ IBKLinePtrs CMyQDatabase_Real::GetInvalidKLines(const CodeStr& codeId, Time_Type
 	return back;
 }
 
-void CMyQDatabase_Real::RecountMa(const CodeStr& codeId, Time_Type timeType)
+void CMyQDatabase_Real::RecountAllIndex(const CodeStr &codeId, Time_Type timeType)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountMa(codeId, iTimeType);
-	return;
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountAllIndex(codeId, iTimeType);
 }
 
-void CMyQDatabase_Real::RecountMaFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime)
+void CMyQDatabase_Real::UpdateAllIndexFromTimePos(const CodeStr &codeId, Time_Type timeType, time_t timePos)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountMaFromTimePos(codeId, iTimeType, beginTime);
-	return;
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateAllIndexFromTimePos(codeId, iTimeType, timePos);
 }
 
 IBMaPtrs CMyQDatabase_Real::GetMas(const CodeStr& codeId, Time_Type timeType, const QQuery& query)
@@ -342,20 +351,6 @@ IBMaPtrs CMyQDatabase_Real::GetMas(const CodeStr& codeId, Time_Type timeType, co
 
 }
 
-void CMyQDatabase_Real::RemoveAllMas(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAllMas(codeId, iTimeType);
-	return;
-
-}
-
-void CMyQDatabase_Real::RemoveMasByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveMasByRange(codeId, iTimeType, beginTime, endTime);
-}
-
 IBMaPtr CMyQDatabase_Real::GetOneMa(const CodeStr& codeId, Time_Type timeType, time_t timePos)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
@@ -365,22 +360,6 @@ IBMaPtr CMyQDatabase_Real::GetOneMa(const CodeStr& codeId, Time_Type timeType, t
 	if (!success) return nullptr;
 
 	return CIceTransfor::TransAvgValueIceToMy(oneValue);
-
-}
-
-void CMyQDatabase_Real::RecountVwMa(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountVwMa(codeId, iTimeType);
-	return;
-
-}
-
-void CMyQDatabase_Real::RecountVwMaFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountVwMaFromTimePos(codeId, iTimeType, beginTime);
-	return;
 
 }
 
@@ -412,21 +391,6 @@ IBVwMaPtrs CMyQDatabase_Real::GetVwMas(const CodeStr& codeId, Time_Type timeType
 	return back;
 }
 
-void CMyQDatabase_Real::RemoveAllVwMas(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAllVwMas(codeId, iTimeType);
-	return;
-
-}
-
-void CMyQDatabase_Real::RemoveVwMasByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveVwMasByRange(codeId, iTimeType, beginTime, endTime);
-
-}
-
 IBVwMaPtr CMyQDatabase_Real::GetOneVwMa(const CodeStr& codeId, Time_Type timeType, time_t timePos)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
@@ -436,20 +400,6 @@ IBVwMaPtr CMyQDatabase_Real::GetOneVwMa(const CodeStr& codeId, Time_Type timeTyp
 	if (!success) return nullptr;
 
 	return CIceTransfor::TransAvgValueIceToMy(oneValue);
-}
-
-void CMyQDatabase_Real::RecountEma(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountEma(codeId, iTimeType);
-	return;
-}
-
-void CMyQDatabase_Real::RecountEmaFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountEmaFromTimePos(codeId, iTimeType, beginTime);
-	return;
 }
 
 IBEmaPtrs CMyQDatabase_Real::GetEmas(const CodeStr& codeId, Time_Type timeType, const QQuery& query)
@@ -478,20 +428,6 @@ IBEmaPtrs CMyQDatabase_Real::GetEmas(const CodeStr& codeId, Time_Type timeType, 
 	return back;
 
 }
-void CMyQDatabase_Real::RemoveAllEmas(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAllEmas(codeId, iTimeType);
-	return;
-
-}
-
-void CMyQDatabase_Real::RemoveEmasByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveEmasByRange(codeId, iTimeType, beginTime, endTime);
-}
-
 IBEmaPtr CMyQDatabase_Real::GetOneEma(const CodeStr& codeId, Time_Type timeType, time_t timePos)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
@@ -502,18 +438,6 @@ IBEmaPtr CMyQDatabase_Real::GetOneEma(const CodeStr& codeId, Time_Type timeType,
 
 	return CIceTransfor::TransAvgValueIceToMy(oneValue);
 
-}
-
-void CMyQDatabase_Real::RecountMacd(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountMacd(codeId, iTimeType);
-}
-
-void CMyQDatabase_Real::RecountMacdFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountMacdFromTimePos(codeId, iTimeType, beginTime);
 }
 
 IBMacdPtrs CMyQDatabase_Real::GetMacds(const CodeStr& codeId, Time_Type timeType, const QQuery& query)
@@ -541,18 +465,6 @@ IBMacdPtrs CMyQDatabase_Real::GetMacds(const CodeStr& codeId, Time_Type timeType
 
 }
 
-void CMyQDatabase_Real::RemoveAllMacds(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAllMacds(codeId, iTimeType);
-}
-
-void CMyQDatabase_Real::RemoveMacdsByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveMacdsByRange(codeId, iTimeType, beginTime, endTime);
-}
-
 IBMacdPtr CMyQDatabase_Real::GetOneMacd(const CodeStr& codeId, Time_Type timeType, time_t timePos)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
@@ -562,18 +474,6 @@ IBMacdPtr CMyQDatabase_Real::GetOneMacd(const CodeStr& codeId, Time_Type timeTyp
 	if (!success) return nullptr;
 
 	return CIceTransfor::TransMacd(oneValue);
-}
-
-void CMyQDatabase_Real::RecountDivType(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountDivType(codeId, iTimeType);
-}
-
-void CMyQDatabase_Real::RecountDivTypeFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountDivTypeFromTimePos(codeId, iTimeType, beginTime);
 }
 
 IBDivTypePtrs CMyQDatabase_Real::GetDivTypes(const CodeStr& codeId, Time_Type timeType, const QQuery& query)
@@ -600,19 +500,6 @@ IBDivTypePtrs CMyQDatabase_Real::GetDivTypes(const CodeStr& codeId, Time_Type ti
 	return back;
 }
 
-void CMyQDatabase_Real::RemoveAllDivTypes(const CodeStr& codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAllDivTypes(codeId, iTimeType);
-
-}
-
-void CMyQDatabase_Real::RemoveDivTypesByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveDivTypesByRange(codeId, iTimeType, beginTime, endTime);
-}
-
 IBDivTypePtr CMyQDatabase_Real::GetOneDivType(const CodeStr& codeId, Time_Type timeType, time_t timePos)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
@@ -622,20 +509,6 @@ IBDivTypePtr CMyQDatabase_Real::GetOneDivType(const CodeStr& codeId, Time_Type t
 	if (!success) return nullptr;
 
 	return CIceTransfor::TransDivType(oneValue);
-
-}
-
-void CMyQDatabase_Real::RecountAtr(const CodeStr &codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountAtr(codeId, iTimeType);
-
-}
-
-void CMyQDatabase_Real::RecountAtrFromTimePos(const CodeStr &codeId, Time_Type timeType, Tick_T beginTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RecountAtrFromTimePos(codeId, iTimeType, beginTime);
 
 }
 
@@ -661,20 +534,6 @@ IBAtrPtrs CMyQDatabase_Real::GetAtrs(const CodeStr &codeId, Time_Type timeType, 
 		back.push_back(pAtr);
 	}
 	return back;
-
-}
-
-void CMyQDatabase_Real::RemoveAllAtrs(const CodeStr &codeId, Time_Type timeType)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAllAtrs(codeId, iTimeType);
-
-}
-
-void CMyQDatabase_Real::RemoveAtrsByRange(const CodeStr &codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime)
-{
-	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->RemoveAtrsByRange(codeId, iTimeType, beginTime, endTime);
 
 }
 

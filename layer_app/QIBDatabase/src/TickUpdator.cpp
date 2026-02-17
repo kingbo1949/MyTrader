@@ -4,6 +4,7 @@
 #include "Calculator/Calculator.h"
 #include <Factory_Log.h>
 #include <Global.h>
+#include "../cmd/Cmd_UpdateAllIndexFromTimePos.h"
 CTickUpdator::CTickUpdator()
 {
 }
@@ -80,134 +81,21 @@ void CTickUpdator::UpdateTickToKLine(const ITick& tick, ITimeType timeType)
 
 	MakeAndGet_Env()->GetDB_KLine()->AddOne(tick.codeId, timeType, kline);
 
-	if (!CanUpdateIndex(tick.codeId, timeType) && exist)
-	{
-		// K线已经存在但不久前扫描过，不要更新
-		return;
-	}
-
-	// 需要扫描并更新指标
 	if (!exist)
 	{
-		// 新生成的K线
-		MakeAndGet_TimerTask_UpdateIndex()->AddNeedUpdate(tick.codeId, timeType, NowOrWait::Now);
-	}
+		// 新生成的K线 加入线程池立刻更新
+		MakeAndGet_MyThreadPool()->commit(CCmd_UpdateAllIndexFromTimePos(tick.codeId, timeType, kline.time));
+	}else
 	{
-		// 旧K线
-		MakeAndGet_TimerTask_UpdateIndex()->AddNeedUpdate(tick.codeId, timeType, NowOrWait::Wait);
-
+		MakeAndGet_TimerTask_UpdateIndex()->AddNeedUpdate(tick.codeId, timeType);
 	}
-	ChgLastUpdateIndexTime(tick.codeId, timeType);
-
 
 
 	return;
 }
 
-bool CTickUpdator::CanUpdateIndex(const std::string& codeId, ITimeType timeType)
-{
-	time_t timeSpec = GetTimeSpec(codeId, timeType);
-
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-	auto pos = m_lastUpdateTime.find(key);
-	if (pos == m_lastUpdateTime.end())
-	{
-		return true;
-	}
-	else
-	{
-		if (benchmark_milliseconds() - pos->second < timeSpec)
-		{
-			// 距离上次更新时间太短
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-
-	}
-}
-
-void CTickUpdator::ChgLastUpdateIndexTime(const std::string& codeId, ITimeType timeType)
-{
-	IQKey key;
-	key.codeId = codeId;
-	key.timeType = timeType;
-	m_lastUpdateTime[key] = benchmark_milliseconds();
-	return;
-
-}
-
-time_t CTickUpdator::GetTimeSpec(const std::string& codeId, ITimeType timeType)
-{
-	return 10000;
 
 
-	//if (GetSecurityType(codeId) == SecurityType::FUT)
-	//{
-	//	// 期货
-	//	switch (timeType)
-	//	{
-	//	case IBTrader::ITimeType::S15:
-	//		return 1000;
-	//		break;
-	//	case IBTrader::ITimeType::M1:
-	//		return 1500;
-	//		break;
-	//	case IBTrader::ITimeType::M5:
-	//		return 2000;
-	//		break;
-	//	case IBTrader::ITimeType::M15:
-	//		return 2000;
-	//		break;
-	//	case IBTrader::ITimeType::M30:
-	//		return 3000;
-	//		break;
-	//	case IBTrader::ITimeType::H1:
-	//		return 5000;
-	//		break;
-	//	case IBTrader::ITimeType::D1:
-	//		return 5000;
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-	//else 
-	//{
-	//	// 股票
-	//	switch (timeType)
-	//	{
-	//	case IBTrader::ITimeType::S15:
-	//		return 5000;
-	//		break;
-	//	case IBTrader::ITimeType::M1:
-	//		return 5000;
-	//		break;
-	//	case IBTrader::ITimeType::M5:
-	//		return 5000;
-	//		break;
-	//	case IBTrader::ITimeType::M15:
-	//		return 5000;
-	//		break;
-	//	case IBTrader::ITimeType::M30:
-	//		return 5000;
-	//		break;
-	//	case IBTrader::ITimeType::H1:
-	//		return 5000;
-	//		break;
-	//	case IBTrader::ITimeType::D1:
-	//		return 5000;
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-	//return 1000;
-}
 
 SecurityType CTickUpdator::GetSecurityType(const std::string& codeId)
 {

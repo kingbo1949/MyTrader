@@ -1,4 +1,4 @@
-#include "DownloadData.h"
+﻿#include "DownloadData.h"
 #include <iostream>
 #include <Global.h>
 #include <Factory_IBGlobalShare.h>
@@ -47,20 +47,7 @@ void CDownloadData::UpdateDbKLineFromIB(const std::string& codeId, Time_Type tim
 	// ����ָ��
 	if (!klines.empty())
 	{
-		if (timeType != Time_Type::D1)
-		{
-			MakeAndGet_QDatabase()->RecountMaFromTimePos(codeId, timeType, klines[0]->time);
-			MakeAndGet_QDatabase()->RecountMacdFromTimePos(codeId, timeType, klines[0]->time);
-			MakeAndGet_QDatabase()->RecountDivTypeFromTimePos(codeId, timeType, klines[0]->time);
-			MakeAndGet_QDatabase()->RecountAtrFromTimePos(codeId, timeType, klines[0]->time);
-		}
-		else
-		{
-			MakeAndGet_QDatabase()->RecountMa(codeId, Time_Type::D1);
-			MakeAndGet_QDatabase()->RecountMacd(codeId, Time_Type::D1);
-			MakeAndGet_QDatabase()->RecountDivType(codeId, Time_Type::D1);
-			MakeAndGet_QDatabase()->RecountAtr(codeId, timeType);
-		}
+		MakeAndGet_QDatabase()->UpdateAllIndexFromTimePos(codeId, timeType, klines[0]->time);
 	}
 
 	Log_Print(LogLevel::Info, fmt::format("update {}, {} {} klines",

@@ -89,15 +89,7 @@ void CAppFuncs::DelToDb(const std::string& codeId, Time_Type timeType, const Tim
 {
 	MakeAndGet_QDatabase()->RemoveKLines(codeId, timeType, timePair);
 
-	MakeAndGet_QDatabase()->RemoveMasByRange(codeId, timeType, timePair.beginPos, timePair.endPos);
-
-	MakeAndGet_QDatabase()->RemoveVwMasByRange(codeId, timeType, timePair.beginPos, timePair.endPos);
-
-	MakeAndGet_QDatabase()->RemoveEmasByRange(codeId, timeType, timePair.beginPos, timePair.endPos);
-
-	MakeAndGet_QDatabase()->RemoveMacdsByRange(codeId, timeType, timePair.beginPos, timePair.endPos);
-
-	MakeAndGet_QDatabase()->RemoveDivTypesByRange(codeId, timeType, timePair.beginPos, timePair.endPos);
+	MakeAndGet_QDatabase()->RecountAllIndex(codeId, timeType);
 
 	return;
 	

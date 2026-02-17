@@ -92,6 +92,13 @@ public:
 	//空闲线程数量
 	int idlCount() { return idlThrNum; }
 
+	// 是否所有线程都空闲
+	bool isAllIdle()
+	{
+		std::lock_guard<std::mutex> lock(m_lock); // 加锁保证获取 tasks.empty() 的准确性
+		return idlThrNum == pool.size() && tasks.empty();
+	}
+
 
 protected:
 

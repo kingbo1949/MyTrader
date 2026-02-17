@@ -1,6 +1,18 @@
 
 #include <QDatabaseI.h>
 
+int
+IBTrader::IQDatabaseI::IdlCount(const Ice::Current& current)
+{
+    return 0;
+}
+
+bool
+IBTrader::IQDatabaseI::IsAllIdle(const Ice::Current& current)
+{
+    return false;
+}
+
 void
 IBTrader::IQDatabaseI::UpdateTickToDB(ITick /*tick*/,
                                       const Ice::Current& current)
@@ -124,41 +136,17 @@ IBTrader::IQDatabaseI::GetInvalidKLines(::std::string /*codeId*/,
 }
 
 void
-IBTrader::IQDatabaseI::RecountMa(::std::string /*codeId*/,
-                                 ITimeType /*timeType*/,
-                                 const Ice::Current& current)
+IBTrader::IQDatabaseI::RecountAllIndex(::std::string /*codeId*/,
+                                       ITimeType /*timeType*/,
+                                       const Ice::Current& current)
 {
 }
 
 void
-IBTrader::IQDatabaseI::RecountMaFromTimePos(::std::string /*codeId*/,
-                                            ITimeType /*timeType*/,
-                                            long long int /*timePos*/,
-                                            const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::UpdateMa(::std::string /*codeId*/,
-                                ITimeType /*timeType*/,
-                                IAvgValue /*ma*/,
-                                const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAllMas(::std::string /*codeId*/,
-                                    ITimeType /*timeType*/,
-                                    const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveMasByRange(::std::string /*codeId*/,
-                                        ITimeType /*timeType*/,
-                                        long long int /*beginTime*/,
-                                        long long int /*endTime*/,
-                                        const Ice::Current& current)
+IBTrader::IQDatabaseI::UpdateAllIndexFromTimePos(::std::string /*codeId*/,
+                                                 ITimeType /*timeType*/,
+                                                 long long int /*timePos*/,
+                                                 const Ice::Current& current)
 {
 }
 
@@ -184,45 +172,6 @@ IBTrader::IQDatabaseI::GetOneMa(::std::string /*codeId*/,
 }
 
 void
-IBTrader::IQDatabaseI::RecountVwMa(::std::string /*codeId*/,
-                                   ITimeType /*timeType*/,
-                                   const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RecountVwMaFromTimePos(::std::string /*codeId*/,
-                                              ITimeType /*timeType*/,
-                                              long long int /*timePos*/,
-                                              const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::UpdateVwMa(::std::string /*codeId*/,
-                                  ITimeType /*timeType*/,
-                                  IAvgValue /*ma*/,
-                                  const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAllVwMas(::std::string /*codeId*/,
-                                      ITimeType /*timeType*/,
-                                      const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveVwMasByRange(::std::string /*codeId*/,
-                                          ITimeType /*timeType*/,
-                                          long long int /*beginTime*/,
-                                          long long int /*endTime*/,
-                                          const Ice::Current& current)
-{
-}
-
-void
 IBTrader::IQDatabaseI::GetVwMas(::std::string /*codeId*/,
                                 ITimeType /*timeType*/,
                                 IQuery /*query*/,
@@ -241,45 +190,6 @@ IBTrader::IQDatabaseI::GetOneVwMa(::std::string /*codeId*/,
 {
     ma = IAvgValue();
     return false;
-}
-
-void
-IBTrader::IQDatabaseI::RecountEma(::std::string /*codeId*/,
-                                  ITimeType /*timeType*/,
-                                  const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RecountEmaFromTimePos(::std::string /*codeId*/,
-                                             ITimeType /*timeType*/,
-                                             long long int /*timePos*/,
-                                             const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::UpdateEma(::std::string /*codeId*/,
-                                 ITimeType /*timeType*/,
-                                 IAvgValue /*ema*/,
-                                 const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAllEmas(::std::string /*codeId*/,
-                                     ITimeType /*timeType*/,
-                                     const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveEmasByRange(::std::string /*codeId*/,
-                                         ITimeType /*timeType*/,
-                                         long long int /*beginTime*/,
-                                         long long int /*endTime*/,
-                                         const Ice::Current& current)
-{
 }
 
 void
@@ -304,45 +214,6 @@ IBTrader::IQDatabaseI::GetOneEma(::std::string /*codeId*/,
 }
 
 void
-IBTrader::IQDatabaseI::RecountMacd(::std::string /*codeId*/,
-                                   ITimeType /*timeType*/,
-                                   const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RecountMacdFromTimePos(::std::string /*codeId*/,
-                                              ITimeType /*timeType*/,
-                                              long long int /*timePos*/,
-                                              const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::UpdateMacd(::std::string /*codeId*/,
-                                  ITimeType /*timeType*/,
-                                  IMacdValue /*macd*/,
-                                  const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAllMacds(::std::string /*codeId*/,
-                                      ITimeType /*timeType*/,
-                                      const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveMacdsByRange(::std::string /*codeId*/,
-                                          ITimeType /*timeType*/,
-                                          long long int /*beginTime*/,
-                                          long long int /*endTime*/,
-                                          const Ice::Current& current)
-{
-}
-
-void
 IBTrader::IQDatabaseI::GetMacds(::std::string /*codeId*/,
                                 ITimeType /*timeType*/,
                                 IQuery /*query*/,
@@ -364,45 +235,6 @@ IBTrader::IQDatabaseI::GetOneMacd(::std::string /*codeId*/,
 }
 
 void
-IBTrader::IQDatabaseI::RecountDivType(::std::string /*codeId*/,
-                                      ITimeType /*timeType*/,
-                                      const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RecountDivTypeFromTimePos(::std::string /*codeId*/,
-                                                 ITimeType /*timeType*/,
-                                                 long long int /*timePos*/,
-                                                 const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::UpdateDivType(::std::string /*codeId*/,
-                                     ITimeType /*timeType*/,
-                                     IDivTypeValue /*divtype*/,
-                                     const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAllDivTypes(::std::string /*codeId*/,
-                                         ITimeType /*timeType*/,
-                                         const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveDivTypesByRange(::std::string /*codeId*/,
-                                             ITimeType /*timeType*/,
-                                             long long int /*beginTime*/,
-                                             long long int /*endTime*/,
-                                             const Ice::Current& current)
-{
-}
-
-void
 IBTrader::IQDatabaseI::GetDivTypes(::std::string /*codeId*/,
                                    ITimeType /*timeType*/,
                                    IQuery /*query*/,
@@ -421,45 +253,6 @@ IBTrader::IQDatabaseI::GetOneDivType(::std::string /*codeId*/,
 {
     divtype = IDivTypeValue();
     return false;
-}
-
-void
-IBTrader::IQDatabaseI::RecountAtr(::std::string /*codeId*/,
-                                  ITimeType /*timeType*/,
-                                  const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RecountAtrFromTimePos(::std::string /*codeId*/,
-                                             ITimeType /*timeType*/,
-                                             long long int /*timePos*/,
-                                             const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::UpdateAtr(::std::string /*codeId*/,
-                                 ITimeType /*timeType*/,
-                                 IAtrValue /*artValue*/,
-                                 const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAllAtrs(::std::string /*codeId*/,
-                                     ITimeType /*timeType*/,
-                                     const Ice::Current& current)
-{
-}
-
-void
-IBTrader::IQDatabaseI::RemoveAtrsByRange(::std::string /*codeId*/,
-                                         ITimeType /*timeType*/,
-                                         long long int /*beginTime*/,
-                                         long long int /*endTime*/,
-                                         const Ice::Current& current)
-{
 }
 
 void

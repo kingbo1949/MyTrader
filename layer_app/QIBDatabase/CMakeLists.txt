@@ -27,6 +27,11 @@ set(SRC_LIST
         src/TickUpdator.cpp
         src/TimerTask_UpdateIndex.cpp
 
+        cmd/Cmd_RecountAllIndex.cpp
+        cmd/Cmd_UpdateAllIndexFromTimePos.cpp
+
+
+
 )
 
 add_executable(${TARGETNAME} ${SRC_LIST})

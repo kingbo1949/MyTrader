@@ -9,12 +9,44 @@ using namespace boost::algorithm;
 
 void CUpdateKlineFromFile::Go()
 {
-	// UpdateOneCode("TSLA");
 	UpdateOneCode("NQ");
 	// UpdateOneCode("ES");
+	// UpdateOneCode("GC");
+	// UpdateOneCode("MBT");
+	// UpdateOneCode("ETHUSDRR");
+
 	// UpdateOneCode("NVDA");
-	// UpdateOneCode("AAPL");
-	
+	// UpdateOneCode("AMD");
+	// UpdateOneCode("META");
+	// UpdateOneCode("NFLX");
+	// UpdateOneCode("MSFT");
+	// UpdateOneCode("AMZN");
+	// UpdateOneCode("COST");
+	// UpdateOneCode("GOOG");
+	// UpdateOneCode("TSM");
+	// UpdateOneCode("INTC");
+	// UpdateOneCode("HOOD");
+	// UpdateOneCode("COIN");
+	// UpdateOneCode("MSTR");
+	// UpdateOneCode("CRCL");
+	// UpdateOneCode("BMNR");
+	// UpdateOneCode("PLTR");
+	// UpdateOneCode("MU");
+	// UpdateOneCode("WDC");
+	// UpdateOneCode("STX");
+	// UpdateOneCode("SOFI");
+	// UpdateOneCode("VRT");
+	// UpdateOneCode("GLXY");
+	// UpdateOneCode("RKLB");
+	// UpdateOneCode("ASTS");
+	// UpdateOneCode("HIMS");
+	// UpdateOneCode("ALAB");
+	// UpdateOneCode("CLS");
+	// UpdateOneCode("SNDK");
+	// UpdateOneCode("KTOS");
+	// UpdateOneCode("UPST");
+
+
 }
 
 std::string CUpdateKlineFromFile::GetFileName(const CodeStr& codeId, Time_Type timeType)
@@ -28,12 +60,13 @@ std::string CUpdateKlineFromFile::GetFileName(const CodeStr& codeId, Time_Type t
 void CUpdateKlineFromFile::UpdateOneCode(const CodeStr& codeId)
 {
 	// UpdateFile(codeId, Time_Type::S15);
-	UpdateFile(codeId, Time_Type::M1);
-	UpdateFile(codeId, Time_Type::M5);
-	UpdateFile(codeId, Time_Type::M15);
+
+	// UpdateFile(codeId, Time_Type::M1);
+	// UpdateFile(codeId, Time_Type::M5);
+	// UpdateFile(codeId, Time_Type::M15);
 	UpdateFile(codeId, Time_Type::M30);
-	UpdateFile(codeId, Time_Type::H1);
-	UpdateFile(codeId, Time_Type::D1);
+	// UpdateFile(codeId, Time_Type::H1);
+	// UpdateFile(codeId, Time_Type::D1);
 
 }
 
@@ -56,7 +89,22 @@ void CUpdateKlineFromFile::UpdateFile(const CodeStr& codeId, Time_Type timeType)
 	{
 		MakeAndGet_QDatabase()->UpdateKLine(codeId, timeType, kline);
 	}
+	MakeAndGet_QDatabase()->RecountAllIndex(codeId, timeType);
+
+
 	printf("%s %s update over \n", codeId.c_str(), CTransToStr::Get_TimeType(timeType).c_str());
 
+	CheckServerData(codeId, timeType);
 
+
+}
+
+void CUpdateKlineFromFile::CheckServerData(const CodeStr &codeId, Time_Type timeType)
+{
+	QQuery query;
+	query.query_type = QQueryType::FROM_CURRENT;
+	query.query_number = 300;
+	IBMaPtrs mas = MakeAndGet_QDatabase()->GetMas(codeId, timeType, query);
+
+	return ;
 }

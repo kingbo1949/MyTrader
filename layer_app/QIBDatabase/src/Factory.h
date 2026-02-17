@@ -2,6 +2,7 @@
 
 #include <IceUtil/IceUtil.h>
 #include <Ice/Ice.h>
+#include <MyThreadPool.h>
 
 using namespace IceUtil;
 using namespace Ice;
@@ -27,3 +28,9 @@ std::string					Trans_Str(ITimeType timetype);
 bool						ValidKline(const std::string& codeId, ITimeType timetype, const IKLine& kline);
 
 TimerTask_UpdateIndexPtr	MakeAndGet_TimerTask_UpdateIndex();
+
+MyThreadPoolPtr				MakeAndGet_MyThreadPool();
+
+void 						GetKline_RecountQuery_All(const std::string& codeId, ITimeType timetype, IKLines& klines);
+void						GetKline_RecountQuery_TimePos(const std::string& codeId, ITimeType timetype, long long int timePos, IKLines& klines);
+

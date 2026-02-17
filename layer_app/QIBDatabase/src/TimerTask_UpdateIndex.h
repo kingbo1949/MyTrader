@@ -1,16 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include <IceUtil/Timer.h>
 #include <QStruc.h>
 using namespace IBTrader;
 
-typedef time_t Tick_T;			// ºÁÃëÊ±¼äÀàĞÍ
-
-enum class NowOrWait
-{
-	Now,
-	Wait
-};
-
+typedef time_t Tick_T;			// ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 class CTimerTask_UpdateIndex : public IceUtil::TimerTask
 {
@@ -20,19 +13,15 @@ public:
 
 	virtual void					runTimerTask();
 
-	void							AddNeedUpdate(const std::string& codeId, ITimeType timetype, NowOrWait nowOrWait);
+	void							AddNeedUpdate(const std::string& codeId, ITimeType timetype);
 	
 
 protected:
 	std::mutex						m_mutex;
-	Tick_T							m_lastUpdateWait;			// ÉÏ´Î¸üĞÂÖ¸ÊıµÄÊ±¼ä(¿ÉµÈ´ı)
-	std::set<IQKey>					m_needUpdate_wait;			// ĞèÒª¼ÆËãÖ¸ÊıµÄkey£¬¿ÉÒÔÉÔºó¼ÆËã
-	std::set<IQKey>					m_needUpdate_now;			// ĞèÒªÂíÉÏ¼ÆËãÖ¸ÊıµÄkey
+	std::set<IQKey>					m_needUpdate;			// éœ€è¦æ›´æ–°çš„å“ç§
 
-	std::set<IQKey>					GetNeedUpdate(NowOrWait nowOrWait);
+	std::set<IQKey>					GetNeedUpdate();
 	void							UpdateIndex(const std::set<IQKey>& keys);
-	void							UpdateIndexWait();
-	void							UpdateIndexNow();
 
 };
 

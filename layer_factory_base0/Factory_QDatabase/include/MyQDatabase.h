@@ -8,6 +8,14 @@ public:
 	CMyQDatabase() { ; };
 	virtual ~CMyQDatabase() { ; };
 
+	// --------------- 线程池 ---------------------
+	// 空闲线程数量
+	virtual int IdlCount() = 0;
+
+	// 是否全部空闲
+	virtual bool IsAllIdle() = 0;
+
+	// --------------- 实时TICK行情 ---------------------
 	// 更新行情数据库
 	virtual void			UpdateTicks(IBTickPtr tick) = 0;
 
@@ -15,7 +23,6 @@ public:
 	virtual IBTickPtr		GetLastUpdateTick(int& updateCount, time_t& recentUpdateSecnd) = 0;
 
 	// --------------- tick 表 ---------------------
-
 	// 取单品种数据
 	virtual IBTickPtrs		GetTickHis(const CodeStr& codeId, const QQuery& query) = 0;
 
@@ -68,106 +75,54 @@ public:
 	// 取无效的BAR
 	virtual IBKLinePtrs		GetInvalidKLines(const CodeStr& codeId, Time_Type timeType) = 0;
 
+	// --------------- 指标更新 ---------------------
+	// 全量计算某品种所有指标
+	virtual void			RecountAllIndex(const CodeStr& codeId, Time_Type timeType) = 0;
+
+	// 增量计算某品种指定时间点(毫秒，包括该时点)之后的所有指标
+	virtual void			UpdateAllIndexFromTimePos(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
+
+
 	// --------------- Ma 表 ---------------------
-	// 重新计算所有MA
-	virtual void			RecountMa(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RecountMaFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) = 0;
-
 	// 取单品种数据
 	virtual IBMaPtrs		GetMas(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
-
-	// 删除单品种所有tick数据
-	virtual void			RemoveAllMas(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RemoveMasByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
 
 	// 查询单个指定数据
 	virtual IBMaPtr			GetOneMa(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
 
 	// --------------- VwMa 表 ---------------------
-	// 重新计算所有MA
-	virtual void			RecountVwMa(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RecountVwMaFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) = 0;
-
 	// 取单品种数据
 	virtual IBVwMaPtrs		GetVwMas(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
-
-	// 删除单品种所有tick数据
-	virtual void			RemoveAllVwMas(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RemoveVwMasByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
 
 	// 查询单个指定数据
 	virtual IBVwMaPtr		GetOneVwMa(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
 
 
 	// --------------- Ema 表 ---------------------
-	// 重新计算所有MA
-	virtual void			RecountEma(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RecountEmaFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) = 0;
-
 	// 取单品种数据
 	virtual IBEmaPtrs		GetEmas(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
-
-	// 删除单品种所有tick数据
-	virtual void			RemoveAllEmas(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RemoveEmasByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
 
 	// 查询单个指定数据
 	virtual IBEmaPtr		GetOneEma(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
 
 	// --------------- macd 表 ---------------------
-	// 重新计算所有MA
-	virtual void			RecountMacd(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RecountMacdFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) = 0;
-
 	// 取单品种数据
 	virtual IBMacdPtrs		GetMacds(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
-
-	// 删除单品种所有tick数据
-	virtual void			RemoveAllMacds(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RemoveMacdsByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
 
 	// 查询单个指定数据
 	virtual IBMacdPtr		GetOneMacd(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
 
 	// --------------- divtype 表 ---------------------
-	// 重新计算所有MA
-	virtual void			RecountDivType(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RecountDivTypeFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) = 0;
-
 	// 取单品种数据
 	virtual IBDivTypePtrs	GetDivTypes(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
-
-	// 删除单品种所有divtype数据
-	virtual void			RemoveAllDivTypes(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RemoveDivTypesByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
 
 	// 查询单个指定数据
 	virtual IBDivTypePtr	GetOneDivType(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
 
 
 	// --------------- atr 表 ---------------------
-	// 重新计算所有atr
-	virtual void			RecountAtr(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RecountAtrFromTimePos(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime) = 0;
-
 	// 取单品种数据
 	virtual IBAtrPtrs		GetAtrs(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
-
-	// 删除单品种所有atr数据
-	virtual void			RemoveAllAtrs(const CodeStr& codeId, Time_Type timeType) = 0;
-
-	virtual void			RemoveAtrsByRange(const CodeStr& codeId, Time_Type timeType, Tick_T beginTime, Tick_T endTime) = 0;
 
 	// 查询单个指定数据
 	virtual IBAtrPtr		GetOneAtr(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;

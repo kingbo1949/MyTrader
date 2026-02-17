@@ -70,6 +70,12 @@ void CSetup_QGenerator::RunIBApi()
 	QueryAndUpdateKline(qContracts);
 	MakeAndGet_DaemonByTick_QGenerator()->UpdateDbSecond();
 
+	// 等待线程池全部空闲再开始订阅行情
+	while (!MakeAndGet_QDatabase()->IsAllIdle())
+	{
+		std::this_thread::sleep_for(std::chrono::microseconds(1000));
+	}
+
 	// 订阅交易所需行情
 	IbContractPtrs tContracts = GetStrategyCodeId(CodeIdType::ForSubscribeQ);
 	Get_IBApi()->SubscribeQuote(tContracts);
@@ -78,8 +84,6 @@ void CSetup_QGenerator::RunIBApi()
 
 void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type timeType)
 {
-
-
 	// 查询回溯2天的K线
 	int days = 2;
 
@@ -110,12 +114,7 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 	// 更新指标
 	if (!klines.empty())
 	{
-		MakeAndGet_QDatabase()->RecountMaFromTimePos(codeId, timeType, klines[0]->time);
-		//MakeAndGet_QDatabase()->RecountEmaFromTimePos(codeId, timeType, klines[0]->time);
-		MakeAndGet_QDatabase()->RecountMacdFromTimePos(codeId, timeType, klines[0]->time);
-		MakeAndGet_QDatabase()->RecountDivTypeFromTimePos(codeId, timeType, klines[0]->time);
-		MakeAndGet_QDatabase()->RecountAtrFromTimePos(codeId, timeType, klines[0]->time);
-
+		MakeAndGet_QDatabase()->UpdateAllIndexFromTimePos(codeId, timeType, klines[0]->time);
 	}
 
 

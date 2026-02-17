@@ -38,6 +38,9 @@ void CKLineConverter_NoMix::ConvertOneKLineFromIBToDb(const CodeStr& codeId, Tim
 
 	CAppFuncs::UpdateToDb(codeId, timeType, klines);
 
+	// 更新指标
+	MakeAndGet_QDatabase()->RecountAllIndex(codeId, timeType);
+
 	Log_Print(LogLevel::Info, fmt::format("{} {} kline size = {}, {} -- {}",
 		codeId.c_str(),
 		CTransToStr::Get_TimeType(timeType).c_str(),

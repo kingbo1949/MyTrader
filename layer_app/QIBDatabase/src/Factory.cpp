@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "Factory.h"
-
+#include <Global.h>
 
 
 
@@ -82,4 +82,38 @@ TimerTask_UpdateIndexPtr MakeAndGet_TimerTask_UpdateIndex()
 		g_pTimerTask_UpdateIndex = std::make_shared<CTimerTask_UpdateIndex>();
 	}
 	return g_pTimerTask_UpdateIndex;
+}
+
+
+MyThreadPoolPtr g_pThreadPool = NULL;
+MyThreadPoolPtr MakeAndGet_MyThreadPool()
+{
+	if (!g_pThreadPool)
+	{
+		const int threadSize = 4;
+		g_pThreadPool = std::make_shared<CMyThreadPool>(threadSize);
+	}
+	return g_pThreadPool;
+}
+
+void GetKline_RecountQuery_All(const std::string& codeId, ITimeType timetype, IKLines& klines)
+{
+	// 在数据库内部，没有经过ICE，所以不需要接力
+	IQuery query;
+	query.byReqType = 1;	// 查询全部数据
+
+	MakeAndGet_Env()->GetDB_KLine()->GetKLines(codeId, timetype, query, klines);
+
+	return;
+}
+
+void GetKline_RecountQuery_TimePos(const std::string& codeId, ITimeType timetype, long long int timePos, IKLines& klines)
+{
+	// 在数据库内部，没有经过ICE，所以不需要接力
+	IQuery query;
+	query.byReqType = 3;		// 查询某时间点之后
+	query.tTime = timePos;
+	query.dwSubscribeNum = 0;	// 为0表示查询某时点之后全部数据
+	MakeAndGet_Env()->GetDB_KLine()->GetKLines(codeId, timetype, query, klines);
+	return;
 }

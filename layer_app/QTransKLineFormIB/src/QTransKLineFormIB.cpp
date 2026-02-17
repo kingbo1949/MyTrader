@@ -17,7 +17,7 @@
 #include "AppFuncs.h"
 #include "UpdateKlineFromFile.h"
 #include "CleanUpKline.h"
-#include "RecountKline.h"
+#include "SaveKlineToFile.h"
 
 CSetupEnv setupEnv;
 CKLineConverter_NoMix klineConverter_nomix;
@@ -33,7 +33,7 @@ void ShowMenu()
 		"a: convert one contract ticks \n"
 		"b: update database from files \n"
 		"c: clean up klines \n"
-		"d: recount klines \n"
+		"d: save klines to files \n"
 		"0: convert one contract \n"
 		"1: query all contracts  \n"
 		"2: recount MA for all contracts  \n"
@@ -91,45 +91,20 @@ void RequestOneContracts()
 // 从ib接口查询所有品种的K线并更新到数据库
 void TransAllContracts_NoMix()
 {
+	int daysForMinute = 60;
+	TimePair timePair;
+	timePair.beginPos = CGlobal::GetTimeByStr("20191101 00:00:00") * 1000;
+	timePair.endPos = Get_CurrentTime()->GetCurrentTime_millisecond();
+
+
 	IbContractPtrs contracts;
 	MakeAndGet_JSonContracts()->Load_Contracts(contracts, SelectType::True);
 	for (auto onecontract : contracts)
 	{
-		printf("%s begin.....", onecontract->codeId.c_str());
-		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M1);
-		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M5);
-		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M15);
-		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::M30);
-		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::H1);
-		MakeAndGet_QDatabase()->RecountAtr(onecontract->codeId, Time_Type::D1);
-		printf("over\n");
 
+		klineConverter_nomix.ConvertOneKLineFromIBToDb(onecontract->codeId, timePair);
+		klineConverter_nomix.QueryKLineInDb(onecontract->codeId);
 	}
-
-
-
-	// int daysForMinute = 60;
-	// TimePair timePair;
-	// timePair.beginPos = CGlobal::GetTimeByStr("20191101 00:00:00") * 1000;
-	// timePair.endPos = Get_CurrentTime()->GetCurrentTime_millisecond();
-	//
-	//
-	// IbContractPtrs contracts;
-	// MakeAndGet_JSonContracts()->Load_Contracts(contracts, SelectType::True);
-	// for (auto onecontract : contracts)
-	// {
-	//
-	// 	klineConverter_nomix.ConvertOneKLineFromIBToDb(onecontract->codeId, timePair);
-	// 	klineConverter_nomix.QueryKLineInDb(onecontract->codeId);
-	//
-	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M1);
-	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M5);
-	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M15);
-	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::M30);
-	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::H1);
-	// 	MakeAndGet_QDatabase()->RemoveAllMas(onecontract->codeId, Time_Type::D1);
-	//
-	// }
 
 }
 
@@ -176,53 +151,10 @@ void ConvertOneContractKLines()
 		CAppFuncs::DelToDb(targetCodeId, Time_Type::D1, timePair);
 	}
 
-
-
-
+	// 更新K线和指标
 	klineConverter_nomix.ConvertOneKLineFromIBToDb(targetCodeId, timePair);
 
 	klineConverter_nomix.QueryKLineInDb(targetCodeId);
-
-	// 开始计算指标
-	//MakeAndGet_QDatabase()->RecountMa(targetCodeId, Time_Type::S15);
-	MakeAndGet_QDatabase()->RecountMa(targetCodeId, Time_Type::M1);
-	MakeAndGet_QDatabase()->RecountMa(targetCodeId, Time_Type::M5);
-	MakeAndGet_QDatabase()->RecountMa(targetCodeId, Time_Type::M15);
-	MakeAndGet_QDatabase()->RecountMa(targetCodeId, Time_Type::M30);
-	MakeAndGet_QDatabase()->RecountMa(targetCodeId, Time_Type::H1);
-	MakeAndGet_QDatabase()->RecountMa(targetCodeId, Time_Type::D1);
-
-	//MakeAndGet_QDatabase()->RecountVwMa(targetCodeId, Time_Type::S15);
-	//MakeAndGet_QDatabase()->RecountVwMa(targetCodeId, Time_Type::M1);
-	//MakeAndGet_QDatabase()->RecountVwMa(targetCodeId, Time_Type::M5);
-	//MakeAndGet_QDatabase()->RecountVwMa(targetCodeId, Time_Type::M15);
-	//MakeAndGet_QDatabase()->RecountVwMa(targetCodeId, Time_Type::M30);
-	//MakeAndGet_QDatabase()->RecountVwMa(targetCodeId, Time_Type::H1);
-	//MakeAndGet_QDatabase()->RecountVwMa(targetCodeId, Time_Type::D1);
-
-	//MakeAndGet_QDatabase()->RecountEma(targetCodeId, Time_Type::S15);
-	//MakeAndGet_QDatabase()->RecountEma(targetCodeId, Time_Type::M1);
-	//MakeAndGet_QDatabase()->RecountEma(targetCodeId, Time_Type::M5);
-	//MakeAndGet_QDatabase()->RecountEma(targetCodeId, Time_Type::M15);
-	//MakeAndGet_QDatabase()->RecountEma(targetCodeId, Time_Type::M30);
-	//MakeAndGet_QDatabase()->RecountEma(targetCodeId, Time_Type::H1);
-	//MakeAndGet_QDatabase()->RecountEma(targetCodeId, Time_Type::D1);
-
-	//MakeAndGet_QDatabase()->RecountMacd(targetCodeId, Time_Type::S15);
-	MakeAndGet_QDatabase()->RecountMacd(targetCodeId, Time_Type::M1);
-	MakeAndGet_QDatabase()->RecountMacd(targetCodeId, Time_Type::M5);
-	MakeAndGet_QDatabase()->RecountMacd(targetCodeId, Time_Type::M15);
-	MakeAndGet_QDatabase()->RecountMacd(targetCodeId, Time_Type::M30);
-	MakeAndGet_QDatabase()->RecountMacd(targetCodeId, Time_Type::H1);
-	MakeAndGet_QDatabase()->RecountMacd(targetCodeId, Time_Type::D1);
-
-	//MakeAndGet_QDatabase()->RecountDivType(targetCodeId, Time_Type::S15);
-	MakeAndGet_QDatabase()->RecountDivType(targetCodeId, Time_Type::M1);
-	MakeAndGet_QDatabase()->RecountDivType(targetCodeId, Time_Type::M5);
-	MakeAndGet_QDatabase()->RecountDivType(targetCodeId, Time_Type::M15);
-	MakeAndGet_QDatabase()->RecountDivType(targetCodeId, Time_Type::M30);
-	MakeAndGet_QDatabase()->RecountDivType(targetCodeId, Time_Type::H1);
-	MakeAndGet_QDatabase()->RecountDivType(targetCodeId, Time_Type::D1);
 
 }
 
@@ -342,8 +274,8 @@ int main()
 		}
 		if (cmd == "d" || cmd == "D")
 		{
-			CRecountKline recountKline;
-			recountKline.Go();
+			CSaveKlineToFile saveKlineToFile;
+			saveKlineToFile.Go();
 		}
 		else if (cmd == "0")
 		{
