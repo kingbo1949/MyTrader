@@ -11,10 +11,12 @@ CRocksEnv::CRocksEnv(const std::string& dbPath)
     // --- DB 级选项 ---
     m_options.create_if_missing = true;
     m_options.db_write_buffer_size = 512 * 1024 * 1024;   // 全局 memtable 上限 512MB
-    m_options.max_background_jobs = 4;                     // flush + compaction 并发线程
+    m_options.max_background_jobs = 8;                     // flush + compaction 并发线程
 
     // --- 列族选项（通过 Options 继承 ColumnFamilyOptions，应用到所有列族）---
-    m_options.write_buffer_size = 32 * 1024 * 1024;        // 每个 CF 32MB memtable
+    m_options.write_buffer_size = 4 * 1024 * 1024;         // 每个 CF 4MB memtable，小 memtable 快速 flush
+    m_options.level0_slowdown_writes_trigger = 40;          // 放宽 L0 限速触发（默认 20）
+    m_options.level0_stop_writes_trigger = 56;              // 放宽 L0 停写触发（默认 36）
     m_options.compression = rocksdb::kNoCompression;        // 不压缩，最大化读写速度
     m_options.optimize_filters_for_hits = true;             // 最底层不建 Bloom，减少空间
     m_options.allow_mmap_reads = true;                      // mmap 读取，减少系统调用开销
