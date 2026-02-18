@@ -10,7 +10,7 @@ CRocksDb::CRocksDb(CRocksEnv& env, const std::string& cfName)
 
 void CRocksDb::Put(const CRocksKey& key, const rocksdb::Slice& value)
 {
-    rocksdb::WriteOptions wo;
+    const auto& wo = m_env.GetWriteOptions();
     auto s = m_env.GetDB()->Put(wo, m_cfHandle, key.ToSlice(), value);
     if (!s.ok()) {
         throw std::runtime_error("Put failed [" + m_cfName + "]: " + s.ToString());
@@ -32,7 +32,7 @@ bool CRocksDb::Get(const CRocksKey& key, std::string* value)
 
 void CRocksDb::Delete(const CRocksKey& key)
 {
-    rocksdb::WriteOptions wo;
+    const auto& wo = m_env.GetWriteOptions();
     auto s = m_env.GetDB()->Delete(wo, m_cfHandle, key.ToSlice());
     if (!s.ok()) {
         throw std::runtime_error("Delete failed [" + m_cfName + "]: " + s.ToString());
@@ -110,7 +110,7 @@ void CRocksDb::DeleteRange(const std::string& symbol, time_t startTime, time_t e
     CRocksKey beginKey(symbol, startTime);
     CRocksKey endKey(symbol, endTime + 1);
 
-    rocksdb::WriteOptions wo;
+    const auto& wo = m_env.GetWriteOptions();
     auto s = m_env.GetDB()->DeleteRange(wo, m_cfHandle, beginKey.ToSlice(), endKey.ToSlice());
     if (!s.ok()) {
         throw std::runtime_error("DeleteRange failed [" + m_cfName + "]: " + s.ToString());

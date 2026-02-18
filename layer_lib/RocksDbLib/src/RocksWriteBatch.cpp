@@ -19,7 +19,7 @@ void CRocksWriteBatch::Delete(rocksdb::ColumnFamilyHandle* cfHandle, const CRock
 
 void CRocksWriteBatch::Commit()
 {
-    rocksdb::WriteOptions wo;
+    const auto& wo = m_env.GetWriteOptions();
     auto s = m_env.GetDB()->Write(wo, &m_batch);
     if (!s.ok()) {
         throw std::runtime_error("WriteBatch commit failed: " + s.ToString());

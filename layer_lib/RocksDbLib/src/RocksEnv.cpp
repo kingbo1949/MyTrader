@@ -15,8 +15,12 @@ CRocksEnv::CRocksEnv(const std::string& dbPath)
 
     // --- 列族选项（通过 Options 继承 ColumnFamilyOptions，应用到所有列族）---
     m_options.write_buffer_size = 32 * 1024 * 1024;        // 每个 CF 32MB memtable
-    m_options.compression = rocksdb::kSnappyCompression;   // Snappy 压缩，CPU 开销低
+    m_options.compression = rocksdb::kNoCompression;        // 不压缩，最大化读写速度
     m_options.optimize_filters_for_hits = true;             // 最底层不建 Bloom，减少空间
+    m_options.allow_mmap_reads = true;                      // mmap 读取，减少系统调用开销
+
+    // 关闭 WAL，写入只进 memtable，由 Flush() 持久化
+    m_writeOptions.disableWAL = true;
 
     // --- 表级选项（Bloom Filter + Block Cache）---
     rocksdb::BlockBasedTableOptions table_options;

@@ -81,7 +81,7 @@ void CDbTable_KLine::RemoveAll()
 		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
 		                 "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff",
 		                 LLONG_MAX);
-		rocksdb::WriteOptions wo;
+		const auto& wo = m_env.GetWriteOptions();
 		m_env.GetDB()->DeleteRange(wo, table->GetCFHandle(), beginKey.ToSlice(), endKey.ToSlice());
 	}
 }

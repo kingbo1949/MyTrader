@@ -37,7 +37,7 @@ public:
     void Put(const CRocksKey& key, const VALUE& value)
     {
         std::string data = RocksSerializer<VALUE>::Serialize(value);
-        rocksdb::WriteOptions wo;
+        const auto& wo = m_env.GetWriteOptions();
         auto s = m_env.GetDB()->Put(wo, m_cfHandle, key.ToSlice(), data);
         if (!s.ok()) {
             throw std::runtime_error("Put failed [" + m_cfName + "]: " + s.ToString());
@@ -68,7 +68,7 @@ public:
     /// @param key CRocksKey（合约+时间戳）
     void Delete(const CRocksKey& key)
     {
-        rocksdb::WriteOptions wo;
+        const auto& wo = m_env.GetWriteOptions();
         auto s = m_env.GetDB()->Delete(wo, m_cfHandle, key.ToSlice());
         if (!s.ok()) {
             throw std::runtime_error("Delete failed [" + m_cfName + "]: " + s.ToString());
@@ -150,7 +150,7 @@ public:
         CRocksKey beginKey(symbol, startTime);
         CRocksKey endKey(symbol, endTime + 1);
 
-        rocksdb::WriteOptions wo;
+        const auto& wo = m_env.GetWriteOptions();
         auto s = m_env.GetDB()->DeleteRange(wo, m_cfHandle, beginKey.ToSlice(), endKey.ToSlice());
         if (!s.ok()) {
             throw std::runtime_error("DeleteRange failed [" + m_cfName + "]: " + s.ToString());

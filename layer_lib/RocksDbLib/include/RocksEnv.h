@@ -56,6 +56,9 @@ public:
     /// @return 构造时传入的 dbPath
     const std::string& GetDbPath() const;
 
+    /// 获取共享的 WriteOptions（disableWAL = true，无压缩场景下最大化写入性能）
+    const rocksdb::WriteOptions& GetWriteOptions() const { return m_writeOptions; }
+
     // 禁止拷贝
     CRocksEnv(const CRocksEnv&) = delete;
     CRocksEnv& operator=(const CRocksEnv&) = delete;
@@ -64,6 +67,7 @@ private:
     std::string m_dbPath;
     rocksdb::DB* m_db = nullptr;
     rocksdb::Options m_options;
+    rocksdb::WriteOptions m_writeOptions;
     /// 列族名 -> 列族句柄 的映射，包含 default 列族
     std::map<std::string, rocksdb::ColumnFamilyHandle*> m_cfHandles;
 };
