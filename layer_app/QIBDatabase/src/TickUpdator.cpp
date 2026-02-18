@@ -83,8 +83,8 @@ void CTickUpdator::UpdateTickToKLine(const ITick& tick, ITimeType timeType)
 
 	if (!exist)
 	{
-		// 新生成的K线 加入线程池立刻更新
-		MakeAndGet_MyThreadPool()->commit(CCmd_UpdateAllIndexFromTimePos(tick.codeId, timeType, kline.time));
+		// 新生成的K线 加入线程池立刻更新 高优先级
+		MakeAndGet_MyThreadPool()->commit(100,CCmd_UpdateAllIndexFromTimePos(tick.codeId, timeType, kline.time));
 	}else
 	{
 		MakeAndGet_TimerTask_UpdateIndex()->AddNeedUpdate(tick.codeId, timeType);

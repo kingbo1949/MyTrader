@@ -22,7 +22,7 @@ void CDaemonByTick_QGenerator::Execute()
 	if (tt.tm_min != 13 && tt.tm_min != 43) return;
 
 	CCmdUpdateDbFromIB cmd(UseType::QGenerator);
-	MakeAndGet_MyThreadPool()->commit(cmd);
+	MakeAndGet_MyThreadPool()->commit(0, cmd);
 
 	m_lastUpdateDbSeccond = Get_CurrentTime()->GetCurrentTime_second();
 

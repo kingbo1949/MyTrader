@@ -195,7 +195,7 @@ void SendTick()
 {
 	// 启动一个异步线程，开始发送仿真行情
 	CCmdQGernerator_Simulator cmd;
-	MakeAndGet_MyThreadPool()->commit(cmd);
+	MakeAndGet_MyThreadPool()->commit(0,cmd);
 
 }
 

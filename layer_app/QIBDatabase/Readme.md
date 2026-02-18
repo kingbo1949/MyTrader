@@ -13,9 +13,9 @@
 ### 实时行情K线更新
 - 接受到TICK，发送到tickupdator 
 - 发送到tickupdator做出K线，直接把K线更新到数据库
-- tickupdator判断K线如果是新生成的，属于急于更新指标数据，做出CCmd_UpdateAllIndexFromTimePos对象，直接加入线程池
+- tickupdator判断K线如果是新生成的，属于急于更新指标数据，做出CCmd_UpdateAllIndexFromTimePos对象，以<font color="red">高优先级</font>直接加入线程池
 - tickupdator判断K线如果不是新生成的，把KEY加入CTimerTask_UpdateIndex队列，CTimerTask_UpdateIndex队列中都是不急于更新的指标数据
-- CTimerTask_UpdateIndex每隔1秒被唤醒，醒后检查线程池全部空闲，没有空闲就退出，有空闲就开始把队列做成CCmd_UpdateAllIndexFromTimePos对象，加入线程池
+- CTimerTask_UpdateIndex每隔2秒被唤醒，醒后检查线程池全部空闲，没有空闲就退出，有空闲就开始把队列做成CCmd_UpdateAllIndexFromTimePos对象，加入线程池
 
 ### CCmdUpdateDbFromIB QGenerator盘中定时从IB下载数据，已经被停用
 ### CSetup_QGenerator::QueryAndUpdateKline QGenerator启动时从IB下载数据

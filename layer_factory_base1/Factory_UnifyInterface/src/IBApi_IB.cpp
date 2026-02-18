@@ -47,7 +47,7 @@ void CIBApi_IB::Connect()
 
 	// 启动接收线程
 	m_cmd = std::make_shared<CCmd_IBDaemon>(m_pApi, m_pReader, &m_osSignal);
-	MakeAndGet_MyThreadPool()->commit(*m_cmd);
+	MakeAndGet_MyThreadPool()->commit(0, *m_cmd);
 
 	return;
 

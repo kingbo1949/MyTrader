@@ -34,7 +34,7 @@ void CTimerTask_UpdateIndex::UpdateIndex(const std::set<IQKey>& keys)
 		MakeAndGet_Env()->GetDB_KLine()->GetKLines(key.codeId, key.timeType, query, klines);
 		if (klines.empty()) continue;
 
-		MakeAndGet_MyThreadPool()->commit(CCmd_UpdateAllIndexFromTimePos(key.codeId, key.timeType, klines[0].time));
+		MakeAndGet_MyThreadPool()->commit(0, CCmd_UpdateAllIndexFromTimePos(key.codeId, key.timeType, klines[0].time));
 	}
 
 	time_t endPos = benchmark_milliseconds();

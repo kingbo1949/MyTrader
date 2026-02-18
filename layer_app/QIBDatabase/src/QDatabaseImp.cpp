@@ -143,12 +143,12 @@ void CQDatabaseImp::GetInvalidKLines(::std::string codeId, ITimeType timeType, I
 
 void CQDatabaseImp::RecountAllIndex(std::string codeId, ITimeType timeType, const Ice::Current &current)
 {
-	MakeAndGet_MyThreadPool()->commit(CCmd_RecountAllIndex(codeId, timeType));
+	MakeAndGet_MyThreadPool()->commit(0,CCmd_RecountAllIndex(codeId, timeType));
 }
 
 void CQDatabaseImp::UpdateAllIndexFromTimePos(std::string codeId, ITimeType timeType, long long int timePos, const Ice::Current &current)
 {
-	MakeAndGet_MyThreadPool()->commit(CCmd_UpdateAllIndexFromTimePos(codeId, timeType, timePos));
+	MakeAndGet_MyThreadPool()->commit(0,CCmd_UpdateAllIndexFromTimePos(codeId, timeType, timePos));
 }
 
 

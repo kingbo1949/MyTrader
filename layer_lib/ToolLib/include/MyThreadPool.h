@@ -35,7 +35,7 @@ public:
 						); // wait 直到有 task
 						if (this->stoped && this->tasks.empty())
 							return;
-						task = std::move(this->tasks.front()); // 取一个 task
+						task = std::move(const_cast<PriorityTask&>(this->tasks.top()).task); // 取优先级最高的 task
 						this->tasks.pop();
 					}
 					idlThrNum--;
@@ -65,7 +65,7 @@ public:
 	// 一种是使用   bind： .commit(std::bind(&Dog::sayHello, &dog));
 	// 一种是用 mem_fn： .commit(std::mem_fn(&Dog::sayHello), &dog)
 	template<class F, class... Args>
-	auto commit(F&& f, Args&&... args) ->std::future<decltype(f(args...))>
+	auto commit(int priority, F&& f, Args&&... args) ->std::future<decltype(f(args...))>
 	{
 		if (stoped.load())    // stop == true ??
 			throw std::runtime_error("commit on ThreadPool is stopped.");
@@ -77,12 +77,12 @@ public:
 		std::future<RetType> future = task->get_future();
 		{    // 添加任务到队列
 			std::lock_guard<std::mutex> lock{ m_lock };//对当前块的语句加锁  lock_guard 是 mutex 的 stack 封装类，构造的时候 lock()，析构的时候 unlock()
-			tasks.emplace(
+			tasks.push(PriorityTask{ priority,
 				[task]()
 			{ // push(Task{...})
 				(*task)();
 			}
-			);
+			});
 		}
 		cv_task.notify_one(); // 唤醒一个线程执行
 
@@ -109,10 +109,22 @@ public:
 protected:
 
 	using Task = std::function<void()>;
+
+	struct PriorityTask
+	{
+		int priority;       // 数值越大优先级越高
+		Task task;
+
+		bool operator<(const PriorityTask& other) const
+		{
+			return priority < other.priority;  // max-heap，大值在顶
+		}
+	};
+
 	// 线程池
 	std::vector<std::thread>				pool;
-	// 任务队列
-	std::queue<Task>						tasks;
+	// 任务队列（按优先级排序）
+	std::priority_queue<PriorityTask>		tasks;
 	// 同步
 	std::mutex								m_lock;
 	// 条件阻塞
