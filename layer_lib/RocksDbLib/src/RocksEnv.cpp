@@ -157,6 +157,58 @@ const std::string& CRocksEnv::GetDbPath() const
     return m_dbPath;
 }
 
+std::string CRocksEnv::DumpStats() const
+{
+    std::string result;
+
+    // 1. write stall 相关
+    std::string val;
+    if (m_db->GetProperty("rocksdb.is-write-stopped", &val))
+        result += "write_stopped=" + val;
+    if (m_db->GetProperty("rocksdb.actual-delayed-write-rate", &val))
+        result += " delayed_write_rate=" + val;
+
+    // 2. 各列族 L0 文件数（只报告 L0 > 0 的）
+    std::string l0Info;
+    int totalL0 = 0;
+    for (const auto& [name, handle] : m_cfHandles) {
+        if (m_db->GetProperty(handle, "rocksdb.num-files-at-level0", &val)) {
+            int n = std::stoi(val);
+            totalL0 += n;
+            if (n > 5) {
+                l0Info += " " + name + "=" + val;
+            }
+        }
+    }
+    result += " total_L0=" + std::to_string(totalL0);
+    if (!l0Info.empty())
+        result += " L0_hot:" + l0Info;
+
+    // 3. pending compaction bytes
+    if (m_db->GetProperty("rocksdb.estimate-pending-compaction-bytes", &val))
+        result += " pending_compact=" + std::to_string(std::stoull(val) / (1024 * 1024)) + "MB";
+
+    // 4. memtable 总使用量
+    if (m_db->GetProperty("rocksdb.cur-size-all-mem-tables", &val))
+        result += " mem_tables=" + std::to_string(std::stoull(val) / (1024 * 1024)) + "MB";
+
+    // 5. block cache 使用量
+    if (m_db->GetProperty("rocksdb.block-cache-usage", &val))
+        result += " block_cache=" + std::to_string(std::stoull(val) / (1024 * 1024)) + "MB";
+
+    // 6. stall 统计
+    if (m_db->GetProperty("rocksdb.cfstats-no-file-histogram", &val)) {
+        // 从长文本中提取 stall 关键行
+        auto pos = val.find("stall");
+        if (pos != std::string::npos) {
+            auto end = val.find('\n', pos);
+            result += " | " + val.substr(pos, end - pos);
+        }
+    }
+
+    return result;
+}
+
 CRocksEnv::~CRocksEnv()
 {
     // 关闭所有列族句柄（default 列族由 DB 析构自动处理，但显式关闭更安全）

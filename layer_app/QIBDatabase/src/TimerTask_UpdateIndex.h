@@ -19,6 +19,7 @@ public:
 protected:
 	std::mutex						m_mutex;
 	std::set<IQKey>					m_needUpdate;			// 需要更新的品种
+	int								m_statsCounter = 0;		// DumpStats 计数器
 
 	std::set<IQKey>					GetNeedUpdate();
 	void							UpdateIndex(const std::set<IQKey>& keys);

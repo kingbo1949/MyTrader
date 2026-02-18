@@ -10,6 +10,13 @@ CTimerTask_UpdateIndex::CTimerTask_UpdateIndex()
 }
 void CTimerTask_UpdateIndex::runTimerTask()
 {
+	// 每 6 次（约 60 秒）输出一次 RocksDB 运行状态
+	if (++m_statsCounter >= 6) {
+		m_statsCounter = 0;
+		std::string stats = MakeAndGet_Env()->GetEnv().DumpStats();
+		Log_AsyncPrintDailyFile("rocksdb_stats", stats, 1, false);
+	}
+
 	// 线程池必须全部空闲
 	if (!MakeAndGet_MyThreadPool()->isAllIdle()) return ;
 

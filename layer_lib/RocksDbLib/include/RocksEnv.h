@@ -59,6 +59,10 @@ public:
     /// 获取共享的 WriteOptions（disableWAL = true，无压缩场景下最大化写入性能）
     const rocksdb::WriteOptions& GetWriteOptions() const { return m_writeOptions; }
 
+    /// 获取 RocksDB 运行状态摘要，用于性能诊断
+    /// @return 包含 write stall、L0 文件数、pending compaction、memtable 使用量等关键指标的字符串
+    std::string DumpStats() const;
+
     // 禁止拷贝
     CRocksEnv(const CRocksEnv&) = delete;
     CRocksEnv& operator=(const CRocksEnv&) = delete;
