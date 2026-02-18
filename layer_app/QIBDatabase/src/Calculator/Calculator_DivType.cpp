@@ -165,17 +165,6 @@ IMacdValues CCalculator_DivType::GetMacdValues(const std::string& codeId, ITimeT
 	return ret;
 }
 
-IMacdValue CCalculator_DivType::GetMacdValue(const std::string& codeId, ITimeType timeType, const IKLine& kline)
-{
-	IMacdValue ret;
-	bool find = MakeAndGet_Env()->GetDB_Macd()->GetOne(codeId, timeType, kline.time, ret);
-	if (!find)
-	{
-		printf("CCalculator_DivType_Real::GetMacdValue, not found \n");
-		exit(-1);
-	}
-	return ret;
-}
 CCalculator_DivType::HighAndLow CCalculator_DivType::GetHighLow_MacdDif(const IMacdValues& values)
 {
 	HighAndLow ret;
@@ -272,7 +261,10 @@ std::optional<bool> CCalculator_DivType::CountDivType(const std::string& codeId,
 	IMacdValues maceValues = GetMacdValues(codeId, timeType, klines);
 	HighAndLow highAndLow = GetHighLow_MacdDif(maceValues);
 
-	IMacdValue valueIndex = GetMacdValue(codeId, timeType, kline);
+	IMacdValue valueIndex;
+	bool find = MakeAndGet_Env()->GetDB_Macd()->GetOne(codeId, timeType, kline.time, valueIndex);
+	if (!find) return std::nullopt;
+
 
 	if (highLow.high < kline.high)
 	{
@@ -282,11 +274,6 @@ std::optional<bool> CCalculator_DivType::CountDivType(const std::string& codeId,
 			// 价格创新高dif却没有创新高 顶背离
 			// 顶背离要求两线大于零
 			return true;
-			//if (valueIndex.dif > 0 && valueIndex.dea > 0)
-			//{
-			//	return true;
-			//}
-
 		}
 	}
 	if (highLow.low > kline.low)
@@ -297,11 +284,6 @@ std::optional<bool> CCalculator_DivType::CountDivType(const std::string& codeId,
 			// 价格创新高dif却没有创新低 底背离
 			// 底背离要求两线小于零
 			return false;
-			//if (valueIndex.dif < 0 && valueIndex.dea < 0)
-			//{
-			//	return false;
-			//}
-
 		}
 	}
 	return std::nullopt;

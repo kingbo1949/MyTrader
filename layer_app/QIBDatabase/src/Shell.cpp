@@ -46,7 +46,7 @@ int CShell::run(int, char* [])
 	MakeAndGet_MyThreadPool();
 
 	m_pTimerJob_UpdateIndex = new Timer();
-	m_pTimerJob_UpdateIndex->scheduleRepeated(MakeAndGet_TimerTask_UpdateIndex(), Time::milliSeconds(1000));
+	m_pTimerJob_UpdateIndex->scheduleRepeated(MakeAndGet_TimerTask_UpdateIndex(), Time::milliSeconds(10000));
 
 	communicator()->waitForShutdown();
 
@@ -62,7 +62,7 @@ void CShell::interruptCallback(int signal)
 	while (!MakeAndGet_MyThreadPool()->isAllIdle())
 	{
 		printf("Idle thread count %d \n", MakeAndGet_MyThreadPool()->idlCount());
-		std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 
 	if (m_pTimerJob_UpdateIndex)

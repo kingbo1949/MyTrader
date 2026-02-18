@@ -73,7 +73,7 @@ void CSetup_QGenerator::RunIBApi()
 	// 等待线程池全部空闲再开始订阅行情
 	while (!MakeAndGet_QDatabase()->IsAllIdle())
 	{
-		std::this_thread::sleep_for(std::chrono::microseconds(1000));
+		std::this_thread::sleep_for(std::chrono::microseconds(2000));
 	}
 
 	// 订阅交易所需行情

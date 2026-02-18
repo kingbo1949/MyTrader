@@ -51,7 +51,6 @@ protected:
 
 	// 取klines所对应的macd
 	IMacdValues					GetMacdValues(const std::string& codeId, ITimeType timeType, const IKLines& klines);
-	IMacdValue					GetMacdValue(const std::string& codeId, ITimeType timeType, const IKLine& kline);
 
 
 	void				UpdateValuesToDb(const std::string& codeId, ITimeType timeType, const IDivTypeValues& values);
