@@ -25,11 +25,14 @@ public:
 	// 全部更新回合
 	virtual void			SetMatches(const KlinePlotSuit& klinePlotSuit) override final { ; };
 
+	IBMacdPtr				GetMacdValue(Tick_T time);
+
 protected:
 	// 把数据库查询做成map
 	virtual bool			MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLinePtrs& klines, int beginPos) override final;
 
 private:
+	std::mutex				m_mutex;
 	std::map<Tick_T, IBMacdPtr>	m_mapMacdValue;
 	QCPGraphQPtr			m_macd;
 	QCPGraphQPtr			m_dea;

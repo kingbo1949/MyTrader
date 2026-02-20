@@ -160,9 +160,18 @@ void CMacdGraph::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChg
 }
 
 
+IBMacdPtr CMacdGraph::GetMacdValue(Tick_T time)
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	auto pos = m_mapMacdValue.find(time);
+	if (pos == m_mapMacdValue.end()) return nullptr;
+	return pos->second;
+}
 
 bool CMacdGraph::MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLinePtrs& klines, int beginPos)
 {
+	std::lock_guard<std::mutex> lock(m_mutex);
+
 	if (klines.empty()) return false;
 
 	QQuery query;

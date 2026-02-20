@@ -36,6 +36,14 @@ IBTrader::IQDatabaseI::GetLastUpdateTick(int& updateCount,
 }
 
 void
+IBTrader::IQDatabaseI::DelCodeId(::std::string /*codeId*/,
+                                 long long int /*beginTime*/,
+                                 long long int /*endTime*/,
+                                 const Ice::Current& current)
+{
+}
+
+void
 IBTrader::IQDatabaseI::RemoveAllTicks(::std::string /*codeId*/,
                                       const Ice::Current& current)
 {

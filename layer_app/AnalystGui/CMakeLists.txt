@@ -44,6 +44,7 @@ set(ITEMHANDLER_LIST
         ItemHandler/TradeSideRect.h
         ItemHandler/VwMaGraph.cpp
         ItemHandler/VwMaGraph.h
+
 )
 
 set(KLINESHAPE_LIST

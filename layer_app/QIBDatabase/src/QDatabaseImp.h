@@ -20,6 +20,9 @@ public:
 
 	virtual ITick GetLastUpdateTick(int& updateCount, long long int& recentUpdateSecnd, const ::Ice::Current& current) override final;
 
+	virtual void DelCodeId(::std::string codeId, long long int beginTime, long long int endTime, const ::Ice::Current& current) final;
+
+
 
 	// tick表
 	virtual void RemoveAllTicks(::std::string codeId, const ::Ice::Current& current) override final;

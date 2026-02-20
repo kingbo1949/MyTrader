@@ -20,12 +20,8 @@ module IBTrader
 		// 查询最近更新情况
 		ITick		GetLastUpdateTick(out int updateCount, out long recentUpdateSecnd);
 
-
-		// 合约表部分
-        // void		AddContract(IContract contract);					// 更新或添加合约 
-		// bool		GetContract(string codeId,out IContract contract);	// 查询合约
-		// void		GetAllContracts(out IContracts contracts);			// 查询合约
-		
+		// 删除合约的数据（K线 指标）
+		void		DelCodeId(string codeId, long beginTime,long endTime);
 
 		// 原始TICK表
 		void		RemoveAllTicks(string codeId);											// 删除某一品种的所有TICK表数据

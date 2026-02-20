@@ -5,11 +5,24 @@
 #include <sstream>
 void CCleanUpKline::Go()
 {
-	ClenaUpKLine("NQ");
-	ClenaUpKLine("ES");
-	ClenaUpKLine("TSLA");
-	ClenaUpKLine("NVDA");
-	ClenaUpKLine("AAPL");
+	Tick_T beginTime = 0;
+	Tick_T endTime = LLONG_MAX;
+	MakeAndGet_QDatabase()->DelCodeId("COST", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("ETHUSDRR", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("CRCL", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("HIMS", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("ALAB", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("KTOS", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("UPST", beginTime, endTime );
+
+
+	// ClenaUpKLine("COST");
+	// ClenaUpKLine("ETHUSDRR");
+	// ClenaUpKLine("CRCL");
+	// ClenaUpKLine("HIMS");
+	// ClenaUpKLine("ALAB");
+	// ClenaUpKLine("KTOS");
+	// ClenaUpKLine("UPST");
 }
 
 void CCleanUpKline::ClenaUpKLine(const CodeStr& codeId)

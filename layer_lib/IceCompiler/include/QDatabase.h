@@ -129,6 +129,11 @@ public:
     bool _iceD_GetLastUpdateTick(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual void DelCodeId(::std::string codeId, long long int beginTime, long long int endTime, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_DelCodeId(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     virtual void RemoveAllTicks(::std::string codeId, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_RemoveAllTicks(::IceInternal::Incoming&, const ::Ice::Current&);
@@ -481,6 +486,32 @@ public:
 
     /// \cond INTERNAL
     void _iceI_GetLastUpdateTick(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetLastUpdateTickResult>>&, const ::Ice::Context&);
+    /// \endcond
+
+    void DelCodeId(const ::std::string& codeId, long long int beginTime, long long int endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_DelCodeId, codeId, beginTime, endTime, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto DelCodeIdAsync(const ::std::string& codeId, long long int beginTime, long long int endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<void>>().get_future())
+    {
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_DelCodeId, codeId, beginTime, endTime, context);
+    }
+
+    ::std::function<void()>
+    DelCodeIdAsync(const ::std::string& codeId, long long int beginTime, long long int endTime,
+                   ::std::function<void()> response,
+                   ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                   ::std::function<void(bool)> sent = nullptr,
+                   const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_DelCodeId, codeId, beginTime, endTime, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_DelCodeId(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, long long int, long long int, const ::Ice::Context&);
     /// \endcond
 
     void RemoveAllTicks(const ::std::string& codeId, const ::Ice::Context& context = ::Ice::noExplicitContext)
@@ -1347,6 +1378,14 @@ typedef ::IceUtil::Handle< Callback_IQDatabase_GetLastUpdateTick_Base> Callback_
 
 /**
  * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_DelCodeId.
+ */
+class Callback_IQDatabase_DelCodeId_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_DelCodeId_Base> Callback_IQDatabase_DelCodeIdPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
  * IceProxy::IBTrader::IQDatabase::begin_RemoveAllTicks.
  * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_RemoveAllTicks.
  */
@@ -1764,6 +1803,44 @@ public:
 private:
 
     ::Ice::AsyncResultPtr _iceI_begin_GetLastUpdateTick(const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    void DelCodeId(const ::std::string& codeId, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_DelCodeId(_iceI_begin_DelCodeId(codeId, beginTime, endTime, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_DelCodeId(const ::std::string& codeId, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_DelCodeId(codeId, beginTime, endTime, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_DelCodeId(const ::std::string& codeId, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_DelCodeId(codeId, beginTime, endTime, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_DelCodeId(const ::std::string& codeId, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_DelCodeId(codeId, beginTime, endTime, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_DelCodeId(const ::std::string& codeId, ::Ice::Long beginTime, ::Ice::Long endTime, const ::IBTrader::Callback_IQDatabase_DelCodeIdPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_DelCodeId(codeId, beginTime, endTime, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_DelCodeId(const ::std::string& codeId, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_DelCodeIdPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_DelCodeId(codeId, beginTime, endTime, context, cb, cookie);
+    }
+
+    void end_DelCodeId(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_DelCodeId(const ::std::string&, ::Ice::Long, ::Ice::Long, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -2953,6 +3030,11 @@ public:
     bool _iceD_GetLastUpdateTick(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual void DelCodeId(const ::std::string& codeId, ::Ice::Long beginTime, ::Ice::Long endTime, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_DelCodeId(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     virtual void RemoveAllTicks(const ::std::string& codeId, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_RemoveAllTicks(::IceInternal::Incoming&, const ::Ice::Current&);
@@ -3890,6 +3972,162 @@ template<class T, typename CT> Callback_IQDatabase_GetLastUpdateTickPtr
 newCallback_IQDatabase_GetLastUpdateTick(T* instance, void (T::*cb)(const ITick&, ::Ice::Int, ::Ice::Long, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_IQDatabase_GetLastUpdateTick<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_DelCodeId.
+ */
+template<class T>
+class CallbackNC_IQDatabase_DelCodeId : public Callback_IQDatabase_DelCodeId_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_IQDatabase_DelCodeId(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_DelCodeId<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_DelCodeId<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_DelCodeId<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_DelCodeId<T>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_DelCodeId.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_DelCodeId : public Callback_IQDatabase_DelCodeId_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_IQDatabase_DelCodeId(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T, typename CT> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_DelCodeId<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T, typename CT> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_DelCodeId<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T, typename CT> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_DelCodeId<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_DelCodeId.
+ */
+template<class T, typename CT> Callback_IQDatabase_DelCodeIdPtr
+newCallback_IQDatabase_DelCodeId(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_DelCodeId<T, CT>(instance, 0, excb, sentcb);
 }
 
 /**

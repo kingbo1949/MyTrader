@@ -25,6 +25,9 @@ public:
 	// 查询最近更新到行情数据库的情况
 	virtual IBTickPtr		GetLastUpdateTick(int& updateCount, time_t& recentUpdateSecnd) = 0;
 
+	// --------------- 删除品种数据 ------------------------
+	virtual void			DelCodeId(const CodeStr& codeId, Tick_T beginTime, Tick_T endTime) = 0;
+
 	// --------------- tick 表 ---------------------
 	// 取单品种数据
 	virtual IBTickPtrs		GetTickHis(const CodeStr& codeId, const QQuery& query) = 0;

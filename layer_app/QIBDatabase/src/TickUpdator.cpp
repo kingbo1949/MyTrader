@@ -84,7 +84,14 @@ void CTickUpdator::UpdateTickToKLine(const ITick& tick, ITimeType timeType)
 	if (!exist)
 	{
 		// 新生成的K线 加入线程池立刻更新 高优先级
-		MakeAndGet_MyThreadPool()->commit(100,CCmd_UpdateAllIndexFromTimePos(tick.codeId, timeType, kline.time));
+		IQuery query;
+		query.byReqType = 0;
+		query.dwSubscribeNum = 2;
+		IKLines klines;
+		MakeAndGet_Env()->GetDB_KLine()->GetKLines(tick.codeId, timeType, query, klines);
+		if (klines.empty()) return;
+
+		MakeAndGet_MyThreadPool()->commit(100,CCmd_UpdateAllIndexFromTimePos(tick.codeId, timeType, klines[0].time));
 	}else
 	{
 		MakeAndGet_TimerTask_UpdateIndex()->AddNeedUpdate(tick.codeId, timeType);
@@ -97,16 +104,5 @@ void CTickUpdator::UpdateTickToKLine(const ITick& tick, ITimeType timeType)
 
 
 
-SecurityType CTickUpdator::GetSecurityType(const std::string& codeId)
-{
-	if (codeId == "NQ" || codeId == "ES" || codeId == "MBT" || codeId == "ETHUSDRR")
-	{
-		return SecurityType::FUT;
-	}
-	else
-	{
-		return SecurityType::STK;
-	}
-}
 
 

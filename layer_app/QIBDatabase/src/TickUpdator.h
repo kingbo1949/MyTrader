@@ -23,7 +23,7 @@ protected:
 
 	void UpdateTickToKLine(const ITick& tick, ITimeType timeType);
 
-	SecurityType GetSecurityType(const std::string& codeId);
+
 
 
 

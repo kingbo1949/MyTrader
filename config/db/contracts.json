@@ -33,17 +33,6 @@
 		"securityType" : "FUT"
 	},
 	{
-		"codeId" : "ETHUSDRR",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "ETHG6",
-		"minMove" : 0.25,
-		"primaryExchangePl" : "CME",
-		"securityType" : "FUT"
-	},
-	{
 		"codeId" : "GC",
 		"currencyID" : "USD",
 		"decDigits" : 2,
@@ -176,17 +165,6 @@
 		"securityType" : "STK"
 	},
 	{
-		"codeId" : "COST",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "COST",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
 		"codeId" : "GOOG",
 		"currencyID" : "USD",
 		"decDigits" : 2,
@@ -250,17 +228,6 @@
 		"localSymbol" : "MSTR",
 		"minMove" : 0.01,
 		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "CRCL",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "CRCL",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
 		"securityType" : "STK"
 	},
 	{
@@ -374,28 +341,6 @@
 		"securityType" : "STK"
 	},
 	{
-		"codeId" : "HIMS",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "HIMS",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "ALAB",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "ALAB",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
 		"codeId" : "CLS",
 		"currencyID" : "USD",
 		"decDigits" : 2,
@@ -413,28 +358,6 @@
 		"enable" : true,
 		"exchangePl" : "SMART",
 		"localSymbol" : "SNDK",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "KTOS",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "KTOS",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "UPST",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "UPST",
 		"minMove" : 0.01,
 		"primaryExchangePl" : "NASDAQ",
 		"securityType" : "STK"

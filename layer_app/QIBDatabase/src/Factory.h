@@ -3,6 +3,7 @@
 #include <IceUtil/IceUtil.h>
 #include <Ice/Ice.h>
 #include <MyThreadPool.h>
+#include <base_struc.h>
 
 using namespace IceUtil;
 using namespace Ice;
@@ -34,4 +35,6 @@ MyThreadPoolPtr				MakeAndGet_MyThreadPool();
 void 						GetKline_RecountQuery_All(const std::string& codeId, ITimeType timetype, IKLines& klines);
 void						GetKline_RecountQuery_TimePos(const std::string& codeId, ITimeType timetype, long long int timePos, IKLines& klines);
 std::string					GetKlineStr(const IKLine& kline);
+
+SecurityType				GetSecurityType(const std::string& codeId);
 

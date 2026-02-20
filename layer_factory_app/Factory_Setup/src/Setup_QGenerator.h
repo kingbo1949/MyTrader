@@ -37,6 +37,9 @@ protected:
 	// 删除K线
 	void						RemoveKlines(const CodeStr& codeId, Time_Type timeType, const std::string& beginTimestr, const std::string& endTimeStr);
 
+	// 判断品种是否需要订阅 不订阅的品种仅每天更新数据而不产生数据库行情压力
+	bool						NeedSubscribe(const CodeStr& codeId);
+
 
 
 

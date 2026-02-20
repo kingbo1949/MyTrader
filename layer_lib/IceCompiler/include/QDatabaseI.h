@@ -23,6 +23,11 @@ public:
                                     long long int&,
                                     const Ice::Current&) override;
 
+    virtual void DelCodeId(::std::string,
+                           long long int,
+                           long long int,
+                           const Ice::Current&) override;
+
     virtual void RemoveAllTicks(::std::string,
                                 const Ice::Current&) override;
 

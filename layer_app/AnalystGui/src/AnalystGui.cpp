@@ -151,7 +151,7 @@ void AnalystGui::InitAllCodeId()
 void AnalystGui::InitPositionCodeId()
 {
 	QStringList codeIds = { "NQ", "GC", "TSLA", "HOOD", "MU", "CLS", "SOFI", "BMNR", "ORCL",
-		"COIN", "STX", "AVGO", "MSTR", "INTC", "TSM", "MSFT", "META", "UPST", "RKLB", "CRCL"};
+		"COIN", "STX", "AVGO", "MSTR", "INTC", "TSM", "MSFT", "META", "RKLB"};
 
 	m_model_positionCodeId = new QStandardItemModel(int(codeIds.size()), 1, ui.positionCodeIdView);
 
@@ -420,9 +420,9 @@ void AnalystGui::onTimerKlineShape()
 		ui.macdAlertView->verticalHeader()->hide();
 		m_pScanKShape_breakMix = std::make_shared<CScanKShape_BreakMix>(ui.macdAlertView);
 	}
-	m_pScanKShape_future->Go();
-	m_pScanKShape_stock->Go();
-	m_pScanKShape_breakMix->Go();
+	// m_pScanKShape_future->Go();
+	// m_pScanKShape_stock->Go();
+	// m_pScanKShape_breakMix->Go();
 	return;
 
 }

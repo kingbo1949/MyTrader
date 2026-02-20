@@ -49,6 +49,11 @@ IBTickPtr CMyQDatabase_Real::GetLastUpdateTick(int& updateCount, time_t& recentU
 
 }
 
+void CMyQDatabase_Real::DelCodeId(const CodeStr &codeId, Tick_T beginTime, Tick_T endTime)
+{
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->DelCodeId(codeId, beginTime, endTime);
+}
+
 IBTickPtrs CMyQDatabase_Real::GetTickHis(const CodeStr& codeId, const QQuery& query)
 {
 	IBTickPtrs back;

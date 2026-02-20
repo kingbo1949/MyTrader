@@ -139,3 +139,15 @@ std::string GetKlineStr(const IKLine &kline)
 	return temstr;
 
 }
+
+SecurityType GetSecurityType(const std::string& codeId)
+{
+	if (codeId == "NQ" || codeId == "ES" || codeId == "MBT" || codeId == "GC")
+	{
+		return SecurityType::FUT;
+	}
+	else
+	{
+		return SecurityType::STK;
+	}
+}

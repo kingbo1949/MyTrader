@@ -78,7 +78,13 @@ void CSetup_QGenerator::RunIBApi()
 
 	// 订阅交易所需行情
 	IbContractPtrs tContracts = GetStrategyCodeId(CodeIdType::ForSubscribeQ);
-	Get_IBApi()->SubscribeQuote(tContracts);
+	IbContractPtrs contracts;
+	for (auto contract : tContracts)
+	{
+		//if (!NeedSubscribe(contract->codeId)) continue;
+		contracts.push_back(contract);
+	}
+	Get_IBApi()->SubscribeQuote(contracts);
 	return;
 }
 
@@ -165,4 +171,18 @@ void CSetup_QGenerator::RemoveKlines(const CodeStr& codeId, Time_Type timeType, 
 	timePair.endPos = CGlobal::GetTimeByStr(endTimeStr) * 1000;
 	MakeAndGet_QDatabase()->RemoveKLines(codeId, timeType, timePair);
 
+}
+
+bool CSetup_QGenerator::NeedSubscribe(const CodeStr &codeId)
+{
+	const std::set<CodeStr> codeIds = {"NQ", "ES", "GC", "AAPL", "TSLA", "AVGO", "NVDA"};
+	const auto pos = codeIds.find(codeId);
+	if (pos == codeIds.end())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }

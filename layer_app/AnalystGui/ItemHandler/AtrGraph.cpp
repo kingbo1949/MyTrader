@@ -108,8 +108,17 @@ void CAtrGraph::UpdateKlines(const KlinePlotSuit &klinePlotSuit, const KlineChgC
 }
 
 
+IBAtrPtr CAtrGraph::GetAtrValue(Tick_T time)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    auto pos = m_mapAtrValue.find(time);
+    if (pos == m_mapAtrValue.end()) return nullptr;
+    return pos->second;
+}
+
 bool CAtrGraph::MakeMap(const CodeStr &codeId, Time_Type timetype, const IBKLinePtrs &klines, int beginPos)
 {
+    std::lock_guard<std::mutex> lock(m_mutex);
     if (klines.empty()) return false;
 
     QQuery query;

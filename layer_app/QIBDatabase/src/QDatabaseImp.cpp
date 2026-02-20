@@ -48,6 +48,23 @@ ITick CQDatabaseImp::GetLastUpdateTick(int& updateCount, long long int& recentUp
 	return m_recentUpdateTick;
 }
 
+void CQDatabaseImp::DelCodeId(std::string codeId, long long int beginTime, long long int endTime, const Ice::Current &current)
+{
+	MakeAndGet_Env()->GetDB_TickHis()->RemoveByRange(codeId, beginTime, endTime);
+
+	for (auto timetype : ALL_TIME_TYPES)
+	{
+		MakeAndGet_Env()->GetDB_DivType()->RemoveByRange(codeId, timetype, beginTime, endTime);
+		MakeAndGet_Env()->GetDB_Macd()->RemoveByRange(codeId, timetype, beginTime, endTime);
+		MakeAndGet_Env()->GetDB_Ma()->RemoveByRange(codeId, timetype, beginTime, endTime);
+		MakeAndGet_Env()->GetDB_Ema()->RemoveByRange(codeId, timetype, beginTime, endTime);
+		MakeAndGet_Env()->GetDB_VwMa()->RemoveByRange(codeId, timetype, beginTime, endTime);
+		MakeAndGet_Env()->GetDB_Atr()->RemoveByRange(codeId, timetype, beginTime, endTime);
+		MakeAndGet_Env()->GetDB_KLine()->RemoveByRange(codeId, timetype, beginTime, endTime);
+
+	}
+}
+
 void CQDatabaseImp::RemoveAllTicks(::std::string codeId, const::Ice::Current& current)
 {
 	MakeAndGet_Env()->GetDB_TickHis()->RemoveKey(codeId);
