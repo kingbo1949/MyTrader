@@ -14,7 +14,7 @@ strategies:
   - class: "Break4Week"
     enable: true
     code_id: "NQ"
-    interval: "H1"
+    interval: "M15"
     start_time: "2025-01-01 00:00:00"
     end_time: "2026-01-01 00:00:00"
     direction: "LONG"
@@ -22,3 +22,16 @@ strategies:
       bar_count: 20
       can_open_begin: "08:00:00"
       can_open_end: "10:00:00"
+
+  - class: "UTurnBottom"
+    enable: false
+    code_id: "NQ"
+    interval: "M15"
+    direction: "LONG"
+    use_enriched: true
+    start_time: "2025-01-01 00:00:00"
+    end_time:   "2026-01-01 00:00:00"
+    params:
+      iv: 0.24
+      risk_free_rate: 0.04
+      option_days: 14

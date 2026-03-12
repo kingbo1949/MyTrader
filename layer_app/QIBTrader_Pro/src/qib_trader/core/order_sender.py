@@ -27,6 +27,7 @@ class RealTradeSender(OrderSender):
         self.symbol = symbol
 
     def send(self, direction: Direction, price: float, volume: float, order_type: str) -> str:
+        # 调用 ice_client 封装的 C++ 接口 (如 UnifyInterface)
         print(f"[REAL] 策略 {self.strategy_name} 向柜台发送订单")
         return "real_ord_123"
 

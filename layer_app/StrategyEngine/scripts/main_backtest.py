@@ -17,28 +17,36 @@ from qib_trader.utils.stats import PerformanceAnalyzer
 logger = logging.getLogger("MainBacktest")
 
 
-def _build_data_key_map(active_configs: list) -> dict:
-    """按 (code_id, interval) 去重，合并各策略的时间范围。"""
+def _build_data_key_map(active_configs: list) -> tuple[dict, dict]:
+    """按 (code_id, interval) 去重，合并时间范围，记录 use_enriched 标志。"""
     data_key_map: dict[tuple, tuple] = {}
+    enriched_map: dict[tuple, bool] = {}
     for s in active_configs:
         key = (s["code_id"], s["interval"])
         start, end = s["start_time"], s["end_time"]
+        use_enriched = s.get("use_enriched", False)
         if key not in data_key_map:
             data_key_map[key] = (start, end)
+            enriched_map[key] = use_enriched
         else:
             prev_start, prev_end = data_key_map[key]
             data_key_map[key] = (min(prev_start, start), max(prev_end, end))
-    return data_key_map
+            enriched_map[key] = enriched_map[key] or use_enriched
+    return data_key_map, enriched_map
 
 
-def _fetch_bars(code_id: str, interval_str: str, start_time, end_time) -> list[BarData]:
+def _fetch_bars(code_id: str, interval_str: str, start_time, end_time,
+                use_enriched: bool = False) -> list[BarData]:
     """拉取单组 (code_id, interval) 的 bar 列表，失败返回空列表。"""
     time_type = getattr(IBTrader.ITimeType, interval_str)
-    klines = FactoryIce.get_klines_loop(
-        code_id=code_id,
-        time_type=time_type,
-        time_pair=FactoryIce.make_timepair(start_time, end_time)
-    )
+    time_pair = FactoryIce.make_timepair(start_time, end_time)
+    if use_enriched:
+        df = FactoryIce.get_enriched_klines_loop(code_id, time_type, time_pair)
+        if df.empty:
+            logger.warning(f"未获取到 enriched 数据: {code_id} {interval_str}，跳过")
+            return []
+        return IceConverter.enriched_df_to_bars(df, code_id, interval_str)
+    klines = FactoryIce.get_klines_loop(code_id=code_id, time_type=time_type, time_pair=time_pair)
     if not klines:
         logger.warning(f"未获取到数据: {code_id} {interval_str}，跳过")
         return []
@@ -46,12 +54,14 @@ def _fetch_bars(code_id: str, interval_str: str, start_time, end_time) -> list[B
     return IceConverter.df_to_bars(df, code_id, interval_str)
 
 
-def _fetch_all_bars(data_key_map: dict) -> dict[tuple, list[BarData]]:
+def _fetch_all_bars(data_key_map: dict, enriched_map: dict) -> dict[tuple, list[BarData]]:
     """批量拉取所有 (code_id, interval) 的数据，返回非空结果。"""
     bars_map: dict[tuple, list[BarData]] = {}
     for (code_id, interval_str), (start_time, end_time) in data_key_map.items():
-        logger.info(f"拉取数据: {code_id} {interval_str} [{start_time} ~ {end_time}]")
-        bars = _fetch_bars(code_id, interval_str, start_time, end_time)
+        use_enriched = enriched_map.get((code_id, interval_str), False)
+        tag = "(enriched)" if use_enriched else ""
+        logger.info(f"拉取数据{tag}: {code_id} {interval_str} [{start_time} ~ {end_time}]")
+        bars = _fetch_bars(code_id, interval_str, start_time, end_time, use_enriched)
         if bars:
             bars_map[(code_id, interval_str)] = bars
             logger.info(f"  获取 {len(bars)} 根 bar")
@@ -117,10 +127,10 @@ def main():
             logger.warning("无启用任务，退出")
             return
 
-        data_key_map = _build_data_key_map(active_configs)
+        data_key_map, enriched_map = _build_data_key_map(active_configs)
         logger.info(f"去重后需拉取 {len(data_key_map)} 组数据")
 
-        bars_map = _fetch_all_bars(data_key_map)
+        bars_map = _fetch_all_bars(data_key_map, enriched_map)
         if not bars_map:
             logger.error("所有数据均为空，退出")
             return

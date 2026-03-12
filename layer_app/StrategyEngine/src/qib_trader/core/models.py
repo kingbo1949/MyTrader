@@ -59,6 +59,16 @@ class BarData:
     close_price: float
     volume: float
     open_interest: float = 0.0
+    # 技术指标
+    dif: float = 0.0
+    dea: float = 0.0
+    div_type: str = ""        # "Normal"/"Bottom"/"BottomSub"/"Top"/"TopSub"
+    is_uturn: bool = False
+    atr: float = 0.0
+    # 上一日日线数据（仅对日内 bar 有效）
+    prev_day_high: float = 0.0
+    prev_day_low: float = 0.0
+    prev_day_close: float = 0.0
 
 # --- 3. 交易执行数据模型 ---
 

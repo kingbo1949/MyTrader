@@ -123,3 +123,37 @@ class IceConverter:
             df.set_index('datetime', inplace=True)
 
         return df[['dif', 'dea', 'macd']]
+
+    @staticmethod
+    def enriched_df_to_bars(df: pd.DataFrame, codeId: CodeId, interval_str: str) -> BarDatas:
+        """
+        将 get_enriched_klines_loop 返回的 DataFrame 转换为 BarData 列表。
+        用 getattr 安全读取扩展字段，确保向后兼容。
+        """
+        if df.empty:
+            return []
+        try:
+            interval_enum = Interval(interval_str)
+        except ValueError:
+            raise ValueError(f"不支持的周期字符串: {interval_str}")
+        return [
+            BarData(
+                codeId=codeId,
+                datetime=row.datetime,
+                interval=interval_enum,
+                open_price=float(row.open_price),
+                high_price=float(row.high_price),
+                low_price=float(row.low_price),
+                close_price=float(row.close_price),
+                volume=int(row.volume),
+                dif           =float(getattr(row, 'dif',            0.0)),
+                dea           =float(getattr(row, 'dea',            0.0)),
+                div_type      =str  (getattr(row, 'div_type',       '')),
+                is_uturn      =bool (getattr(row, 'is_uturn',       False)),
+                atr           =float(getattr(row, 'atr',            0.0)),
+                prev_day_high =float(getattr(row, 'prev_day_high',  0.0)),
+                prev_day_low  =float(getattr(row, 'prev_day_low',   0.0)),
+                prev_day_close=float(getattr(row, 'prev_day_close', 0.0)),
+            )
+            for row in df.itertuples(index=False)
+        ]
