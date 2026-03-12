@@ -1,0 +1,24 @@
+# config/strategies.yaml
+strategies:
+  - class: "DoubleMAStrategy"
+    enable: false
+    code_id: "NQ"
+    interval: "D1"
+    start_time: "2025-01-01 00:00:00"
+    end_time: "2026-01-01 00:00:00"
+    direction: "LONG"
+    params:
+      fast_window: 5
+      slow_window: 20
+
+  - class: "Break4Week"
+    enable: true
+    code_id: "NQ"
+    interval: "H1"
+    start_time: "2025-01-01 00:00:00"
+    end_time: "2026-01-01 00:00:00"
+    direction: "LONG"
+    params:
+      bar_count: 20
+      can_open_begin: "08:00:00"
+      can_open_end: "10:00:00"

@@ -17,7 +17,7 @@ module IBTrader
 	{
 		RMB,						//人民币
 		USD,						//美元
-		HKD,						//港币
+		HKD,						//港币å
 		GBP,						//英镑
 		JPY,						//日元
 		CAD,						//加拿大元

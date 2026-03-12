@@ -79,4 +79,4 @@ endif()
 
 #target_link_options(${TARGETNAME} PRIVATE /VERBOSE:LIB)
 set_target_properties(${TARGETNAME} PROPERTIES INTERFACE_LINK_LIBRARIES "ZeroIce::all")
-#set_target_properties(ZeroIce::ice PROPERTIES INTERFACE_LINK_LIBRARIES "Bzip2::bzip2")
+#set_target_properties(ZeroIce::py PROPERTIES INTERFACE_LINK_LIBRARIES "Bzip2::bzip2")
