@@ -2,12 +2,12 @@
 #include <RocksWriteBatch.h>
 #include <climits>
 #include <chrono>
-
+#include <Factory_Log.h>
 CDbTable_TickHis::CDbTable_TickHis(CRocksEnv& env, const std::string& cfName)
 	: m_env(env)
 {
 	m_table = std::make_unique<CRocksTable<ITick>>(env, cfName);
-	printf("CDbTable_TickHis open\n");
+	Log_Print(LogLevel::Info, fmt::format("CDbTable_TickHis open"));
 }
 
 void CDbTable_TickHis::AddOne(const ITick& value)

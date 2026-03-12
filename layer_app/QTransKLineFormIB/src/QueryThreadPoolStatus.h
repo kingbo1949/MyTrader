@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-
+#include <base_struc.h>
 class CQueryThreadPoolStatus
 {
 public:
@@ -8,6 +8,8 @@ public:
     virtual ~CQueryThreadPoolStatus() { ; };
 
     void	Go();
+
+    void    Test(const std::string& timestr );
 
 };
 

@@ -169,15 +169,15 @@ bool CQDatabaseImp::GetLastDayKLine(std::string codeId, long long int msTime, IK
 	if (msTime < msDay + 17 * 60 * 60 * 1000)
 	{
 		// msTime是一个小于17:00:00的时间
-		belongDay = msTime;
+		belongDay = msDay;
 	}else
 	{
 		// msTime是一个17:00:00 - 24:00:00 的时间
-		belongDay = msTime + 24 * 60 * 60 * 1000;
+		belongDay = msDay + 24 * 60 * 60 * 1000;
 	}
 	IQuery query;
 	query.byReqType = 2;		// 2表示请求某个时间以前(包括该时间)多少个单位的数据(dwSubscribeNum为0时表示该时间前所有的数据)
-	query.tTime = belongDay -1; // 时间(请求类型为2、3时使用)(毫秒) 数据区间为[... : tTime] 或者 [tTime : ...]
+	query.tTime = belongDay - 1000; // 时间(请求类型为2、3时使用)(毫秒) 数据区间为[... : tTime] 或者 [tTime : ...]
 	query.dwSubscribeNum = 1;
 
 	IKLines klines;

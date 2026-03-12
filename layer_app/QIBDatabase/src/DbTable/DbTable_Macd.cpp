@@ -2,7 +2,7 @@
 #include "../Factory.h"
 #include <RocksWriteBatch.h>
 #include <climits>
-
+#include <Factory_Log.h>
 CDbTable_Macd::CDbTable_Macd(CRocksEnv& env, const std::string& prefix)
 	: m_env(env), m_prefix(prefix)
 {
@@ -10,7 +10,7 @@ CDbTable_Macd::CDbTable_Macd(CRocksEnv& env, const std::string& prefix)
 	{
 		GetTable(tt);
 	}
-	printf("CDbTable_Macd open, %zu column families ready\n", m_tables.size());
+	Log_Print(LogLevel::Info, fmt::format("CDbTable_Macd open, {} column families ready", m_tables.size()));
 }
 
 CRocksTable<IMacdValue>& CDbTable_Macd::GetTable(ITimeType timeType)

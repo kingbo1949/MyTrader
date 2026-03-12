@@ -2,7 +2,7 @@
 #include "../Factory.h"
 #include <RocksWriteBatch.h>
 #include <climits>
-
+#include <Factory_Log.h>
 CDbTable_Average::CDbTable_Average(CRocksEnv& env, const std::string& prefix)
 	: m_env(env), m_prefix(prefix)
 {
@@ -10,7 +10,7 @@ CDbTable_Average::CDbTable_Average(CRocksEnv& env, const std::string& prefix)
 	{
 		GetTable(tt);
 	}
-	printf("CDbTable_Average open, %zu column families ready\n", m_tables.size());
+	Log_Print(LogLevel::Info, fmt::format("CDbTable_Average open, {} column families ready", m_tables.size()));
 }
 
 CRocksTable<IAvgValue>& CDbTable_Average::GetTable(ITimeType timeType)

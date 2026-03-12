@@ -348,6 +348,18 @@ IBKLinePtrs CMyQDatabase_Real::GetInvalidKLines(const CodeStr& codeId, Time_Type
 	return back;
 }
 
+// 取上一日日线
+IBKLinePtr CMyQDatabase_Real::GetLastDayKLine(const CodeStr& codeId, Tick_T time)
+{
+	IKLine kline;
+	bool success = MakeAndGet_IceProxy()->GetQDatabasePrx()->GetLastDayKLine(codeId, time, kline);
+	if (!success) return nullptr;
+
+	IBKLinePtr ibkline = CIceTransfor::TransKLineIceToMy(kline);
+	return ibkline;
+}
+
+
 void CMyQDatabase_Real::RecountAllIndex(const CodeStr &codeId, Time_Type timeType)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);

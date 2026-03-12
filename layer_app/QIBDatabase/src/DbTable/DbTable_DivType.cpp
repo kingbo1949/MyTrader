@@ -2,7 +2,7 @@
 #include "../Factory.h"
 #include <RocksWriteBatch.h>
 #include <climits>
-
+#include <Factory_Log.h>
 CDbTable_DivType::CDbTable_DivType(CRocksEnv& env, const std::string& prefix)
 	: m_env(env), m_prefix(prefix)
 {
@@ -10,7 +10,7 @@ CDbTable_DivType::CDbTable_DivType(CRocksEnv& env, const std::string& prefix)
 	{
 		GetTable(tt);
 	}
-	printf("CDbTable_DivType open, %zu column families ready\n", m_tables.size());
+	Log_Print(LogLevel::Info, fmt::format("CDbTable_DivType open, {} column families ready", m_tables.size()));
 }
 
 CRocksTable<IDivTypeValue>& CDbTable_DivType::GetTable(ITimeType timeType)

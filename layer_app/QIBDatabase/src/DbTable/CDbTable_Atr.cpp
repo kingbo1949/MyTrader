@@ -2,6 +2,7 @@
 #include "../Factory.h"
 #include <RocksWriteBatch.h>
 #include <climits>
+#include <Factory_Log.h>
 
 CDbTable_Atr::CDbTable_Atr(CRocksEnv& env, const std::string& prefix)
 	: m_env(env), m_prefix(prefix)
@@ -10,7 +11,7 @@ CDbTable_Atr::CDbTable_Atr(CRocksEnv& env, const std::string& prefix)
 	{
 		GetTable(tt);
 	}
-	printf("CDbTable_Atr open, %zu column families ready\n", m_tables.size());
+	Log_Print(LogLevel::Info, fmt::format("CDbTable_Atr open, {} column families ready", m_tables.size()));
 }
 
 CRocksTable<IAtrValue>& CDbTable_Atr::GetTable(ITimeType timeType)

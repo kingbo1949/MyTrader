@@ -85,6 +85,9 @@ public:
 	// 取无效的BAR
 	virtual IBKLinePtrs		GetInvalidKLines(const CodeStr& codeId, Time_Type timeType) override final;
 
+	// 取上一日日线
+	virtual IBKLinePtr		GetLastDayKLine(const CodeStr& codeId, Tick_T time) final;
+
 	// --------------- 指标更新 ---------------------
 	// 全量计算某品种所有指标
 	virtual void			RecountAllIndex(const CodeStr& codeId, Time_Type timeType) final;
