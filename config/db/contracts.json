@@ -27,7 +27,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "MBTG6",
+		"localSymbol" : "MBTH6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"
