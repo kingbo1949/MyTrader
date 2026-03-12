@@ -1,4 +1,4 @@
-#include "DbTable_Average.h"
+﻿#include "DbTable_Average.h"
 #include "../Factory.h"
 #include <RocksWriteBatch.h>
 #include <climits>

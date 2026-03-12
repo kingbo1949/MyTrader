@@ -157,6 +157,16 @@ IBTrader::IQDatabaseI::GetInvalidKLines(::std::string /*codeId*/,
     klines = IKLines();
 }
 
+bool
+IBTrader::IQDatabaseI::GetLastDayKLine(::std::string /*codeId*/,
+                                       long long int /*msTime*/,
+                                       IKLine& kline,
+                                       const Ice::Current& current)
+{
+    kline = IKLine();
+    return false;
+}
+
 void
 IBTrader::IQDatabaseI::RecountAllIndex(::std::string /*codeId*/,
                                        ITimeType /*timeType*/,

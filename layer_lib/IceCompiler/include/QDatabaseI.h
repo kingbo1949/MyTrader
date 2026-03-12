@@ -95,6 +95,11 @@ public:
                                   IKLines&,
                                   const Ice::Current&) override;
 
+    virtual bool GetLastDayKLine(::std::string,
+                                 long long int,
+                                 IKLine&,
+                                 const Ice::Current&) override;
+
     virtual void RecountAllIndex(::std::string,
                                  ITimeType,
                                  const Ice::Current&) override;

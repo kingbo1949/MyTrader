@@ -1,4 +1,4 @@
-#include "DbTable_Macd.h"
+﻿#include "DbTable_Macd.h"
 #include "../Factory.h"
 #include <RocksWriteBatch.h>
 #include <climits>

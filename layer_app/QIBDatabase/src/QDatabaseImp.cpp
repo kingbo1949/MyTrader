@@ -1,6 +1,7 @@
 ﻿#include "QDatabaseImp.h"
 #include "Factory.h"
 #include <Factory_Log.h>
+#include <Global.h>
 #include "Calculator/Calculator.h"
 #include "MakeKlinePairs.h"
 #include "../cmd/Cmd_RecountAllIndex.h"
@@ -156,6 +157,35 @@ void CQDatabaseImp::GetInvalidKLines(::std::string codeId, ITimeType timeType, I
 		}
 	}
 	return;
+}
+
+bool CQDatabaseImp::GetLastDayKLine(std::string codeId, long long int msTime, IKLine &kline, const Ice::Current &current)
+{
+	// 得到机器时间day
+	time_t seconds = msTime / 1000;
+	time_t msDay = CGlobal::QGetDayTime(seconds) * 1000;
+
+	time_t belongDay = 0;
+	if (msTime < msDay + 17 * 60 * 60 * 1000)
+	{
+		// msTime是一个小于17:00:00的时间
+		belongDay = msTime;
+	}else
+	{
+		// msTime是一个17:00:00 - 24:00:00 的时间
+		belongDay = msTime + 24 * 60 * 60 * 1000;
+	}
+	IQuery query;
+	query.byReqType = 2;		// 2表示请求某个时间以前(包括该时间)多少个单位的数据(dwSubscribeNum为0时表示该时间前所有的数据)
+	query.tTime = belongDay -1; // 时间(请求类型为2、3时使用)(毫秒) 数据区间为[... : tTime] 或者 [tTime : ...]
+	query.dwSubscribeNum = 1;
+
+	IKLines klines;
+	MakeAndGet_Env()->GetDB_KLine()->GetKLines(codeId, ITimeType::D1, query, klines);
+
+	if (klines.size() != 1) return false;
+	kline = klines[0];
+	return true;
 }
 
 void CQDatabaseImp::RecountAllIndex(std::string codeId, ITimeType timeType, const Ice::Current &current)

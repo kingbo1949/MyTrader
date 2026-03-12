@@ -53,6 +53,9 @@ public:
 
 	virtual void GetInvalidKLines(::std::string codeId, ITimeType timeType, IKLines& klines, const ::Ice::Current& current) override final;
 
+	virtual bool GetLastDayKLine(::std::string codeId, long long int msTime, IKLine& kline, const ::Ice::Current& current) final;
+
+
 	// 指标更新
 	virtual void RecountAllIndex(::std::string codeId, ITimeType timeType, const ::Ice::Current& current) final;
 	virtual void UpdateAllIndexFromTimePos(::std::string codeId, ITimeType timeType, long long int timePos, const ::Ice::Current& current) final;

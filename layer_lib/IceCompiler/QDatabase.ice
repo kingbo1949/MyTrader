@@ -39,6 +39,7 @@ module IBTrader
 		bool		GetOneKLine(string codeId, ITimeType timeType, long timePos, out IKLine kline);			// 查询单个指定数据
 		void		GetKLinePairs(string first, string second, ITimeType timeType, IQuery query,out IKLinePairs kLinePairs);
 		void		GetInvalidKLines(string codeId, ITimeType timeType, out IKLines klines);				// 得到非法的BAR为清理数据库做准备
+		bool        GetLastDayKLine(string codeId, long msTime, out IKLine kline);                          // 得到指定时间上一日的日线，日线时间是[18:00:00 - 下一日17:00:00]
 
 		// 指标更新
 		void		RecountAllIndex(string codeId, ITimeType timeType);										// 全量计算某品种所有指标
