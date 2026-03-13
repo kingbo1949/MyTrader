@@ -18,7 +18,7 @@ IBKLinePtr CKLineAndMaTool::GetLastKline(const std::string& codeId, Time_Type ti
 	query.time_ms = recordNo - 1;		// 不包括指定时点
 	query.query_number = 1;				// 只取一个数据即可
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	if (klines.empty()) return nullptr;
 
 	return klines[0];
@@ -34,7 +34,7 @@ IBKLinePtrs CKLineAndMaTool::GetLastDayKLines(const std::string &codeId, Time_Ty
 	query.query_type = QQueryType::BETWEEN_TIME;
 	query.time_pair.beginPos = last1D->time + CHighFrequencyGlobalFunc::MakeMilliSecondPart("09:30:00", 0);
 	query.time_pair.endPos = last1D->time + CHighFrequencyGlobalFunc::MakeMilliSecondPart("16:00:00", 0);
-	klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	return klines;
 }
 
@@ -91,7 +91,7 @@ IBKLinePtr CKLineAndMaTool::GetLastDayCloseKLine(const std::string& codeId, Time
 	query.time_ms = dayMillisec;		// 包括指定时点
 	query.query_number = count;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	if (klines.size() < count)
 	{
 		// 数据不充足，返回空集
@@ -111,7 +111,7 @@ IBKLinePtrs CKLineAndMaTool::GetKLines_OneDay(const std::string& codeId, Time_Ty
 	query.time_ms = kline_time - 1;		// 不包括指定时点
 	query.query_number = count;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	if (klines.empty()) return klines;
 
 	if (klines[0]->time > CHighFrequencyGlobalFunc::GetDayMillisec(ticktime) && klines.size() == count)
@@ -135,7 +135,7 @@ IBKLinePtrs CKLineAndMaTool::GetKLines_MoreDay(const std::string& codeId, Time_T
 	query.time_ms = kline_time - 1;		// 不包括指定时点
 	query.query_number = count;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	if (klines.size() < count)
 	{
 		// 数据不充足，返回空集
@@ -164,7 +164,7 @@ IBKLinePtrs CKLineAndMaTool::GetKLines_MoreDay(const std::string& codeId, Time_T
 
 	if (query.time_pair.endPos < query.time_pair.beginPos) return klines;
 
-	klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	return klines;
 
 }
@@ -240,7 +240,7 @@ time_t CKLineAndMaTool::GetFirstKline(const CodeStr& codeId, Time_Type timeType,
 	query.time_ms = dayMillisec;		// 包括指定时点
 	query.query_number = count;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	if (klines.size() < count)
 	{
 		// 数据不充足，返回空集

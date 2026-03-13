@@ -355,6 +355,25 @@ public:
     bool _iceD_GetOneAtr(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual void GetRichs(::std::string codeId, ITimeType timeType, IQuery query, IRichValues& richs, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetRichs(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    /**
+     * Encapsulates the results of a call to GetOneRich.
+     */
+    struct GetOneRichResult
+    {
+        bool returnValue;
+        IRichValue rich;
+    };
+
+    virtual bool GetOneRich(::std::string codeId, ITimeType timeType, long long int timePos, IRichValue& rich, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetOneRich(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     /// \cond INTERNAL
     virtual bool _iceDispatch(::IceInternal::Incoming&, const ::Ice::Current&) override;
     /// \endcond
@@ -1310,6 +1329,64 @@ public:
     void _iceI_GetOneAtr(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneAtrResult>>&, const ::std::string&, ITimeType, long long int, const ::Ice::Context&);
     /// \endcond
 
+    void GetRichs(const ::std::string& codeId, ITimeType timeType, const IQuery& query, IRichValues& richs, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        richs = _makePromiseOutgoing<::IBTrader::IRichValues>(true, this, &IQDatabasePrx::_iceI_GetRichs, codeId, timeType, query, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto GetRichsAsync(const ::std::string& codeId, ITimeType timeType, const IQuery& query, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<::IBTrader::IRichValues>>().get_future())
+    {
+        return _makePromiseOutgoing<::IBTrader::IRichValues, P>(false, this, &IQDatabasePrx::_iceI_GetRichs, codeId, timeType, query, context);
+    }
+
+    ::std::function<void()>
+    GetRichsAsync(const ::std::string& codeId, ITimeType timeType, const IQuery& query,
+                  ::std::function<void(::IBTrader::IRichValues)> response,
+                  ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                  ::std::function<void(bool)> sent = nullptr,
+                  const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<::IBTrader::IRichValues>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_GetRichs, codeId, timeType, query, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_GetRichs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IRichValues>>&, const ::std::string&, ITimeType, const IQuery&, const ::Ice::Context&);
+    /// \endcond
+
+    bool GetOneRich(const ::std::string& codeId, ITimeType timeType, long long int timePos, IRichValue& rich, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        auto _result = _makePromiseOutgoing<IQDatabase::GetOneRichResult>(true, this, &IQDatabasePrx::_iceI_GetOneRich, codeId, timeType, timePos, context).get();
+        rich = ::std::move(_result.rich);
+        return _result.returnValue;
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto GetOneRichAsync(const ::std::string& codeId, ITimeType timeType, long long int timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<IQDatabase::GetOneRichResult>>().get_future())
+    {
+        return _makePromiseOutgoing<IQDatabase::GetOneRichResult, P>(false, this, &IQDatabasePrx::_iceI_GetOneRich, codeId, timeType, timePos, context);
+    }
+
+    ::std::function<void()>
+    GetOneRichAsync(const ::std::string& codeId, ITimeType timeType, long long int timePos,
+                    ::std::function<void(bool, ::IBTrader::IRichValue)> response,
+                    ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                    ::std::function<void(bool)> sent = nullptr,
+                    const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        auto _responseCb = [response](IQDatabase::GetOneRichResult&& _result)
+        {
+            response(_result.returnValue, ::std::move(_result.rich));
+        };
+        return _makeLamdaOutgoing<IQDatabase::GetOneRichResult>(std::move(_responseCb), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_GetOneRich, codeId, timeType, timePos, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_GetOneRich(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneRichResult>>&, const ::std::string&, ITimeType, long long int, const ::Ice::Context&);
+    /// \endcond
+
     /**
      * Obtains the Slice type ID of this interface.
      * @return The fully-scoped type ID.
@@ -1653,6 +1730,22 @@ typedef ::IceUtil::Handle< Callback_IQDatabase_GetAtrs_Base> Callback_IQDatabase
  */
 class Callback_IQDatabase_GetOneAtr_Base : public virtual ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_IQDatabase_GetOneAtr_Base> Callback_IQDatabase_GetOneAtrPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetRichs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetRichs.
+ */
+class Callback_IQDatabase_GetRichs_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_GetRichs_Base> Callback_IQDatabase_GetRichsPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetOneRich.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetOneRich.
+ */
+class Callback_IQDatabase_GetOneRich_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_GetOneRich_Base> Callback_IQDatabase_GetOneRichPtr;
 
 }
 
@@ -3038,6 +3131,90 @@ private:
 
 public:
 
+    void GetRichs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, ::IBTrader::IRichValues& richs, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        end_GetRichs(richs, _iceI_begin_GetRichs(codeId, timeType, query, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_GetRichs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_GetRichs(codeId, timeType, query, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetRichs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetRichs(codeId, timeType, query, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetRichs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetRichs(codeId, timeType, query, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetRichs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::IBTrader::Callback_IQDatabase_GetRichsPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetRichs(codeId, timeType, query, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetRichs(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IQuery& query, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_GetRichsPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetRichs(codeId, timeType, query, context, cb, cookie);
+    }
+
+    void end_GetRichs(::IBTrader::IRichValues& richs, const ::Ice::AsyncResultPtr& result);
+    /// \cond INTERNAL
+
+    void _iceI_end_GetRichs(::IBTrader::IRichValues& iceP_richs, const ::Ice::AsyncResultPtr&);
+    /// \endcond
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_GetRichs(const ::std::string&, ::IBTrader::ITimeType, const ::IBTrader::IQuery&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    bool GetOneRich(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, ::IBTrader::IRichValue& rich, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return end_GetOneRich(rich, _iceI_begin_GetOneRich(codeId, timeType, timePos, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneRich(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_GetOneRich(codeId, timeType, timePos, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneRich(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneRich(codeId, timeType, timePos, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneRich(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneRich(codeId, timeType, timePos, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneRich(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::IBTrader::Callback_IQDatabase_GetOneRichPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneRich(codeId, timeType, timePos, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetOneRich(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::Ice::Long timePos, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_GetOneRichPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetOneRich(codeId, timeType, timePos, context, cb, cookie);
+    }
+
+    bool end_GetOneRich(::IBTrader::IRichValue& rich, const ::Ice::AsyncResultPtr& result);
+    /// \cond INTERNAL
+
+    void _iceI_end_GetOneRich(::IBTrader::IRichValue& iceP_rich, bool& ret, const ::Ice::AsyncResultPtr&);
+    /// \endcond
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_GetOneRich(const ::std::string&, ::IBTrader::ITimeType, ::Ice::Long, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
     /**
      * Obtains the Slice type ID corresponding to this interface.
      * @return A fully-scoped type ID.
@@ -3269,6 +3446,16 @@ public:
     virtual bool GetOneAtr(const ::std::string& codeId, ITimeType timeType, ::Ice::Long timePos, IAtrValue& avgAtr, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_GetOneAtr(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual void GetRichs(const ::std::string& codeId, ITimeType timeType, const IQuery& query, IRichValues& richs, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetRichs(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual bool GetOneRich(const ::std::string& codeId, ITimeType timeType, ::Ice::Long timePos, IRichValue& rich, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetOneRich(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
     /// \cond INTERNAL
@@ -8539,6 +8726,312 @@ template<class T, typename CT> Callback_IQDatabase_GetOneAtrPtr
 newCallback_IQDatabase_GetOneAtr(T* instance, void (T::*cb)(bool, const IAtrValue&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_IQDatabase_GetOneAtr<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetRichs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetRichs.
+ */
+template<class T>
+class CallbackNC_IQDatabase_GetRichs : public Callback_IQDatabase_GetRichs_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(const IRichValues&);
+
+    CallbackNC_IQDatabase_GetRichs(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        IRichValues iceP_richs;
+        try
+        {
+            proxy->end_GetRichs(iceP_richs, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(iceP_richs);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetRichs.
+ */
+template<class T> Callback_IQDatabase_GetRichsPtr
+newCallback_IQDatabase_GetRichs(const IceUtil::Handle<T>& instance, void (T::*cb)(const IRichValues&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetRichs<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetRichs.
+ */
+template<class T> Callback_IQDatabase_GetRichsPtr
+newCallback_IQDatabase_GetRichs(T* instance, void (T::*cb)(const IRichValues&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetRichs<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetRichs.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetRichs.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_GetRichs : public Callback_IQDatabase_GetRichs_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const IRichValues&, const CT&);
+
+    Callback_IQDatabase_GetRichs(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        IRichValues iceP_richs;
+        try
+        {
+            proxy->end_GetRichs(iceP_richs, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(iceP_richs, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetRichs.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetRichsPtr
+newCallback_IQDatabase_GetRichs(const IceUtil::Handle<T>& instance, void (T::*cb)(const IRichValues&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetRichs<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetRichs.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetRichsPtr
+newCallback_IQDatabase_GetRichs(T* instance, void (T::*cb)(const IRichValues&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetRichs<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetOneRich.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetOneRich.
+ */
+template<class T>
+class CallbackNC_IQDatabase_GetOneRich : public Callback_IQDatabase_GetOneRich_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(bool, const IRichValue&);
+
+    CallbackNC_IQDatabase_GetOneRich(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        IRichValue iceP_rich;
+        bool ret;
+        try
+        {
+            ret = proxy->end_GetOneRich(iceP_rich, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(ret, iceP_rich);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneRich.
+ */
+template<class T> Callback_IQDatabase_GetOneRichPtr
+newCallback_IQDatabase_GetOneRich(const IceUtil::Handle<T>& instance, void (T::*cb)(bool, const IRichValue&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetOneRich<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneRich.
+ */
+template<class T> Callback_IQDatabase_GetOneRichPtr
+newCallback_IQDatabase_GetOneRich(T* instance, void (T::*cb)(bool, const IRichValue&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetOneRich<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetOneRich.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetOneRich.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_GetOneRich : public Callback_IQDatabase_GetOneRich_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(bool, const IRichValue&, const CT&);
+
+    Callback_IQDatabase_GetOneRich(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        IRichValue iceP_rich;
+        bool ret;
+        try
+        {
+            ret = proxy->end_GetOneRich(iceP_rich, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(ret, iceP_rich, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneRich.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetOneRichPtr
+newCallback_IQDatabase_GetOneRich(const IceUtil::Handle<T>& instance, void (T::*cb)(bool, const IRichValue&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetOneRich<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetOneRich.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetOneRichPtr
+newCallback_IQDatabase_GetOneRich(T* instance, void (T::*cb)(bool, const IRichValue&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetOneRich<T, CT>(instance, cb, excb, sentcb);
 }
 
 }

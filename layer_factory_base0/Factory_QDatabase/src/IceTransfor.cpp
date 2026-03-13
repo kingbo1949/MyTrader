@@ -4,6 +4,9 @@
 #include "Factory_HashEnv.h"
 #include <Global.h>
 #include <Factory_Log.h>
+
+#include "boost/mpl/integral_c_tag.hpp"
+
 IBTickPtr CIceTransfor::TransTickIceToMy(const ITick& tick)
 {
 	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(tick.codeId.c_str());
@@ -229,26 +232,7 @@ IBDivTypePtr CIceTransfor::TransDivType(const IDivTypeValue& value)
 	IBDivTypePtr back = std::make_shared<CIBDivType>();
 
 	back->time = value.time;
-	if (value.divType == IBTrader::IDivType::NORMAL)
-	{
-		back->divType = DivergenceType::Normal;
-	}
-	if (value.divType == IBTrader::IDivType::TOP)
-	{
-		back->divType = DivergenceType::Top;
-	}
-	if (value.divType == IBTrader::IDivType::BOTTOM)
-	{
-		back->divType = DivergenceType::Bottom;
-	}
-	if (value.divType == IBTrader::IDivType::BOTTOMSUB)
-	{
-		back->divType = DivergenceType::BottomSub;
-	}
-	if (value.divType == IBTrader::IDivType::TOPSUB)
-	{
-		back->divType = DivergenceType::TopSub;
-	}
+	back->divType = TransType(value.divType);
 	back->isUTurn = value.isUTurn;
 	return back;
 }
@@ -257,26 +241,7 @@ IDivTypeValue CIceTransfor::TransDivType(IBDivTypePtr pValue)
 {
 	IDivTypeValue back;
 	back.time = pValue->time;
-	if (pValue->divType == DivergenceType::Normal)
-	{
-		back.divType = IBTrader::IDivType::NORMAL;
-	}
-	if (pValue->divType == DivergenceType::Top)
-	{
-		back.divType = IBTrader::IDivType::TOP;
-	}
-	if (pValue->divType == DivergenceType::Bottom)
-	{
-		back.divType = IBTrader::IDivType::BOTTOM;
-	}
-	if (pValue->divType == DivergenceType::TopSub)
-	{
-		back.divType = IBTrader::IDivType::TOPSUB;
-	}
-	if (pValue->divType == DivergenceType::BottomSub)
-	{
-		back.divType = IBTrader::IDivType::BOTTOMSUB;
-	}
+	back.divType = TransType(pValue->divType);
 	back.isUTurn = pValue->isUTurn;
 	return back;
 }
@@ -298,6 +263,123 @@ IAtrValue CIceTransfor::TransAtr(const IBAtrPtr& pValue)
 	back.time = pValue->time;
 	back.thisAtr = pValue->thisAtr;
 	back.avgAtr = pValue->avgAtr;
+	return back;
+
+}
+IBRichDataPtr CIceTransfor::TransRichData(const IRichValue &value)
+{
+	IBRichDataPtr back = std::make_shared<CIBRichData>();
+	back->time = value.time;
+	back->open = value.open;
+	back->close = value.close;
+	back->high = value.high;
+	back->low = value.low;
+	back->vol = value.vol;
+
+	back->dif = value.dif;
+	back->dea = value.dea;
+	back->macd = value.macd;
+
+	back->divType = TransType(value.divType);
+	back->isUTurn = value.isUTurn;
+
+	back->thisAtr = value.thisAtr;
+	back->avgAtr = value.avgAtr;
+
+	back->ma5 = value.ma5;
+	back->ma20 = value.ma20;
+	back->ma60 = value.ma60;
+	back->ma200 = value.ma200;
+
+	back->preDayHigh = value.preDayHigh;
+	back->preDayLow = value.preDayLow;
+
+	return back;
+}
+
+IRichValue CIceTransfor::TransRichData(IBRichDataPtr pValue)
+{
+	IRichValue back;
+	back.time = pValue->time;
+	back.open = pValue->open;
+	back.close = pValue->close;
+	back.high = pValue->high;
+	back.low = pValue->low;
+	back.vol = pValue->vol;
+
+	back.dif = pValue->dif;
+	back.dea = pValue->dea;
+	back.macd = pValue->macd;
+
+	back.divType = TransType(pValue->divType);
+	back.isUTurn = pValue->isUTurn;
+
+	back.thisAtr = pValue->thisAtr;
+	back.avgAtr = pValue->avgAtr;
+
+	back.ma5 = pValue->ma5;
+	back.ma20 = pValue->ma20;
+	back.ma60 = pValue->ma60;
+	back.ma200 = pValue->ma200;
+
+	back.preDayHigh = pValue->preDayHigh;
+	back.preDayLow = pValue->preDayLow;
+
+	return back;
+}
+
+IDivType CIceTransfor::TransType(DivergenceType type)
+{
+	IDivType back = IDivType::NORMAL;
+	if (type == DivergenceType::Normal)
+	{
+		back = IBTrader::IDivType::NORMAL;
+	}
+	if (type == DivergenceType::Top)
+	{
+		back = IBTrader::IDivType::TOP;
+	}
+	if (type == DivergenceType::Bottom)
+	{
+		back = IBTrader::IDivType::BOTTOM;
+	}
+	if (type == DivergenceType::TopSub)
+	{
+		back = IBTrader::IDivType::TOPSUB;
+	}
+	if (type == DivergenceType::BottomSub)
+	{
+		back = IBTrader::IDivType::BOTTOMSUB;
+	}
+	return back;
+
+
+}
+
+DivergenceType CIceTransfor::TransType(IDivType type)
+{
+	DivergenceType back = DivergenceType::Normal;
+
+	if (type == IBTrader::IDivType::NORMAL)
+	{
+		back = DivergenceType::Normal;
+	}
+	if (type == IBTrader::IDivType::TOP)
+	{
+		back = DivergenceType::Top;
+	}
+	if (type == IBTrader::IDivType::BOTTOM)
+	{
+		back = DivergenceType::Bottom;
+	}
+	if (type == IBTrader::IDivType::BOTTOMSUB)
+	{
+		back = DivergenceType::BottomSub;
+	}
+	if (type == IBTrader::IDivType::TOPSUB)
+	{
+		back = DivergenceType::TopSub;
+	}
 	return back;
 
 }

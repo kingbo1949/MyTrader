@@ -318,6 +318,40 @@ struct IAtrValue
 
 using IAtrValues = ::std::vector<IAtrValue>;
 
+struct IRichValue
+{
+    long long int time = 0LL;
+    double close = 0;
+    double open = 0;
+    double high = 0;
+    double low = 0;
+    long long int vol = 0LL;
+    double dif = 0;
+    double dea = 0;
+    double macd = 0;
+    ::IBTrader::IDivType divType = ::IBTrader::IDivType::NORMAL;
+    bool isUTurn = false;
+    double thisAtr = 0;
+    double avgAtr = 0;
+    double ma5 = 0;
+    double ma20 = 0;
+    double ma60 = 0;
+    double ma200 = 0;
+    double preDayHigh = 0;
+    double preDayLow = 0;
+
+    /**
+     * Obtains a tuple containing all of the struct's data members.
+     * @return The data members in a tuple.
+     */
+    std::tuple<const long long int&, const double&, const double&, const double&, const double&, const long long int&, const double&, const double&, const double&, const ::IBTrader::IDivType&, const bool&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&> ice_tuple() const
+    {
+        return std::tie(time, close, open, high, low, vol, dif, dea, macd, divType, isUTurn, thisAtr, avgAtr, ma5, ma20, ma60, ma200, preDayHigh, preDayLow);
+    }
+};
+
+using IRichValues = ::std::vector<IRichValue>;
+
 using Ice::operator<;
 using Ice::operator<=;
 using Ice::operator>;
@@ -572,6 +606,23 @@ struct StreamReader<::IBTrader::IAtrValue, S>
     static void read(S* istr, ::IBTrader::IAtrValue& v)
     {
         istr->readAll(v.time, v.thisAtr, v.avgAtr);
+    }
+};
+
+template<>
+struct StreamableTraits<::IBTrader::IRichValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 138;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamReader<::IBTrader::IRichValue, S>
+{
+    static void read(S* istr, ::IBTrader::IRichValue& v)
+    {
+        istr->readAll(v.time, v.close, v.open, v.high, v.low, v.vol, v.dif, v.dea, v.macd, v.divType, v.isUTurn, v.thisAtr, v.avgAtr, v.ma5, v.ma20, v.ma60, v.ma200, v.preDayHigh, v.preDayLow);
     }
 };
 
@@ -1166,6 +1217,79 @@ struct IAtrValue
 
 typedef ::std::vector<IAtrValue> IAtrValues;
 
+struct IRichValue
+{
+    /** Default constructor that assigns default values to members as specified in the Slice definition. */
+    IRichValue() :
+        time(ICE_INT64(0)),
+        close(0),
+        open(0),
+        high(0),
+        low(0),
+        vol(ICE_INT64(0)),
+        dif(0),
+        dea(0),
+        macd(0),
+        divType(NORMAL),
+        isUTurn(false),
+        thisAtr(0),
+        avgAtr(0),
+        ma5(0),
+        ma20(0),
+        ma60(0),
+        ma200(0),
+        preDayHigh(0),
+        preDayLow(0)
+    {
+    }
+    
+    IRichValue(::Ice::Long time, ::Ice::Double close, ::Ice::Double open, ::Ice::Double high, ::Ice::Double low, ::Ice::Long vol, ::Ice::Double dif, ::Ice::Double dea, ::Ice::Double macd, IDivType divType, bool isUTurn, ::Ice::Double thisAtr, ::Ice::Double avgAtr, ::Ice::Double ma5, ::Ice::Double ma20, ::Ice::Double ma60, ::Ice::Double ma200, ::Ice::Double preDayHigh, ::Ice::Double preDayLow) :
+        time(time),
+        close(close),
+        open(open),
+        high(high),
+        low(low),
+        vol(vol),
+        dif(dif),
+        dea(dea),
+        macd(macd),
+        divType(divType),
+        isUTurn(isUTurn),
+        thisAtr(thisAtr),
+        avgAtr(avgAtr),
+        ma5(ma5),
+        ma20(ma20),
+        ma60(ma60),
+        ma200(ma200),
+        preDayHigh(preDayHigh),
+        preDayLow(preDayLow)
+    {
+    }
+    
+
+    ::Ice::Long time;
+    ::Ice::Double close;
+    ::Ice::Double open;
+    ::Ice::Double high;
+    ::Ice::Double low;
+    ::Ice::Long vol;
+    ::Ice::Double dif;
+    ::Ice::Double dea;
+    ::Ice::Double macd;
+    ::IBTrader::IDivType divType;
+    bool isUTurn;
+    ::Ice::Double thisAtr;
+    ::Ice::Double avgAtr;
+    ::Ice::Double ma5;
+    ::Ice::Double ma20;
+    ::Ice::Double ma60;
+    ::Ice::Double ma200;
+    ::Ice::Double preDayHigh;
+    ::Ice::Double preDayLow;
+};
+
+typedef ::std::vector<IRichValue> IRichValues;
+
 }
 
 /// \cond STREAM
@@ -1603,6 +1727,68 @@ struct StreamReader< ::IBTrader::IAtrValue, S>
         istr->read(v.time);
         istr->read(v.thisAtr);
         istr->read(v.avgAtr);
+    }
+};
+
+template<>
+struct StreamableTraits< ::IBTrader::IRichValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 138;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamWriter< ::IBTrader::IRichValue, S>
+{
+    static void write(S* ostr, const ::IBTrader::IRichValue& v)
+    {
+        ostr->write(v.time);
+        ostr->write(v.close);
+        ostr->write(v.open);
+        ostr->write(v.high);
+        ostr->write(v.low);
+        ostr->write(v.vol);
+        ostr->write(v.dif);
+        ostr->write(v.dea);
+        ostr->write(v.macd);
+        ostr->write(v.divType);
+        ostr->write(v.isUTurn);
+        ostr->write(v.thisAtr);
+        ostr->write(v.avgAtr);
+        ostr->write(v.ma5);
+        ostr->write(v.ma20);
+        ostr->write(v.ma60);
+        ostr->write(v.ma200);
+        ostr->write(v.preDayHigh);
+        ostr->write(v.preDayLow);
+    }
+};
+
+template<typename S>
+struct StreamReader< ::IBTrader::IRichValue, S>
+{
+    static void read(S* istr, ::IBTrader::IRichValue& v)
+    {
+        istr->read(v.time);
+        istr->read(v.close);
+        istr->read(v.open);
+        istr->read(v.high);
+        istr->read(v.low);
+        istr->read(v.vol);
+        istr->read(v.dif);
+        istr->read(v.dea);
+        istr->read(v.macd);
+        istr->read(v.divType);
+        istr->read(v.isUTurn);
+        istr->read(v.thisAtr);
+        istr->read(v.avgAtr);
+        istr->read(v.ma5);
+        istr->read(v.ma20);
+        istr->read(v.ma60);
+        istr->read(v.ma200);
+        istr->read(v.preDayHigh);
+        istr->read(v.preDayLow);
     }
 };
 

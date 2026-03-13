@@ -26,6 +26,7 @@ set(SRC_LIST
         src/Shell.cpp
         src/TickUpdator.cpp
         src/TimerTask_UpdateIndex.cpp
+        src/RichDataMaker.cpp
 
         cmd/Cmd_RecountAllIndex.cpp
         cmd/Cmd_UpdateAllIndexFromTimePos.cpp

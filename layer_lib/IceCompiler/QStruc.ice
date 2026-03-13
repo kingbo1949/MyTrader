@@ -45,7 +45,7 @@ module IBTrader
 											// 4表示请求一个时间段的数据
 		long		dwSubscribeNum = 0;     // 订阅数据的数量(请求类型为0、2、3时使用) 
 		long		tTime = 0;				// 时间(请求类型为2、3时使用)(毫秒) 数据区间为[... : tTime] 或者 [tTime : ...]
-		ITimePair	timePair;				// 时间段(请求类型为4时使用) 数据区间为[beginPos : endPos)
+		ITimePair	timePair;				// 时间段(请求类型为4时使用) 数据区间为[beginPos : endPos]的闭合区间
 	};
 
 	struct  IContract						// 合约
@@ -197,6 +197,12 @@ module IBTrader
 		// atr 部分
 		double          thisAtr = 0.0;      // 本bar的ATR
 		double		    avgAtr = 0.0;       // 14周期均值
+
+		// Ma 部分
+		double          ma5 = 0.0;          // 5根K线的均值
+		double          ma20 = 0.0;         // 20根K线的均值
+		double          ma60 = 0.0;         // 60根K线的均值
+		double          ma200 = 0.0;        // 200根K线的均值
 
 		// 上日高低价
         double			preDayHigh = 0.0;

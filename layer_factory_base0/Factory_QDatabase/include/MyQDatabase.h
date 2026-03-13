@@ -61,7 +61,7 @@ public:
 
 
 	// 取单品种数据
-	virtual IBKLinePtrs		GetKLine(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
+	virtual IBKLinePtrs		GetKLines(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
 
 	// 取单品种数据 使用接力方式
 	virtual IBKLinePtrs		GetKLineByLoop(const CodeStr& codeId, Time_Type timeType, const TimePair& timePair) = 0;
@@ -138,6 +138,13 @@ public:
 
 	// 查询单个指定数据
 	virtual IBAtrPtr		GetOneAtr(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
+
+	// --------------- 组合数据 ---------------------
+	virtual IBRichDataPtrs	GetRichsByLoop(const CodeStr& codeId, Time_Type timeType, const TimePair& timePair) = 0;
+
+	virtual IBRichDataPtrs	GetRichs(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
+
+	virtual IBRichDataPtr	GetOneRich(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
 };
 typedef std::shared_ptr<CMyQDatabase> MyQDatabasePtr;
 

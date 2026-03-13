@@ -83,7 +83,7 @@ void CTableModel_Ma::QueryClose()
 	QQuery query;
 	query.query_type = QQueryType::FROM_CURRENT;
 	query.query_number = 1;
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(m_codeId, Time_Type::M1, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(m_codeId, Time_Type::M1, query);
 	if (klines.empty()) return;
 	m_close = klines.back()->close;
 	return;

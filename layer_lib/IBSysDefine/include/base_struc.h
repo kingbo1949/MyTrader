@@ -317,6 +317,49 @@ public:
 typedef std::vector<IBAtrPtr> IBAtrPtrs;
 
 
+class  CIBRichData;
+typedef std::shared_ptr<CIBRichData> IBRichDataPtr;
+typedef std::vector<IBRichDataPtr> IBRichDataPtrs;
+class  CIBRichData
+{
+	public:
+	time_t			time = 0;					// localtime时间(毫秒)
+
+	// k线部分
+	double			open = std::numeric_limits<double>::quiet_NaN();					// 今日开盘价位
+	double			close = std::numeric_limits<double>::quiet_NaN();				// 最新价位
+	double			high = std::numeric_limits<double>::quiet_NaN();					// 最高价位
+	double			low = std::numeric_limits<double>::quiet_NaN();					// 最低价位
+	int				vol = 0;					// 最新成交量
+
+	// macd部分
+	double			dif = std::numeric_limits<double>::quiet_NaN();
+	double			dea = std::numeric_limits<double>::quiet_NaN();
+	double			macd = std::numeric_limits<double>::quiet_NaN() ;
+
+	// divType部分
+	DivergenceType	divType = DivergenceType::Normal;
+	bool			isUTurn = false;
+
+	// atr 部分
+	double			thisAtr = std::numeric_limits<double>::quiet_NaN();
+	double			avgAtr = std::numeric_limits<double>::quiet_NaN();
+
+	// Ma 部分
+	double			ma5 = std::numeric_limits<double>::quiet_NaN();						// 5周期均线
+	double			ma20 = std::numeric_limits<double>::quiet_NaN();					// 20周期均线
+	double			ma60 = std::numeric_limits<double>::quiet_NaN();					// 60周期均线
+	double			ma200 = std::numeric_limits<double>::quiet_NaN();					// 200周期均线
+
+	// 上日高低价
+	double			preDayHigh = std::numeric_limits<double>::quiet_NaN();
+	double			preDayLow = std::numeric_limits<double>::quiet_NaN();
+
+};
+
+
+
+
 enum class TimeZone_Type
 {
 	For_QAnalyst = 0,			// 打印行情数据

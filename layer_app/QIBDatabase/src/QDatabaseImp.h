@@ -94,6 +94,12 @@ public:
 
 	virtual bool GetOneAtr(::std::string codeId, ITimeType timeType, long long int timePos, IAtrValue& avgAtr, const ::Ice::Current& current) final;
 
+	// 组合数据
+	virtual void GetRichs(::std::string codeId, ITimeType timeType, IQuery query, IRichValues& richs, const ::Ice::Current& current) final;
+
+	virtual bool GetOneRich(::std::string codeId, ITimeType timeType, long long int timePos, IRichValue& rich, const ::Ice::Current& current) final;
+
+
 
 
 

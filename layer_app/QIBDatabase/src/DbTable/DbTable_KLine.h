@@ -27,6 +27,9 @@ public:
 
 	void		GetKLines(const std::string& codeId, ITimeType timeType, IQuery query, IKLines& values);
 
+	// 取指定时间点msTime上以日的日线
+	bool		GetLastDayKLine(std::string codeId, Long msTime, IKLine &kline);
+
 private:
 	CRocksEnv& m_env;
 	std::string m_prefix;

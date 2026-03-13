@@ -180,6 +180,18 @@ public:
                            long long int,
                            IAtrValue&,
                            const Ice::Current&) override;
+
+    virtual void GetRichs(::std::string,
+                          ITimeType,
+                          IQuery,
+                          IRichValues&,
+                          const Ice::Current&) override;
+
+    virtual bool GetOneRich(::std::string,
+                            ITimeType,
+                            long long int,
+                            IRichValue&,
+                            const Ice::Current&) override;
 };
 
 }

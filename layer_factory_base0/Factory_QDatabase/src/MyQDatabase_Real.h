@@ -61,7 +61,7 @@ public:
 
 
 	// 取单品种数据
-	virtual IBKLinePtrs		GetKLine(const CodeStr& codeId, Time_Type timeType, const QQuery& query) override final;
+	virtual IBKLinePtrs		GetKLines(const CodeStr& codeId, Time_Type timeType, const QQuery& query) override final;
 
 	// 取单品种数据 使用接力方式
 	virtual IBKLinePtrs		GetKLineByLoop(const CodeStr& codeId, Time_Type timeType, const TimePair& timePair) override final;
@@ -138,6 +138,14 @@ public:
 
 	// 查询单个指定数据
 	virtual IBAtrPtr		GetOneAtr(const CodeStr& codeId, Time_Type timeType, time_t timePos) override final;
+
+	// --------------- 组合数据 ---------------------
+	virtual IBRichDataPtrs	GetRichsByLoop(const CodeStr& codeId, Time_Type timeType, const TimePair& timePair) final;
+
+	virtual IBRichDataPtrs	GetRichs(const CodeStr& codeId, Time_Type timeType, const QQuery& query) final;
+
+	virtual IBRichDataPtr	GetOneRich(const CodeStr& codeId, Time_Type timeType, time_t timePos) final;
+
 
 
 

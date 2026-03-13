@@ -5,7 +5,7 @@
 class CSaveData_Klines
 {
 public:
-	CSaveData_Klines(const CodeStr& codeId, const KLine4Tables& kline4Tables);
+	CSaveData_Klines(const CodeStr& codeId, const IBRichDataPtrs& richDatas);
 	virtual ~CSaveData_Klines() { ; }
 
 
@@ -13,15 +13,15 @@ public:
 
 
 protected:
-	KLine4Tables					m_kline4Tables;
+	IBRichDataPtrs					m_richDatas;
 	CodeStr							m_codeId;
-	TradeDayPtr						m_pTradeDay;
+
 
 
 	// 得到表头
 	std::string						GetTitle();
 
-	std::string						GetKlineStr(const KLine4Table &kLine4Table);
+	std::string						GetRichStr(const IBRichDataPtr rich);
 
 
 

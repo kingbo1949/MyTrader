@@ -131,7 +131,7 @@ bool CCheckQuote::Scan(IBKLinePtr dayKLine, Time_Type time_type, TimePair timePa
 	query.time_pair.beginPos = timePair.beginPos;
 	query.time_pair.endPos = timePair.endPos + 1;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(m_contract->codeId, time_type, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(m_contract->codeId, time_type, query);
 	if (klines.empty()) return false;
 
 	highlow = CHighFrequencyGlobalFunc::MakeHighAndLow(klines, false);

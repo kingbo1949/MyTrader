@@ -319,7 +319,7 @@ IBKLinePtrs AnalystGui::GetKLines(const CodeStr& codeId, Time_Type timeType)
 		QQuery query;
 		query.query_type = QQueryType::FROM_CURRENT;
 		query.query_number = 300;
-		klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+		klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	}
 	else
 	{
@@ -394,7 +394,7 @@ void AnalystGui::onTimerRealQuote()
 	query.query_type = QQueryType::FROM_CURRENT;
 	query.query_number = 2;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(codeId, timeType, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	m_plotContainer->AddKlines(codeId, timeType, klines);
 
 	MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);

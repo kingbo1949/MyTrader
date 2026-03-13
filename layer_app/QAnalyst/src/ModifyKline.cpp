@@ -35,7 +35,7 @@ void CModifyKline::CheckDayKLineCount()
 		query.query_number = klinecount;
 		query.time_ms = endTime;
 
-		IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(m_codeId, Time_Type::M30, query);
+		IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(m_codeId, Time_Type::M30, query);
 		std::string beginStr = CGlobal::GetTickTimeStr(klines[0]->time);
 		std::string endStr = CGlobal::GetTickTimeStr(klines.back()->time);
 		if (klines.size() != klinecount)
@@ -93,7 +93,7 @@ std::vector<Tick_T> CModifyKline::NeedEnd()
 		query.query_number = klinecount;
 		query.time_ms = endTime;
 
-		IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(m_codeId, Time_Type::M30, query);
+		IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(m_codeId, Time_Type::M30, query);
 		if (klines.size() == 0 || klines[0]->time != endTime)
 		{
 			std::string holidaystr = CGlobal::GetTickTimeStr(daytime);
@@ -120,7 +120,7 @@ void CModifyKline::PadingDay(Tick_T daytime)
 	query.query_number = klinecount;
 	query.time_ms = endTime;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(m_codeId, Time_Type::M30, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(m_codeId, Time_Type::M30, query);
 	Tick_T step = 30 * 60 * 1000;
 	Tick_T beginTime = klines[0]->time + step;
 	for (Tick_T i = beginTime; i <= endTime; i += step)

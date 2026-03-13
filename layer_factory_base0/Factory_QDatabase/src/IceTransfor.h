@@ -45,5 +45,12 @@ public:
 	// 转换Atr
 	static IBAtrPtr						TransAtr(const IAtrValue& value);
 	static IAtrValue					TransAtr(const IBAtrPtr& pValue);
+
+	// 转换RichData
+	static IBRichDataPtr				TransRichData(const IRichValue& value);
+	static IRichValue					TransRichData(IBRichDataPtr pValue);
+
+	static IDivType						TransType(DivergenceType type);
+	static DivergenceType				TransType(IDivType type);
 };
 

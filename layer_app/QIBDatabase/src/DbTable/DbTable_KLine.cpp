@@ -3,6 +3,7 @@
 #include <RocksWriteBatch.h>
 #include <climits>
 #include <Factory_Log.h>
+#include <Global.h>
 CDbTable_KLine::CDbTable_KLine(CRocksEnv& env, const std::string& prefix)
 	: m_env(env), m_prefix(prefix)
 {
@@ -117,6 +118,36 @@ void CDbTable_KLine::GetKLines(const std::string& codeId, ITimeType timeType, IQ
 		GetRange(codeId, timeType, query.timePair.beginPos, query.timePair.endPos, values);
 		return;
 	}
+}
+
+bool CDbTable_KLine::GetLastDayKLine(std::string codeId, Long msTime, IKLine &kline)
+{
+	// 得到机器时间day
+	time_t seconds = msTime / 1000;
+	time_t msDay = CGlobal::QGetDayTime(seconds) * 1000;
+
+	time_t belongDay = 0;
+	if (msTime < msDay + 17 * 60 * 60 * 1000)
+	{
+		// msTime是一个小于17:00:00的时间
+		belongDay = msDay;
+	}else
+	{
+		// msTime是一个17:00:00 - 24:00:00 的时间
+		belongDay = msDay + 24 * 60 * 60 * 1000;
+	}
+	IQuery query;
+	query.byReqType = 2;		// 2表示请求某个时间以前(包括该时间)多少个单位的数据(dwSubscribeNum为0时表示该时间前所有的数据)
+	query.tTime = belongDay - 1000; // 时间(请求类型为2、3时使用)(毫秒) 数据区间为[... : tTime] 或者 [tTime : ...]
+	query.dwSubscribeNum = 1;
+
+	IKLines klines;
+	GetKLines(codeId, ITimeType::D1, query, klines);
+
+	if (klines.size() != 1) return false;
+	kline = klines[0];
+	return true;
+
 }
 
 void CDbTable_KLine::GetRange(const std::string& codeId, ITimeType timeType, Long beginTime, Long endTime, IKLines& values)

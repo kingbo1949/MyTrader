@@ -307,3 +307,24 @@ IBTrader::IQDatabaseI::GetOneAtr(::std::string /*codeId*/,
     avgAtr = IAtrValue();
     return false;
 }
+
+void
+IBTrader::IQDatabaseI::GetRichs(::std::string /*codeId*/,
+                                ITimeType /*timeType*/,
+                                IQuery /*query*/,
+                                IRichValues& richs,
+                                const Ice::Current& current)
+{
+    richs = IRichValues();
+}
+
+bool
+IBTrader::IQDatabaseI::GetOneRich(::std::string /*codeId*/,
+                                  ITimeType /*timeType*/,
+                                  long long int /*timePos*/,
+                                  IRichValue& rich,
+                                  const Ice::Current& current)
+{
+    rich = IRichValue();
+    return false;
+}

@@ -12,7 +12,7 @@ Cmd_CheckOneCodeId_BreakUTurn::Cmd_CheckOneCodeId_BreakUTurn(IbContractPtr contr
     query.query_type = QQueryType::BEFORE_TIME;
     query.time_ms = endTime + 1;
     query.query_number = backCount;
-    IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(m_contract->codeId, m_timeType, query);
+    IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(m_contract->codeId, m_timeType, query);
     m_pTradeDay = Make_TradeDayObj(klines);
     return ;
 }

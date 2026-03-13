@@ -73,7 +73,7 @@ void CPrintQuoteLastBar::PrintLastBar(IbContractPtr contract, Time_Type timetype
 	query.query_type = QQueryType::FROM_CURRENT;
 	query.query_number = 1;
 
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLine(contract->codeId, timetype, query);
+	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(contract->codeId, timetype, query);
 	if (klines.empty()) return;
 
 	std::string klinestr = CTransDataToStr::GetKlineStr_Csv(klines[0]);

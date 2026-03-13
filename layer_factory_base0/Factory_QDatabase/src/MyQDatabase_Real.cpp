@@ -211,7 +211,7 @@ double CMyQDatabase_Real::MakeMa(const CodeStr& codeId, Time_Type timeType, int 
 	query.time_ms = kline_time - 1;		// 不包括指定时点
 	query.query_number = circle;
 
-	IBKLinePtrs klines = GetKLine(codeId, timeType, query);
+	IBKLinePtrs klines = GetKLines(codeId, timeType, query);
 	if (klines.size() < circle)
 	{
 		// 数据不充足，返回空集
@@ -226,7 +226,7 @@ double CMyQDatabase_Real::MakeMa(const CodeStr& codeId, Time_Type timeType, int 
 	return sum / circle;
 }
 
-IBKLinePtrs CMyQDatabase_Real::GetKLine(const CodeStr& codeId, Time_Type timeType, const QQuery& query)
+IBKLinePtrs CMyQDatabase_Real::GetKLines(const CodeStr& codeId, Time_Type timeType, const QQuery& query)
 {
 	IBKLinePtrs back;
 
@@ -265,12 +265,12 @@ IBKLinePtrs CMyQDatabase_Real::GetKLineByLoop(const CodeStr& codeId, Time_Type t
 	IBKLinePtrs back;
 	while (true)
 	{
-		IBKLinePtrs klines = GetKLine(codeId, timeType, query);
+		IBKLinePtrs klines = GetKLines(codeId, timeType, query);
 		if (klines.empty()) return back;
 
 		for (const auto& onekline : klines)
 		{
-			if (onekline->time >= timePair.endPos) return back;
+			if (onekline->time > timePair.endPos) return back;
 
 			back.push_back(onekline);
 		}
@@ -597,6 +597,63 @@ IBAtrPtr CMyQDatabase_Real::GetOneAtr(const CodeStr &codeId, Time_Type timeType,
 
 	return CIceTransfor::TransAtr(oneValue);
 
+}
+
+IBRichDataPtrs CMyQDatabase_Real::GetRichsByLoop(const CodeStr &codeId, Time_Type timeType, const TimePair &timePair)
+{
+	QQuery query;
+	query.query_type = QQueryType::AFTER_TIME;
+	query.time_ms = timePair.beginPos;
+	query.query_number = 4000;
+
+	IBRichDataPtrs back;
+	while (true)
+	{
+		IBRichDataPtrs richs = GetRichs(codeId, timeType, query);
+		if (richs.empty()) return back;
+
+		for (const auto& oneRich : richs)
+		{
+			if (oneRich->time > timePair.endPos) return back;
+
+			back.push_back(oneRich);
+		}
+		query.time_ms = richs.back()->time + 1;
+	}
+
+	return back;
+
+}
+
+IBRichDataPtrs CMyQDatabase_Real::GetRichs(const CodeStr &codeId, Time_Type timeType, const QQuery &query)
+{
+	IQuery queryIce = CIceTransfor::TransQueryMyToIce(query);
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+
+	IBRichDataPtrs back;
+
+	IRichValues values;
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->GetRichs(codeId, iTimeType, queryIce, values);
+
+	for (auto& oneRich : values)
+	{
+		IBRichDataPtr pRich = CIceTransfor::TransRichData(oneRich);
+
+		back.push_back(pRich);
+	}
+	return back;
+
+}
+
+IBRichDataPtr CMyQDatabase_Real::GetOneRich(const CodeStr &codeId, Time_Type timeType, time_t timePos)
+{
+	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
+
+	IRichValue oneValue;
+	bool success = MakeAndGet_IceProxy()->GetQDatabasePrx()->GetOneRich(codeId, iTimeType, timePos, oneValue);
+	if (!success) return nullptr;
+
+	return CIceTransfor::TransRichData(oneValue);
 }
 
 bool CMyQDatabase_Real::ValidFlite(time_t ms, int bigTick, IBTickPtr thisTick, IBTickPtr lastTick, IBTickPtr lastAddedTick)
