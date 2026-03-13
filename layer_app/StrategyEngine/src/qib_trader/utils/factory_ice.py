@@ -1,9 +1,7 @@
-import bisect
 import threading
 import Ice
 import IBTrader
 import pandas as pd
-from datetime import datetime
 from qib_trader.utils.tool import TimeUtils
 from qib_trader.utils.config_loader import get_env_config
 
@@ -51,13 +49,13 @@ class FactoryIce:
         time_pair.endPos = TimeUtils.str_to_ms(endPos)
         return time_pair
 
-    @classmethod
-    def get_klines_lastday(cls, code_id : str, timestr: str):
-        db_proxy = cls.make_and_get_proxy();
-        success, kline = db_proxy.GetLastDayKLine(code_id, TimeUtils.str_to_ms(timestr))
-        print(f"success = {success}, data = {kline}")
-        print(TimeUtils.ms_to_str(kline.time))
-        return
+    # @classmethod
+    # def get_klines_lastday(cls, code_id : str, timestr: str):
+    #     db_proxy = cls.make_and_get_proxy();
+    #     success, kline = db_proxy.GetLastDayKLine(code_id, TimeUtils.str_to_ms(timestr))
+    #     print(f"success = {success}, data = {kline}")
+    #     print(TimeUtils.ms_to_str(kline.time))
+    #     return
 
     @classmethod
     def get_klines_loop(cls, code_id : str, time_type : IBTrader.ITimeType, time_pair : IBTrader.ITimePair):
@@ -174,44 +172,23 @@ class FactoryIce:
         return df
 
     @classmethod
-    def _build_d1_map(cls, d1_klines):
-        """Build {date: (high, low, close)} dict and sorted date list."""
-        d1_dict = {}
-        for k in d1_klines:
-            dt = datetime.fromtimestamp(k.time / 1000)
-            d1_dict[dt.date()] = (float(k.high), float(k.low), float(k.close))
-        return d1_dict, sorted(d1_dict.keys())
-
-    @classmethod
-    def _prev_day_hlc(cls, m15_date, sorted_dates, d1_dict):
-        """Return prev trading day (high, low, close) for a given date."""
-        idx = bisect.bisect_left(sorted_dates, m15_date)
-        if idx == 0:
-            return 0.0, 0.0, 0.0
-        return d1_dict[sorted_dates[idx - 1]]
-
-    @classmethod
-    def _merge_prev_day(cls, m15_df, d1_klines) -> pd.DataFrame:
-        """Attach prev_day_high / prev_day_low / prev_day_close to each M15 row."""
-        df = m15_df.copy()
-        if not d1_klines:
-            df['prev_day_high'] = df['prev_day_low'] = df['prev_day_close'] = 0.0
-            return df
-        d1_dict, sorted_dates = cls._build_d1_map(d1_klines)
-        rows = [cls._prev_day_hlc(r.datetime.date(), sorted_dates, d1_dict)
-                for r in df.itertuples(index=False)]
-        df['prev_day_high']  = [r[0] for r in rows]
-        df['prev_day_low']   = [r[1] for r in rows]
-        df['prev_day_close'] = [r[2] for r in rows]
+    def _merge_prev_day(cls, klines_df, code_id: str) -> pd.DataFrame:
+        """逐 bar 调用 GetLastDayKLine，注入 prev_day_high/low/close。
+        同一自然日的不同时间点可能属于不同交易日，不可按日期缓存。"""
+        df = klines_df.copy()
+        db_proxy = cls.make_and_get_proxy()
+        rows_hlc = []
+        for row in df.itertuples(index=False):
+            result = db_proxy.GetLastDayKLine(code_id, int(row.time))
+            if result[0]:
+                rows_hlc.append((float(result[1].high), float(result[1].low), float(result[1].close)))
+                print(TimeUtils.ms_to_str(result[1].time))
+            else:
+                rows_hlc.append((0.0, 0.0, 0.0))
+        df['prev_day_high']  = [r[0] for r in rows_hlc]
+        df['prev_day_low']   = [r[1] for r in rows_hlc]
+        df['prev_day_close'] = [r[2] for r in rows_hlc]
         return df
-
-    @classmethod
-    def _make_d1_time_pair(cls, m15_time_pair):
-        """D1 range: 7 days before M15 start through M15 end."""
-        d1_pair = IBTrader.ITimePair()
-        d1_pair.beginPos = m15_time_pair.beginPos - 7 * 24 * 3600 * 1000
-        d1_pair.endPos   = m15_time_pair.endPos
-        return d1_pair
 
     @classmethod
     def get_enriched_klines_loop(cls, code_id: str, time_type, time_pair) -> pd.DataFrame:
@@ -223,17 +200,14 @@ class FactoryIce:
         macds    = cls._get_macds_loop(code_id, time_type, time_pair)
         divtypes = cls._get_divtypes_loop(code_id, time_type, time_pair)
         atrs     = cls._get_atrs_loop(code_id, time_type, time_pair)
-        d1_klines = cls.get_klines_loop(
-            code_id, IBTrader.ITimeType.D1, cls._make_d1_time_pair(time_pair)
-        )
         klines_df = IceConverter.klines_to_df(klines)
         df = cls._merge_indicators(klines_df, macds, divtypes, atrs)
-        return cls._merge_prev_day(df, d1_klines)
+        return cls._merge_prev_day(df, code_id)
 
 
 if __name__ == "__main__":
 
-    FactoryIce.get_klines_lastday("NQ", "2025-01-16 12:00:00")
+    # ("NQ", "2025-01-16 12:00:00")
     
 
     mylist = [1,2,3,4,5,6,7,8,9]

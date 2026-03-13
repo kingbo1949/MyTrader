@@ -174,6 +174,38 @@ module IBTrader
 	}
 	sequence<IAtrValue> IAtrValues;
 
+	struct IRichValue
+	{
+		long			time = 0;			// 毫秒
+
+		// k线部分
+        double			close = 0.0;
+        double			open = 0.0;
+        double			high = 0.0;
+        double			low = 0.0;
+        long 			vol = 0;
+
+		// macd部分
+		double			dif = 0.0;
+		double			dea = 0.0;
+		double			macd = 0.0 ;
+
+        // divType部分
+		IDivType		divType = NORMAL;
+		bool			isUTurn = false;	// 是否拐点型
+
+		// atr 部分
+		double          thisAtr = 0.0;      // 本bar的ATR
+		double		    avgAtr = 0.0;       // 14周期均值
+
+		// 上日高低价
+        double			preDayHigh = 0.0;
+        double			preDayLow = 0.0;
+
+	}
+	sequence<IRichValue> IRichValues;
+
+
 
 	
 	

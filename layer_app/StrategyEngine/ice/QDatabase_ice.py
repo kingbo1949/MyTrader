@@ -258,6 +258,18 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
         def end_GetInvalidKLines(self, _r):
             return _M_IBTrader.IQDatabase._op_GetInvalidKLines.end(self, _r)
 
+        def GetLastDayKLine(self, codeId, msTime, context=None):
+            return _M_IBTrader.IQDatabase._op_GetLastDayKLine.invoke(self, ((codeId, msTime), context))
+
+        def GetLastDayKLineAsync(self, codeId, msTime, context=None):
+            return _M_IBTrader.IQDatabase._op_GetLastDayKLine.invokeAsync(self, ((codeId, msTime), context))
+
+        def begin_GetLastDayKLine(self, codeId, msTime, _response=None, _ex=None, _sent=None, context=None):
+            return _M_IBTrader.IQDatabase._op_GetLastDayKLine.begin(self, ((codeId, msTime), _response, _ex, _sent, context))
+
+        def end_GetLastDayKLine(self, _r):
+            return _M_IBTrader.IQDatabase._op_GetLastDayKLine.end(self, _r)
+
         def RecountAllIndex(self, codeId, timeType, context=None):
             return _M_IBTrader.IQDatabase._op_RecountAllIndex.invoke(self, ((codeId, timeType), context))
 
@@ -512,6 +524,9 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
         def GetInvalidKLines(self, codeId, timeType, current=None):
             raise NotImplementedError("servant method 'GetInvalidKLines' not implemented")
 
+        def GetLastDayKLine(self, codeId, msTime, current=None):
+            raise NotImplementedError("servant method 'GetLastDayKLine' not implemented")
+
         def RecountAllIndex(self, codeId, timeType, current=None):
             raise NotImplementedError("servant method 'RecountAllIndex' not implemented")
 
@@ -581,6 +596,7 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
     IQDatabase._op_GetOneKLine = IcePy.Operation('GetOneKLine', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), IcePy._t_long, False, 0)), (((), _M_IBTrader._t_IKLine, False, 0),), ((), IcePy._t_bool, False, 0), ())
     IQDatabase._op_GetKLinePairs = IcePy.Operation('GetKLinePairs', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), _M_IBTrader._t_IQuery, False, 0)), (((), _M_IBTrader._t_IKLinePairs, False, 0),), None, ())
     IQDatabase._op_GetInvalidKLines = IcePy.Operation('GetInvalidKLines', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0)), (((), _M_IBTrader._t_IKLines, False, 0),), None, ())
+    IQDatabase._op_GetLastDayKLine = IcePy.Operation('GetLastDayKLine', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), IcePy._t_long, False, 0)), (((), _M_IBTrader._t_IKLine, False, 0),), ((), IcePy._t_bool, False, 0), ())
     IQDatabase._op_RecountAllIndex = IcePy.Operation('RecountAllIndex', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0)), (), None, ())
     IQDatabase._op_UpdateAllIndexFromTimePos = IcePy.Operation('UpdateAllIndexFromTimePos', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), IcePy._t_long, False, 0)), (), None, ())
     IQDatabase._op_GetMas = IcePy.Operation('GetMas', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), _M_IBTrader._t_IQuery, False, 0)), (((), _M_IBTrader._t_IAvgValues, False, 0),), None, ())

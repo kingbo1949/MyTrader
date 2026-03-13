@@ -69,6 +69,12 @@ module IBTrader
 		void		GetAtrs(string codeId, ITimeType timeType, IQuery query,out IAtrValues avgAtrs);
 		bool		GetOneAtr(string codeId, ITimeType timeType, long timePos, out IAtrValue avgAtr);	    // 查询单个指定数据
 
+		// 组合数据
+		void		GetRichs(string codeId, ITimeType timeType, IQuery query,out IRichValues richs);
+		bool		GetOneRich(string codeId, ITimeType timeType, long timePos, out IRichValue rich);	    // 查询单个指定数据
+
+
+
 	};
 };
 

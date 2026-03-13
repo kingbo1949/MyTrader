@@ -12,7 +12,7 @@ strategies:
       slow_window: 20
 
   - class: "Break4Week"
-    enable: true
+    enable: false
     code_id: "NQ"
     interval: "M15"
     start_time: "2025-01-01 00:00:00"
@@ -24,7 +24,7 @@ strategies:
       can_open_end: "10:00:00"
 
   - class: "UTurnBottom"
-    enable: false
+    enable: true
     code_id: "NQ"
     interval: "M15"
     direction: "LONG"
