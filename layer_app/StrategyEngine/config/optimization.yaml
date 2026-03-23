@@ -1,7 +1,7 @@
 # config/optimization.yaml
 optimizations:
   - class: "DoubleMAStrategy"
-    enable: true
+    enable: false
     code_id: "NQ"
     interval: "M30"
     direction: "LONG"
@@ -11,3 +11,36 @@ optimizations:
     grid:
       fast_window: [5, 10, 15, 20, 25, 30]
       slow_window: [20, 40, 60, 80, 100]
+
+  - class: "Break4Week"
+    enable: true
+    code_id: "NQ"
+    interval: "M15"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2025-01-01 00:00:00"
+    grid:
+      bar_count:      [20]
+      can_open_begin: ["00:00:00"]
+      can_open_end:   ["10:00:00"]
+      max_avg_atr:    [15, 20, 25, 30,35,40,45,50,55,60, 999999]  # 999999 = 不限制
+
+  - class: "UTurnBottom"
+    enable: false
+    code_id: "ES"
+    interval: "M15"
+    direction: "LONG"
+    start_time: "2024-01-05 00:00:00"
+    end_time:   "2026-01-01 00:00:00"
+    grid:
+      iv:               [0.2]
+      risk_free_rate:   [0.04]
+      option_days:      [14]
+      expiry_weekday:   [2]           # 2=周三 4=周五
+      dif_entry:        [-5, -15, -20, -30]
+      dif_profit:       [5, 10]
+      k2_takeprofit:    [0]
+      k2_stoploss:      [0]
+      k2_timeout_profit: [0]
+      k2_timeout_loss:  [0]
+      early_exit_ratio: [0.8]

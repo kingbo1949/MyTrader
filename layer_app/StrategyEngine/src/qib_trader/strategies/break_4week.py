@@ -31,7 +31,11 @@ class Break4Week(Strategy):
 
     def _can_open(self, bar: BarData) -> bool:
         t = bar.datetime.time()
-        return self._open_begin <= t <= self._open_end
+        if not (self._open_begin <= t <= self._open_end):
+            return False
+        if bar.avg_atr > self.max_avg_atr:
+            return False
+        return True
 
     def _highest(self) -> float:
         # DataUtils.print_bars(self.history[-self.bar_count - 1:-1], "highest window")

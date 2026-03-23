@@ -1,0 +1,24 @@
+# config/wfo.yaml  —— Walk-Forward Optimization 配置
+wfo_tasks:
+  - class: "UTurnBottom"
+    enable: true
+    code_id: "NQ"
+    interval: "M15"
+    direction: "LONG"
+    start_time: "2024-01-05 00:00:00"
+    end_time:   "2026-03-01 00:00:00"
+    is_months:    9       # in-sample 窗口长度（月）
+    oos_months:   3       # out-of-sample 窗口长度（月），同时也是滑动步长
+    optimize_by:  "recovery_factor"  # 可选: recovery_factor / sharpe_ratio / total_return / win_rate
+    grid:
+      iv:               [0.24]
+      risk_free_rate:   [0.04]
+      option_days:      [7, 14, 21]
+      expiry_weekday:   [2]           # 2=周三 4=周五
+      dif_entry:        [-30]
+      dif_profit:       [20]
+      k2_takeprofit:    [50]
+      k2_stoploss:      [50]
+      k2_timeout_profit: [100]
+      k2_timeout_loss:  [100]
+      early_exit_ratio: [0.8]

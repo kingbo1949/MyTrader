@@ -9,6 +9,9 @@ from qib_trader.core.models import BarData, Direction, OrderData, TradeData, Int
 
 class Strategy(ABC):
 
+    initial_capital: float = 200_000.0
+    options_mode: bool = False   # 期权策略设为 True，用 realized PnL 构建净值曲线
+
     def __init__(self, codeId: CodeId, interval: Interval, direction: Direction, params: Dict[str, Any]):
         self.codeId: CodeId = codeId
         self.interval: Interval = interval

@@ -76,6 +76,12 @@ def get_strategies_config() -> [Any]:
     return strategy_configs
 
 
+def get_wfo_config() -> [Any]:
+    """从 config/wfo.yaml 中获取 Walk-Forward Optimization 任务配置。"""
+    loader = load_yaml_config("config/wfo.yaml")
+    return loader.get("wfo_tasks", [])
+
+
 def get_optimizations_config() -> [Any]:
     """
     从 config/optimization.yaml 中获取环境的全局配置属性。

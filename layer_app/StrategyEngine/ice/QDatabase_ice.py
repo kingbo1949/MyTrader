@@ -438,6 +438,30 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
         def end_GetOneAtr(self, _r):
             return _M_IBTrader.IQDatabase._op_GetOneAtr.end(self, _r)
 
+        def GetRichs(self, codeId, timeType, query, context=None):
+            return _M_IBTrader.IQDatabase._op_GetRichs.invoke(self, ((codeId, timeType, query), context))
+
+        def GetRichsAsync(self, codeId, timeType, query, context=None):
+            return _M_IBTrader.IQDatabase._op_GetRichs.invokeAsync(self, ((codeId, timeType, query), context))
+
+        def begin_GetRichs(self, codeId, timeType, query, _response=None, _ex=None, _sent=None, context=None):
+            return _M_IBTrader.IQDatabase._op_GetRichs.begin(self, ((codeId, timeType, query), _response, _ex, _sent, context))
+
+        def end_GetRichs(self, _r):
+            return _M_IBTrader.IQDatabase._op_GetRichs.end(self, _r)
+
+        def GetOneRich(self, codeId, timeType, timePos, context=None):
+            return _M_IBTrader.IQDatabase._op_GetOneRich.invoke(self, ((codeId, timeType, timePos), context))
+
+        def GetOneRichAsync(self, codeId, timeType, timePos, context=None):
+            return _M_IBTrader.IQDatabase._op_GetOneRich.invokeAsync(self, ((codeId, timeType, timePos), context))
+
+        def begin_GetOneRich(self, codeId, timeType, timePos, _response=None, _ex=None, _sent=None, context=None):
+            return _M_IBTrader.IQDatabase._op_GetOneRich.begin(self, ((codeId, timeType, timePos), _response, _ex, _sent, context))
+
+        def end_GetOneRich(self, _r):
+            return _M_IBTrader.IQDatabase._op_GetOneRich.end(self, _r)
+
         @staticmethod
         def checkedCast(proxy, facetOrContext=None, context=None):
             return _M_IBTrader.IQDatabasePrx.ice_checkedCast(proxy, '::IBTrader::IQDatabase', facetOrContext, context)
@@ -569,6 +593,12 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
         def GetOneAtr(self, codeId, timeType, timePos, current=None):
             raise NotImplementedError("servant method 'GetOneAtr' not implemented")
 
+        def GetRichs(self, codeId, timeType, query, current=None):
+            raise NotImplementedError("servant method 'GetRichs' not implemented")
+
+        def GetOneRich(self, codeId, timeType, timePos, current=None):
+            raise NotImplementedError("servant method 'GetOneRich' not implemented")
+
         def __str__(self):
             return IcePy.stringify(self, _M_IBTrader._t_IQDatabaseDisp)
 
@@ -611,6 +641,8 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
     IQDatabase._op_GetOneDivType = IcePy.Operation('GetOneDivType', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), IcePy._t_long, False, 0)), (((), _M_IBTrader._t_IDivTypeValue, False, 0),), ((), IcePy._t_bool, False, 0), ())
     IQDatabase._op_GetAtrs = IcePy.Operation('GetAtrs', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), _M_IBTrader._t_IQuery, False, 0)), (((), _M_IBTrader._t_IAtrValues, False, 0),), None, ())
     IQDatabase._op_GetOneAtr = IcePy.Operation('GetOneAtr', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), IcePy._t_long, False, 0)), (((), _M_IBTrader._t_IAtrValue, False, 0),), ((), IcePy._t_bool, False, 0), ())
+    IQDatabase._op_GetRichs = IcePy.Operation('GetRichs', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), _M_IBTrader._t_IQuery, False, 0)), (((), _M_IBTrader._t_IRichValues, False, 0),), None, ())
+    IQDatabase._op_GetOneRich = IcePy.Operation('GetOneRich', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), IcePy._t_long, False, 0)), (((), _M_IBTrader._t_IRichValue, False, 0),), ((), IcePy._t_bool, False, 0), ())
 
     _M_IBTrader.IQDatabase = IQDatabase
     del IQDatabase

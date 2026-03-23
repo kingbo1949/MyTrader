@@ -17,51 +17,37 @@ from qib_trader.utils.stats import PerformanceAnalyzer
 logger = logging.getLogger("MainBacktest")
 
 
-def _build_data_key_map(active_configs: list) -> tuple[dict, dict]:
-    """按 (code_id, interval) 去重，合并时间范围，记录 use_enriched 标志。"""
+def _build_data_key_map(active_configs: list) -> dict:
+    """按 (code_id, interval) 去重，合并时间范围。"""
     data_key_map: dict[tuple, tuple] = {}
-    enriched_map: dict[tuple, bool] = {}
     for s in active_configs:
         key = (s["code_id"], s["interval"])
         start, end = s["start_time"], s["end_time"]
-        use_enriched = s.get("use_enriched", False)
         if key not in data_key_map:
             data_key_map[key] = (start, end)
-            enriched_map[key] = use_enriched
         else:
             prev_start, prev_end = data_key_map[key]
             data_key_map[key] = (min(prev_start, start), max(prev_end, end))
-            enriched_map[key] = enriched_map[key] or use_enriched
-    return data_key_map, enriched_map
+    return data_key_map
 
 
-def _fetch_bars(code_id: str, interval_str: str, start_time, end_time,
-                use_enriched: bool = False) -> list[BarData]:
+def _fetch_bars(code_id: str, interval_str: str, start_time, end_time) -> list[BarData]:
     """拉取单组 (code_id, interval) 的 bar 列表，失败返回空列表。"""
     time_type = getattr(IBTrader.ITimeType, interval_str)
     time_pair = FactoryIce.make_timepair(start_time, end_time)
-    if use_enriched:
-        df = FactoryIce.get_enriched_klines_loop(code_id, time_type, time_pair)
-        if df.empty:
-            logger.warning(f"未获取到 enriched 数据: {code_id} {interval_str}，跳过")
-            return []
-        return IceConverter.enriched_df_to_bars(df, code_id, interval_str)
-    klines = FactoryIce.get_klines_loop(code_id=code_id, time_type=time_type, time_pair=time_pair)
-    if not klines:
+    df = FactoryIce.get_enriched_klines_loop(code_id, time_type, time_pair)
+    if df.empty:
         logger.warning(f"未获取到数据: {code_id} {interval_str}，跳过")
         return []
-    df = IceConverter.klines_to_df(klines)
-    return IceConverter.df_to_bars(df, code_id, interval_str)
+    return IceConverter.enriched_df_to_bars(df, code_id, interval_str)
 
 
-def _fetch_all_bars(data_key_map: dict, enriched_map: dict) -> dict[tuple, list[BarData]]:
+def _fetch_all_bars(data_key_map: dict) -> dict[tuple, list[BarData]]:
     """批量拉取所有 (code_id, interval) 的数据，返回非空结果。"""
     bars_map: dict[tuple, list[BarData]] = {}
     for (code_id, interval_str), (start_time, end_time) in data_key_map.items():
-        use_enriched = enriched_map.get((code_id, interval_str), False)
-        tag = "(enriched)" if use_enriched else ""
-        logger.info(f"拉取数据{tag}: {code_id} {interval_str} [{start_time} ~ {end_time}]")
-        bars = _fetch_bars(code_id, interval_str, start_time, end_time, use_enriched)
+        logger.info(f"拉取数据: {code_id} {interval_str} [{start_time} ~ {end_time}]")
+        bars = _fetch_bars(code_id, interval_str, start_time, end_time)
         if bars:
             bars_map[(code_id, interval_str)] = bars
             logger.info(f"  获取 {len(bars)} 根 bar")
@@ -101,6 +87,16 @@ def _export_trades_csv(strategy_id: str, trades: list) -> None:
     logger.info(f"成交记录已导出: {path}")
 
 
+def _export_spreads_csv(strategy_id: str, closed_spreads: list) -> None:
+    """将期权仓位生命周期记录导出为 output/<strategy_id>.csv。"""
+    output_dir = Path(__file__).resolve().parents[1] / "output"
+    output_dir.mkdir(exist_ok=True)
+    df = pd.DataFrame(closed_spreads)
+    path = output_dir / f"{strategy_id}.csv"
+    df.to_csv(path, index=False)
+    logger.info(f"期权仓位记录已导出: {path}")
+
+
 def _print_results(bars_map: dict) -> None:
     """按策略调用 PerformanceAnalyzer 输出绩效报告。"""
     all_trades = get_broker().get_trades()
@@ -109,11 +105,16 @@ def _print_results(bars_map: dict) -> None:
         bars = bars_map.get((strategy.codeId, strategy.interval.value), [])
         multiplier = get_codeId_config(strategy.codeId).get("multiplier", 1.0)
         logger.info(f"策略 {strategy.strategy_id}: 共 {len(trades)} 笔成交")
-        analyzer = PerformanceAnalyzer(trades, bars, contract_multiplier=multiplier)
+        analyzer = PerformanceAnalyzer(trades, bars, initial_capital=strategy.initial_capital,
+                                        contract_multiplier=multiplier, options_mode=strategy.options_mode)
         df = analyzer.calculate_performance()
         analyzer.plot_result(df)
         if is_export_trades_csv() and trades:
-            _export_trades_csv(strategy.strategy_id, trades)
+            closed = getattr(strategy, '_closed_spreads', None)
+            if closed:
+                _export_spreads_csv(strategy.strategy_id, closed)
+            else:
+                _export_trades_csv(strategy.strategy_id, trades)
 
 
 def main():
@@ -127,10 +128,10 @@ def main():
             logger.warning("无启用任务，退出")
             return
 
-        data_key_map, enriched_map = _build_data_key_map(active_configs)
+        data_key_map = _build_data_key_map(active_configs)
         logger.info(f"去重后需拉取 {len(data_key_map)} 组数据")
 
-        bars_map = _fetch_all_bars(data_key_map, enriched_map)
+        bars_map = _fetch_all_bars(data_key_map)
         if not bars_map:
             logger.error("所有数据均为空，退出")
             return

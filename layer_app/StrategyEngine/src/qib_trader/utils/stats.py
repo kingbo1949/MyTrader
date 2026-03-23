@@ -40,13 +40,36 @@ def _merge_pos_into_bars(bar_df: pd.DataFrame, trade_df: pd.DataFrame) -> pd.Dat
     return bar_df
 
 
-def _calc_equity(bar_df: pd.DataFrame, initial_capital: float, multiplier: float) -> pd.DataFrame:
+def _realized_pnl_by_bar(trade_df: pd.DataFrame, multiplier: float, bar_index) -> pd.Series:
+    """逐笔配对计算实现损益，按结算时间戳映射到 bar 索引。"""
+    pnl_by_dt = {}
+    pos, entry_price = 0, 0.0
+    for _, row in trade_df.iterrows():
+        if pos == 0:
+            entry_price = row.price
+            pos = 1 if row.direction == Direction.LONG else -1
+        else:
+            diff = (row.price - entry_price) if pos > 0 else (entry_price - row.price)
+            dt = pd.Timestamp(row.datetime)
+            pnl_by_dt[dt] = pnl_by_dt.get(dt, 0.0) + diff * multiplier
+            pos = 0
+    return pd.Series(pnl_by_dt).reindex(bar_index).fillna(0.0)
+
+
+def _calc_equity(bar_df: pd.DataFrame, trade_df: pd.DataFrame,
+                 initial_capital: float, multiplier: float,
+                 options_mode: bool = False) -> pd.DataFrame:
     bar_df = bar_df.copy()
-    bar_df["pnl"] = (
-        bar_df["position"].shift(1).fillna(0)
-        * bar_df["close_price"].diff().fillna(0)
-        * multiplier
-    )
+    if options_mode and not trade_df.empty:
+        # 期权模式：用实现损益（FIFO配对）构建资金曲线，忽略持仓盯市
+        bar_df["pnl"] = _realized_pnl_by_bar(trade_df, multiplier, bar_df.index)
+    else:
+        # 期货/股票模式：逐 bar 盯市
+        bar_df["pnl"] = (
+            bar_df["position"].shift(1).fillna(0)
+            * bar_df["close_price"].diff().fillna(0)
+            * multiplier
+        )
     bar_df["equity"] = initial_capital + bar_df["pnl"].cumsum()
     bar_df["max_equity"] = bar_df["equity"].expanding().max()
     bar_df["drawdown"] = (bar_df["equity"] - bar_df["max_equity"]) / bar_df["max_equity"]
@@ -132,11 +155,13 @@ class PerformanceAnalyzer:
 
     def __init__(self, trades: TradeDatas, bars: BarDatas,
                  initial_capital: float = 100_000.0,
-                 contract_multiplier: float = 1.0):
+                 contract_multiplier: float = 1.0,
+                 options_mode: bool = False):
         self.trades = trades
         self.bars = bars
         self.initial_capital = initial_capital
         self.multiplier = contract_multiplier
+        self.options_mode = options_mode
 
     def calculate_performance(self) -> pd.DataFrame:
         if not self.trades:
@@ -145,7 +170,7 @@ class PerformanceAnalyzer:
         bar_df = _build_bar_df(self.bars)
         trade_df = _build_trade_df(self.trades)
         bar_df = _merge_pos_into_bars(bar_df, trade_df)
-        bar_df = _calc_equity(bar_df, self.initial_capital, self.multiplier)
+        bar_df = _calc_equity(bar_df, trade_df, self.initial_capital, self.multiplier, self.options_mode)
         trade_metrics = _calc_trade_metrics(_round_trip_pnls(trade_df, self.multiplier))
         summary = _calc_summary(bar_df, self.initial_capital)
         _print_report(summary, trade_metrics, self.initial_capital)

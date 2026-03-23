@@ -54,13 +54,11 @@ def _filter_param_grid(param_grid: list[dict]) -> list[dict]:
 
 def _fetch_bars(opt_config: dict) -> BarDatas:
     time_type = getattr(IBTrader.ITimeType, opt_config["interval"])
-    klines = FactoryIce.get_klines_loop(
-        code_id=opt_config["code_id"],
-        time_type=time_type,
-        time_pair=FactoryIce.make_timepair(opt_config["start_time"], opt_config["end_time"])
-    )
-    df = IceConverter.klines_to_df(klines)
-    return IceConverter.df_to_bars(df, opt_config["code_id"], opt_config["interval"])
+    time_pair = FactoryIce.make_timepair(opt_config["start_time"], opt_config["end_time"])
+    df = FactoryIce.get_enriched_klines_loop(opt_config["code_id"], time_type, time_pair)
+    if df.empty:
+        return []
+    return IceConverter.enriched_df_to_bars(df, opt_config["code_id"], opt_config["interval"])
 
 
 # ─── 绩效提取（静默，不打印）──────────────────────────────────────────────────
@@ -71,7 +69,7 @@ def _extract_metrics(params: dict, trades, bars: BarDatas, multiplier: float) ->
     trade_df = _build_trade_df(trades)
     bar_df = _calc_equity(
         _merge_pos_into_bars(_build_bar_df(bars), trade_df),
-        _INITIAL_CAPITAL, multiplier
+        trade_df, _INITIAL_CAPITAL, multiplier
     )
     summary = _calc_summary(bar_df, _INITIAL_CAPITAL)
     tm = _calc_trade_metrics(_round_trip_pnls(trade_df, multiplier))

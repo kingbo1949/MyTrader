@@ -954,4 +954,110 @@ if 'IAtrValue' not in _M_IBTrader.__dict__:
 if '_t_IAtrValues' not in _M_IBTrader.__dict__:
     _M_IBTrader._t_IAtrValues = IcePy.defineSequence('::IBTrader::IAtrValues', (), _M_IBTrader._t_IAtrValue)
 
+if 'IRichValue' not in _M_IBTrader.__dict__:
+    _M_IBTrader.IRichValue = Ice.createTempClass()
+    class IRichValue(object):
+        def __init__(self, time=0, close=0, open=0, high=0, low=0, vol=0, dif=0, dea=0, macd=0, divType=_M_IBTrader.IDivType.NORMAL, isUTurn=False, thisAtr=0, avgAtr=0, ma5=0, ma20=0, ma60=0, ma200=0, preDayHigh=0, preDayLow=0):
+            self.time = time
+            self.close = close
+            self.open = open
+            self.high = high
+            self.low = low
+            self.vol = vol
+            self.dif = dif
+            self.dea = dea
+            self.macd = macd
+            self.divType = divType
+            self.isUTurn = isUTurn
+            self.thisAtr = thisAtr
+            self.avgAtr = avgAtr
+            self.ma5 = ma5
+            self.ma20 = ma20
+            self.ma60 = ma60
+            self.ma200 = ma200
+            self.preDayHigh = preDayHigh
+            self.preDayLow = preDayLow
+
+        def __eq__(self, other):
+            if other is None:
+                return False
+            elif not isinstance(other, _M_IBTrader.IRichValue):
+                return NotImplemented
+            else:
+                if self.time != other.time:
+                    return False
+                if self.close != other.close:
+                    return False
+                if self.open != other.open:
+                    return False
+                if self.high != other.high:
+                    return False
+                if self.low != other.low:
+                    return False
+                if self.vol != other.vol:
+                    return False
+                if self.dif != other.dif:
+                    return False
+                if self.dea != other.dea:
+                    return False
+                if self.macd != other.macd:
+                    return False
+                if self.divType != other.divType:
+                    return False
+                if self.isUTurn != other.isUTurn:
+                    return False
+                if self.thisAtr != other.thisAtr:
+                    return False
+                if self.avgAtr != other.avgAtr:
+                    return False
+                if self.ma5 != other.ma5:
+                    return False
+                if self.ma20 != other.ma20:
+                    return False
+                if self.ma60 != other.ma60:
+                    return False
+                if self.ma200 != other.ma200:
+                    return False
+                if self.preDayHigh != other.preDayHigh:
+                    return False
+                if self.preDayLow != other.preDayLow:
+                    return False
+                return True
+
+        def __ne__(self, other):
+            return not self.__eq__(other)
+
+        def __str__(self):
+            return IcePy.stringify(self, _M_IBTrader._t_IRichValue)
+
+        __repr__ = __str__
+
+    _M_IBTrader._t_IRichValue = IcePy.defineStruct('::IBTrader::IRichValue', IRichValue, (), (
+        ('time', (), IcePy._t_long),
+        ('close', (), IcePy._t_double),
+        ('open', (), IcePy._t_double),
+        ('high', (), IcePy._t_double),
+        ('low', (), IcePy._t_double),
+        ('vol', (), IcePy._t_long),
+        ('dif', (), IcePy._t_double),
+        ('dea', (), IcePy._t_double),
+        ('macd', (), IcePy._t_double),
+        ('divType', (), _M_IBTrader._t_IDivType),
+        ('isUTurn', (), IcePy._t_bool),
+        ('thisAtr', (), IcePy._t_double),
+        ('avgAtr', (), IcePy._t_double),
+        ('ma5', (), IcePy._t_double),
+        ('ma20', (), IcePy._t_double),
+        ('ma60', (), IcePy._t_double),
+        ('ma200', (), IcePy._t_double),
+        ('preDayHigh', (), IcePy._t_double),
+        ('preDayLow', (), IcePy._t_double)
+    ))
+
+    _M_IBTrader.IRichValue = IRichValue
+    del IRichValue
+
+if '_t_IRichValues' not in _M_IBTrader.__dict__:
+    _M_IBTrader._t_IRichValues = IcePy.defineSequence('::IBTrader::IRichValues', (), _M_IBTrader._t_IRichValue)
+
 # End of module IBTrader

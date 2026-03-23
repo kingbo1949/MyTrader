@@ -151,9 +151,9 @@ class IceConverter:
                 div_type      =str  (getattr(row, 'div_type',       '')),
                 is_uturn      =bool (getattr(row, 'is_uturn',       False)),
                 atr           =float(getattr(row, 'atr',            0.0)),
-                prev_day_high =float(getattr(row, 'prev_day_high',  0.0)),
-                prev_day_low  =float(getattr(row, 'prev_day_low',   0.0)),
-                prev_day_close=float(getattr(row, 'prev_day_close', 0.0)),
+                avg_atr       =float(getattr(row, 'avg_atr',        0.0)),
+                prev_day_high =float(getattr(row, 'prev_day_high', 0.0)),
+                prev_day_low  =float(getattr(row, 'prev_day_low',  0.0)),
             )
             for row in df.itertuples(index=False)
         ]

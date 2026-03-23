@@ -65,10 +65,10 @@ class BarData:
     div_type: str = ""        # "Normal"/"Bottom"/"BottomSub"/"Top"/"TopSub"
     is_uturn: bool = False
     atr: float = 0.0
+    avg_atr: float = 0.0          # 最近14周期 ATR 均值
     # 上一日日线数据（仅对日内 bar 有效）
     prev_day_high: float = 0.0
     prev_day_low: float = 0.0
-    prev_day_close: float = 0.0
 
 # --- 3. 交易执行数据模型 ---
 

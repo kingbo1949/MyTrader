@@ -2,6 +2,7 @@ import threading
 import Ice
 import IBTrader
 import pandas as pd
+from datetime import datetime
 from qib_trader.utils.tool import TimeUtils
 from qib_trader.utils.config_loader import get_env_config
 
@@ -90,15 +91,15 @@ class FactoryIce:
             continue
         return klines
 
-    # ── Enriched klines: klines + MACD + DivType + ATR + prev-day D1 ──────────
+    # ── Enriched klines: GetRichs 一次返回 kline + MACD + DivType + ATR + 上日高低 ──
 
     @classmethod
     def _generic_loop(cls, getter_name: str, code_id: str, time_type, time_pair):
-        """通用分页循环查询，适用于所有具备 .time 字段的指标接口。"""
+        """通用分页循环查询，适用于所有具备 .time 字段的接口。"""
         db_proxy = cls.make_and_get_proxy()
         getter = getattr(db_proxy, getter_name)
         query = IBTrader.IQuery()
-        query.byReqType = 3 # 3表示请求某个时间以后多少个单位的数据(dwSubscribeNum为0时表示该时间后所有的数据)
+        query.byReqType = 3
         query.dwSubscribeNum = 4000
         results = []
         while True:
@@ -112,18 +113,6 @@ class FactoryIce:
         return results
 
     @classmethod
-    def _get_macds_loop(cls, code_id, time_type, time_pair):
-        return cls._generic_loop("GetMacds", code_id, time_type, time_pair)
-
-    @classmethod
-    def _get_divtypes_loop(cls, code_id, time_type, time_pair):
-        return cls._generic_loop("GetDivTypes", code_id, time_type, time_pair)
-
-    @classmethod
-    def _get_atrs_loop(cls, code_id, time_type, time_pair):
-        return cls._generic_loop("GetAtrs", code_id, time_type, time_pair)
-
-    @classmethod
     def _divtype_str(cls, dt_enum) -> str:
         if dt_enum == IBTrader.IDivType.BOTTOM:    return "Bottom"
         if dt_enum == IBTrader.IDivType.BOTTOMSUB: return "BottomSub"
@@ -132,77 +121,36 @@ class FactoryIce:
         return "Normal"
 
     @classmethod
-    def _macd_df(cls, macds):
-        if not macds:
-            return None
-        return pd.DataFrame([{'time': m.time, 'dif': m.dif, 'dea': m.dea} for m in macds])
-
-    @classmethod
-    def _divtype_df(cls, divtypes):
-        if not divtypes:
-            return None
-        return pd.DataFrame([{
-            'time': d.time,
-            'div_type': cls._divtype_str(d.divType),
-            'is_uturn': bool(d.isUTurn)
-        } for d in divtypes])
-
-    @classmethod
-    def _atr_df(cls, atrs):
-        if not atrs:
-            return None
-        return pd.DataFrame([{'time': a.time, 'atr': float(a.thisAtr)} for a in atrs])
-
-    @classmethod
-    def _merge_indicators(cls, klines_df, macds, divtypes, atrs) -> pd.DataFrame:
-        """Left-join MACD / DivType / ATR onto klines DataFrame (keyed on 'time')."""
-        df = klines_df.copy().reset_index(drop=True)
-        for indicator_df, defaults in [
-            (cls._macd_df(macds),     {'dif': 0.0, 'dea': 0.0}),
-            (cls._divtype_df(divtypes), {'div_type': '', 'is_uturn': False}),
-            (cls._atr_df(atrs),        {'atr': 0.0}),
-        ]:
-            if indicator_df is not None:
-                df = df.merge(indicator_df, on='time', how='left')
-            for col, val in defaults.items():
-                if col not in df.columns:
-                    df[col] = val
-                else:
-                    df[col] = df[col].fillna(val)
-        return df
-
-    @classmethod
-    def _merge_prev_day(cls, klines_df, code_id: str) -> pd.DataFrame:
-        """逐 bar 调用 GetLastDayKLine，注入 prev_day_high/low/close。
-        同一自然日的不同时间点可能属于不同交易日，不可按日期缓存。"""
-        df = klines_df.copy()
-        db_proxy = cls.make_and_get_proxy()
-        rows_hlc = []
-        for row in df.itertuples(index=False):
-            result = db_proxy.GetLastDayKLine(code_id, int(row.time))
-            if result[0]:
-                rows_hlc.append((float(result[1].high), float(result[1].low), float(result[1].close)))
-                print(TimeUtils.ms_to_str(result[1].time))
-            else:
-                rows_hlc.append((0.0, 0.0, 0.0))
-        df['prev_day_high']  = [r[0] for r in rows_hlc]
-        df['prev_day_low']   = [r[1] for r in rows_hlc]
-        df['prev_day_close'] = [r[2] for r in rows_hlc]
+    def _richs_to_df(cls, richs) -> pd.DataFrame:
+        """IRichValues → DataFrame，列名与 enriched_df_to_bars 匹配。"""
+        if not richs:
+            return pd.DataFrame()
+        data = [{
+            'time':          r.time,
+            'datetime':      datetime.fromtimestamp(r.time / 1000.0),
+            'open_price':    float(r.open),
+            'high_price':    float(r.high),
+            'low_price':     float(r.low),
+            'close_price':   float(r.close),
+            'volume':        int(r.vol),
+            'dif':           float(r.dif),
+            'dea':           float(r.dea),
+            'div_type':      cls._divtype_str(r.divType),
+            'is_uturn':      bool(r.isUTurn),
+            'atr':           float(r.thisAtr),
+            'avg_atr':       float(r.avgAtr),
+            'prev_day_high': float(r.preDayHigh),
+            'prev_day_low':  float(r.preDayLow),
+        } for r in richs]
+        df = pd.DataFrame(data)
+        df.set_index('datetime', inplace=True, drop=False)
         return df
 
     @classmethod
     def get_enriched_klines_loop(cls, code_id: str, time_type, time_pair) -> pd.DataFrame:
-        """拉取 M15 klines 并合并 MACD / DivType / ATR / prev-day D1，返回 DataFrame。"""
-        from qib_trader.api.converters import IceConverter
-        klines = cls.get_klines_loop(code_id, time_type, time_pair)
-        if not klines:
-            return pd.DataFrame()
-        macds    = cls._get_macds_loop(code_id, time_type, time_pair)
-        divtypes = cls._get_divtypes_loop(code_id, time_type, time_pair)
-        atrs     = cls._get_atrs_loop(code_id, time_type, time_pair)
-        klines_df = IceConverter.klines_to_df(klines)
-        df = cls._merge_indicators(klines_df, macds, divtypes, atrs)
-        return cls._merge_prev_day(df, code_id)
+        """用 GetRichs 一次拉取所有 enriched 数据，返回 DataFrame。"""
+        richs = cls._generic_loop("GetRichs", code_id, time_type, time_pair)
+        return cls._richs_to_df(richs)
 
 
 if __name__ == "__main__":
