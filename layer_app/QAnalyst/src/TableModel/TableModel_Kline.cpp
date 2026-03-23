@@ -9,7 +9,7 @@
 CTableModel_Kline::CTableModel_Kline(IbContractPtr pContract)
 	:CTableModel(pContract)
 {
-	m_headers = { "Time", "Open", "High", "Low", "Close", "Vol", "Dif", "Dea", "Macd", "DivType", "IsUTurn", "Atr", "Ma5", "Ma20", "Ma60", "Ma200", "PreDayHigh", "PreDayLow"  };
+	m_headers = { "Time", "Open", "High", "Low", "Close", "Vol", "Dif", "Dea", "Macd", "DivType", "IsUTurn", "Atr", "Ma5", "Ma20", "Ma60", "Ma200", "PreDayHigh", "PreDayLow", "PreDayClose"  };
 }
 
 void CTableModel_Kline::QueryData(const TimeZoneOfCodeId& timeZone)
@@ -23,8 +23,6 @@ void CTableModel_Kline::QueryData(const TimeZoneOfCodeId& timeZone)
 
 	beginResetModel();
 	m_richDatas = MakeAndGet_QDatabase()->GetRichsByLoop(timeZone.codeId, timeZone.timeType, qQuery.time_pair);
-	// IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLineByLoop(timeZone.codeId, timeZone.timeType, qQuery.time_pair);
-	// FillKline4Tables(timeZone.codeId, timeZone.timeType, klines);
 	endResetModel();
 
 }
@@ -124,6 +122,10 @@ QVariant CTableModel_Kline::data(const QModelIndex& index, int role) const
 	{
 		return QString::number(pRichData->preDayLow, 'f', 2);
 	}
+	if (klineRole == KLineRole::PreDayClose)
+	{
+		return QString::number(pRichData->preDayClose, 'f', 2);
+	}
 
 	return QVariant();
 }
@@ -136,18 +138,3 @@ std::string CTableModel_Kline::GetFileName(const CodeStr& codeId)
 	return filename;
 }
 
-// void CTableModel_Kline::FillKline4Tables(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs &klines)
-// {
-// 	m_kline4Tables.clear();
-// 	for (auto kline : klines)
-// 	{
-// 		KLine4Table kLine4Table;
-// 		kLine4Table.pkline = kline;
-// 		kLine4Table.pmacd = MakeAndGet_QDatabase()->GetOneMacd(codeId, timeType, kline->time);
-// 		kLine4Table.pDivType = MakeAndGet_QDatabase()->GetOneDivType(codeId, timeType, kline->time);
-// 		kLine4Table.pAtr = MakeAndGet_QDatabase()->GetOneAtr(codeId, timeType, kline->time);
-// 		kLine4Table.pMa = MakeAndGet_QDatabase()->GetOneMa(codeId, timeType, kline->time);
-// 		m_kline4Tables.push_back(kLine4Table);
-// 	}
-// 	return ;
-// }

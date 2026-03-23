@@ -25,7 +25,8 @@ public:
 		Ma60 = 14,			// 60周期均线
 		Ma200 = 15,			// 200周期均线
 		PreDayHigh = 16,	// 上日最高价
-		PreDayLow = 17		// 上日最低价
+		PreDayLow = 17,		// 上日最低价
+		PreDayClose = 18	// 上日收盘
 	};
 
 
@@ -47,11 +48,9 @@ public:
 
 protected:
 	IBRichDataPtrs					m_richDatas;
-	//KLine4Tables					m_kline4Tables;
 
 	virtual std::string				GetFileName(const CodeStr& codeId) override;
 
-	// void							FillKline4Tables(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs &klines);
 
 
 };

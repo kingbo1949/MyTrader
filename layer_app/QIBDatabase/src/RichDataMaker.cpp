@@ -166,6 +166,7 @@ void CRichDataMaker::FillPreDay()
 
         pos->second.preDayHigh = dayKline.high;
         pos->second.preDayLow = dayKline.low;
+        pos->second.preDayClose = dayKline.close;
 
     }
 }

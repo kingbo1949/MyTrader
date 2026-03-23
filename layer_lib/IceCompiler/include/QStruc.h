@@ -339,14 +339,15 @@ struct IRichValue
     double ma200 = 0;
     double preDayHigh = 0;
     double preDayLow = 0;
+    double preDayClose = 0;
 
     /**
      * Obtains a tuple containing all of the struct's data members.
      * @return The data members in a tuple.
      */
-    std::tuple<const long long int&, const double&, const double&, const double&, const double&, const long long int&, const double&, const double&, const double&, const ::IBTrader::IDivType&, const bool&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&> ice_tuple() const
+    std::tuple<const long long int&, const double&, const double&, const double&, const double&, const long long int&, const double&, const double&, const double&, const ::IBTrader::IDivType&, const bool&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&> ice_tuple() const
     {
-        return std::tie(time, close, open, high, low, vol, dif, dea, macd, divType, isUTurn, thisAtr, avgAtr, ma5, ma20, ma60, ma200, preDayHigh, preDayLow);
+        return std::tie(time, close, open, high, low, vol, dif, dea, macd, divType, isUTurn, thisAtr, avgAtr, ma5, ma20, ma60, ma200, preDayHigh, preDayLow, preDayClose);
     }
 };
 
@@ -613,7 +614,7 @@ template<>
 struct StreamableTraits<::IBTrader::IRichValue>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 138;
+    static const int minWireSize = 146;
     static const bool fixedLength = false;
 };
 
@@ -622,7 +623,7 @@ struct StreamReader<::IBTrader::IRichValue, S>
 {
     static void read(S* istr, ::IBTrader::IRichValue& v)
     {
-        istr->readAll(v.time, v.close, v.open, v.high, v.low, v.vol, v.dif, v.dea, v.macd, v.divType, v.isUTurn, v.thisAtr, v.avgAtr, v.ma5, v.ma20, v.ma60, v.ma200, v.preDayHigh, v.preDayLow);
+        istr->readAll(v.time, v.close, v.open, v.high, v.low, v.vol, v.dif, v.dea, v.macd, v.divType, v.isUTurn, v.thisAtr, v.avgAtr, v.ma5, v.ma20, v.ma60, v.ma200, v.preDayHigh, v.preDayLow, v.preDayClose);
     }
 };
 
@@ -1239,11 +1240,12 @@ struct IRichValue
         ma60(0),
         ma200(0),
         preDayHigh(0),
-        preDayLow(0)
+        preDayLow(0),
+        preDayClose(0)
     {
     }
     
-    IRichValue(::Ice::Long time, ::Ice::Double close, ::Ice::Double open, ::Ice::Double high, ::Ice::Double low, ::Ice::Long vol, ::Ice::Double dif, ::Ice::Double dea, ::Ice::Double macd, IDivType divType, bool isUTurn, ::Ice::Double thisAtr, ::Ice::Double avgAtr, ::Ice::Double ma5, ::Ice::Double ma20, ::Ice::Double ma60, ::Ice::Double ma200, ::Ice::Double preDayHigh, ::Ice::Double preDayLow) :
+    IRichValue(::Ice::Long time, ::Ice::Double close, ::Ice::Double open, ::Ice::Double high, ::Ice::Double low, ::Ice::Long vol, ::Ice::Double dif, ::Ice::Double dea, ::Ice::Double macd, IDivType divType, bool isUTurn, ::Ice::Double thisAtr, ::Ice::Double avgAtr, ::Ice::Double ma5, ::Ice::Double ma20, ::Ice::Double ma60, ::Ice::Double ma200, ::Ice::Double preDayHigh, ::Ice::Double preDayLow, ::Ice::Double preDayClose) :
         time(time),
         close(close),
         open(open),
@@ -1262,7 +1264,8 @@ struct IRichValue
         ma60(ma60),
         ma200(ma200),
         preDayHigh(preDayHigh),
-        preDayLow(preDayLow)
+        preDayLow(preDayLow),
+        preDayClose(preDayClose)
     {
     }
     
@@ -1286,6 +1289,7 @@ struct IRichValue
     ::Ice::Double ma200;
     ::Ice::Double preDayHigh;
     ::Ice::Double preDayLow;
+    ::Ice::Double preDayClose;
 };
 
 typedef ::std::vector<IRichValue> IRichValues;
@@ -1734,7 +1738,7 @@ template<>
 struct StreamableTraits< ::IBTrader::IRichValue>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 138;
+    static const int minWireSize = 146;
     static const bool fixedLength = false;
 };
 
@@ -1762,6 +1766,7 @@ struct StreamWriter< ::IBTrader::IRichValue, S>
         ostr->write(v.ma200);
         ostr->write(v.preDayHigh);
         ostr->write(v.preDayLow);
+        ostr->write(v.preDayClose);
     }
 };
 
@@ -1789,6 +1794,7 @@ struct StreamReader< ::IBTrader::IRichValue, S>
         istr->read(v.ma200);
         istr->read(v.preDayHigh);
         istr->read(v.preDayLow);
+        istr->read(v.preDayClose);
     }
 };
 

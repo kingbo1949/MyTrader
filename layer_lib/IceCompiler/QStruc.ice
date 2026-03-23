@@ -207,6 +207,7 @@ module IBTrader
 		// 上日高低价
         double			preDayHigh = 0.0;
         double			preDayLow = 0.0;
+        double			preDayClose = 0.0;
 
 	}
 	sequence<IRichValue> IRichValues;

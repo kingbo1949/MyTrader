@@ -60,7 +60,8 @@ std::string CSaveData_Klines::GetRichStr(const IBRichDataPtr rich)
 		"{:.2f}, "					// ma60
 		"{:.2f}, "					// ma200
 		"{:.2f}, "					// preHigh
-		"{:.2f}"					// preLow
+		"{:.2f}, "					// preLow
+		"{:.2f} "					// preClose
 		,
 		CGlobal::GetTickTimeStr(rich->time).substr(0, 17).c_str(),			// 取时间字符串不要毫秒部分
 		rich->open,
@@ -79,7 +80,8 @@ std::string CSaveData_Klines::GetRichStr(const IBRichDataPtr rich)
 		rich->ma60,
 		rich->ma200,
 		rich->preDayHigh,
-		rich->preDayLow
+		rich->preDayLow,
+		rich->preDayClose
 	);
 
 	return temstr;

@@ -293,6 +293,7 @@ IBRichDataPtr CIceTransfor::TransRichData(const IRichValue &value)
 
 	back->preDayHigh = value.preDayHigh;
 	back->preDayLow = value.preDayLow;
+	back->preDayClose = value.preDayClose;
 
 	return back;
 }
@@ -324,6 +325,7 @@ IRichValue CIceTransfor::TransRichData(IBRichDataPtr pValue)
 
 	back.preDayHigh = pValue->preDayHigh;
 	back.preDayLow = pValue->preDayLow;
+	back.preDayClose = pValue->preDayClose;
 
 	return back;
 }

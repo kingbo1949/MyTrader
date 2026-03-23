@@ -354,6 +354,7 @@ class  CIBRichData
 	// 上日高低价
 	double			preDayHigh = std::numeric_limits<double>::quiet_NaN();
 	double			preDayLow = std::numeric_limits<double>::quiet_NaN();
+	double			preDayClose = std::numeric_limits<double>::quiet_NaN();
 
 };
 
