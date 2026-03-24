@@ -957,7 +957,7 @@ if '_t_IAtrValues' not in _M_IBTrader.__dict__:
 if 'IRichValue' not in _M_IBTrader.__dict__:
     _M_IBTrader.IRichValue = Ice.createTempClass()
     class IRichValue(object):
-        def __init__(self, time=0, close=0, open=0, high=0, low=0, vol=0, dif=0, dea=0, macd=0, divType=_M_IBTrader.IDivType.NORMAL, isUTurn=False, thisAtr=0, avgAtr=0, ma5=0, ma20=0, ma60=0, ma200=0, preDayHigh=0, preDayLow=0):
+        def __init__(self, time=0, close=0, open=0, high=0, low=0, vol=0, dif=0, dea=0, macd=0, divType=_M_IBTrader.IDivType.NORMAL, isUTurn=False, thisAtr=0, avgAtr=0, ma5=0, ma20=0, ma60=0, ma200=0, preDayHigh=0, preDayLow=0, preDayClose=0):
             self.time = time
             self.close = close
             self.open = open
@@ -977,6 +977,7 @@ if 'IRichValue' not in _M_IBTrader.__dict__:
             self.ma200 = ma200
             self.preDayHigh = preDayHigh
             self.preDayLow = preDayLow
+            self.preDayClose = preDayClose
 
         def __eq__(self, other):
             if other is None:
@@ -1022,6 +1023,8 @@ if 'IRichValue' not in _M_IBTrader.__dict__:
                     return False
                 if self.preDayLow != other.preDayLow:
                     return False
+                if self.preDayClose != other.preDayClose:
+                    return False
                 return True
 
         def __ne__(self, other):
@@ -1051,7 +1054,8 @@ if 'IRichValue' not in _M_IBTrader.__dict__:
         ('ma60', (), IcePy._t_double),
         ('ma200', (), IcePy._t_double),
         ('preDayHigh', (), IcePy._t_double),
-        ('preDayLow', (), IcePy._t_double)
+        ('preDayLow', (), IcePy._t_double),
+        ('preDayClose', (), IcePy._t_double)
     ))
 
     _M_IBTrader.IRichValue = IRichValue
