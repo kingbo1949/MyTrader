@@ -69,6 +69,7 @@ class BarData:
     # 上一日日线数据（仅对日内 bar 有效）
     prev_day_high: float = 0.0
     prev_day_low: float = 0.0
+    prev_day_close: float = 0.0
 
 # --- 3. 交易执行数据模型 ---
 

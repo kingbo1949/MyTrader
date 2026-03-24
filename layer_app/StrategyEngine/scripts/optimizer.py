@@ -5,11 +5,11 @@ from multiprocessing import Pool, cpu_count
 
 import IBTrader
 from qib_trader.api.converters import IceConverter
-from qib_trader.core.broker import make_broker, get_broker
+from qib_trader.core.broker import make_broker, get_broker, reset_broker
 from qib_trader.core.engine import BacktestEngine
 from qib_trader.core.factory_strategy import FactoryStrategy
 from qib_trader.core.models import BarDatas
-from qib_trader.core.strategy_pool import make_pool, get_pool
+from qib_trader.core.strategy_pool import make_pool, get_pool, reset_pool
 from qib_trader.utils.config_loader import get_optimizations_config, get_codeId_config
 from qib_trader.utils.factory_ice import FactoryIce
 from qib_trader.utils.log_setup import setup_logging
@@ -17,9 +17,6 @@ from qib_trader.utils.stats import (
     _build_bar_df, _build_trade_df, _merge_pos_into_bars,
     _calc_equity, _calc_summary, _round_trip_pnls, _calc_trade_metrics,
 )
-
-_INITIAL_CAPITAL = 100_000.0
-
 
 # ─── 结果数据类 ───────────────────────────────────────────────────────────────
 
@@ -63,15 +60,16 @@ def _fetch_bars(opt_config: dict) -> BarDatas:
 
 # ─── 绩效提取（静默，不打印）──────────────────────────────────────────────────
 
-def _extract_metrics(params: dict, trades, bars: BarDatas, multiplier: float) -> OptimizationResult:
+def _extract_metrics(params: dict, trades, bars: BarDatas, multiplier: float,
+                     initial_capital: float, options_mode: bool) -> OptimizationResult:
     if not trades or not bars:
         return OptimizationResult(params, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0)
     trade_df = _build_trade_df(trades)
     bar_df = _calc_equity(
         _merge_pos_into_bars(_build_bar_df(bars), trade_df),
-        trade_df, _INITIAL_CAPITAL, multiplier
+        trade_df, initial_capital, multiplier, options_mode
     )
-    summary = _calc_summary(bar_df, _INITIAL_CAPITAL)
+    summary = _calc_summary(bar_df, initial_capital)
     tm = _calc_trade_metrics(_round_trip_pnls(trade_df, multiplier))
     return OptimizationResult(
         params=params,
@@ -91,14 +89,18 @@ def _run_single_backtest(task: tuple) -> OptimizationResult:
     class_name, params, bars, code_id, interval_str, direction_str, multiplier = task
     make_pool()
     make_broker()
+    reset_pool()
+    reset_broker()
     strategy_conf = {
         "class": class_name, "code_id": code_id,
         "interval": interval_str, "direction": direction_str,
         "params": params,
     }
-    get_pool().add_strategy(FactoryStrategy.create_strategy(strategy_conf))
+    strategy = FactoryStrategy.create_strategy(strategy_conf)
+    get_pool().add_strategy(strategy)
     BacktestEngine().run_backtest(bars)
-    return _extract_metrics(params, get_broker().get_trades(), bars, multiplier)
+    return _extract_metrics(params, get_broker().get_trades(), bars, multiplier,
+                            strategy.initial_capital, strategy.options_mode)
 
 
 # ─── 结果展示 ─────────────────────────────────────────────────────────────────

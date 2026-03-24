@@ -117,15 +117,18 @@ def _calc_sharpe(equity: pd.Series) -> float:
 
 
 def _calc_summary(df: pd.DataFrame, initial_capital: float) -> dict[str, Any]:
-    total_pnl = df["equity"].iloc[-1] - initial_capital
-    max_dd_amount = (df["max_equity"] - df["equity"]).max()
+    total_return = df["equity"].iloc[-1] / initial_capital - 1
+    max_dd_dt = df["drawdown"].idxmin()
+    max_dd_pct = abs(df["drawdown"].min())
+    max_dd_amount = (df["max_equity"] - df["equity"])[max_dd_dt]
     return {
         "final_equity": df["equity"].iloc[-1],
-        "total_return": df["equity"].iloc[-1] / initial_capital - 1,
+        "total_return": total_return,
         "max_dd_pct": df["drawdown"].min(),
         "max_dd_amount": max_dd_amount,
+        "max_dd_dt": max_dd_dt,
         "sharpe": _calc_sharpe(df["equity"]),
-        "recovery_factor": total_pnl / max_dd_amount if max_dd_amount != 0 else 0.0,
+        "recovery_factor": total_return / max_dd_pct if max_dd_pct != 0 else 0.0,
     }
 
 
@@ -138,7 +141,7 @@ def _print_report(summary: dict, trades: dict, initial_capital: float) -> None:
     print("█" * 44)
     print(f"┃ 初始资金:    ${initial_capital:,.2f}")
     print(f"┃ 最终净值:    ${s['final_equity']:,.2f} ({s['total_return']:+.2%})")
-    print(f"┃ 最大回撤:    {s['max_dd_pct']:.2%} (-${s['max_dd_amount']:,.2f})")
+    print(f"┃ 最大回撤:    {s['max_dd_pct']:.2%} (-${s['max_dd_amount']:,.2f})  @ {s['max_dd_dt']}")
     print(f"┃ 夏普比率:    {s['sharpe']:.2f}")
     print(f"┃ 收益风险比:   {s['recovery_factor']:.2f}")
     print("┣" + "━" * 42 + "┫")

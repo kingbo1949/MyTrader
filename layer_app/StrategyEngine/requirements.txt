@@ -3,3 +3,41 @@ numpy>=1.24.0
 matplotlib>=3.7.0
 pyyaml>=6.0.0
 zeroc-ice>=3.7.0
+
+
+████████████████████████████████████████████
+┃          QUANT ENHANCED REPORT           ┃
+████████████████████████████████████████████
+┃ 初始资金:    $100,000.00
+┃ 最终净值:    $253,569.49 (+153.57%)
+┃ 最大回撤:    -5.10% (-$5,951.04)  @ 2024-08-06 14:45:00
+┃ 夏普比率:    0.16
+┃ 收益风险比:   30.09
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ 总平仓次数:   43
+┃ 胜率:        58.14%
+┃ 盈亏比:      3.80
+┃ 单笔平均盈亏:  $3,571.38
+████████████████████████████████████████████
+
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+                  参数优化报告: UTurnBottom_NQ_M15_LONG
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+排名    参数组合                             夏普       胜率         盈亏比      收益风险比
+------------------------------------------------------------------------
+1       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.5, 'stop_loss_ratio': 0.6} 0.16      61.76%       3.61       25.63
+2       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.5, 'stop_loss_ratio': 0.5} 0.15      56.25%       3.67       18.49
+3       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.6, 'stop_loss_ratio': 0.6} 0.16      68.75%       2.26       16.44
+4       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.6, 'stop_loss_ratio': 0.7} 0.19      64.71%       2.35       13.34
+5       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.6, 'stop_loss_ratio': 0.5} 0.15      54.84%       3.48       12.61
+6       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.5, 'stop_loss_ratio': 0.7} 0.17      55.88%       3.27       11.99
+7       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.5, 'stop_loss_ratio': 0.3} 0.14      54.84%       3.12       11.94
+8       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.7, 'stop_loss_ratio': 0.6} 0.15      62.50%       2.62       11.34
+9       {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.7, 'stop_loss_ratio': 0.7} 0.19      64.71%       2.22       10.70
+10      {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.7, 'stop_loss_ratio': 0.5} 0.15      61.29%       2.54       10.45
+11      {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.6, 'stop_loss_ratio': 0.3} 0.14      56.67%       2.97       10.20
+12      {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.5, 'stop_loss_ratio': 0.4} 0.14      54.84%       3.12       10.15
+13      {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.6, 'stop_loss_ratio': 0.4} 0.14      54.84%       3.13       9.87
+14      {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.7, 'stop_loss_ratio': 0.4} 0.15      61.29%       2.43       9.78
+15      {'iv': 0.24, 'risk_free_rate': 0.04, 'option_days': 7, 'expiry_weekday': 2, 'dif_entry': -20, 'dif_profit': 20, 'k2_takeprofit': 200, 'k2_stoploss': 100, 'k2_timeout_profit': 100, 'k2_timeout_loss': 100, 'early_exit_ratio': 0.8, 'min_drop_from_prev_close': 0.018, 'min_rise_from_prev_close': 0.008, 'entry_delta': 0.7, 'stop_loss_ratio': 0.3} 0.15      63.33%       2.21       9.10
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★

@@ -1,5 +1,5 @@
 """
-UTurnBottom 策略：底部 UTurn 信号 → 买入 ATM Call → 防御型锁定 → 到期结算
+UTurnBottom 策略：底部 UTurn 信号 → 买入指定 Delta 的 Call → 防御型锁定 → 到期结算
 期权通过 BS 公式模拟定价，所有 PnL 以 点数 记录，multiplier 由 PerformanceAnalyzer 换算 USD。
 """
 import math
@@ -24,27 +24,43 @@ def bs_call_price(S: float, K: float, T: float, r: float, sigma: float) -> float
 
 class UTurnBottom(Strategy):
     """
-    底部 UTurn 期权策略（Bull Call Spread）。
+    底部 UTurn 期权策略（Bull Call Spread），ATM Call 开仓。
     params: iv, risk_free_rate, option_days
     """
 
-    options_mode: bool = True   # 期权 PnL 模式，覆盖基类默认值
+    options_mode: bool = True           # 期权 PnL 模式，覆盖基类默认值
+    initial_capital: float = 100_000.0  # 覆盖基类默认值（200k）
+    min_rise_from_prev_close: float = 0.0  # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
+    entry_delta: float = 0.5            # 开仓 Call 的目标 Delta（0.5 = ATM）
+    stop_loss_ratio: float = 0.6        # 期权价值跌至保费此比例时触发止损
 
     def on_init(self) -> None:
         self._long_call: dict | None = None   # 当前持有的 call
         self._spreads: list[dict] = []         # 已锁定 spread，等待到期结算
         self._closed_spreads: list[dict] = []  # 已平仓 spread 的完整生命周期记录
+        self._last_bar: BarData | None = None  # 最后一个已处理的 bar（用于强制平仓）
 
     def on_start(self) -> None:
         self.active = True
 
     def on_stop(self) -> None:
         self.active = False
+        if self._last_bar is None:
+            return
+        for sp in self._spreads:
+            self._settle_spread(sp, self._last_bar)
+        self._spreads.clear()
+        self._long_call = None  # 仅有信号尚未锁定 spread，无成交记录，直接丢弃
 
     # ── 工具方法 ──────────────────────────────────────────────────────────────
 
-    def _atm_strike(self, close: float) -> float:
-        return round(close / 100.0) * 100.0
+    def _strike_by_delta(self, S: float, T: float) -> float:
+        """由目标 entry_delta 反推行权价，结果取整到最近的 100 点。
+        使用简化公式 K = S·exp(-N⁻¹(delta)·σ·√T)，忽略漂移项，
+        使 delta=0.5 精确等价于 ATM（K=round(S/100)×100）。"""
+        d1 = norm.ppf(self.entry_delta)
+        K = S * math.exp(-d1 * self.iv * math.sqrt(max(T, 1e-8)))
+        return round(K / 100.0) * 100.0
 
     def _next_expiry(self, bar_dt, min_days: int):
         """返回 bar_dt + min_days 之后的第一个 expiry_weekday（0=周一,2=周三,4=周五）。"""
@@ -168,13 +184,13 @@ class UTurnBottom(Strategy):
         self._lock_spread(bar, k2, lc)
 
     def _check_stop_loss(self, bar: BarData) -> None:
-        """当前期权价值 ≤ 50% 保费，转为 spread 止损。"""
+        """当前期权价值 ≤ 60% 保费，转为 spread 止损。"""
         if self._long_call is None:
             return
         lc = self._long_call
         rem_t = self._rem_t(bar.datetime, lc['expiry'])
         curr_val = bs_call_price(bar.close_price, lc['k1'], rem_t, self.risk_free_rate, self.iv)
-        if curr_val <= 0.5 * lc['long_prem']:
+        if curr_val <= self.stop_loss_ratio * lc['long_prem']:
             self._lock_spread(bar, lc['entry_close'] + self.k2_stoploss, lc)
 
     def _check_take_profit(self, bar: BarData) -> None:
@@ -182,16 +198,22 @@ class UTurnBottom(Strategy):
         if self._long_call is None:
             return
         is_top = bar.div_type in ('Top', 'TopSub') and bar.is_uturn
-        if is_top and bar.dif > self.dif_profit and bar.prev_day_high > 0 and bar.high_price > bar.prev_day_high:
+        if (is_top and bar.dif > self.dif_profit and bar.prev_day_high > 0
+                and bar.high_price > bar.prev_day_high
+                and (bar.prev_day_close <= 0
+                     or bar.high_price > bar.prev_day_close * (1 + self.min_rise_from_prev_close))):
             self._lock_spread(bar, bar.close_price + self.k2_takeprofit, self._long_call)
 
     def _entry_signal(self, bar: BarData) -> bool:
-        """当前开仓条件：底部 UTurn + dif < dif_entry + low 破昨低。"""
+        """底部 UTurn + dif < dif_entry + low 破昨低 + low 低于昨收 min_drop_from_prev_close。"""
         is_bottom = bar.div_type in ('Bottom', 'BottomSub') and bar.is_uturn
+        low_below_prev_close = (bar.prev_day_close <= 0
+                                or bar.low_price < bar.prev_day_close * (1 - self.min_drop_from_prev_close))
         return (is_bottom
                 and bar.dif < self.dif_entry
                 and bar.prev_day_low > 0
-                and bar.low_price < bar.prev_day_low)
+                and bar.low_price < bar.prev_day_low
+                and low_below_prev_close)
 
     def _check_entry(self, bar: BarData) -> None:
         """买入 ATM call，开仓条件由 _entry_signal 决定。"""
@@ -199,9 +221,9 @@ class UTurnBottom(Strategy):
             return
         if not self._entry_signal(bar):
             return
-        k1 = self._atm_strike(bar.close_price)
         expiry = self._next_expiry(bar.datetime, self.option_days)
         T = (expiry - bar.datetime).total_seconds() / (365.25 * 24 * 3600)
+        k1 = self._strike_by_delta(bar.close_price, T)
         long_prem = bs_call_price(bar.close_price, k1, T, self.risk_free_rate, self.iv)
         self._long_call = {
             'entry_dt': bar.datetime, 'entry_close': bar.close_price,
@@ -221,3 +243,4 @@ class UTurnBottom(Strategy):
         self._check_stop_loss(bar)
         self._check_take_profit(bar)
         self._check_entry(bar)
+        self._last_bar = bar

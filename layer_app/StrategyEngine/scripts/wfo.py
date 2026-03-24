@@ -60,23 +60,29 @@ def _run_single(task: tuple) -> OptResult:
     class_name, params, bars, code_id, interval_str, direction_str, multiplier = task
     make_pool()
     make_broker()
+    reset_pool()
+    reset_broker()
     conf = {"class": class_name, "code_id": code_id,
             "interval": interval_str, "direction": direction_str, "params": params}
-    get_pool().add_strategy(FactoryStrategy.create_strategy(conf))
+    strategy = FactoryStrategy.create_strategy(conf)
+    get_pool().add_strategy(strategy)
     BacktestEngine().run_backtest(bars)
     trades = get_broker().get_trades()
-    return _score(params, trades, bars, multiplier)
+    return _score(params, trades, bars, multiplier,
+                  strategy.initial_capital, strategy.options_mode)
 
 
-def _score(params, trades, bars, multiplier) -> OptResult:
+def _score(params, trades, bars, multiplier,
+           initial_capital: float = _INITIAL_CAPITAL,
+           options_mode: bool = False) -> OptResult:
     if not trades or not bars:
         return OptResult(params, 0.0, 0.0, 0.0, 0.0, 0)
     trade_df = _build_trade_df(trades)
     bar_df = _calc_equity(
         _merge_pos_into_bars(_build_bar_df(bars), trade_df),
-        trade_df, _INITIAL_CAPITAL, multiplier
+        trade_df, initial_capital, multiplier, options_mode
     )
-    s = _calc_summary(bar_df, _INITIAL_CAPITAL)
+    s = _calc_summary(bar_df, initial_capital)
     tm = _calc_trade_metrics(_round_trip_pnls(trade_df, multiplier))
     return OptResult(params=params,
                      recovery_factor=s["recovery_factor"],
@@ -143,7 +149,7 @@ def _best_params(bars_is: BarDatas, cfg: dict, multiplier: float) -> tuple[dict,
 
 # ─── OOS 单次回测 ─────────────────────────────────────────────────────────────
 
-def _run_oos(bars_oos: BarDatas, params: dict, cfg: dict) -> list:
+def _run_oos(bars_oos: BarDatas, params: dict, cfg: dict) -> tuple:
     make_pool()
     make_broker()
     reset_pool()      # 清除旧策略
@@ -151,9 +157,10 @@ def _run_oos(bars_oos: BarDatas, params: dict, cfg: dict) -> list:
     conf = {"class": cfg["class"], "code_id": cfg["code_id"],
             "interval": cfg["interval"], "direction": cfg["direction"],
             "params": params}
-    get_pool().add_strategy(FactoryStrategy.create_strategy(conf))
+    strategy = FactoryStrategy.create_strategy(conf)
+    get_pool().add_strategy(strategy)
     BacktestEngine().run_backtest(bars_oos)
-    return get_broker().get_trades()
+    return get_broker().get_trades(), strategy
 
 
 # ─── 参数汇总输出 ────────────────────────────────────────────────────────────
@@ -210,8 +217,9 @@ def _run_wfo_task(cfg: dict) -> None:
         logger.info(f"窗口{i}: IS {is_s.date()}~{is_e.date()} ({len(bars_is)}bars)"
                     f"  OOS {oos_s.date()}~{oos_e.date()} ({len(bars_oos)}bars)")
         params, is_result = _best_params(bars_is, cfg, multiplier)
-        oos_trades = _run_oos(bars_oos, params, cfg)
-        oos_result = _score(params, oos_trades, bars_oos, multiplier)
+        oos_trades, oos_strategy = _run_oos(bars_oos, params, cfg)
+        oos_result = _score(params, oos_trades, bars_oos, multiplier,
+                            oos_strategy.initial_capital, oos_strategy.options_mode)
         logger.info(f"窗口{i} OOS 成交: {len(oos_trades)} 笔")
         window_records.append((i, oos_s, oos_e, len(oos_trades), params))
         perf_records.append(WindowPerf(i, oos_s, oos_e, is_result, oos_result))
@@ -221,8 +229,9 @@ def _run_wfo_task(cfg: dict) -> None:
     _print_params_summary(window_records, cfg)
     _print_window_performance(perf_records)
     analyzer = PerformanceAnalyzer(all_oos_trades, all_oos_bars,
-                                   initial_capital=_INITIAL_CAPITAL,
-                                   contract_multiplier=multiplier)
+                                   initial_capital=oos_strategy.initial_capital,
+                                   contract_multiplier=multiplier,
+                                   options_mode=oos_strategy.options_mode)
     df = analyzer.calculate_performance()
     if not df.empty:
         dd_idx = df["drawdown"].idxmin()

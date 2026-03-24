@@ -29,38 +29,46 @@ strategies:
     code_id: "NQ"
     interval: "M15"
     direction: "LONG"
-    start_time: "2025-01-01 00:00:00"
-    end_time:   "2026-01-01 00:00:00"
+    start_time: "2024-01-05 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
     params:
       initial_capital: 100000       # 从峰值净值开始
       iv: 0.24
       risk_free_rate: 0.04
-      option_days: 14
+      option_days: 7
       expiry_weekday: 2  # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      dif_entry: -50
+      dif_entry: -20
       dif_profit: 20
-      k2_takeprofit: 100
+      k2_takeprofit: 200
       k2_stoploss: 100
       k2_timeout_profit: 100
       k2_timeout_loss: 100
       early_exit_ratio: 0.8  # 锁定spread盈利达到最大盈利此比例时提前平仓
+      min_drop_from_prev_close: 0.018   # 开仓低价须低于昨收的最小跌幅比率
+      min_rise_from_prev_close: 0.008    # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
+      entry_delta: 0.5                   # 开仓 Call 的目标 Delta（0.5=ATM）
+      stop_loss_ratio: 0.6               # 期权价值跌至保费此比例时触发止损
 
   - class: "UTurnBottom"
     enable: false
     code_id: "ES"
-    interval: "M5"
+    interval: "M15"
     direction: "LONG"
-    start_time: "2025-01-01 00:00:00"
-    end_time:   "2026-03-10 00:00:00"
+    start_time: "2024-01-05 00:00:00"
+    end_time:   "2026-04-10 00:00:00"
     params:
       iv: 0.24
       risk_free_rate: 0.04
-      option_days: 14
+      option_days: 7
       expiry_weekday: 2  # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      dif_entry: -10
-      dif_profit: 3
+      dif_entry: -8
+      dif_profit: 2
       k2_takeprofit: 20
-      k2_stoploss: 20
-      k2_timeout_profit: 20
-      k2_timeout_loss: 20
-      early_exit_ratio: 0.85  # 锁定spread盈利达到最大盈利此比例时提前平仓
+      k2_stoploss: 30
+      k2_timeout_profit: 50
+      k2_timeout_loss: 50
+      early_exit_ratio: 0.8  # 锁定spread盈利达到最大盈利此比例时提前平仓
+      min_drop_from_prev_close: 0.002   # 开仓低价须低于昨收的最小跌幅比率
+      min_rise_from_prev_close: 0.005    # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
+      entry_delta: 0.5                   # 开仓 Call 的目标 Delta（0.5=ATM）
+      stop_loss_ratio: 0.6               # 期权价值跌至保费此比例时触发止损

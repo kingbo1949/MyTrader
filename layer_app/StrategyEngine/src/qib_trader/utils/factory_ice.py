@@ -139,8 +139,9 @@ class FactoryIce:
             'is_uturn':      bool(r.isUTurn),
             'atr':           float(r.thisAtr),
             'avg_atr':       float(r.avgAtr),
-            'prev_day_high': float(r.preDayHigh),
-            'prev_day_low':  float(r.preDayLow),
+            'prev_day_high':  float(r.preDayHigh),
+            'prev_day_low':   float(r.preDayLow),
+            'prev_day_close': float(r.preDayClose),
         } for r in richs]
         df = pd.DataFrame(data)
         df.set_index('datetime', inplace=True, drop=False)

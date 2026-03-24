@@ -13,7 +13,7 @@ optimizations:
       slow_window: [20, 40, 60, 80, 100]
 
   - class: "Break4Week"
-    enable: true
+    enable: false
     code_id: "NQ"
     interval: "M15"
     direction: "LONG"
@@ -27,20 +27,48 @@ optimizations:
 
   - class: "UTurnBottom"
     enable: false
+    code_id: "NQ"
+    interval: "M15"
+    direction: "LONG"
+    start_time: "2024-01-05 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    grid:
+      iv:               [0.24]
+      risk_free_rate:   [0.04]
+      option_days:      [7]
+      expiry_weekday:   [2]
+      dif_entry:        [-20]
+      dif_profit:       [20]
+      k2_takeprofit:    [100, 200]
+      k2_stoploss:      [100]
+      k2_timeout_profit: [100]
+      k2_timeout_loss:  [100]
+      early_exit_ratio: [0.8]
+      min_drop_from_prev_close:  [0.018]
+      min_rise_from_prev_close:  [0.007, 0.008]
+      entry_delta:               [0.5, 0.6, 0.7, 0.8]
+      stop_loss_ratio:           [0.3, 0.4, 0.5, 0.6, 0.7]
+
+  - class: "UTurnBottom"
+    enable: true
     code_id: "ES"
     interval: "M15"
     direction: "LONG"
     start_time: "2024-01-05 00:00:00"
-    end_time:   "2026-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
     grid:
-      iv:               [0.2]
+      iv:               [0.24]
       risk_free_rate:   [0.04]
-      option_days:      [14]
-      expiry_weekday:   [2]           # 2=周三 4=周五
-      dif_entry:        [-5, -15, -20, -30]
-      dif_profit:       [5, 10]
-      k2_takeprofit:    [0]
-      k2_stoploss:      [0]
-      k2_timeout_profit: [0]
-      k2_timeout_loss:  [0]
+      option_days:      [7]
+      expiry_weekday:   [2]
+      dif_entry:        [-5, -8, -10]
+      dif_profit:       [2, 5, 8, 10]
+      k2_takeprofit:    [20,30,50]
+      k2_stoploss:      [20,30,50]
+      k2_timeout_profit: [50]
+      k2_timeout_loss:  [50]
       early_exit_ratio: [0.8]
+      min_drop_from_prev_close:  [0.002]
+      min_rise_from_prev_close:  [0.002, 0.003, 0.004,0.005]
+      entry_delta:               [0.5]
+      stop_loss_ratio:           [0.6]
