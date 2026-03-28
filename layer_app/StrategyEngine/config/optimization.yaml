@@ -1,17 +1,5 @@
 # config/optimization.yaml
 optimizations:
-  - class: "DoubleMAStrategy"
-    enable: false
-    code_id: "NQ"
-    interval: "M30"
-    direction: "LONG"
-    start_time: "2025-01-01 00:00:00"
-    end_time: "2026-03-01 00:00:00"
-    # 参数网格定义
-    grid:
-      fast_window: [5, 10, 15, 20, 25, 30]
-      slow_window: [20, 40, 60, 80, 100]
-
   - class: "Break4Week"
     enable: false
     code_id: "NQ"
@@ -25,7 +13,7 @@ optimizations:
       can_open_end:   ["10:00:00"]
       max_avg_atr:    [15, 20, 25, 30,35,40,45,50,55,60, 999999]  # 999999 = 不限制
 
-  - class: "UTurnBottom"
+  - class: "UTurnBottomLongCall"
     enable: false
     code_id: "NQ"
     interval: "M15"
@@ -33,7 +21,6 @@ optimizations:
     start_time: "2024-01-05 00:00:00"
     end_time:   "2026-04-01 00:00:00"
     grid:
-      iv:               [0.24]
       risk_free_rate:   [0.04]
       option_days:      [7]
       expiry_weekday:   [2]
@@ -49,26 +36,63 @@ optimizations:
       entry_delta:               [0.5, 0.6, 0.7, 0.8]
       stop_loss_ratio:           [0.3, 0.4, 0.5, 0.6, 0.7]
 
-  - class: "UTurnBottom"
-    enable: true
-    code_id: "ES"
-    interval: "M15"
+  - class: "UTurnBottomLongCall"
+    enable: false
+    code_id: "NVDA"
+    interval: "H1"
     direction: "LONG"
     start_time: "2024-01-05 00:00:00"
     end_time:   "2026-04-01 00:00:00"
     grid:
-      iv:               [0.24]
       risk_free_rate:   [0.04]
-      option_days:      [7]
-      expiry_weekday:   [2]
-      dif_entry:        [-5, -8, -10]
-      dif_profit:       [2, 5, 8, 10]
-      k2_takeprofit:    [20,30,50]
-      k2_stoploss:      [20,30,50]
-      k2_timeout_profit: [50]
-      k2_timeout_loss:  [50]
-      early_exit_ratio: [0.8]
-      min_drop_from_prev_close:  [0.002]
-      min_rise_from_prev_close:  [0.002, 0.003, 0.004,0.005]
+      option_days:      [21, 28]
+      expiry_weekday:   [2, 4]
+      dif_entry:        [-1, -2, -3]
+      dif_profit:       [1]
+      k2_takeprofit:    [2,5, 8]
+      k2_stoploss:      [2,5, 8]
+      k2_timeout_profit: [2]
+      k2_timeout_loss:  [2]
+      early_exit_ratio: [0.8, 0.9]
+      min_drop_from_prev_close:  [0.2, 0.03]
+      min_rise_from_prev_close:  [0.1, 0.02]
       entry_delta:               [0.5]
       stop_loss_ratio:           [0.6]
+
+  - class: "UTurnBottomShortPut"
+    enable: false
+    code_id: "NQ"
+    interval: "M30"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    fixed_params:
+      multi_uturn_window: 300
+    grid:
+      risk_free_rate:            [0.04]
+      option_days:               [3, 5, 7, 14]
+      expiry_weekday:            [0, 2, 4]
+      entry_short:               [0.5]
+      entry_long:                [0.2, 0.3]
+      cooldown_hours:            [1, 12, 24]
+      min_drop_from_prev_close:  [0.0001, 0.005]
+      require_low_below_prev_day_low: [0, 1]
+
+  - class: "UTurnBottomShortPut"
+    enable: true
+    code_id: "TSLA"
+    interval: "M5"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    fixed_params:
+      multi_uturn_window: 300
+      risk_free_rate:     0.04
+    grid:
+      option_days:               [7, 14, 28]
+      expiry_weekday:            [2, 4]
+      entry_short:               [0.5]
+      entry_long:                [0.1, 0.2, 0.3]
+      cooldown_hours:            [1, 12, 24, 48]
+      min_drop_from_prev_close:  [0.0001]
+      require_low_below_prev_day_low: [0, 1]

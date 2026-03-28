@@ -148,6 +148,7 @@ class IceConverter:
                 volume=int(row.volume),
                 dif           =float(getattr(row, 'dif',            0.0)),
                 dea           =float(getattr(row, 'dea',            0.0)),
+                macd          =float(getattr(row, 'macd',           0.0)),
                 div_type      =str  (getattr(row, 'div_type',       '')),
                 is_uturn      =bool (getattr(row, 'is_uturn',       False)),
                 atr           =float(getattr(row, 'atr',            0.0)),

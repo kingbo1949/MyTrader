@@ -3,9 +3,205 @@ codeIds:
   NQ:
     multiplier: 20.0  # Nasdaq 100 每点 $20
     commission: 2.0   # 每手手续费 (预留)
+    strike_round: 50  # 期权链行权价档位（点数）
+    iv:
+      put:
+        0.5: 0.275
+        0.4: 283
+        0.3: 0.291
+        0.2: 0.302
+        0.1: 0.319
+      call:
+        0.5: 0.275
+        0.4: 0.266
+        0.3: 0.256
+        0.2: 0.244
+        0.1: 0.23
   ES:
     multiplier: 50.0  # S&P 500 每点 $50
     commission: 2.0
+    strike_round: 10
+    iv:
+      put:
+        0.5: 0.25
+        0.4: 0.257
+        0.3: 0.264
+        0.2: 0.272
+        0.1: 0.285
+      call:
+        0.5: 0.252
+        0.4: 0.242
+        0.3: 0.233
+        0.2: 0.222
+        0.1: 0.209
+  TSLA:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.459
+        0.4: 0.469
+        0.3: 0.49
+        0.2: 0.512
+        0.1: 0.549
+      call:
+        0.5: 0.46
+        0.4: 0.446
+        0.3: 0.437
+        0.2: 0.428
+        0.1: 0.425
+  AVGO:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.487
+        0.4: 0.506
+        0.3: 0.539
+        0.2: 0.571
+        0.1: 0.607
+      call:
+        0.5: 0.473
+        0.4: 0.492
+        0.3: 0.472
+        0.2: 0.466
+        0.1: 0.468
+  ORCL:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.539
+        0.4: 0.506
+        0.3: 0.539
+        0.2: 0.571
+        0.1: 0.607
+      call:
+        0.5: 0.539
+        0.4: 0.492
+        0.3: 0.472
+        0.2: 0.466
+        0.1: 0.468
+  NVDA:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 2.5
+    iv:
+      put:
+        0.5: 0.40
+      call:
+        0.5: 0.40
+  TSM:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.475
+      call:
+        0.5: 0.475
+  GOOG:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.339
+      call:
+        0.5: 0.339
+  MSFT:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.324
+      call:
+        0.5: 0.324
+  AMZN:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.375
+      call:
+        0.5: 0.375
+  COIN:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.80
+      call:
+        0.5: 0.80
+  META:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.42
+      call:
+        0.5: 0.42
+  SOXX:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.41
+      call:
+        0.5: 0.41
+  AAPL:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.29
+      call:
+        0.5: 0.29
+  MCD:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 2.5
+    iv:
+      put:
+        0.5: 0.236
+      call:
+        0.5: 0.236
+  WMT:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.286
+      call:
+        0.5: 0.286
+  MSTR:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.7
+      call:
+        0.5: 0.7
+  AMD:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.55
+      call:
+        0.5: 0.55
 
 # 全局运行环境配置
 environment:

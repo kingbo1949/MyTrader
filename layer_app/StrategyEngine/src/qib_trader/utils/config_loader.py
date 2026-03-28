@@ -54,6 +54,17 @@ def get_codeId_config(codeId: CodeId) -> Dict[str, Any]:
         # 如果 settings.yaml 不存在，返回保守默认值
         return {"multiplier": 1.0, "commission": 0.0}
 
+def get_iv(codeId: str, option_type: str, delta: float) -> float:
+    """从 settings.yaml 按品种+期权类型+delta 查找 IV；找不到取最近 delta；表不存在返回 0.24。"""
+    iv_table = get_codeId_config(codeId).get("iv", {}).get(option_type, {})
+    if not iv_table:
+        return 0.24
+    key = round(delta, 2)
+    if key in iv_table:
+        return iv_table[key]
+    return iv_table[min(iv_table, key=lambda k: abs(k - delta))]
+
+
 def get_env_config() -> Dict[str, Any]:
     """
     从 config/settings.yaml 中获取环境的全局配置属性。

@@ -1,6 +1,6 @@
 # config/wfo.yaml  —— Walk-Forward Optimization 配置
 wfo_tasks:
-  - class: "UTurnBottom"
+  - class: "UTurnBottomLongCall"
     enable: true
     code_id: "NQ"
     interval: "M15"
@@ -26,3 +26,27 @@ wfo_tasks:
       min_rise_from_prev_close: [0.0, 0.005, 0.01]
       entry_delta:              [0.5]
       stop_loss_ratio:          [0.6]
+
+  - class: "UTurnBottomShortPut"
+    enable: false
+    code_id: "NQ"
+    interval: "M15"
+    direction: "LONG"
+    start_time: "2024-01-05 00:00:00"
+    end_time:   "2026-03-01 00:00:00"
+    is_months:    3
+    oos_months:   3
+    optimize_by:  "recovery_factor"
+    grid:
+      iv:                        [0.24]
+      risk_free_rate:            [0.04]
+      option_days:               [7]
+      expiry_weekday:            [2]
+      dif_entry:                 [-20]
+      dif_profit:                [20, 30, 40]
+      entry_delta:               [0.3, 0.4, 0.5]
+      stop_loss_delta:           [0.5]
+      take_profit_delta:         [0.1, 0.2]
+      timeout_hours:             [72]
+      timeout_delta:             [0.2]
+      min_drop_from_prev_close:  [0.018]

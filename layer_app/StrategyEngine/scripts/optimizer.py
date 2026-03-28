@@ -1,5 +1,6 @@
 import logging
 import itertools
+import os
 from dataclasses import dataclass
 from multiprocessing import Pool, cpu_count
 
@@ -105,15 +106,44 @@ def _run_single_backtest(task: tuple) -> OptimizationResult:
 
 # ─── 结果展示 ─────────────────────────────────────────────────────────────────
 
-def _show_results(results: list[OptimizationResult], task_name: str) -> None:
+def _format_results(results: list[OptimizationResult], task_name: str,
+                    fixed_keys: set = None) -> str:
     ranked = sorted(results, key=lambda r: r.recovery_factor, reverse=True)
-    print(f"\n{'★' * 72}\n{'参数优化报告: ' + task_name:^68}\n{'★' * 72}")
-    print(f"{'排名':<5} {'参数组合':<32} {'夏普':<8} {'胜率':<10} {'盈亏比':<8} {'收益风险比'}")
-    print("-" * 72)
-    for i, r in enumerate(ranked[:15]):
-        print(f"{i+1:<7} {str(r.params):<35} {r.sharpe_ratio:<10.2f}"
-              f"{r.win_rate:<12.2%} {r.pnl_ratio:<10.2f} {r.recovery_factor:.2f}")
-    print(f"{'★' * 72}\n")
+    lines = [
+        f"\n{'★' * 82}",
+        f"{'参数优化报告: ' + task_name:^78}",
+        f"{'★' * 82}",
+        f"{'排名':<5} {'参数组合':<32} {'夏普':<8} {'胜率':<10} {'盈亏比':<8} {'最大回撤':<10} {'收益风险比'}",
+        "-" * 82,
+    ]
+    for i, r in enumerate(ranked[:50]):
+        display_params = {k: v for k, v in r.params.items() if k not in (fixed_keys or set())}
+        lines.append(
+            f"{i+1:<7} {str(display_params):<35} {r.sharpe_ratio:<10.2f}"
+            f"{r.win_rate:<12.2%} {r.pnl_ratio:<10.2f} {r.max_drawdown:<12.2%} {r.recovery_factor:.2f}"
+        )
+    lines.append(f"{'★' * 82}\n")
+    return "\n".join(lines)
+
+
+def _save_results(text: str, task_name: str) -> None:
+    # task_name 格式: ClassName_CodeId_Interval_Direction
+    parts = task_name.split("_")
+    code_id = parts[1] if len(parts) > 1 else "unknown"
+    output_dir = os.path.join(os.path.dirname(__file__), "..", "output", code_id, "optimizer")
+    os.makedirs(output_dir, exist_ok=True)
+    filename = "_".join(parts[:3]) + "_opt.txt"
+    path = os.path.join(output_dir, filename)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+    logging.getLogger("Opt").info(f"优化报告已保存: {path}")
+
+
+def _show_results(results: list[OptimizationResult], task_name: str,
+                  fixed_keys: set = None) -> None:
+    text = _format_results(results, task_name, fixed_keys)
+    print(text)
+    _save_results(text, task_name)
 
 
 # ─── 单任务编排 ───────────────────────────────────────────────────────────────
@@ -130,16 +160,17 @@ def _run_opt_task(opt_config: dict) -> None:
     if not bars:
         logger.error(f"数据为空，跳过: {opt_config['name']}")
         return
+    fixed_params = opt_config.get("fixed_params") or {}
     param_grid = _filter_param_grid(_generate_param_grid(opt_config["grid"]))
     logger.info(f"有效参数组合: {len(param_grid)} 个，启动并行池 ({cpu_count()} 核)...")
     tasks = [
-        (opt_config["class"], p, bars, opt_config["code_id"],
+        (opt_config["class"], {**fixed_params, **p}, bars, opt_config["code_id"],
          opt_config["interval"], opt_config["direction"], multiplier)
         for p in param_grid
     ]
     with Pool(processes=cpu_count()) as pool:
         results = pool.map(_run_single_backtest, tasks)
-    _show_results(results, task_id)
+    _show_results(results, task_id, fixed_keys=set(fixed_params.keys()))
 
 
 # ─── 主入口 ───────────────────────────────────────────────────────────────────

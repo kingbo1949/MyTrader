@@ -42,17 +42,9 @@ def _merge_pos_into_bars(bar_df: pd.DataFrame, trade_df: pd.DataFrame) -> pd.Dat
 
 def _realized_pnl_by_bar(trade_df: pd.DataFrame, multiplier: float, bar_index) -> pd.Series:
     """逐笔配对计算实现损益，按结算时间戳映射到 bar 索引。"""
-    pnl_by_dt = {}
-    pos, entry_price = 0, 0.0
-    for _, row in trade_df.iterrows():
-        if pos == 0:
-            entry_price = row.price
-            pos = 1 if row.direction == Direction.LONG else -1
-        else:
-            diff = (row.price - entry_price) if pos > 0 else (entry_price - row.price)
-            dt = pd.Timestamp(row.datetime)
-            pnl_by_dt[dt] = pnl_by_dt.get(dt, 0.0) + diff * multiplier
-            pos = 0
+    pnl_by_dt: dict = {}
+    for dt, pnl in _match_roundtrips(trade_df, multiplier):
+        pnl_by_dt[dt] = pnl_by_dt.get(dt, 0.0) + pnl
     return pd.Series(pnl_by_dt).reindex(bar_index).fillna(0.0)
 
 
@@ -78,16 +70,25 @@ def _calc_equity(bar_df: pd.DataFrame, trade_df: pd.DataFrame,
 
 # ─── 逐笔统计 ────────────────────────────────────────────────────────────────
 
-def _round_trip_pnls(trade_df: pd.DataFrame, multiplier: float) -> list[float]:
-    pnls, pos, entry_price = [], 0, 0.0
+def _match_roundtrips(trade_df: pd.DataFrame, multiplier: float) -> list[tuple]:
+    """FIFO 配对开/平仓，返回 (close_datetime, pnl) 列表。
+    支持同方向持仓叠加（如 Bull Put Spread 重叠时多个 SHORT 同时在途）。
+    """
+    from collections import deque
+    pending: deque[tuple] = deque()  # (direction, price)
+    results = []
     for _, row in trade_df.iterrows():
-        if pos == 0:
-            entry_price, pos = row.price, (1 if row.direction == Direction.LONG else -1)
+        if not pending or pending[0][0] == row.direction:
+            pending.append((row.direction, row.price))
         else:
-            diff = (row.price - entry_price) if pos > 0 else (entry_price - row.price)
-            pnls.append(diff * multiplier)
-            pos = 0
-    return pnls
+            open_dir, open_price = pending.popleft()
+            diff = (row.price - open_price) if open_dir == Direction.LONG else (open_price - row.price)
+            results.append((pd.Timestamp(row.datetime), diff * multiplier))
+    return results
+
+
+def _round_trip_pnls(trade_df: pd.DataFrame, multiplier: float) -> list[float]:
+    return [pnl for _, pnl in _match_roundtrips(trade_df, multiplier)]
 
 
 def _calc_trade_metrics(pnls: list[float]) -> dict[str, Any]:
@@ -113,7 +114,12 @@ def _calc_trade_metrics(pnls: list[float]) -> dict[str, Any]:
 def _calc_sharpe(equity: pd.Series) -> float:
     ret = equity.pct_change().fillna(0)
     std = ret.std()
-    return (ret.mean() / std) * np.sqrt(252) if std != 0 else 0.0
+    if std == 0:
+        return 0.0
+    n = len(equity)
+    span_years = (equity.index[-1] - equity.index[0]).total_seconds() / (365.25 * 24 * 3600)
+    bars_per_year = n / span_years if span_years > 0 else 252
+    return (ret.mean() / std) * np.sqrt(bars_per_year)
 
 
 def _calc_summary(df: pd.DataFrame, initial_capital: float) -> dict[str, Any]:
@@ -174,23 +180,47 @@ class PerformanceAnalyzer:
         trade_df = _build_trade_df(self.trades)
         bar_df = _merge_pos_into_bars(bar_df, trade_df)
         bar_df = _calc_equity(bar_df, trade_df, self.initial_capital, self.multiplier, self.options_mode)
-        trade_metrics = _calc_trade_metrics(_round_trip_pnls(trade_df, self.multiplier))
-        summary = _calc_summary(bar_df, self.initial_capital)
-        _print_report(summary, trade_metrics, self.initial_capital)
+        self._trade_metrics = _calc_trade_metrics(_round_trip_pnls(trade_df, self.multiplier))
+        self._summary = _calc_summary(bar_df, self.initial_capital)
+        _print_report(self._summary, self._trade_metrics, self.initial_capital)
         return bar_df
 
-    def plot_result(self, df: pd.DataFrame) -> None:
+    def plot_result(self, df: pd.DataFrame, title: str = "", params: dict = None,
+                    save_path: str = None) -> None:
         if df.empty:
             return
         plt.style.use("ggplot")
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10), sharex=True)
+        if title:
+            fig.suptitle(title, fontsize=15, fontweight="bold")
         ax1.plot(df.index, df["equity"], color="#2c3e50", lw=2, label="Equity Curve")
         ax1.set_title("Strategic Performance: Equity Curve", fontsize=14, fontweight="bold")
         ax1.set_ylabel("Account Value (USD)")
         ax1.legend(loc="upper left")
+        s, t = getattr(self, '_summary', None), getattr(self, '_trade_metrics', None)
+        if s and t:
+            metrics_text = (
+                f"Return: {s['total_return']:+.2%}   Sharpe: {s['sharpe']:.2f}   "
+                f"MaxDD: {s['max_dd_pct']:.2%}   RecovFactor: {s['recovery_factor']:.2f}\n"
+                f"Trades: {t['total_trades']}   WinRate: {t['win_rate']:.2%}   "
+                f"PnLRatio: {t['pnl_ratio']:.2f}   AvgPnL: ${t['avg_pnl']:,.2f}"
+            )
+            ax1.text(0.99, 0.97, metrics_text, transform=ax1.transAxes,
+                     ha='right', va='top', fontsize=9,
+                     bbox=dict(boxstyle='round,pad=0.4', facecolor='white', alpha=0.85, edgecolor='#cccccc'))
         ax2.fill_between(df.index, df["drawdown"] * 100, 0,
                          facecolor="#e74c3c", alpha=0.5, label="Drawdown %")
         ax2.set_title("Risk Profile: Drawdown", fontsize=14, fontweight="bold")
         ax2.set_ylabel("Percentage (%)")
-        plt.tight_layout()
+        if params:
+            items = [f"{k}={v}" for k, v in params.items()]
+            lines = ["    ".join(items[i:i+4]) for i in range(0, len(items), 4)]
+            fig.text(0.5, 0.01, "\n".join(lines),
+                     ha='center', va='bottom', fontsize=7.5, family='monospace',
+                     bbox=dict(boxstyle='round,pad=0.3', facecolor='#f5f5f5', alpha=0.8))
+            plt.tight_layout(rect=[0, 0.06 + 0.025 * len(lines), 1, 1])
+        else:
+            plt.tight_layout()
+        if save_path:
+            fig.savefig(save_path, dpi=150, bbox_inches='tight')
         plt.show()

@@ -62,6 +62,7 @@ class BarData:
     # 技术指标
     dif: float = 0.0
     dea: float = 0.0
+    macd: float = 0.0         # MACD 柱子值 = dif - dea
     div_type: str = ""        # "Normal"/"Bottom"/"BottomSub"/"Top"/"TopSub"
     is_uturn: bool = False
     atr: float = 0.0

@@ -4,6 +4,9 @@ build/
 out/
 ThirdParty/
 
+# ===== StrategyEngine 回测输出 =====
+layer_app/StrategyEngine/output/
+
 # ===== IDE =====
 .vs/
 .idea/

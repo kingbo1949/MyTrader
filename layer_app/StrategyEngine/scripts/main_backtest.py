@@ -76,23 +76,25 @@ def _merge_bars(bars_map: dict) -> list[BarData]:
     return all_bars
 
 
-def _export_trades_csv(strategy_id: str, trades: list) -> None:
-    """将成交记录导出为 output/<strategy_id>.csv。"""
-    output_dir = Path(__file__).resolve().parents[1] / "output"
-    output_dir.mkdir(exist_ok=True)
+def _output_dir(code_id: str, subdir: str) -> Path:
+    d = Path(__file__).resolve().parents[1] / "output" / code_id / subdir
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def _export_trades_csv(strategy_id: str, code_id: str, trades: list) -> None:
+    """将成交记录导出为 output/<code_id>/deallist/<strategy_id>.csv。"""
     from dataclasses import asdict
     df = pd.DataFrame([asdict(t) for t in trades])
-    path = output_dir / f"{strategy_id}.csv"
+    path = _output_dir(code_id, "deallist") / f"{strategy_id}.csv"
     df.to_csv(path, index=False)
     logger.info(f"成交记录已导出: {path}")
 
 
-def _export_spreads_csv(strategy_id: str, closed_spreads: list) -> None:
-    """将期权仓位生命周期记录导出为 output/<strategy_id>.csv。"""
-    output_dir = Path(__file__).resolve().parents[1] / "output"
-    output_dir.mkdir(exist_ok=True)
+def _export_spreads_csv(strategy_id: str, code_id: str, closed_spreads: list) -> None:
+    """将期权仓位生命周期记录导出为 output/<code_id>/deallist/<strategy_id>.csv。"""
     df = pd.DataFrame(closed_spreads)
-    path = output_dir / f"{strategy_id}.csv"
+    path = _output_dir(code_id, "deallist") / f"{strategy_id}.csv"
     df.to_csv(path, index=False)
     logger.info(f"期权仓位记录已导出: {path}")
 
@@ -108,13 +110,16 @@ def _print_results(bars_map: dict) -> None:
         analyzer = PerformanceAnalyzer(trades, bars, initial_capital=strategy.initial_capital,
                                         contract_multiplier=multiplier, options_mode=strategy.options_mode)
         df = analyzer.calculate_performance()
-        analyzer.plot_result(df)
+        chart_path = _output_dir(strategy.codeId, "deallist") / f"{strategy.strategy_id}.png"
+        analyzer.plot_result(df, title=strategy.strategy_id, params=strategy.params,
+                             save_path=str(chart_path))
         if is_export_trades_csv() and trades:
-            closed = getattr(strategy, '_closed_spreads', None)
+            closed = (getattr(strategy, '_closed_spreads', None)
+                      or getattr(strategy, '_closed_positions', None))
             if closed:
-                _export_spreads_csv(strategy.strategy_id, closed)
+                _export_spreads_csv(strategy.strategy_id, strategy.codeId, closed)
             else:
-                _export_trades_csv(strategy.strategy_id, trades)
+                _export_trades_csv(strategy.strategy_id, strategy.codeId, trades)
 
 
 def main():

@@ -135,6 +135,7 @@ class FactoryIce:
             'volume':        int(r.vol),
             'dif':           float(r.dif),
             'dea':           float(r.dea),
+            'macd':          float(r.macd),
             'div_type':      cls._divtype_str(r.divType),
             'is_uturn':      bool(r.isUTurn),
             'atr':           float(r.thisAtr),
