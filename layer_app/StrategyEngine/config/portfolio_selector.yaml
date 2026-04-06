@@ -1,0 +1,18 @@
+# config/portfolio_selector.yaml
+# $100k 投资组合选择配置
+# 运行: cd layer_app/StrategyEngine && PYTHONPATH=ice:src python3 scripts/portfolio_selector.py
+portfolio:
+  initial_capital: 100000
+  min_sharpe: 2.5           # 最低夏普比率门槛
+  max_dd_pct: -10.0          # 最大回撤不超过 -5%（调大可纳入 ES/NQ）
+  max_margin_pct: 0.80      # 单个品种最大保证金占总资金比例
+  max_total_margin_pct: 2.0  # 全组合总峰值保证金上限（调大可纳入更多品种）
+  top_n_per_group: 2        # 每个相关性组最多选几个品种
+  min_trades: 10            # 最少成交笔数（过滤样本不足的回测）
+  simulate_max1: false      # 实际文件已是单仓输出，无需预览模式
+  margin_recent_n: 20       # 单笔保证金取最近 N 笔均值（反映当前股价水平）
+  score_weights: #  score = 1.0 × sharpe + 1.0 × recov_factor + 50.0 × total_return
+    sharpe:       1.0   # 夏普比率权重
+    recov_factor: 1.0   # 收益回撤比权重
+    total_return: 10.0  # 总收益率权重
+  exclude_codes: ["WMT", "MCD", "MSTR", "INTC", "COIN"]  # 黑名单：强制排除这些品种

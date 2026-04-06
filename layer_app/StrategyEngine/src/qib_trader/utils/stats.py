@@ -186,7 +186,7 @@ class PerformanceAnalyzer:
         return bar_df
 
     def plot_result(self, df: pd.DataFrame, title: str = "", params: dict = None,
-                    save_path: str = None) -> None:
+                    save_path: str = None, show: bool = True) -> None:
         if df.empty:
             return
         plt.style.use("ggplot")
@@ -223,4 +223,7 @@ class PerformanceAnalyzer:
             plt.tight_layout()
         if save_path:
             fig.savefig(save_path, dpi=150, bbox_inches='tight')
-        plt.show()
+        if show:
+            plt.show()
+        else:
+            plt.close(fig)

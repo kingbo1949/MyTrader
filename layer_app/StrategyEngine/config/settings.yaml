@@ -7,7 +7,7 @@ codeIds:
     iv:
       put:
         0.5: 0.275
-        0.4: 283
+        0.4: 0.283
         0.3: 0.291
         0.2: 0.302
         0.1: 0.319
@@ -23,11 +23,11 @@ codeIds:
     strike_round: 10
     iv:
       put:
-        0.5: 0.25
-        0.4: 0.257
-        0.3: 0.264
-        0.2: 0.272
-        0.1: 0.285
+        0.5: 0.264
+        0.4: 0.273
+        0.3: 0.283
+        0.2: 0.296
+        0.1: 0.328
       call:
         0.5: 0.252
         0.4: 0.242
@@ -68,23 +68,96 @@ codeIds:
         0.3: 0.472
         0.2: 0.466
         0.1: 0.468
-  ORCL:
+  SPY:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.28
+      call:
+        0.5: 0.28
+  SH:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.28
+      call:
+        0.5: 0.28
+  QQQ:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.3
+      call:
+        0.5: 0.3
+  PSQ:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.3
+      call:
+        0.5: 0.3
+  IWM:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.343
+      call:
+        0.5: 0.343
+  SMH:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 2.5
+    iv:
+      put:
+        0.5: 0.449
+      call:
+        0.5: 0.449
+  JPM:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 2.5
+    iv:
+      put:
+        0.5: 0.365
+      call:
+        0.5: 0.365
+  C:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.41
+      call:
+        0.5: 0.41
+  MS:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.39
+      call:
+        0.5: 0.39
+  GS:
     multiplier: 100.0
     commission: 0.01
     strike_round: 5
     iv:
       put:
-        0.5: 0.539
-        0.4: 0.506
-        0.3: 0.539
-        0.2: 0.571
-        0.1: 0.607
+        0.5: 0.46
       call:
-        0.5: 0.539
-        0.4: 0.492
-        0.3: 0.472
-        0.2: 0.466
-        0.1: 0.468
+        0.5: 0.46
   NVDA:
     multiplier: 100.0
     commission: 0.01
@@ -103,6 +176,16 @@ codeIds:
         0.5: 0.475
       call:
         0.5: 0.475
+  INTC:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 0.5
+    iv:
+      put:
+        0.5: 0.683
+      call:
+        0.5: 0.683
+
   GOOG:
     multiplier: 100.0
     commission: 0.01

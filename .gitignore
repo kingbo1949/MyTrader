@@ -4,8 +4,6 @@ build/
 out/
 ThirdParty/
 
-# ===== StrategyEngine 回测输出 =====
-layer_app/StrategyEngine/output/
 
 # ===== IDE =====
 .vs/
@@ -42,6 +40,9 @@ compile_commands.json
 ThirdParty/**/build/
 ThirdParty/**/bin/
 ThirdParty/**/lib/
+
+# ===== Requirement_Description 数据文件 =====
+layer_app/Requirement_Description/*.csv
 
 # ===== Temp =====
 *.tmp

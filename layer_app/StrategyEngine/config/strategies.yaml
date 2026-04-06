@@ -65,11 +65,12 @@ strategies:
       min_drop_from_prev_close: 0.00001
       multi_uturn_window: 300
       cooldown_hours: 1            # 开仓后冷却时间（小时），0=不限制
+      max_positions: 0             # 最大并发持仓数，0=不限制
       require_low_below_prev_day_low: 0  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
 
   - class: "UTurnBottomShortPut"
-    enable: true
-    code_id: "TSLA"
+    enable: false
+    code_id: "ES"
     interval: "M5"
     direction: "LONG"
     start_time: "2024-01-01 00:00:00"
@@ -77,14 +78,34 @@ strategies:
     params:
       initial_capital: 100000
       risk_free_rate: 0.04
-      option_days: 28
+      option_days: 1
       expiry_weekday: 2         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
       entry_short: 0.5          # 卖出腿 put delta 绝对值（K1，较高行权价）
       entry_long: 0.1           # 买入腿 put delta 绝对值（K2，较低行权价）
       min_drop_from_prev_close: 0.00001
       multi_uturn_window: 300
-      cooldown_hours: 48         # 开仓后冷却时间（小时），0=不限制
+      cooldown_hours: 1         # 开仓后冷却时间（小时），0=不限制
+      max_positions: 0          # 最大并发持仓数，0=不限制
       require_low_below_prev_day_low: 1  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
+
+  - class: "UTurnBottomShortCall"
+    enable: true
+    code_id: "ES"
+    interval: "M30"
+    direction: "SHORT"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    params:
+      initial_capital: 100000
+      risk_free_rate: 0.04
+      option_days: 21
+      expiry_weekday: 2         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
+      entry_short: 0.4          # 卖出腿 call delta（K1，较低行权价）
+      entry_long: 0.1           # 买入腿 call delta（K2，较高行权价）
+      multi_uturn_window: 300
+      cooldown_hours: 24        # 开仓后冷却时间（小时），0=不限制
+      max_positions: 2          # 最大并发持仓数，0=不限制
+      require_high_above_prev_day_high: 0  # 1=开仓bar最高价须大于上一日最高价；0=不限制
 
   - class: "MixMultipleTurn_Long"
     enable: false

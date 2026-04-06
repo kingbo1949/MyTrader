@@ -1,0 +1,33 @@
+# config/portfolio_analyzer.yaml
+# 手工组合绩效分析配置
+# 运行: cd layer_app/StrategyEngine && PYTHONPATH=ice:src python3 scripts/portfolio_analyzer.py
+#
+# strategy 字段可选，默认为 UTurnBottomShortPut
+#   UTurnBottomShortPut  → 底部 mix uturn 卖 Bull Put Spread（direction: LONG）
+#   UTurnBottomShortCall → 顶部 mix uturn 卖 Bear Call Spread（direction: SHORT）
+analyze:
+  initial_capital: 100000
+
+  # 手工指定要分析的品种组合（取消注释后运行）
+  portfolio:
+#     - {code: TSLA, interval: H1,  strategy: UTurnBottomShortPut}
+#     - {code: IWM,  interval: H1,  strategy: UTurnBottomShortPut}
+#     - {code: QQQ,  interval: M15, strategy: UTurnBottomShortPut}
+#     - {code: TSM,  interval: M15, strategy: UTurnBottomShortPut}
+#     - {code: GS,   interval: M5,  strategy: UTurnBottomShortPut}
+#     - {code: GS,   interval: M15, strategy: UTurnBottomShortCall}
+#     - {code: SPY,  interval: M15, strategy: UTurnBottomShortPut}
+     - {code: ES,   interval: M15, strategy: UTurnBottomShortCall}
+     - {code: ES,   interval: M5,  strategy: UTurnBottomShortPut}
+#     - {code: SH,   interval: M15, strategy: UTurnBottomShortPut}
+#     - {code: SMH,  interval: M15, strategy: UTurnBottomShortPut}
+#     - {code: AVGO, interval: M5,  strategy: UTurnBottomShortPut}
+#     - {code: JPM,  interval: M5,  strategy: UTurnBottomShortPut}
+
+#  QQQ    M15  | 组别:GroupA_IndexETF      | Sharpe:2.74 WinRate:87.8% MaxDD:-0.08% RecovF:461.3 | 峰值保证金:$22,215 (22.2%)
+#  IWM    H1   | 组别:GroupA_IndexETF      | Sharpe:2.54 WinRate:90.0% MaxDD:-0.05% RecovF:141.7 | 峰值保证金:$4,360 (4.4%)
+#  TSM    M15  | 组别:GroupC_BigTech       | Sharpe:2.62 WinRate:91.7% MaxDD:-0.44% RecovF:74.1 | 峰值保证金:$20,438 (20.4%)
+#  SMH    M15  | 组别:GroupB_SemiETF       | Sharpe:2.74 WinRate:86.7% MaxDD:-0.58% RecovF:44.4 | 峰值保证金:$21,667 (21.7%)
+#  JPM    M5   | 组别:GroupD_Financial     | Sharpe:2.80 WinRate:83.3% MaxDD:-0.96% RecovF:32.4 | 峰值保证金:$24,148 (24.1%)
+#  SOXX   M15  | 组别:GroupB_SemiETF       | Sharpe:2.62 WinRate:87.1% MaxDD:-0.42% RecovF:27.5 | 峰值保证金:$6,145 (6.1%)
+#  AVGO   M5   | 组别:GroupC_BigTech       | Sharpe:2.54 WinRate:79.6% MaxDD:-4.04% RecovF:9.2 | 峰值保证金:$28,259 (28.3%)

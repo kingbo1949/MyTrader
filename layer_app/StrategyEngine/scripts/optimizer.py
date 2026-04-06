@@ -31,6 +31,7 @@ class OptimizationResult:
     pnl_ratio: float
     recovery_factor: float
     trade_count: int
+    max_concurrent: int
 
 
 # ─── 参数网格 ─────────────────────────────────────────────────────────────────
@@ -61,10 +62,24 @@ def _fetch_bars(opt_config: dict) -> BarDatas:
 
 # ─── 绩效提取（静默，不打印）──────────────────────────────────────────────────
 
+def _calc_max_concurrent(closed_positions: list[dict]) -> int:
+    if not closed_positions:
+        return 0
+    events = [(p["entry_dt"], 1) for p in closed_positions] + \
+             [(p["settlement_dt"], -1) for p in closed_positions]
+    events.sort(key=lambda x: x[0])
+    max_c, cur = 0, 0
+    for _, delta in events:
+        cur += delta
+        max_c = max(max_c, cur)
+    return max_c
+
+
 def _extract_metrics(params: dict, trades, bars: BarDatas, multiplier: float,
-                     initial_capital: float, options_mode: bool) -> OptimizationResult:
+                     initial_capital: float, options_mode: bool,
+                     max_concurrent: int = 0) -> OptimizationResult:
     if not trades or not bars:
-        return OptimizationResult(params, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0)
+        return OptimizationResult(params, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0)
     trade_df = _build_trade_df(trades)
     bar_df = _calc_equity(
         _merge_pos_into_bars(_build_bar_df(bars), trade_df),
@@ -81,6 +96,7 @@ def _extract_metrics(params: dict, trades, bars: BarDatas, multiplier: float,
         pnl_ratio=tm["pnl_ratio"],
         recovery_factor=summary["recovery_factor"],
         trade_count=tm["total_trades"],
+        max_concurrent=max_concurrent,
     )
 
 
@@ -100,8 +116,10 @@ def _run_single_backtest(task: tuple) -> OptimizationResult:
     strategy = FactoryStrategy.create_strategy(strategy_conf)
     get_pool().add_strategy(strategy)
     BacktestEngine().run_backtest(bars)
+    closed = getattr(strategy, "_closed_positions", None) or []
+    max_conc = _calc_max_concurrent(closed)
     return _extract_metrics(params, get_broker().get_trades(), bars, multiplier,
-                            strategy.initial_capital, strategy.options_mode)
+                            strategy.initial_capital, strategy.options_mode, max_conc)
 
 
 # ─── 结果展示 ─────────────────────────────────────────────────────────────────
@@ -110,19 +128,20 @@ def _format_results(results: list[OptimizationResult], task_name: str,
                     fixed_keys: set = None) -> str:
     ranked = sorted(results, key=lambda r: r.recovery_factor, reverse=True)
     lines = [
-        f"\n{'★' * 82}",
-        f"{'参数优化报告: ' + task_name:^78}",
-        f"{'★' * 82}",
-        f"{'排名':<5} {'参数组合':<32} {'夏普':<8} {'胜率':<10} {'盈亏比':<8} {'最大回撤':<10} {'收益风险比'}",
-        "-" * 82,
+        f"\n{'★' * 100}",
+        f"{'参数优化报告: ' + task_name:^96}",
+        f"{'★' * 100}",
+        f"{'排名':<5} {'参数组合':<32} {'夏普':<8} {'胜率':<10} {'盈亏比':<8} {'最大回撤':<10} {'收益风险比':<12} {'总收益率':<10} {'最大持仓'}",
+        "-" * 100,
     ]
     for i, r in enumerate(ranked[:50]):
         display_params = {k: v for k, v in r.params.items() if k not in (fixed_keys or set())}
         lines.append(
             f"{i+1:<7} {str(display_params):<35} {r.sharpe_ratio:<10.2f}"
-            f"{r.win_rate:<12.2%} {r.pnl_ratio:<10.2f} {r.max_drawdown:<12.2%} {r.recovery_factor:.2f}"
+            f"{r.win_rate:<12.2%} {r.pnl_ratio:<10.2f} {r.max_drawdown:<12.2%} {r.recovery_factor:<14.2f}"
+            f"{r.total_return:<12.2%} {r.max_concurrent}"
         )
-    lines.append(f"{'★' * 82}\n")
+    lines.append(f"{'★' * 100}\n")
     return "\n".join(lines)
 
 

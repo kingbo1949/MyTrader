@@ -4,7 +4,7 @@ UTurnBottomShortPut 策略：底部 UTurn 信号 → 直接开仓 Bull Put Sprea
 """
 import math
 from collections import deque
-from datetime import timedelta
+from datetime import timedelta, datetime, time as dtime
 from scipy.stats import norm
 
 from qib_trader.strategies.base import Strategy
@@ -16,6 +16,8 @@ from qib_trader.utils.config_loader import get_iv
 def bs_put_price(S: float, K: float, T: float, r: float, sigma: float) -> float:
     """欧式 Put 期权 Black-Scholes 定价（T 为年化剩余时间）。"""
     if T <= 0:
+        return max(K - S, 0.0)
+    if K <= 0 or sigma <= 0:
         return max(K - S, 0.0)
     d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
     d2 = d1 - sigma * math.sqrt(T)
@@ -42,6 +44,7 @@ class UTurnBottomShortPut(Strategy):
     min_drop_from_prev_close: float = 0.018  # 开仓低价须低于昨收的最小跌幅
     multi_uturn_window: int = 50      # 多重 uturn 检测的 bar 历史窗口大小
     cooldown_hours: float = 0.0       # 开仓后冷却时间（小时），期间不允许再次开仓
+    max_positions: int = 0            # 最大并发持仓数，0 = 不限制
     require_low_below_prev_day_low: int = 0  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
 
     def on_init(self) -> None:
@@ -59,7 +62,7 @@ class UTurnBottomShortPut(Strategy):
         if self._last_bar is None:
             return
         for sp in self._spreads:
-            self._settle_spread(sp, self._last_bar)
+            self._settle_spread(sp, self._last_bar, 'force_close')
         self._spreads.clear()
 
     # ── 工具方法 ──────────────────────────────────────────────────────────────
@@ -71,10 +74,16 @@ class UTurnBottomShortPut(Strategy):
         return round(K / self.strike_round) * self.strike_round
 
     def _next_expiry(self, bar_dt, min_days: int):
-        """返回 bar_dt + min_days 之后的第一个 expiry_weekday。"""
-        target = bar_dt + timedelta(days=min_days)
-        days_ahead = (self.expiry_weekday - target.weekday()) % 7
-        return target + timedelta(days=days_ahead)
+        if min_days == 1:
+            # 次日到期：bar_dt + 24h 之后的第一个交易日（跳过周末）
+            target = bar_dt + timedelta(days=1)
+            extra = {5: 2, 6: 1}.get(target.weekday(), 0)
+            expiry_date = (target + timedelta(days=extra)).date()
+        else:
+            target = bar_dt + timedelta(days=min_days)
+            days_ahead = (self.expiry_weekday - target.weekday()) % 7
+            expiry_date = (target + timedelta(days=days_ahead)).date()
+        return datetime.combine(expiry_date, dtime(16, 0))
 
     def _rem_t(self, bar_dt, expiry) -> float:
         delta = (expiry - bar_dt).total_seconds() / (365.25 * 24 * 3600)
@@ -92,7 +101,7 @@ class UTurnBottomShortPut(Strategy):
                 remaining.append(sp)
         self._spreads = remaining
 
-    def _settle_spread(self, sp: dict, bar: BarData) -> None:
+    def _settle_spread(self, sp: dict, bar: BarData, close_reason: str = 'expiry') -> None:
         """到期结算。payoff = max(K2-S,0) - max(K1-S,0)；final_pnl = net_credit + payoff。"""
         S = bar.close_price
         short_settle = max(sp['k1'] - S, 0.0)
@@ -101,7 +110,7 @@ class UTurnBottomShortPut(Strategy):
         net_credit = sp['net_credit']
         final_pnl = net_credit + payoff
         self._send_order(Direction.LONG, net_credit - final_pnl, 1, "MKT")
-        self._record_position(sp, bar, 'expiry', short_settle, long_settle, final_pnl)
+        self._record_position(sp, bar, close_reason, short_settle, long_settle, final_pnl)
         self.logger.info(
             f"[{bar.datetime}] spread到期 K1={sp['k1']} K2={sp['k2']} "
             f"payoff={payoff:.2f} final_pnl={final_pnl:.2f}"
@@ -129,6 +138,8 @@ class UTurnBottomShortPut(Strategy):
         """仅允许 mix 型多重底部 uturn 开仓（区间内存在至少一根 macd > 0 的 bar）。"""
         if (self._last_entry_dt is not None and self.cooldown_hours > 0
                 and bar.datetime < self._last_entry_dt + timedelta(hours=self.cooldown_hours)):
+            return False
+        if self.max_positions > 0 and len(self._spreads) >= self.max_positions:
             return False
         if self.require_low_below_prev_day_low and bar.prev_day_low > 0 and bar.low_price >= bar.prev_day_low:
             return False

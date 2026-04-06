@@ -1,0 +1,40 @@
+# config/compare.yaml
+# 多品种横向对比配置
+# 运行: cd scripts && python3 compare.py
+compare:
+  initial_capital: 100000
+
+  strategies:
+    - class: "UTurnBottomShortPut"
+      code_id: "ES"
+      interval: "M15"
+      direction: "LONG"
+      start_time: "2024-01-01 00:00:00"
+      end_time:   "2026-04-01 00:00:00"
+      params:
+        risk_free_rate: 0.04
+        option_days: 7
+        expiry_weekday: 2
+        entry_short: 0.5
+        entry_long: 0.2
+        min_drop_from_prev_close: 0.00001
+        multi_uturn_window: 300
+        cooldown_hours: 1
+        require_low_below_prev_day_low: 0
+
+    - class: "UTurnBottomShortPut"
+      code_id: "NQ"
+      interval: "M15"
+      direction: "LONG"
+      start_time: "2024-01-01 00:00:00"
+      end_time:   "2026-04-01 00:00:00"
+      params:
+        risk_free_rate: 0.04
+        option_days: 7
+        expiry_weekday: 2
+        entry_short: 0.5
+        entry_long: 0.2
+        min_drop_from_prev_close: 0.00001
+        multi_uturn_window: 300
+        cooldown_hours: 1
+        require_low_below_prev_day_low: 0

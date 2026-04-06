@@ -87,7 +87,7 @@ def _export_trades_csv(strategy_id: str, code_id: str, trades: list) -> None:
     from dataclasses import asdict
     df = pd.DataFrame([asdict(t) for t in trades])
     path = _output_dir(code_id, "deallist") / f"{strategy_id}.csv"
-    df.to_csv(path, index=False)
+    df.to_csv(path, index=False, float_format='%.4f')
     logger.info(f"成交记录已导出: {path}")
 
 
@@ -95,7 +95,7 @@ def _export_spreads_csv(strategy_id: str, code_id: str, closed_spreads: list) ->
     """将期权仓位生命周期记录导出为 output/<code_id>/deallist/<strategy_id>.csv。"""
     df = pd.DataFrame(closed_spreads)
     path = _output_dir(code_id, "deallist") / f"{strategy_id}.csv"
-    df.to_csv(path, index=False)
+    df.to_csv(path, index=False, float_format='%.4f')
     logger.info(f"期权仓位记录已导出: {path}")
 
 

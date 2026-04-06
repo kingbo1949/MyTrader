@@ -65,7 +65,7 @@ optimizations:
     interval: "M30"
     direction: "LONG"
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
+    end_time:   "2026-03-28 00:00:00"
     fixed_params:
       multi_uturn_window: 300
     grid:
@@ -78,21 +78,41 @@ optimizations:
       min_drop_from_prev_close:  [0.0001, 0.005]
       require_low_below_prev_day_low: [0, 1]
 
-  - class: "UTurnBottomShortPut"
+  - class: "UTurnBottomShortCall"
     enable: true
-    code_id: "TSLA"
-    interval: "M5"
-    direction: "LONG"
+    code_id: "ES"
+    interval: "M30"
+    direction: "SHORT"
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
+    end_time:   "2026-03-28 00:00:00"
     fixed_params:
       multi_uturn_window: 300
       risk_free_rate:     0.04
     grid:
-      option_days:               [7, 14, 28]
-      expiry_weekday:            [2, 4]
-      entry_short:               [0.5]
-      entry_long:                [0.1, 0.2, 0.3]
-      cooldown_hours:            [1, 12, 24, 48]
+      option_days:                    [7, 14, 21, 28]
+      expiry_weekday:                 [2, 4]
+      entry_short:                    [0.4]
+      entry_long:                     [0.1, 0.2]
+      cooldown_hours:                 [1, 12, 24]
+      max_positions:                  [1]
+      require_high_above_prev_day_high: [0, 1]
+
+  - class: "UTurnBottomShortPut"
+    enable: false
+    code_id: "ES"
+    interval: "M5"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-03-28 00:00:00"
+    fixed_params:
+      multi_uturn_window: 300
+      risk_free_rate:     0.04
+    grid:
+      option_days:               [7,14,21,28]
+      expiry_weekday:            [2,4]
+      entry_short:               [0.4]
+      entry_long:                [0.1, 0.2]
+      cooldown_hours:            [1, 12, 24]
+      max_positions:             [1]
       min_drop_from_prev_close:  [0.0001]
       require_low_below_prev_day_low: [0, 1]
