@@ -77,27 +77,11 @@ optimizations:
       cooldown_hours:            [1, 12, 24]
       min_drop_from_prev_close:  [0.0001, 0.005]
       require_low_below_prev_day_low: [0, 1]
+      require_lower_k1_than_existing: [0, 1]
+      stop_loss_ratio:                [0, 0.5, 1.0]
 
-  - class: "UTurnBottomShortCall"
-    enable: true
-    code_id: "ES"
-    interval: "M30"
-    direction: "SHORT"
-    start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-03-28 00:00:00"
-    fixed_params:
-      multi_uturn_window: 300
-      risk_free_rate:     0.04
-    grid:
-      option_days:                    [7, 14, 21, 28]
-      expiry_weekday:                 [2, 4]
-      entry_short:                    [0.4]
-      entry_long:                     [0.1, 0.2]
-      cooldown_hours:                 [1, 12, 24]
-      max_positions:                  [1]
-      require_high_above_prev_day_high: [0, 1]
 
-  - class: "UTurnBottomShortPut"
+  - class: "MixUTurnBottomLongCall"
     enable: false
     code_id: "ES"
     interval: "M5"
@@ -109,10 +93,98 @@ optimizations:
       risk_free_rate:     0.04
     grid:
       option_days:               [7,14,21,28]
-      expiry_weekday:            [2,4]
-      entry_short:               [0.4]
-      entry_long:                [0.1, 0.2]
-      cooldown_hours:            [1, 12, 24]
-      max_positions:             [1]
+      expiry_weekday:            [-1]
+      entry_long:                [0.5, 0.4]
+      entry_short:               [0.2,0.1]
+      cooldown_hours:            [1,12]
+      max_positions:             [3]
       min_drop_from_prev_close:  [0.0001]
+      require_low_below_prev_day_low: [0, 1]
+      require_lower_k1_than_existing: [0, 1]
+
+  - class: "UTurnBottomShortCall"
+    enable: true
+    code_id: "ES"
+    interval: "M30"
+    direction: "SHORT"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-06-01 00:00:00"
+    fixed_params:
+      multi_uturn_window: 300
+      risk_free_rate:     0.04
+    grid:
+      option_days:                    [2,3,4,5]
+      expiry_weekday:                 [-1,4]
+      entry_short:                    [0.4]
+      entry_long:                     [0.1, 0.2]
+      cooldown_hours:                 [1]
+      max_positions:                  [3]
+      require_high_above_prev_day_high: [1]
+      stop_loss_ratio:                  [0.5]
+      require_plus_pattern:             [0, 1]
+
+  - class: "UTurnBottomShortPut"
+    enable: false
+    code_id: "ES"
+    interval: "M5"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-28 00:00:00"
+    fixed_params:
+      multi_uturn_window: 300
+      risk_free_rate:     0.04
+    grid:
+      option_days:               [2,3,4,5,7,14]
+      expiry_weekday:            [-1, 2]
+      entry_short:               [0.4, 0.5]
+      entry_long:                [0.1, 0.2]
+      cooldown_hours:            [1]
+      max_positions:             [3]
+      min_drop_from_prev_close:  [0.0001]
+      require_low_below_prev_day_low: [0, 1]
+      require_lower_k1_than_existing: [0]
+      stop_loss_ratio:                [0.5, 1]
+      require_plus_pattern:           [0, 1]
+
+  - class: "UTurnLongCallMomentum"
+    enable: false
+    code_id: "ES"
+    interval: "M5"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    fixed_params:
+      multi_uturn_window: 300
+      risk_free_rate:     0.04
+      risk_per_trade:     0.01
+    grid:
+      option_days:                    [7, 14]
+      expiry_weekday:                 [-1]
+      entry_delta:                    [0.5]
+      take_profit_ratio:              [0.5, 1.0, 2.0]
+      stop_loss_ratio:                [0.3, 0.5]
+      cooldown_hours:                 [1, 12]
+      max_positions:                  [3]
+      require_low_below_prev_day_low: [0, 1]
+      min_drop_from_prev_close:       [0.0001]
+
+  - class: "MixUTurnStrangleBull"
+    enable: false
+    code_id: "ES"
+    interval: "M5"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    fixed_params:
+      multi_uturn_window: 300
+      risk_free_rate:     0.04
+    grid:
+      option_days:                    [7, 14, 21, 28]
+      expiry_weekday:                 [-1]
+      entry_call:                     [0.5]
+      entry_put:                      [0.5,0.4,0.3]
+      entry_put_short:                [0.1, 0.2]  # 0=不启用 short put 腿
+      cooldown_hours:                 [1]
+      max_positions:                  [1,3]
+      min_drop_from_prev_close:       [0.0001]
       require_low_below_prev_day_low: [0, 1]

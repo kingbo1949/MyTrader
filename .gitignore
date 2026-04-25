@@ -47,3 +47,6 @@ layer_app/Requirement_Description/*.csv
 # ===== Temp =====
 *.tmp
 *.bak
+
+# ===== Strategy output images =====
+layer_app/StrategyEngine/output/**/*.png

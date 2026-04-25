@@ -67,7 +67,7 @@ def _calc_max_concurrent(closed_positions: list[dict]) -> int:
         return 0
     events = [(p["entry_dt"], 1) for p in closed_positions] + \
              [(p["settlement_dt"], -1) for p in closed_positions]
-    events.sort(key=lambda x: x[0])
+    events.sort(key=lambda x: (x[0], x[1]))  # 同时刻结算(-1)先于开仓(+1)
     max_c, cur = 0, 0
     for _, delta in events:
         cur += delta

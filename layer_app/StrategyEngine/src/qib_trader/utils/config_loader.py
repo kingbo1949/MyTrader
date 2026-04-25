@@ -55,14 +55,31 @@ def get_codeId_config(codeId: CodeId) -> Dict[str, Any]:
         return {"multiplier": 1.0, "commission": 0.0}
 
 def get_iv(codeId: str, option_type: str, delta: float) -> float:
-    """从 settings.yaml 按品种+期权类型+delta 查找 IV；找不到取最近 delta；表不存在返回 0.24。"""
+    """从 settings.yaml 按品种+期权类型+delta 查找 IV。
+    精确匹配直接返回；多档位时线性插值/外推；单档位时返回该值；表不存在返回 0.24。
+    """
     iv_table = get_codeId_config(codeId).get("iv", {}).get(option_type, {})
     if not iv_table:
         return 0.24
     key = round(delta, 2)
     if key in iv_table:
         return iv_table[key]
-    return iv_table[min(iv_table, key=lambda k: abs(k - delta))]
+    if len(iv_table) == 1:
+        return next(iter(iv_table.values()))
+    deltas = sorted(iv_table.keys())
+    # 找到相邻两个档位做线性插值（含端点外推）
+    for i in range(len(deltas) - 1):
+        d0, d1 = deltas[i], deltas[i + 1]
+        if d0 <= delta <= d1:
+            t = (delta - d0) / (d1 - d0)
+            return iv_table[d0] + t * (iv_table[d1] - iv_table[d0])
+    # 超出范围：用最近两端做线性外推
+    if delta < deltas[0]:
+        d0, d1 = deltas[0], deltas[1]
+    else:
+        d0, d1 = deltas[-2], deltas[-1]
+    t = (delta - d0) / (d1 - d0)
+    return iv_table[d0] + t * (iv_table[d1] - iv_table[d0])
 
 
 def get_env_config() -> Dict[str, Any]:

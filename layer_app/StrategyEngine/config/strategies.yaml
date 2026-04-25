@@ -26,8 +26,8 @@ strategies:
 
   - class: "UTurnBottomLongCall"
     enable: false
-    code_id: "AVGO"
-    interval: "M30"
+    code_id: "NQ"
+    interval: "M15"
     direction: "LONG"
     start_time: "2024-01-05 00:00:00"
     end_time:   "2026-04-01 00:00:00"
@@ -36,17 +36,17 @@ strategies:
       risk_free_rate: 0.04
       option_days: 21
       expiry_weekday: 2 # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      dif_entry: -1
-      dif_profit: 2
-      k2_takeprofit: 50
-      k2_stoploss: 10
-      k2_timeout_profit: 10
-      k2_timeout_loss: 10
+      dif_entry: -20
+      dif_profit: 20
+      k2_takeprofit: 100
+      k2_stoploss: 100
+      k2_timeout_profit: 100
+      k2_timeout_loss: 100
       early_exit_ratio: 0.9  # 锁定spread盈利达到最大盈利此比例时提前平仓
-      min_drop_from_prev_close: 0.03   # 开仓低价须低于昨收的最小跌幅比率
-      min_rise_from_prev_close: 0.03    # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
+      min_drop_from_prev_close: 0.002   # 开仓低价须低于昨收的最小跌幅比率
+      min_rise_from_prev_close: 0.002    # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
       entry_delta: 0.5                   # 开仓 Call 的目标 Delta（0.5=ATM）
-      stop_loss_ratio: 0.6               # 期权价值跌至保费此比例时触发止损
+      stop_loss_ratio: 0.5               # 期权价值跌至保费此比例时触发止损
 
   - class: "UTurnBottomShortPut"
     enable: false
@@ -67,8 +67,54 @@ strategies:
       cooldown_hours: 1            # 开仓后冷却时间（小时），0=不限制
       max_positions: 0             # 最大并发持仓数，0=不限制
       require_low_below_prev_day_low: 0  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
+      require_lower_k1_than_existing: 0  # 1=连续开仓时新仓K1须低于所有现有仓位K1；0=不限制
+      stop_loss_ratio: 0                 # 亏损达到最大亏损的此比例时平仓，0=不启用
 
   - class: "UTurnBottomShortPut"
+    enable: true
+    code_id: "ES"
+    interval: "M15"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-28 00:00:00"
+    params:
+      initial_capital: 100000
+      risk_free_rate: 0.04
+      option_days: 3
+      expiry_weekday: 2         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
+      entry_short: 0.5          # 卖出腿 put delta 绝对值（K1，较高行权价）
+      entry_long: 0.2           # 买入腿 put delta 绝对值（K2，较低行权价）
+      min_drop_from_prev_close: 0.00001
+      multi_uturn_window: 300
+      cooldown_hours: 1         # 开仓后冷却时间（小时），0=不限制
+      max_positions: 3          # 最大并发持仓数，0=不限制
+      require_low_below_prev_day_low: 1  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
+      require_lower_k1_than_existing: 0  # 1=连续开仓时新仓K1须低于所有现有仓位K1；0=不限制
+      stop_loss_ratio: 1                 # 亏损达到最大亏损的此比例时平仓，0=不启用
+      require_plus_pattern: 0            # 1=要求当前UTurn点|dif|>上一个UTurn点|dif|（plus形态）
+
+  - class: "UTurnBottomShortCall"
+    enable: false
+    code_id: "ES"
+    interval: "M5"
+    direction: "SHORT"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    params:
+      initial_capital: 100000
+      risk_free_rate: 0.04
+      option_days: 2
+      expiry_weekday: -1         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
+      entry_short: 0.4          # 卖出腿 call delta（K1，较低行权价）
+      entry_long: 0.1           # 买入腿 call delta（K2，较高行权价）
+      multi_uturn_window: 300
+      cooldown_hours: 1        # 开仓后冷却时间（小时），0=不限制
+      max_positions: 5          # 最大并发持仓数，0=不限制
+      require_high_above_prev_day_high: 1  # 1=开仓bar最高价须大于上一日最高价；0=不限制
+      stop_loss_ratio: 0.5                   # 亏损达到最大亏损的此比例时平仓，0=不启用
+      require_plus_pattern: 0               # 1=要求当前UTurn点|dif|>上一个UTurn点|dif|（plus形态）
+
+  - class: "MixUTurnBottomLongCall"
     enable: false
     code_id: "ES"
     interval: "M5"
@@ -78,42 +124,24 @@ strategies:
     params:
       initial_capital: 100000
       risk_free_rate: 0.04
-      option_days: 1
-      expiry_weekday: 2         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      entry_short: 0.5          # 卖出腿 put delta 绝对值（K1，较高行权价）
-      entry_long: 0.1           # 买入腿 put delta 绝对值（K2，较低行权价）
-      min_drop_from_prev_close: 0.00001
+      option_days: 7
+      expiry_weekday: -1        # -1=每日期权（跳过周末）
+      entry_long: 0.5           # 买入腿 call delta（K1，较低行权价）
+      entry_short: 0.3          # 卖出腿 call delta（K2，较高行权价）
+      min_drop_from_prev_close: 0.0001
       multi_uturn_window: 300
-      cooldown_hours: 1         # 开仓后冷却时间（小时），0=不限制
-      max_positions: 0          # 最大并发持仓数，0=不限制
-      require_low_below_prev_day_low: 1  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
-
-  - class: "UTurnBottomShortCall"
-    enable: true
-    code_id: "ES"
-    interval: "M30"
-    direction: "SHORT"
-    start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
-    params:
-      initial_capital: 100000
-      risk_free_rate: 0.04
-      option_days: 21
-      expiry_weekday: 2         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      entry_short: 0.4          # 卖出腿 call delta（K1，较低行权价）
-      entry_long: 0.1           # 买入腿 call delta（K2，较高行权价）
-      multi_uturn_window: 300
-      cooldown_hours: 24        # 开仓后冷却时间（小时），0=不限制
-      max_positions: 2          # 最大并发持仓数，0=不限制
-      require_high_above_prev_day_high: 0  # 1=开仓bar最高价须大于上一日最高价；0=不限制
+      cooldown_hours: 1
+      max_positions: 5
+      require_low_below_prev_day_low: 0
+      require_lower_k1_than_existing: 0
 
   - class: "MixMultipleTurn_Long"
     enable: false
-    code_id: "NQ"
-    interval: "M1"
+    code_id: "ES"
+    interval: "M5"
     direction: "LONG"
     start_time: "2024-01-05 00:00:00"
-    end_time:   "2024-04-01 00:00:00"
+    end_time:   "2025-04-01 00:00:00"
     params:
       multi_uturn_window: 300
 
@@ -139,3 +167,46 @@ strategies:
       min_rise_from_prev_close: 0.005    # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
       entry_delta: 0.5                   # 开仓 Call 的目标 Delta（0.5=ATM）
       stop_loss_ratio: 0.6               # 期权价值跌至保费此比例时触发止损
+
+  - class: "UTurnLongCallMomentum"
+    enable: false
+    code_id: "ES"
+    interval: "M5"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    params:
+      initial_capital: 100000
+      risk_free_rate: 0.04
+      option_days: 7
+      expiry_weekday: -1
+      entry_delta: 0.5               # ATM call
+      take_profit_ratio: 1.0         # 期权市值涨 100% 时止盈
+      stop_loss_ratio: 0.5           # 期权市值跌 50% 时止损
+      risk_per_trade: 0.01           # 每笔风险 1% 资金
+      multi_uturn_window: 300
+      cooldown_hours: 1
+      max_positions: 3
+      require_low_below_prev_day_low: 1
+      min_drop_from_prev_close: 0.0001
+
+  - class: "MixUTurnStrangleBull"
+    enable: false
+    code_id: "NQ"
+    interval: "M15"
+    direction: "LONG"
+    start_time: "2024-01-01 00:00:00"
+    end_time:   "2026-04-01 00:00:00"
+    params:
+      initial_capital: 100000
+      risk_free_rate: 0.04
+      option_days: 7
+      expiry_weekday: -1         # -1=每日期权（跳过周末）
+      entry_call: 0.5            # 买入 OTM call 的 delta
+      entry_put: 0.3             # 买入 OTM put 的 delta 绝对值（较高行权价）
+      entry_put_short: 0       # 卖出 put 的 delta 绝对值（较低行权价），0=不启用
+      multi_uturn_window: 300
+      cooldown_hours: 1
+      max_positions: 3
+      min_drop_from_prev_close: 0.0001
+      require_low_below_prev_day_low: 1

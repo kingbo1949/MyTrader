@@ -46,6 +46,9 @@ class UTurnBottomShortPut(Strategy):
     cooldown_hours: float = 0.0       # 开仓后冷却时间（小时），期间不允许再次开仓
     max_positions: int = 0            # 最大并发持仓数，0 = 不限制
     require_low_below_prev_day_low: int = 0  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
+    require_lower_k1_than_existing: int = 0  # 1=连续开仓时新仓K1须低于所有现有仓位K1；0=不限制
+    stop_loss_ratio: float = 0.0      # 亏损达到最大亏损(价差宽度−credit)的此比例时平仓，0=不启用
+    require_plus_pattern: int = 0     # 1=要求当前UTurn点|dif|大于上一个UTurn点|dif|（plus形态）
 
     def on_init(self) -> None:
         self._spreads: list[dict] = []         # 持有中的 bull put spread，等待到期
@@ -77,6 +80,11 @@ class UTurnBottomShortPut(Strategy):
         if min_days == 1:
             # 次日到期：bar_dt + 24h 之后的第一个交易日（跳过周末）
             target = bar_dt + timedelta(days=1)
+            extra = {5: 2, 6: 1}.get(target.weekday(), 0)
+            expiry_date = (target + timedelta(days=extra)).date()
+        elif self.expiry_weekday == -1:
+            # 每日期权（QQQ/SPY）：经过 min_days 天后，仅跳过周末
+            target = bar_dt + timedelta(days=min_days)
             extra = {5: 2, 6: 1}.get(target.weekday(), 0)
             expiry_date = (target + timedelta(days=extra)).date()
         else:
@@ -134,6 +142,42 @@ class UTurnBottomShortPut(Strategy):
             'final_pnl':     final_pnl,
         })
 
+    def _settle_stop_loss(self, sp: dict, bar: BarData) -> None:
+        T = self._rem_t(bar.datetime, sp['expiry'])
+        S = bar.close_price
+        curr_p1 = bs_put_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'])
+        curr_p2 = bs_put_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'])
+        curr_spread = curr_p1 - curr_p2
+        final_pnl = sp['net_credit'] - curr_spread
+        self._send_order(Direction.LONG, curr_spread, 1, "MKT")
+        self._record_position(sp, bar, 'stop_loss', 0.0, 0.0, final_pnl)
+        self.logger.info(f"[{bar.datetime}] 止损平仓 K1={sp['k1']} K2={sp['k2']} "
+                         f"curr_spread={curr_spread:.2f} final_pnl={final_pnl:.2f}")
+
+    def _check_stop_loss(self, bar: BarData) -> None:
+        if self.stop_loss_ratio <= 0:
+            return
+        S, remaining = bar.close_price, []
+        for sp in self._spreads:
+            T = self._rem_t(bar.datetime, sp['expiry'])
+            curr_p1 = bs_put_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'])
+            curr_p2 = bs_put_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'])
+            max_loss = (sp['k1'] - sp['k2']) - sp['net_credit']
+            loss = (curr_p1 - curr_p2) - sp['net_credit']
+            if max_loss > 0 and loss >= self.stop_loss_ratio * max_loss:
+                self._settle_stop_loss(sp, bar)
+            else:
+                remaining.append(sp)
+        self._spreads = remaining
+
+    def _is_plus_pattern(self, zone) -> bool:
+        """当前 UTurnBottom 点的 |dif| > 上一个 UTurnBottom 点的 |dif|。"""
+        uturn_bars = [b for b in zone.zone_bars
+                      if b.div_type in ('Bottom', 'BottomSub') and b.is_uturn]
+        if len(uturn_bars) < 2:
+            return False
+        return abs(uturn_bars[-1].dif) > abs(uturn_bars[-2].dif)
+
     def _entry_signal(self, bar: BarData) -> bool:
         """仅允许 mix 型多重底部 uturn 开仓（区间内存在至少一根 macd > 0 的 bar）。"""
         if (self._last_entry_dt is not None and self.cooldown_hours > 0
@@ -144,7 +188,11 @@ class UTurnBottomShortPut(Strategy):
         if self.require_low_below_prev_day_low and bar.prev_day_low > 0 and bar.low_price >= bar.prev_day_low:
             return False
         zone = detect_multi_uturn(list(self._bar_history))
-        return zone is not None and zone.zone_type == 'bottom' and zone.is_mix
+        if zone is None or zone.zone_type != 'bottom' or not zone.is_mix:
+            return False
+        if self.require_plus_pattern and not self._is_plus_pattern(zone):
+            return False
+        return True
 
     def _check_entry(self, bar: BarData) -> None:
         """直接开仓 Bull Put Spread：同时卖出 K1 put 和买入 K2 put。"""
@@ -156,6 +204,9 @@ class UTurnBottomShortPut(Strategy):
         iv_long  = get_iv(self.codeId, 'put', self.entry_long)
         k1 = self._put_strike_by_delta(bar.close_price, T, self.entry_short, iv_short)
         k2 = self._put_strike_by_delta(bar.close_price, T, self.entry_long,  iv_long)
+        # 连续开仓时，新仓 K1 必须低于所有现有仓位的 K1
+        if self.require_lower_k1_than_existing and self._spreads and k1 >= min(sp['k1'] for sp in self._spreads):
+            return
         p1 = bs_put_price(bar.close_price, k1, T, self.risk_free_rate, iv_short)
         p2 = bs_put_price(bar.close_price, k2, T, self.risk_free_rate, iv_long)
         net_credit = p1 - p2
@@ -178,5 +229,6 @@ class UTurnBottomShortPut(Strategy):
     def logic(self, bar: BarData) -> None:
         self._bar_history.append(bar)
         self._check_expiry(bar)
+        self._check_stop_loss(bar)
         self._check_entry(bar)
         self._last_bar = bar

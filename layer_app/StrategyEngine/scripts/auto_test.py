@@ -29,11 +29,11 @@ from optimizer import _run_opt_task, _fetch_bars, _task_id
 
 # ─── 硬编码配置（按需修改）────────────────────────────────────────────────────
 
-TARGETS   = ["NQ"]
+TARGETS   = ["ES"]
 # TARGETS   = ["QQQ", "SPY", "AAPL", "AMD", "AMZN", "AVGO", "COIN", "GOOG", "GS", "INTC", "IWM", "JPM", "MCD", "META", "MSFT", "MSTR", "NVDA", "SMH", "SOXX", "TSLA", "TSM", "WMT"]
 # TARGETS   = ["QQQ", "SPY", "GS", "JPM", "MS", "SMH", "TSM"]
 
-INTERVALS = ["H1", "M30", "M15", "M5"]
+INTERVALS = ["M15","M5"]
 
 # ─── 模板加载 ──────────────────────────────────────────────────────────────────
 
@@ -51,7 +51,8 @@ def _load_template() -> dict:
     if not tasks:
         raise RuntimeError("optimization.yaml 中没有 enable:true 的条目")
     if len(tasks) > 1:
-        logging.getLogger("AutoTest").warning(f"发现 {len(tasks)} 个 enable:true 条目，使用第一个")
+        names = [f"{t.get('class','?')}_{t.get('code_id','?')}_{t.get('interval','?')}" for t in tasks]
+        logging.getLogger("AutoTest").warning(f"发现 {len(tasks)} 个 enable:true 条目，使用第一个。条目: {names}")
     return tasks[0]
 
 
