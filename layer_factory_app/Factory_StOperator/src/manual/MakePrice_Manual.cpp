@@ -61,7 +61,7 @@ bool CMakePrice_Manual::GetOpenCoverPrice(double& price)
 	int pos = 0;
 	if (m_stParams.openOrCover == RoundAction::Open_Round)
 	{
-		pos = -1;
+		pos = 0;
 	}
 	else
 	{

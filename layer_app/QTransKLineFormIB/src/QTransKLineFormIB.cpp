@@ -28,27 +28,6 @@ CKLineConverter_NoMix klineConverter_nomix;
 
 
 
-void ShowMenu()
-{
-	std::cout <<
-		"usage:\n"
-		"a: convert one contract ticks \n"
-		"b: update database from files \n"
-		"c: clean up klines \n"
-		"d: save klines to files \n"
-		"e: threadpool status \n"
-		"0: convert one contract \n"
-		"1: query all contracts  \n"
-		"2: recount MA for all contracts  \n"
-		"3: request one contracts  \n"
-		"4: trans all unmix contracts  \n"
-		"6: del ticks  \n"
-		"7: check quote  \n"
-		"8: fix quote  \n"
-		"9: fix one day quote  \n"
-		"x: exit\n";
-	return;
-}
 
 // 查询打印所有品种的K线
 void QueryAllContracts()
@@ -132,8 +111,8 @@ void ConvertOneContractTicks()
 void ConvertOneContractKLines()
 {
 	// std::set<CodeStr> codeIds = {"MS", "C"};
-	std::set<CodeStr> codeIds = {"VXN"};
-	// std::set<CodeStr> codeIds = {"TSLA"};
+	// std::set<CodeStr> codeIds = {"EUV", "IREN", "MSTR", "CRCL", "BMNR", "WGMI", "IBIT"};
+	std::set<CodeStr> codeIds = {"MNQ"};
 
 	CConvertContractsKlines converter(codeIds);
 	converter.Go();
@@ -221,6 +200,27 @@ void CleanUpKlines()
 	cleanup.Go();
 }
 
+void ShowMenu()
+{
+	std::cout <<
+		"usage:\n"
+		"a: convert one contract ticks \n"
+		"b: update database from files \n"
+		"c: clean up klines \n"
+		"d: save klines to files \n"
+		"e: threadpool status \n"
+		"0: convert one contract \n"
+		"1: query all contracts  \n"
+		"2: recount MA for all contracts  \n"
+		"3: request one contracts  \n"
+		"4: trans all unmix contracts  \n"
+		"6: del ticks  \n"
+		"7: check quote  \n"
+		"8: fix quote  \n"
+		"9: fix one day quote  \n"
+		"x: exit\n";
+	return;
+}
 
 int main()
 {

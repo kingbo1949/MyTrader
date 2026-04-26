@@ -150,8 +150,7 @@ void AnalystGui::InitAllCodeId()
 
 void AnalystGui::InitPositionCodeId()
 {
-	QStringList codeIds = { "NQ", "GC", "TSLA", "HOOD", "MU", "CLS", "SOFI", "BMNR", "ORCL",
-		"COIN", "STX", "AVGO", "MSTR", "INTC", "TSM", "MSFT", "META", "RKLB"};
+	QStringList codeIds = { "NQ", "GC", "TSLA", "HOOD", "MU", "COIN", "AVGO", "TSM", "MSFT", "META", "RKLB"};
 
 	m_model_positionCodeId = new QStandardItemModel(int(codeIds.size()), 1, ui.positionCodeIdView);
 
@@ -172,7 +171,7 @@ void AnalystGui::InitPositionCodeId()
 
 void AnalystGui::InitKLineType()
 {
-	ui.klineTypeCtrl->addItem(CTransToStr::Get_TimeType(Time_Type::S15).c_str());
+	// ui.klineTypeCtrl->addItem(CTransToStr::Get_TimeType(Time_Type::S15).c_str());
 	ui.klineTypeCtrl->addItem(CTransToStr::Get_TimeType(Time_Type::M1).c_str());
 	ui.klineTypeCtrl->addItem(CTransToStr::Get_TimeType(Time_Type::M5).c_str());
 	ui.klineTypeCtrl->addItem(CTransToStr::Get_TimeType(Time_Type::M15).c_str());
@@ -397,11 +396,17 @@ void AnalystGui::onTimerRealQuote()
 	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	m_plotContainer->AddKlines(codeId, timeType, klines);
 
-	MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
-	MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
+	// MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
+	// MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
 }
 void AnalystGui::onTimerKlineShape()
 {
+	std::string codeId = GetSelectCodeId(ui.tabWidget);
+	MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
+	MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
+
+
+
 	if (!m_pScanKShape_future)
 	{
 		ui.futureView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -480,7 +485,8 @@ void AnalystGui::keyPressEvent(QKeyEvent* event)
 void AnalystGui::StartKlineShapeTimer()
 {
 	QObject::connect(&m_timer_klineShape, &QTimer::timeout, this, &AnalystGui::onTimerKlineShape);
-	m_timer_klineShape.start(1000 * 60);  // 1分钟刷新一次
+	// m_timer_klineShape.start(1000 * 60);  // 1分钟刷新一次
+	m_timer_klineShape.start(3000);  // 3000毫秒刷新一次
 
 }
 void AnalystGui::on_isRealCtrl_clicked()

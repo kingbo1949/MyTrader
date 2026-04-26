@@ -14,7 +14,8 @@ std::string CQtGlobal::QtString_StdString(const QString& qtString)
 
 QString CQtGlobal::StdString_QString(const std::string& string)
 {
-	return QString::fromLocal8Bit(QByteArray::fromRawData(string.c_str(), string.size()));
+	return QString::fromUtf8(string.c_str(), static_cast<int>(string.size()));
+	// return QString::fromLocal8Bit(QByteArray::fromRawData(string.c_str(), string.size()));
 }
 
 QStringList CQtGlobal::StdStrings_QStringList(const std::vector<std::string> strings)

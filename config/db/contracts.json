@@ -1,16 +1,5 @@
 [
 	{
-		"codeId" : "VXN",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "VXN",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "CBOE",
-		"securityType" : "IND"
-	},
-	{
 		"codeId" : "VIX",
 		"currencyID" : "USD",
 		"decDigits" : 2,
@@ -27,7 +16,18 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "NQM6",
+		"localSymbol" : "NQZ6",
+		"minMove" : 0.25,
+		"primaryExchangePl" : "CME",
+		"securityType" : "FUT"
+	},
+	{
+		"codeId" : "MNQ",
+		"currencyID" : "USD",
+		"decDigits" : 2,
+		"enable" : true,
+		"exchangePl" : "SMART",
+		"localSymbol" : "MNQZ6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"
@@ -38,7 +38,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "ESM6",
+		"localSymbol" : "ESZ6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"
@@ -49,7 +49,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "MBTJ6",
+		"localSymbol" : "MBTX6",
 		"minMove" : 0.25,
 		"primaryExchangePl" : "CME",
 		"securityType" : "FUT"
@@ -60,7 +60,7 @@
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "GCM6",
+		"localSymbol" : "GCZ6",
 		"minMove" : 0.1,
 		"primaryExchangePl" : "COMEX",
 		"securityType" : "FUT"
@@ -77,23 +77,12 @@
 		"securityType" : "STK"
 	},
 	{
-		"codeId" : "SPY",
+		"codeId" : "TSLA",
 		"currencyID" : "USD",
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
 		"localSymbol" : "SPY",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "IWM",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "IWM",
 		"minMove" : 0.01,
 		"primaryExchangePl" : "NYSE",
 		"securityType" : "STK"
@@ -110,67 +99,12 @@
 		"securityType" : "STK"
 	},
 	{
-		"codeId" : "JPM",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "JPM",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "GS",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "GS",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "MS",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "MS",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "AAPL",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "AAPL",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
 		"codeId" : "TSLA",
 		"currencyID" : "USD",
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
 		"localSymbol" : "TSLA",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "SOXX",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "SOXX",
 		"minMove" : 0.01,
 		"primaryExchangePl" : "NASDAQ",
 		"securityType" : "STK"
@@ -209,28 +143,6 @@
 		"securityType" : "STK"
 	},
 	{
-		"codeId" : "META",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "META",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "MSFT",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "MSFT",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
 		"codeId" : "AMZN",
 		"currencyID" : "USD",
 		"decDigits" : 2,
@@ -264,39 +176,6 @@
 		"securityType" : "STK"
 	},
 	{
-		"codeId" : "HOOD",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "HOOD",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "COIN",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "COIN",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "PLTR",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "PLTR",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
 		"codeId" : "MU",
 		"currencyID" : "USD",
 		"decDigits" : 2,
@@ -308,67 +187,12 @@
 		"securityType" : "STK"
 	},
 	{
-		"codeId" : "WDC",
+		"codeId" : "SPCX",
 		"currencyID" : "USD",
 		"decDigits" : 2,
 		"enable" : true,
 		"exchangePl" : "SMART",
-		"localSymbol" : "WDC",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "RKLB",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "RKLB",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "ASTS",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "ASTS",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NASDAQ",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "CLS",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "CLS",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "MCD",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "MCD",
-		"minMove" : 0.01,
-		"primaryExchangePl" : "NYSE",
-		"securityType" : "STK"
-	},
-	{
-		"codeId" : "WMT",
-		"currencyID" : "USD",
-		"decDigits" : 2,
-		"enable" : true,
-		"exchangePl" : "SMART",
-		"localSymbol" : "WMT",
+		"localSymbol" : "SPCX",
 		"minMove" : 0.01,
 		"primaryExchangePl" : "NASDAQ",
 		"securityType" : "STK"

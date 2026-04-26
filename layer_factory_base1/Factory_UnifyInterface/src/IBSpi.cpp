@@ -44,15 +44,18 @@ void CIBSpi::SetApi(EClientSocket* pApi)
 
 void CIBSpi::tickPrice(TickerId tickerId, TickType field, double price, const TickAttrib& attrib)
 {
-	//IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(tickerId);
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(tickerId);
+	// printf("%s receive tickPrice: %.2f \n", contract->codeId.c_str(), price);
 
 	std::lock_guard<std::mutex> lock(m_mutex);
 	if (field == OPEN)
 	{
+		// printf("%s receive tickPrice: %.2f, OPEN \n", contract->codeId.c_str(), price);
 		MakeAndGet_WhiteBoard()->UpdateOpen(tickerId, price);
 	}
 	if (field == LAST)
 	{
+		// printf("%s receive tickPrice: %.2f LAST \n", contract->codeId.c_str(), price);
 		MakeAndGet_WhiteBoard()->UpdateLastPrice(tickerId, price);
 	}
 
@@ -60,12 +63,12 @@ void CIBSpi::tickPrice(TickerId tickerId, TickType field, double price, const Ti
 	{
 		if (field == BID)
 		{
-			//printf("tickPrice rec BID %.2f \n", price);
+			// printf("%s receive tickPrice: %.2f BID \n", contract->codeId.c_str(), price);
 			MakeAndGet_WhiteBoard()->UpdateBid(tickerId, price);
 		}
 		if (field == ASK)
 		{
-			//printf("tickPrice rec ASK %.2f \n", price);
+			// printf("%s receive tickPrice: %.2f ASK \n", contract->codeId.c_str(), price);
 			MakeAndGet_WhiteBoard()->UpdateAsk(tickerId, price);
 		}
 	}
@@ -77,19 +80,21 @@ void CIBSpi::tickSize(TickerId tickerId, TickType field, Decimal size)
 	std::lock_guard<std::mutex> lock(m_mutex);
 
 	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(tickerId);
+	// printf("%s receive tickSize: %d \n", contract->codeId.c_str(), decimal_to_int(size));
 	IBTickPtr tick = nullptr;
 	if (field == LAST_SIZE)
 	{
-		//printf("tickSize rec LAST_SIZE %d \n", size);
+		// printf("%s receive tickSize: %d LAST SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
 		tick = MakeAndGet_WhiteBoard()->UpdateLastVol(tickerId, decimal_to_int(size));
 
 	}
 	if (field == VOLUME)
 	{
 		// tickSize 股票返回的值是手数，需要乘以100转换成股
-		//printf("tickSize rec totalvol %d \n", size);
+		// printf("%s receive tickSize: %d VOLUME \n", contract->codeId.c_str(), decimal_to_int(size));
 		if (contract->securityType == SecurityType::STK)
 		{
+
 			tick = MakeAndGet_WhiteBoard()->UpdateTotalVol(tickerId, decimal_to_int(size) * 100);
 		}
 		else
@@ -108,27 +113,27 @@ void CIBSpi::tickSize(TickerId tickerId, TickType field, Decimal size)
 	{
 		if (field == BID_SIZE)
 		{
-			//printf("tickSize rec bidvol %d \n", size);
+			// printf("%s receive tickSize: %d BID SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
 			tick = MakeAndGet_WhiteBoard()->UpdateBidVol(tickerId, decimal_to_int(size));
 		}
 		if (field == ASK_SIZE)
 		{
-			//printf("tickSize rec askvol %d \n", size);
+			// printf("%s receive tickSize: %d ASK SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
 			tick = MakeAndGet_WhiteBoard()->UpdateAskVol(tickerId, decimal_to_int(size));
 		}
 	}
 
 	if (!tick) return;
 
-	//Log_Print(LogLevel::Info, fmt::format("rec tick {}, {}({})->{}({}), open = {} last = {} ", 
-	//	Get_CodeIdEnv()->Get_CodeStrByHashId(tick->codeHash), 
-	//	tick->bidAsks[0].bid,
-	//	tick->bidAsks[0].bidVol,
-	//	tick->bidAsks[0].ask,
-	//	tick->bidAsks[0].askVol,
-	//	tick->open,
-	//	tick->last
-	//));
+	// Log_Print(LogLevel::Info, fmt::format("rec tick {}, {}({})->{}({}), open = {} last = {} ",
+	// 	contract->codeId.c_str(),
+	// 	tick->bidAsks[0].bid,
+	// 	tick->bidAsks[0].bidVol,
+	// 	tick->bidAsks[0].ask,
+	// 	tick->bidAsks[0].askVol,
+	// 	tick->open,
+	// 	tick->last
+	// ));
 
 	IBTickPtr cloneTick = tick->Clone();
 	MakeAndGet_MarketDepth()->Combine(tickerId, cloneTick->bidAsks);

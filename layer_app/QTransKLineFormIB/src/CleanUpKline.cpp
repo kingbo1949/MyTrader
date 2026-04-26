@@ -8,10 +8,15 @@ void CCleanUpKline::Go()
 {
 	Tick_T beginTime = 0;
 	Tick_T endTime = LLONG_MAX;
-	MakeAndGet_QDatabase()->DelCodeId("C", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("HOOD", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("COIN", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("RKLB", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("BE", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("APP", beginTime, endTime );
 	MakeAndGet_QDatabase()->DelCodeId("MSTR", beginTime, endTime );
-	MakeAndGet_QDatabase()->DelCodeId("NFLX", beginTime, endTime );
-	MakeAndGet_QDatabase()->DelCodeId("INTC", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("CRCL", beginTime, endTime );
+	MakeAndGet_QDatabase()->DelCodeId("NASA", beginTime, endTime );
+
 
 
 	// ClenaUpKLine("COST");

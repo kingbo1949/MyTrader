@@ -88,36 +88,41 @@ bool CWhiteBoard_Real::IsInTradeStatus(CodeHashId codeId, time_t millisecondIn)
 
 bool CWhiteBoard_Real::ValidTick(IBTickPtr tick)
 {
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(tick->codeHash);
 	if (tick->time == 0)
 	{
-		//Log_Print(LogLevel::Err, "time err");
+		Log_Print(LogLevel::Err, fmt::format("{} time err", contract->codeId.c_str()));
 		return false;
 	}
-	if (tick->open == 0)
+	if (tick->open <= 0)
 	{
-		//Log_Print(LogLevel::Err, "open err");
+		// Log_Print(LogLevel::Err, fmt::format("{} open err", contract->codeId.c_str()));
 		return false;
 	}
-	if (tick->last == 0)
+	if (tick->last <= 0)
 	{
-		//Log_Print(LogLevel::Err, "last err");
+		Log_Print(LogLevel::Err, fmt::format("{} last err", contract->codeId.c_str()));
 		return false;
 	}
-	if (tick->bidAsks[0].bid == 0)
-	{
 
-		//Log_Print(LogLevel::Err, "bid err");
-		return false;
-	}
-	if (tick->bidAsks[0].ask == 0)
+	if (contract->securityType != SecurityType::INDEX)
 	{
-		//Log_Print(LogLevel::Err, "ask err");
-		return false;
-	}
-	if (tick->bidAsks[0].bid >= tick->bidAsks[0].ask)
-	{
-		// Log_Print(LogLevel::Err, "bid ask err");
-		return false;
+		if (tick->bidAsks[0].bid == 0)
+		{
+			// Log_Print(LogLevel::Err, "bid err");
+			return false;
+		}
+		if (tick->bidAsks[0].ask == 0)
+		{
+			// Log_Print(LogLevel::Err, "ask err");
+			return false;
+		}
+		if (tick->bidAsks[0].bid >= tick->bidAsks[0].ask)
+		{
+			// Log_Print(LogLevel::Err, "bid ask err");
+			return false;
+		}
+
 	}
 
 	return true;

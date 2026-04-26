@@ -299,7 +299,11 @@ void CIBApi_IB::SubscribeQuote(const IbContractPtrs& contracts)
 		}
 		m_pApi->reqMktData(codeHash, contract, "", false, false, TagValueListSPtr());
 
-		m_pApi->reqMktDepth(codeHash, contract, MaxPriceRowCountSubscribe, false, TagValueListSPtr());
+		if (one_contract->codeId == "NQ")
+		{
+			m_pApi->reqMktDepth(codeHash, contract, MaxPriceRowCountSubscribe, false, TagValueListSPtr());
+		}
+
 
 		Log_Print(LogLevel::Warn, fmt::format("SubscribeQuote {} {}", contract.symbol.c_str(), contract.localSymbol.c_str()));
 	}

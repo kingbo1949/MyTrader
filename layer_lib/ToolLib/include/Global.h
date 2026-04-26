@@ -67,13 +67,16 @@ public:
 	CGlobal() { ; };
 	virtual ~CGlobal() { ; };
 
+	// 从UTC毫秒时间返回星期几
+	static std::string			GetTickTimeWeekDay(time_t tickTime);
+
 	// 从毫秒时间返回字符串，格式为：[yyyymmdd hh:mm:ss.milliSecond]
 	static std::string			GetTickTimeStr(time_t tickTime);
 
 	// 从纳妙时间返回字符串，格式为：[yyyymmdd hh:mm:ss.nanoseconds]
 	static std::string			GetTickRecTimeStr(time_t tickRecTime);
 
-	//把一个时间按YYYYMMDD hh:mm:ss字符串返回
+	//把一个时间按YYYYMMDD hh:mm:ss字符串返回 UTC值转为本地字符串
 	static std::string			GetTimeStr(time_t sencondTime);
 
 

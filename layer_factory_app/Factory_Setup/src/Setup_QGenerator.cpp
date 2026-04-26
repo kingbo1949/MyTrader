@@ -94,8 +94,8 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 	int days = 2;
 
 	if (timeType == Time_Type::M30 || timeType == Time_Type::H1 || timeType == Time_Type::D1)
-	{ 
-		days = 5;	
+	{
+		days = 5;
 	}
 
 	time_t endSecond = Get_CurrentTime()->GetCurrentTime_second() + 10;
@@ -124,16 +124,12 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 	{
 		MakeAndGet_QDatabase()->UpdateAllIndexFromTimePos(codeId, timeType, klines[0]->time);
 	}
-
-
-
 	if (klines.empty())
 	{
 		Log_Print(LogLevel::Info, fmt::format("update to db {} {} size = 0",
 			codeId.c_str(),
 			CTransToStr::Get_TimeType(timeType).c_str()
 		));
-
 	}
 	else
 	{
@@ -145,7 +141,6 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 			CGlobal::GetTickTimeStr(klines.back()->time).c_str()
 		));
 	}
-
 	return;
 }
 

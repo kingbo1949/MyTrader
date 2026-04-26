@@ -20,7 +20,7 @@ void CConvertContractsKlines::Go()
 void CConvertContractsKlines::ConvertOneContractKLines(const CodeStr &targetCodeId)
 {
     TimePair timePair;
-    timePair.beginPos = CGlobal::GetTimeByStr("20240101 00:00:00") * 1000;
+    timePair.beginPos = CGlobal::GetTimeByStr("20260101 00:00:00") * 1000;
     timePair.endPos = Get_CurrentTime()->GetCurrentTime_millisecond();
 
     CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(targetCodeId.c_str());

@@ -45,7 +45,7 @@ std::string CRichDataMaker::GetIndexCode()
     std::string indexCode = "";
     if (m_codeId == "NQ")
     {
-        indexCode = "VXN";
+        indexCode = "VIX";
     }
     if (m_codeId == "ES")
     {

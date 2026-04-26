@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <memory>
 #include <string>
@@ -12,7 +12,7 @@ public:
 	void				Go();
 
 private:
-	// ´ÓIB½Ó¿ÚÈ¡KÏß£¬²»°üÀ¨µ±Ç°KÏß
+	// ä»IBæ¥å£å–Kçº¿ï¼Œä¸åŒ…æ‹¬å½“å‰Kçº¿
 	void				UpdateDbKLineFromIB(const std::string& codeId, Time_Type  timeType);
 
 

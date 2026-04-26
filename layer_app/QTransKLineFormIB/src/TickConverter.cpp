@@ -192,7 +192,7 @@ void CTickConverter::RequestKLineInDb(const CodeStr& codeId, time_t daySecond, M
 	{
 		for (auto onetick : ticksdb)
 		{
-			Log_Print(LogLevel::Info, fmt::format("{} last = {}, lastsize = {}, {}({})->{}({])",
+			Log_Print(LogLevel::Info, fmt::format("{} last = {}, lastsize = {}, {}({})->{}({})",
 				CGlobal::GetTickTimeStr(onetick->time).c_str(),
 				onetick->last,
 				onetick->vol,

@@ -91,7 +91,8 @@ enum class ExchangePl
 	ARCA = 4,						// 群岛交易所 
 	CME = 5,						// CME
 	COMEX = 6,						// COMEX
-	CBOE = 7						// CBOE
+	CBOE = 7,						// CBOE
+	BATS = 8						// BATS
 
 };
 // 币种标识

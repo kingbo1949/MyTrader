@@ -7,6 +7,7 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include <chrono>
 
 
 #include <boost/algorithm/string.hpp>
@@ -25,9 +26,38 @@ using namespace boost::algorithm;
 #define LOG_DIR "log/"
 
 
+std::string CGlobal::GetTickTimeWeekDay(time_t tickTime)
+{
+	// 1. 将毫秒转换为 sys_time (系统时间点)
+	std::chrono::sys_time<std::chrono::milliseconds> tp{std::chrono::milliseconds{tickTime}};
 
+	// 2. 转换为日期 (year_month_day)
+	// floor<days> 将时间点截断到“天”
+	auto dp = std::chrono::floor<std::chrono::days>(tp);
 
+	// 3. 计算星期几 (std::chrono::weekday)
+	std::chrono::weekday wd{dp};
 
+	switch (wd.c_encoding())
+	{
+		case 0:
+			return "周日";
+		case 1:
+			return "周1";
+		case 2:
+			return "周2";
+		case 3:
+			return "周3";
+		case 4:
+			return "周4";
+		case 5:
+			return "周5";
+		case 6:
+			return "周6";
+	}
+	return "";
+
+}
 
 std::string CGlobal::GetTickTimeStr(time_t tickTime)
 {

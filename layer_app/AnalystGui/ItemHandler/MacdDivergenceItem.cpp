@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <Factory_IBGlobalShare.h>
 #include <Factory_QDatabase.h>
+#include "../src/CheckSync.h"
 CMacdDivergenceItem::CMacdDivergenceItem(QCustomPlot* parent, SubType subType)
 	:CSubGraph(parent, subType)
 {
@@ -10,21 +11,29 @@ void CMacdDivergenceItem::AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit)
 {
 	if (!IsMyType()) return ;
 
-	// 坐标变化需要移动顶部箭头
-	QCPRange yRange = GetY()->range();
-	// 箭头长度
-	double arrowLenth = (yRange.upper - yRange.lower) * (GetYAxisFactor() - 1) / 3;
-	double upper_top = yRange.upper;
-	double lower_top = yRange.upper - arrowLenth;
-
-	double upper_bottom = yRange.lower + arrowLenth;
-	double lower_bottom = yRange.lower;
-
 	for (auto item : m_arrows)
 	{
 		QCPItemLineQPtr arrow = item.second.arrow;
 		QPointF startPoint = arrow->start->coords();
 		QPointF endPoint = arrow->end->coords();
+
+		// 坐标变化需要移动顶部箭头
+		QCPRange yRange = GetY()->range();
+		// 箭头长度
+		double arrowLenth = (yRange.upper - yRange.lower) * (GetYAxisFactor() - 1) / 3;
+		if (arrow->head().style() == QCPLineEnding::esSquare)
+		{
+			arrowLenth = arrowLenth * 3;
+		}
+
+
+		double upper_top = yRange.upper;
+		double lower_top = yRange.upper - arrowLenth;
+
+		double upper_bottom = yRange.lower + arrowLenth;
+		double lower_bottom = yRange.lower;
+
+
 
 		if (item.second.type == DivergenceType::Top || item.second.type == DivergenceType::TopSub)
 		{
@@ -44,6 +53,7 @@ void CMacdDivergenceItem::AxisRangeChgEvent(const KlinePlotSuit& klinePlotSuit)
 }
 void CMacdDivergenceItem::SetKLines(const KlinePlotSuit& klinePlotSuit)
 {
+
 	ClearItems();
 	m_mapDivTypeValue.clear();
 	if (!IsMyType()) return ;
@@ -62,7 +72,7 @@ void CMacdDivergenceItem::SetKLines(const KlinePlotSuit& klinePlotSuit)
 
 		if (pos->second->divType == DivergenceType::Normal) continue;
 
-		DivergenceArrow divergenceArrow = MakeOneArrow(i, pos->second);
+		DivergenceArrow divergenceArrow = MakeOneArrow(klinePlotSuit.codeId, klinePlotSuit.timeType, i, pos->second);
 		SetupArrowAtIndex(i, divergenceArrow);
 	}
 
@@ -80,7 +90,7 @@ void CMacdDivergenceItem::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const
 	}
 	;
 
-	UpdateKlines(klinePlotSuit.timeType, klinePlotSuit.klines, klineChgCount.addcount, klineChgCount.chgcount);
+	UpdateKlines(klinePlotSuit.codeId, klinePlotSuit.timeType, klinePlotSuit.klines, klineChgCount.addcount, klineChgCount.chgcount);
 
 	return;
 
@@ -89,6 +99,7 @@ void CMacdDivergenceItem::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const
 
 bool CMacdDivergenceItem::MakeMap(const CodeStr& codeId, Time_Type timetype, const IBKLinePtrs& klines, int beginPos)
 {
+
 	if (klines.empty()) return false;
 
 	QQuery query;
@@ -129,7 +140,7 @@ void CMacdDivergenceItem::DelDataAtIndex(int index)
 	return;
 }
 
-DivergenceArrow CMacdDivergenceItem::MakeOneArrow(int index, IBDivTypePtr type)
+DivergenceArrow CMacdDivergenceItem::MakeOneArrow(const CodeStr& codeId, Time_Type timetype,int index, IBDivTypePtr type)
 {
 	DivergenceArrow ret;
 
@@ -144,6 +155,12 @@ DivergenceArrow CMacdDivergenceItem::MakeOneArrow(int index, IBDivTypePtr type)
 		arrow->setHead(QCPLineEnding::esDiamond); // 设置箭头类型
 	}
 
+	if (CCheckSync().IsSync(codeId, timetype, type))
+	{
+		arrow->setHead(QCPLineEnding::esSquare); // 设置箭头类型
+	}
+
+
 	arrow->setLayer("overlay");
 	arrow->start->setAxes(GetX(), GetY());
 	arrow->end->setAxes(GetX(), GetY());
@@ -152,6 +169,7 @@ DivergenceArrow CMacdDivergenceItem::MakeOneArrow(int index, IBDivTypePtr type)
 	ret.type = type->divType;
 	ret.isUTurn = type->isUTurn;
 	ret.arrow = arrow;
+
 
 
 	m_arrows[index] = ret;
@@ -163,6 +181,12 @@ void CMacdDivergenceItem::SetupArrowAtIndex(int index, DivergenceArrow divergenc
 	QCPRange yRange = GetY()->range();
 	// 箭头长度
 	double arrowLenth = (yRange.upper - yRange.lower) * (GetYAxisFactor() - 1) / 3;
+
+	if (divergenceArrow.arrow->head().style() == QCPLineEnding::esSquare)
+	{
+		arrowLenth = (yRange.upper - yRange.lower) * (GetYAxisFactor() - 1) ;
+	}
+
 
 	QPointF beginPoint(index, 0);;
 	QPointF endPoint(index, 0);
@@ -200,7 +224,7 @@ void CMacdDivergenceItem::SetupArrowAtIndex(int index, DivergenceArrow divergenc
 	return;
 }
 
-void CMacdDivergenceItem::UpdateKlines(Time_Type timeType, const IBKLinePtrs& klines, int addcount, int chgcount)
+void CMacdDivergenceItem::UpdateKlines(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs& klines, int addcount, int chgcount)
 {
 	// 本回合数据
 	int beginPos = int(klines.size()) - (chgcount + addcount);
@@ -220,7 +244,7 @@ void CMacdDivergenceItem::UpdateKlines(Time_Type timeType, const IBKLinePtrs& kl
 
 		if (pos->second->divType == DivergenceType::Normal) continue;
 
-		DivergenceArrow divergenceArrow = MakeOneArrow(i, pos->second);
+		DivergenceArrow divergenceArrow = MakeOneArrow(codeId, timeType, i, pos->second);
 		SetupArrowAtIndex(i, divergenceArrow);
 	}
 

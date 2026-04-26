@@ -186,7 +186,8 @@ void CMouseMoveItems::DrawCrossLine(QMouseEvent* event, const IBKLinePtrs& kline
 
 	// 绘制十字虚线注释
 	std::string timestr = CGlobal::GetTickTimeStr(kline->time);
-	QString time = CQtGlobal::StdString_QString(timestr);
+	std::string weekday = CGlobal::GetTickTimeWeekDay(kline->time);
+	QString time = CQtGlobal::StdString_QString(timestr + " " + weekday);
 
 	m_crossLineItems->hTextItem->setText(time);
 	m_crossLineItems->hTextItem->position->setCoords(x, GetY()->range().lower); // 设置水平虚线与纵轴相交点的位置

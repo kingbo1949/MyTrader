@@ -69,6 +69,7 @@ set(KLINESHAPE_LIST
         klineShape/ScanKShape_Stock.h
         klineShape/ScanKShape_BreakMix.cpp
         klineShape/ScanKShape_BreakMix.h
+
 )
 set(QCUSTOMPLOT_LIST
         qcustomplot/qcustomplot.h
@@ -115,6 +116,8 @@ set(SRC_LIST
         src/PlotContainer.h
         src/PlotObject.cpp
         src/PlotObject.h
+        src/CheckSync.h
+        src/CheckSync.cpp
 
         ui/AnalystGui.ui
         resources/AnalystGui.qrc

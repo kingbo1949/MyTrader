@@ -63,6 +63,7 @@ std::string CTransToStr::Get_ExchangePl(ExchangePl exchangePl)
 	if (exchangePl == ExchangePl::CME) return "CME";
 	if (exchangePl == ExchangePl::COMEX) return "COMEX";
 	if (exchangePl == ExchangePl::CBOE) return "CBOE";
+	if (exchangePl == ExchangePl::BATS) return "BATS";
 
 	Log_Print(LogLevel::Err, fmt::format("unknows ExchangePl Type:{}", int(exchangePl)));
 	exit(-1);
@@ -79,6 +80,7 @@ ExchangePl CTransToStr::Get_ExchangePl(const std::string& exchangePlStr)
 	if (exchangePlStr == "CME") return ExchangePl::CME;
 	if (exchangePlStr == "COMEX") return ExchangePl::COMEX;
 	if (exchangePlStr == "CBOE") return ExchangePl::CBOE;
+	if (exchangePlStr == "BATS") return ExchangePl::BATS;
 
 	Log_Print(LogLevel::Err, fmt::format("unknows ExchangePl Type:{}", exchangePlStr.c_str()));
 	exit(-1);
