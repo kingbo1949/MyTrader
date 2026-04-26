@@ -56,12 +56,16 @@ void CFixOneDayQuote::Go()
 
 	if (!canUpdate && !HaveErrInIBQuote(m_contract->codeId, m_dayTimeMs)) return;
 
+	bool isIndex = (m_contract->securityType == SecurityType::INDEX);
+
 	//CAppFuncs::UpdateToDb(m_contract->codeId, Time_Type::M1, klines_M1);
 	//CAppFuncs::UpdateToDb(m_contract->codeId, Time_Type::M5, klines_M5);
 	//CAppFuncs::UpdateToDb(m_contract->codeId, Time_Type::M15, klines_M15);
-	CAppFuncs::UpdateToDb(m_contract->codeId, Time_Type::M30, klines_M30);
-	CAppFuncs::UpdateToDb(m_contract->codeId, Time_Type::H1, klines_H1);
-	MakeAndGet_QDatabase()->UpdateKLine(m_contract->codeId, Time_Type::D1, m_dayKlineIb);
+	CAppFuncs::UpdateToDb(m_contract->codeId, isIndex, Time_Type::M30, klines_M30);
+	CAppFuncs::UpdateToDb(m_contract->codeId, isIndex, Time_Type::H1, klines_H1);
+
+
+	MakeAndGet_QDatabase()->UpdateKLine(m_contract->codeId, isIndex, Time_Type::D1, m_dayKlineIb);
 
 	return;
 }

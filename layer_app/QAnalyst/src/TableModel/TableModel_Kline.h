@@ -26,7 +26,20 @@ public:
 		Ma200 = 15,			// 200周期均线
 		PreDayHigh = 16,	// 上日最高价
 		PreDayLow = 17,		// 上日最低价
-		PreDayClose = 18	// 上日收盘
+		PreDayClose = 18,	// 上日收盘
+		TimeI = 19,			// 指数时间
+		OpenI = 20,
+		HighI = 21,
+		LowI = 22,
+		CloseI = 23,
+		VolI = 24,
+		DifI = 25,			// 指数的dif
+		DeaI = 26,			// 指数的dea
+		MacdI = 27,			// 指数的macd
+		DivTypeI = 28,		// 指数的divType
+		IsUTurnI = 29		// 指数的isUTurn
+
+
 	};
 
 

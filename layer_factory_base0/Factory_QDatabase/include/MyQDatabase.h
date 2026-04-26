@@ -20,7 +20,7 @@ public:
 
 	// --------------- 实时TICK行情 ---------------------
 	// 更新行情数据库
-	virtual void			UpdateTicks(IBTickPtr tick) = 0;
+	virtual void			UpdateTicks(IBTickPtr tick, bool isIndex) = 0;
 
 	// 查询最近更新到行情数据库的情况
 	virtual IBTickPtr		GetLastUpdateTick(int& updateCount, time_t& recentUpdateSecnd) = 0;
@@ -51,10 +51,10 @@ public:
 
 	// --------------- kline 表 ---------------------
 	// 更新单品种数据
-	virtual void			UpdateKLine(const CodeStr& codeId, Time_Type timeType, IBKLinePtr kline) = 0;
+	virtual void			UpdateKLine(const CodeStr& codeId, bool isIndex, Time_Type timeType, IBKLinePtr kline) = 0;
 
 	// 更新单品种数据
-	virtual void			UpdateKLinesByLoop(const CodeStr& codeId, Time_Type timeType, const IBKLinePtrs& klines) = 0;
+	virtual void			UpdateKLinesByLoop(const CodeStr& codeId, bool isIndex, Time_Type timeType, const IBKLinePtrs& klines) = 0;
 
 	// 不算当前K线，计算ma的值
 	virtual double			MakeMa(const CodeStr& codeId, Time_Type timeType, int circle, Tick_T currentTime) = 0;
@@ -82,7 +82,7 @@ public:
 	virtual IBKLinePairs	GetKLinePair(const CodeStr& firstcode, const CodeStr& secondcode, Time_Type timeType, const QQuery& query) = 0;
 
 	// 取无效的BAR
-	virtual IBKLinePtrs		GetInvalidKLines(const CodeStr& codeId, Time_Type timeType) = 0;
+	virtual IBKLinePtrs		GetInvalidKLines(const CodeStr& codeId, bool isIndex, Time_Type timeType) = 0;
 
 	// 取上一日日线
 	virtual IBKLinePtr		GetLastDayKLine(const CodeStr& codeId, Tick_T time) = 0;

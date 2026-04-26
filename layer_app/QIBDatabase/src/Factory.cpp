@@ -63,10 +63,10 @@ std::string Trans_Str(ITimeType timetype)
 	return back;
 }
 
-bool ValidKline(const std::string& codeId, ITimeType timetype, const IKLine& kline)
+bool ValidKline(const std::string& codeId, bool isIndex, ITimeType timetype, const IKLine& kline)
 {
 	// 成交量不为0
-	if (kline.vol == 0)
+	if (kline.vol == 0 && !isIndex)
 	{
 		//printf("invalid kline, %s vol == 0, %s, %s \n", codeId.c_str(), Trans_Str(timetype).c_str(), CGlobal::GetTickTimeStr(kline.time).c_str());
 		return false;

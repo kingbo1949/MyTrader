@@ -3,30 +3,6 @@
 
 module IBTrader
 {
-	// 交易所
-	enum IExchangePl
-	{
-		SMART,						// 智能选择交易所
-		SEHK,						// 香港证券交易所
-		NYSE,						// 纽约证券交易所
-		NASDAQ,						// 纳斯达克
-		ARCA						// 群岛交易所
-	};
-	// 币种标识
-	enum IMoney
-	{
-		RMB,						//人民币
-		USD,						//美元
-		HKD,						//港币å
-		GBP,						//英镑
-		JPY,						//日元
-		CAD,						//加拿大元
-		AUD,						//澳大利亚元
-		EUR,						//殴元
-		KRW,						//韩元
-	};
-
-
 
 	struct ITimePair
 	{
@@ -47,21 +23,6 @@ module IBTrader
 		long		tTime = 0;				// 时间(请求类型为2、3时使用)(毫秒) 数据区间为[... : tTime] 或者 [tTime : ...]
 		ITimePair	timePair;				// 时间段(请求类型为4时使用) 数据区间为[beginPos : endPos]的闭合区间
 	};
-
-	struct  IContract						// 合约
-	{
-		string			codeId = "";						// 品种代码
-		string			des = "";							// 商品描述
-
-		IExchangePl		exchangePl = SMART;					// 交易所
-		IExchangePl		primaryExchangePl = NASDAQ;			// 主交易所
-
-		IMoney			currencyID= USD;					// 货币ID(交易结算货币)
-		int				decDigits = 0;						// 小数点位数
-		double			minMove = 0.0;						// 最小价格变动
-
-	};
-	sequence<IContract> IContracts;
 
 	struct  IBidAsk
 	{
@@ -174,6 +135,29 @@ module IBTrader
 	}
 	sequence<IAtrValue> IAtrValues;
 
+
+	struct IIndexValue
+	{
+		long			time = 0;			// 毫秒
+
+		// k线部分
+        double			close = 0.0;
+        double			open = 0.0;
+        double			high = 0.0;
+        double			low = 0.0;
+        long 			vol = 0;
+
+		// macd部分
+		double			dif = 0.0;
+		double			dea = 0.0;
+		double			macd = 0.0 ;
+
+        // divType部分
+		IDivType		divType = NORMAL;
+		bool			isUTurn = false;	// 是否拐点型
+
+	};
+
 	struct IRichValue
 	{
 		long			time = 0;			// 毫秒
@@ -208,6 +192,9 @@ module IBTrader
         double			preDayHigh = 0.0;
         double			preDayLow = 0.0;
         double			preDayClose = 0.0;
+
+        bool            indexValid = false;
+        IIndexValue     indexValue;
 
 	}
 	sequence<IRichValue> IRichValues;

@@ -12,16 +12,16 @@ public:
 	CTickUpdator();
 	virtual ~CTickUpdator(void) { ; };
 
-	void UpdateTickToDB(const ITick& tick);
+	void UpdateTickToDB(const ITick& tick, bool isIndex);
 
 protected:
 	// 更新tick表
 	void UpdateTickToTickHis(const ITick& tick);
 
 	// 更新kline表
-	void UpdateTickToKLine(const ITick& tick);
+	void UpdateTickToKLine(const ITick& tick, bool isIndex);
 
-	void UpdateTickToKLine(const ITick& tick, ITimeType timeType);
+	void UpdateTickToKLine(const ITick& tick, bool isIndex, ITimeType timeType);
 
 
 

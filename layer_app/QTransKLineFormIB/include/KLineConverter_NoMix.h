@@ -18,7 +18,7 @@ public:
 protected:
 	void				QueryKLineInDb(const CodeStr& codeId, Time_Type timeType);
 
-	void				ConvertOneKLineFromIBToDb(const CodeStr& codeId, Time_Type timeType, TimePair timePair);
+	void				ConvertOneKLineFromIBToDb(const CodeStr& codeId, bool isIndex, Time_Type timeType, TimePair timePair);
 
 
 

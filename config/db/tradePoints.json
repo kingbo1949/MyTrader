@@ -53,5 +53,16 @@
 		"openEvening" : "20:00:00",
 		"openMorning" : "4:00:00",
 		"primaryExchangePl" : "COMEX"
+	},
+	{
+		"breakBegin" : "20:00:00",
+		"breakEnd" : "23:59:59",
+		"closeAfternoon" : "20:00:00",
+		"closeEvening" : "20:00:01",
+		"closeMorning" : "12:00:00",
+		"openAfternoon" : "12:00:01",
+		"openEvening" : "20:00:00",
+		"openMorning" : "4:00:00",
+		"primaryExchangePl" : "CBOE"
 	}
 ]

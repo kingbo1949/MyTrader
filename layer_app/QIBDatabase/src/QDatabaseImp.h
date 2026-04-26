@@ -16,7 +16,7 @@ public:
 	virtual int TaskCount(const ::Ice::Current& current) final;
 
 
-	virtual void UpdateTickToDB(ITick tick, const ::Ice::Current& current) override final;
+	virtual void UpdateTickToDB(ITick tick, bool isIndex, const ::Ice::Current& current) override final;
 
 	virtual ITick GetLastUpdateTick(int& updateCount, long long int& recentUpdateSecnd, const ::Ice::Current& current) override final;
 
@@ -35,9 +35,9 @@ public:
 
 
 	// kline表
-	virtual void UpdateKLine(::std::string codeId, ITimeType timeType, IKLine kline, const ::Ice::Current& current) override final;
+	virtual void UpdateKLine(::std::string codeId, bool isIndex, ITimeType timeType, IKLine kline, const ::Ice::Current& current) override final;
 
-	virtual void UpdateKLines(::std::string codeId, ITimeType timeType, IKLines klines, const ::Ice::Current& current) final;
+	virtual void UpdateKLines(::std::string codeId, bool isIndex, ITimeType timeType, IKLines klines, const ::Ice::Current& current) final;
 
 	virtual void RemoveAllKLines(::std::string codeId, ITimeType timeType, const ::Ice::Current& current) override final;
 
@@ -51,7 +51,7 @@ public:
 
 	virtual void GetKLinePairs(::std::string first, ::std::string second, ITimeType timeType, IQuery query, IKLinePairs& kLinePairs, const ::Ice::Current& current) override final;
 
-	virtual void GetInvalidKLines(::std::string codeId, ITimeType timeType, IKLines& klines, const ::Ice::Current& current) override final;
+	virtual void GetInvalidKLines(::std::string codeId, bool isIndex, ITimeType timeType, IKLines& klines, const ::Ice::Current& current) override final;
 
 	virtual bool GetLastDayKLine(::std::string codeId, long long int msTime, IKLine& kline, const ::Ice::Current& current) final;
 

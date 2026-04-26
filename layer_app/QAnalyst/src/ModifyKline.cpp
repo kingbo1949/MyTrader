@@ -4,10 +4,16 @@
 #include <Factory_QDatabase.h>
 #include <Global.h>
 #include <Log.h>
+#include <Factory_HashEnv.h>
 CModifyKline::CModifyKline(const CodeStr& codeId, Time_Type timeType, IBKLinePtrs klines)
 	:m_codeId(codeId), m_timeType(timeType), m_klines(klines)
 {
 	m_pTradeDay = Make_TradeDayObj(klines);
+
+	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(codeId.c_str());
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
+	m_isIndex = (contract->securityType == SecurityType::INDEX);
+
 }
 
 void CModifyKline::CheckHoliday()
@@ -133,7 +139,7 @@ void CModifyKline::PadingDay(Tick_T daytime)
 		kline->close = klines[0]->close;
 		kline->vol = 0;
 		std::string klinetime = CGlobal::GetTickTimeStr(i);
-		MakeAndGet_QDatabase()->UpdateKLine(m_codeId, Time_Type::M30, kline);
+		MakeAndGet_QDatabase()->UpdateKLine(m_codeId, m_isIndex, Time_Type::M30, kline);
 	}
 }
 
@@ -159,7 +165,7 @@ void CModifyKline::AddSpecaildata()
 
 		IBKLinePtr newKline = kline->Clone();
 		newKline->time += 30 * 60 * 1000;
-		MakeAndGet_QDatabase()->UpdateKLine(m_codeId, Time_Type::M30, newKline);
+		MakeAndGet_QDatabase()->UpdateKLine(m_codeId, m_isIndex, Time_Type::M30, newKline);
 
 	}
 	return;

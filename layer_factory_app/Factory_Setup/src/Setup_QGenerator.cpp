@@ -97,6 +97,7 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 	{ 
 		days = 5;	
 	}
+
 	time_t endSecond = Get_CurrentTime()->GetCurrentTime_second() + 10;
 
 	bool onlyRegularTime = false;	// 盘前盘后数据都需要查询
@@ -112,7 +113,11 @@ void CSetup_QGenerator::QueryAndUpdateKline(const CodeStr& codeId, Time_Type tim
 		MakeAndGet_QDatabase()->RemoveKLines(codeId, timeType, timePair);
 	}
 
-	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, klines);
+	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(codeId.c_str());
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
+	bool isIndex = (contract->securityType == SecurityType::INDEX);
+
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, isIndex, timeType, klines);
 
 	// 更新指标
 	if (!klines.empty())

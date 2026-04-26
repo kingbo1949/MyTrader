@@ -9,7 +9,10 @@
 CTableModel_Kline::CTableModel_Kline(IbContractPtr pContract)
 	:CTableModel(pContract)
 {
-	m_headers = { "Time", "Open", "High", "Low", "Close", "Vol", "Dif", "Dea", "Macd", "DivType", "IsUTurn", "Atr", "Ma5", "Ma20", "Ma60", "Ma200", "PreDayHigh", "PreDayLow", "PreDayClose"  };
+	m_headers = {
+		"Time", "Open", "High", "Low", "Close", "Vol", "Dif", "Dea", "Macd", "DivType", "IsUTurn", "Atr", "Ma5", "Ma20", "Ma60", "Ma200", "PreDayHigh", "PreDayLow", "PreDayClose",
+		"ITime", "IOpen","IHigh", "ILow", "IClose", "IVol", "IDif", "IDea", "IMacd", "IDivType", "IIsUTurn"
+	};
 }
 
 void CTableModel_Kline::QueryData(const TimeZoneOfCodeId& timeZone)
@@ -50,7 +53,6 @@ QVariant CTableModel_Kline::data(const QModelIndex& index, int role) const
 	{
 		std::string timestr = CGlobal::GetTickTimeStr(pRichData->time).c_str();
 		return CQtGlobal::StdString_QString(timestr);
-
 	}
 	if (klineRole == KLineRole::Open)
 	{
@@ -125,6 +127,58 @@ QVariant CTableModel_Kline::data(const QModelIndex& index, int role) const
 	if (klineRole == KLineRole::PreDayClose)
 	{
 		return QString::number(pRichData->preDayClose, 'f', 2);
+	}
+
+	if (pRichData->indexRichData)
+	{
+		if (klineRole == KLineRole::TimeI)
+		{
+			std::string timestr = CGlobal::GetTickTimeStr(pRichData->indexRichData->time).c_str();
+			return CQtGlobal::StdString_QString(timestr);
+		}
+		if (klineRole == KLineRole::OpenI)
+		{
+			return QString::number(pRichData->indexRichData->open, 'f', 2);
+		}
+		if (klineRole == KLineRole::HighI)
+		{
+			return QString::number(pRichData->indexRichData->high, 'f', 2);
+		}
+		if (klineRole == KLineRole::LowI)
+		{
+			return QString::number(pRichData->indexRichData->low, 'f', 2);
+		}
+		if (klineRole == KLineRole::CloseI)
+		{
+			return QString::number(pRichData->indexRichData->close, 'f', 2);
+		}
+		if (klineRole == KLineRole::VolI)
+		{
+			return QString::number(pRichData->indexRichData->vol);
+		}
+		if (klineRole == KLineRole::DifI)
+		{
+			return QString::number(pRichData->indexRichData->dif, 'f', 2);
+		}
+		if (klineRole == KLineRole::DeaI)
+		{
+			return QString::number(pRichData->indexRichData->dea, 'f', 2);
+		}
+		if (klineRole == KLineRole::MacdI)
+		{
+			return QString::number(pRichData->indexRichData->macd, 'f', 2);
+		}
+		if (klineRole == KLineRole::DivTypeI)
+		{
+			std::string str = CTransToStr::Get_DivergenceType(pRichData->indexRichData->divType);
+			return CQtGlobal::StdString_QString(str);
+		}
+		if (klineRole == KLineRole::IsUTurnI)
+		{
+			return pRichData->indexRichData->isUTurn ? "1" : "0";
+		}
+
+
 	}
 
 	return QVariant();

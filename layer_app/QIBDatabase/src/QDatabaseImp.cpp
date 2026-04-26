@@ -28,13 +28,13 @@ int CQDatabaseImp::TaskCount(const ::Ice::Current& current)
 	return MakeAndGet_MyThreadPool()->taskCount();
 }
 
-void CQDatabaseImp::UpdateTickToDB(ITick tick, const::Ice::Current& current)
+void CQDatabaseImp::UpdateTickToDB(ITick tick, bool isIndex, const::Ice::Current& current)
 {
 	//printf("rec tick, %s, %s \n",
 	//	CGlobal::GetTickTimeStr(tick.time).c_str(),
 	//	tick.codeId.c_str()
 	//	);
-	m_pTickUpdator->UpdateTickToDB(tick);
+	m_pTickUpdator->UpdateTickToDB(tick, isIndex);
 
 	m_updateCount++;
 	m_recentUpdateSecnd = time(nullptr);
@@ -90,19 +90,19 @@ bool CQDatabaseImp::GetOneTick(::std::string codeId, long long int timePos, ITic
 }
 
 
-void CQDatabaseImp::UpdateKLine(::std::string codeId, ITimeType timeType, IKLine kline, const::Ice::Current& current)
+void CQDatabaseImp::UpdateKLine(::std::string codeId, bool isIndex, ITimeType timeType, IKLine kline, const::Ice::Current& current)
 {
-	if (!ValidKline(codeId, timeType, kline)) return;
+	if (!ValidKline(codeId, isIndex, timeType, kline)) return;
 	MakeAndGet_Env()->GetDB_KLine()->AddOne(codeId, timeType, kline);
 	// Log_Print(LogLevel::Info, fmt::format("{}", GetKlineStr(kline).c_str() ));
 }
 
-void CQDatabaseImp::UpdateKLines(std::string codeId, ITimeType timeType, IKLines klines, const Ice::Current &current)
+void CQDatabaseImp::UpdateKLines(std::string codeId, bool isIndex, ITimeType timeType, IKLines klines, const Ice::Current &current)
 {
 	IKLines temKines;
 	for (const auto& kline : klines)
 	{
-		if (!ValidKline(codeId, timeType, kline)) continue;
+		if (!ValidKline(codeId, isIndex, timeType, kline)) continue;
 		temKines.push_back(kline);
 	}
 	MakeAndGet_Env()->GetDB_KLine()->AddSome(codeId, timeType, temKines);
@@ -143,7 +143,7 @@ void CQDatabaseImp::GetKLinePairs(::std::string first, ::std::string second, ITi
 
 }
 
-void CQDatabaseImp::GetInvalidKLines(::std::string codeId, ITimeType timeType, IKLines& klines, const::Ice::Current& current)
+void CQDatabaseImp::GetInvalidKLines(::std::string codeId, bool isIndex, ITimeType timeType, IKLines& klines, const::Ice::Current& current)
 {
 	IQuery query;
 	query.byReqType = 1;	// 查询所有数据
@@ -152,7 +152,7 @@ void CQDatabaseImp::GetInvalidKLines(::std::string codeId, ITimeType timeType, I
 	MakeAndGet_Env()->GetDB_KLine()->GetKLines(codeId, timeType, query, klineAll);
 	for (const auto& kline : klineAll)
 	{
-		if (!ValidKline(codeId, timeType, kline))
+		if (!ValidKline(codeId, isIndex, timeType, kline))
 		{
 			klines.push_back(kline);
 		}

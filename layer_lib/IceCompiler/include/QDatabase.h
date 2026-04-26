@@ -109,7 +109,7 @@ public:
     bool _iceD_TaskCount(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void UpdateTickToDB(ITick tick, const ::Ice::Current& current) = 0;
+    virtual void UpdateTickToDB(ITick tick, bool isIndex, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateTickToDB(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
@@ -163,12 +163,12 @@ public:
     bool _iceD_GetOneTick(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void UpdateKLine(::std::string codeId, ITimeType timeType, IKLine kline, const ::Ice::Current& current) = 0;
+    virtual void UpdateKLine(::std::string codeId, bool isIndex, ITimeType timeType, IKLine kline, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateKLine(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void UpdateKLines(::std::string codeId, ITimeType timeType, IKLines klines, const ::Ice::Current& current) = 0;
+    virtual void UpdateKLines(::std::string codeId, bool isIndex, ITimeType timeType, IKLines klines, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateKLines(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
@@ -212,7 +212,7 @@ public:
     bool _iceD_GetKLinePairs(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void GetInvalidKLines(::std::string codeId, ITimeType timeType, IKLines& klines, const ::Ice::Current& current) = 0;
+    virtual void GetInvalidKLines(::std::string codeId, bool isIndex, ITimeType timeType, IKLines& klines, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_GetInvalidKLines(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
@@ -463,30 +463,30 @@ public:
     void _iceI_TaskCount(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<int>>&, const ::Ice::Context&);
     /// \endcond
 
-    void UpdateTickToDB(const ITick& tick, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void UpdateTickToDB(const ITick& tick, bool isIndex, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateTickToDB, tick, context).get();
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateTickToDB, tick, isIndex, context).get();
     }
 
     template<template<typename> class P = ::std::promise>
-    auto UpdateTickToDBAsync(const ITick& tick, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    auto UpdateTickToDBAsync(const ITick& tick, bool isIndex, const ::Ice::Context& context = ::Ice::noExplicitContext)
         -> decltype(::std::declval<P<void>>().get_future())
     {
-        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateTickToDB, tick, context);
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateTickToDB, tick, isIndex, context);
     }
 
     ::std::function<void()>
-    UpdateTickToDBAsync(const ITick& tick,
+    UpdateTickToDBAsync(const ITick& tick, bool isIndex,
                         ::std::function<void()> response,
                         ::std::function<void(::std::exception_ptr)> ex = nullptr,
                         ::std::function<void(bool)> sent = nullptr,
                         const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateTickToDB, tick, context);
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateTickToDB, tick, isIndex, context);
     }
 
     /// \cond INTERNAL
-    void _iceI_UpdateTickToDB(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ITick&, const ::Ice::Context&);
+    void _iceI_UpdateTickToDB(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ITick&, bool, const ::Ice::Context&);
     /// \endcond
 
     ITick GetLastUpdateTick(int& updateCount, long long int& recentUpdateSecnd, const ::Ice::Context& context = ::Ice::noExplicitContext)
@@ -657,56 +657,56 @@ public:
     void _iceI_GetOneTick(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneTickResult>>&, const ::std::string&, long long int, const ::Ice::Context&);
     /// \endcond
 
-    void UpdateKLine(const ::std::string& codeId, ITimeType timeType, const IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void UpdateKLine(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateKLine, codeId, timeType, kline, context).get();
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateKLine, codeId, isIndex, timeType, kline, context).get();
     }
 
     template<template<typename> class P = ::std::promise>
-    auto UpdateKLineAsync(const ::std::string& codeId, ITimeType timeType, const IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    auto UpdateKLineAsync(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
         -> decltype(::std::declval<P<void>>().get_future())
     {
-        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateKLine, codeId, timeType, kline, context);
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateKLine, codeId, isIndex, timeType, kline, context);
     }
 
     ::std::function<void()>
-    UpdateKLineAsync(const ::std::string& codeId, ITimeType timeType, const IKLine& kline,
+    UpdateKLineAsync(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLine& kline,
                      ::std::function<void()> response,
                      ::std::function<void(::std::exception_ptr)> ex = nullptr,
                      ::std::function<void(bool)> sent = nullptr,
                      const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateKLine, codeId, timeType, kline, context);
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateKLine, codeId, isIndex, timeType, kline, context);
     }
 
     /// \cond INTERNAL
-    void _iceI_UpdateKLine(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, const IKLine&, const ::Ice::Context&);
+    void _iceI_UpdateKLine(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, bool, ITimeType, const IKLine&, const ::Ice::Context&);
     /// \endcond
 
-    void UpdateKLines(const ::std::string& codeId, ITimeType timeType, const IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void UpdateKLines(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateKLines, codeId, timeType, klines, context).get();
+        _makePromiseOutgoing<void>(true, this, &IQDatabasePrx::_iceI_UpdateKLines, codeId, isIndex, timeType, klines, context).get();
     }
 
     template<template<typename> class P = ::std::promise>
-    auto UpdateKLinesAsync(const ::std::string& codeId, ITimeType timeType, const IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    auto UpdateKLinesAsync(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
         -> decltype(::std::declval<P<void>>().get_future())
     {
-        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateKLines, codeId, timeType, klines, context);
+        return _makePromiseOutgoing<void, P>(false, this, &IQDatabasePrx::_iceI_UpdateKLines, codeId, isIndex, timeType, klines, context);
     }
 
     ::std::function<void()>
-    UpdateKLinesAsync(const ::std::string& codeId, ITimeType timeType, const IKLines& klines,
+    UpdateKLinesAsync(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLines& klines,
                       ::std::function<void()> response,
                       ::std::function<void(::std::exception_ptr)> ex = nullptr,
                       ::std::function<void(bool)> sent = nullptr,
                       const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateKLines, codeId, timeType, klines, context);
+        return _makeLamdaOutgoing<void>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_UpdateKLines, codeId, isIndex, timeType, klines, context);
     }
 
     /// \cond INTERNAL
-    void _iceI_UpdateKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, ITimeType, const IKLines&, const ::Ice::Context&);
+    void _iceI_UpdateKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, bool, ITimeType, const IKLines&, const ::Ice::Context&);
     /// \endcond
 
     void RemoveAllKLines(const ::std::string& codeId, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
@@ -871,30 +871,30 @@ public:
     void _iceI_GetKLinePairs(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IKLinePairs>>&, const ::std::string&, const ::std::string&, ITimeType, const IQuery&, const ::Ice::Context&);
     /// \endcond
 
-    void GetInvalidKLines(const ::std::string& codeId, ITimeType timeType, IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void GetInvalidKLines(const ::std::string& codeId, bool isIndex, ITimeType timeType, IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        klines = _makePromiseOutgoing<::IBTrader::IKLines>(true, this, &IQDatabasePrx::_iceI_GetInvalidKLines, codeId, timeType, context).get();
+        klines = _makePromiseOutgoing<::IBTrader::IKLines>(true, this, &IQDatabasePrx::_iceI_GetInvalidKLines, codeId, isIndex, timeType, context).get();
     }
 
     template<template<typename> class P = ::std::promise>
-    auto GetInvalidKLinesAsync(const ::std::string& codeId, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    auto GetInvalidKLinesAsync(const ::std::string& codeId, bool isIndex, ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
         -> decltype(::std::declval<P<::IBTrader::IKLines>>().get_future())
     {
-        return _makePromiseOutgoing<::IBTrader::IKLines, P>(false, this, &IQDatabasePrx::_iceI_GetInvalidKLines, codeId, timeType, context);
+        return _makePromiseOutgoing<::IBTrader::IKLines, P>(false, this, &IQDatabasePrx::_iceI_GetInvalidKLines, codeId, isIndex, timeType, context);
     }
 
     ::std::function<void()>
-    GetInvalidKLinesAsync(const ::std::string& codeId, ITimeType timeType,
+    GetInvalidKLinesAsync(const ::std::string& codeId, bool isIndex, ITimeType timeType,
                           ::std::function<void(::IBTrader::IKLines)> response,
                           ::std::function<void(::std::exception_ptr)> ex = nullptr,
                           ::std::function<void(bool)> sent = nullptr,
                           const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _makeLamdaOutgoing<::IBTrader::IKLines>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_GetInvalidKLines, codeId, timeType, context);
+        return _makeLamdaOutgoing<::IBTrader::IKLines>(std::move(response), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_GetInvalidKLines, codeId, isIndex, timeType, context);
     }
 
     /// \cond INTERNAL
-    void _iceI_GetInvalidKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IKLines>>&, const ::std::string&, ITimeType, const ::Ice::Context&);
+    void _iceI_GetInvalidKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IKLines>>&, const ::std::string&, bool, ITimeType, const ::Ice::Context&);
     /// \endcond
 
     bool GetLastDayKLine(const ::std::string& codeId, long long int msTime, IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
@@ -1873,41 +1873,41 @@ private:
 
 public:
 
-    void UpdateTickToDB(const ::IBTrader::ITick& tick, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void UpdateTickToDB(const ::IBTrader::ITick& tick, bool isIndex, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        end_UpdateTickToDB(_iceI_begin_UpdateTickToDB(tick, context, ::IceInternal::dummyCallback, 0, true));
+        end_UpdateTickToDB(_iceI_begin_UpdateTickToDB(tick, isIndex, context, ::IceInternal::dummyCallback, 0, true));
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, bool isIndex, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _iceI_begin_UpdateTickToDB(tick, context, ::IceInternal::dummyCallback, 0);
+        return _iceI_begin_UpdateTickToDB(tick, isIndex, context, ::IceInternal::dummyCallback, 0);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, bool isIndex, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateTickToDB(tick, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_UpdateTickToDB(tick, isIndex, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, bool isIndex, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateTickToDB(tick, context, cb, cookie);
+        return _iceI_begin_UpdateTickToDB(tick, isIndex, context, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, const ::IBTrader::Callback_IQDatabase_UpdateTickToDBPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, bool isIndex, const ::IBTrader::Callback_IQDatabase_UpdateTickToDBPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateTickToDB(tick, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_UpdateTickToDB(tick, isIndex, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateTickToDBPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateTickToDB(const ::IBTrader::ITick& tick, bool isIndex, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateTickToDBPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateTickToDB(tick, context, cb, cookie);
+        return _iceI_begin_UpdateTickToDB(tick, isIndex, context, cb, cookie);
     }
 
     void end_UpdateTickToDB(const ::Ice::AsyncResultPtr& result);
 
 private:
 
-    ::Ice::AsyncResultPtr _iceI_begin_UpdateTickToDB(const ::IBTrader::ITick&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+    ::Ice::AsyncResultPtr _iceI_begin_UpdateTickToDB(const ::IBTrader::ITick&, bool, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -2151,79 +2151,79 @@ private:
 
 public:
 
-    void UpdateKLine(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void UpdateKLine(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        end_UpdateKLine(_iceI_begin_UpdateKLine(codeId, timeType, kline, context, ::IceInternal::dummyCallback, 0, true));
+        end_UpdateKLine(_iceI_begin_UpdateKLine(codeId, isIndex, timeType, kline, context, ::IceInternal::dummyCallback, 0, true));
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _iceI_begin_UpdateKLine(codeId, timeType, kline, context, ::IceInternal::dummyCallback, 0);
+        return _iceI_begin_UpdateKLine(codeId, isIndex, timeType, kline, context, ::IceInternal::dummyCallback, 0);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLine(codeId, timeType, kline, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_UpdateKLine(codeId, isIndex, timeType, kline, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLine(codeId, timeType, kline, context, cb, cookie);
+        return _iceI_begin_UpdateKLine(codeId, isIndex, timeType, kline, context, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::IBTrader::Callback_IQDatabase_UpdateKLinePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::IBTrader::Callback_IQDatabase_UpdateKLinePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLine(codeId, timeType, kline, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_UpdateKLine(codeId, isIndex, timeType, kline, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateKLinePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLine(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLine& kline, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateKLinePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLine(codeId, timeType, kline, context, cb, cookie);
+        return _iceI_begin_UpdateKLine(codeId, isIndex, timeType, kline, context, cb, cookie);
     }
 
     void end_UpdateKLine(const ::Ice::AsyncResultPtr& result);
 
 private:
 
-    ::Ice::AsyncResultPtr _iceI_begin_UpdateKLine(const ::std::string&, ::IBTrader::ITimeType, const ::IBTrader::IKLine&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+    ::Ice::AsyncResultPtr _iceI_begin_UpdateKLine(const ::std::string&, bool, ::IBTrader::ITimeType, const ::IBTrader::IKLine&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
-    void UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void UpdateKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        end_UpdateKLines(_iceI_begin_UpdateKLines(codeId, timeType, klines, context, ::IceInternal::dummyCallback, 0, true));
+        end_UpdateKLines(_iceI_begin_UpdateKLines(codeId, isIndex, timeType, klines, context, ::IceInternal::dummyCallback, 0, true));
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _iceI_begin_UpdateKLines(codeId, timeType, klines, context, ::IceInternal::dummyCallback, 0);
+        return _iceI_begin_UpdateKLines(codeId, isIndex, timeType, klines, context, ::IceInternal::dummyCallback, 0);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLines(codeId, timeType, klines, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_UpdateKLines(codeId, isIndex, timeType, klines, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLines(codeId, timeType, klines, context, cb, cookie);
+        return _iceI_begin_UpdateKLines(codeId, isIndex, timeType, klines, context, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::IBTrader::Callback_IQDatabase_UpdateKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::IBTrader::Callback_IQDatabase_UpdateKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLines(codeId, timeType, klines, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_UpdateKLines(codeId, isIndex, timeType, klines, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_UpdateKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::IKLines& klines, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_UpdateKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_UpdateKLines(codeId, timeType, klines, context, cb, cookie);
+        return _iceI_begin_UpdateKLines(codeId, isIndex, timeType, klines, context, cb, cookie);
     }
 
     void end_UpdateKLines(const ::Ice::AsyncResultPtr& result);
 
 private:
 
-    ::Ice::AsyncResultPtr _iceI_begin_UpdateKLines(const ::std::string&, ::IBTrader::ITimeType, const ::IBTrader::IKLines&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+    ::Ice::AsyncResultPtr _iceI_begin_UpdateKLines(const ::std::string&, bool, ::IBTrader::ITimeType, const ::IBTrader::IKLines&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -2467,34 +2467,34 @@ private:
 
 public:
 
-    void GetInvalidKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void GetInvalidKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, ::IBTrader::IKLines& klines, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        end_GetInvalidKLines(klines, _iceI_begin_GetInvalidKLines(codeId, timeType, context, ::IceInternal::dummyCallback, 0, true));
+        end_GetInvalidKLines(klines, _iceI_begin_GetInvalidKLines(codeId, isIndex, timeType, context, ::IceInternal::dummyCallback, 0, true));
     }
 
-    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
-        return _iceI_begin_GetInvalidKLines(codeId, timeType, context, ::IceInternal::dummyCallback, 0);
+        return _iceI_begin_GetInvalidKLines(codeId, isIndex, timeType, context, ::IceInternal::dummyCallback, 0);
     }
 
-    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_GetInvalidKLines(codeId, timeType, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_GetInvalidKLines(codeId, isIndex, timeType, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_GetInvalidKLines(codeId, timeType, context, cb, cookie);
+        return _iceI_begin_GetInvalidKLines(codeId, isIndex, timeType, context, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::IBTrader::Callback_IQDatabase_GetInvalidKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::IBTrader::Callback_IQDatabase_GetInvalidKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_GetInvalidKLines(codeId, timeType, ::Ice::noExplicitContext, cb, cookie);
+        return _iceI_begin_GetInvalidKLines(codeId, isIndex, timeType, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_GetInvalidKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_GetInvalidKLines(const ::std::string& codeId, bool isIndex, ::IBTrader::ITimeType timeType, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_GetInvalidKLinesPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
-        return _iceI_begin_GetInvalidKLines(codeId, timeType, context, cb, cookie);
+        return _iceI_begin_GetInvalidKLines(codeId, isIndex, timeType, context, cb, cookie);
     }
 
     void end_GetInvalidKLines(::IBTrader::IKLines& klines, const ::Ice::AsyncResultPtr& result);
@@ -2505,7 +2505,7 @@ public:
 
 private:
 
-    ::Ice::AsyncResultPtr _iceI_begin_GetInvalidKLines(const ::std::string&, ::IBTrader::ITimeType, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+    ::Ice::AsyncResultPtr _iceI_begin_GetInvalidKLines(const ::std::string&, bool, ::IBTrader::ITimeType, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -3293,7 +3293,7 @@ public:
     bool _iceD_TaskCount(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void UpdateTickToDB(const ITick& tick, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    virtual void UpdateTickToDB(const ITick& tick, bool isIndex, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateTickToDB(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
@@ -3328,12 +3328,12 @@ public:
     bool _iceD_GetOneTick(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void UpdateKLine(const ::std::string& codeId, ITimeType timeType, const IKLine& kline, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    virtual void UpdateKLine(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLine& kline, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateKLine(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void UpdateKLines(const ::std::string& codeId, ITimeType timeType, const IKLines& klines, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    virtual void UpdateKLines(const ::std::string& codeId, bool isIndex, ITimeType timeType, const IKLines& klines, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_UpdateKLines(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
@@ -3368,7 +3368,7 @@ public:
     bool _iceD_GetKLinePairs(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
-    virtual void GetInvalidKLines(const ::std::string& codeId, ITimeType timeType, IKLines& klines, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    virtual void GetInvalidKLines(const ::std::string& codeId, bool isIndex, ITimeType timeType, IKLines& klines, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_GetInvalidKLines(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond

@@ -17,6 +17,7 @@ public:
     virtual int TaskCount(const Ice::Current&) override;
 
     virtual void UpdateTickToDB(ITick,
+                                bool,
                                 const Ice::Current&) override;
 
     virtual ITick GetLastUpdateTick(int&,
@@ -47,11 +48,13 @@ public:
                             const Ice::Current&) override;
 
     virtual void UpdateKLine(::std::string,
+                             bool,
                              ITimeType,
                              IKLine,
                              const Ice::Current&) override;
 
     virtual void UpdateKLines(::std::string,
+                              bool,
                               ITimeType,
                               IKLines,
                               const Ice::Current&) override;
@@ -91,6 +94,7 @@ public:
                                const Ice::Current&) override;
 
     virtual void GetInvalidKLines(::std::string,
+                                  bool,
                                   ITimeType,
                                   IKLines&,
                                   const Ice::Current&) override;

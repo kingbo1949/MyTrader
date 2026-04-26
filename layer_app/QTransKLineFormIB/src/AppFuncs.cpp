@@ -57,7 +57,7 @@ void CAppFuncs::PrintErr_HighLow_Klines(Time_Type timeType, const HighAndLow& kl
 	Log_Print(LogLevel::Warn, str);
 }
 
-void CAppFuncs::UpdateToDb(const std::string& codeId, Time_Type timeType, const IBKLinePtrs& klines)
+void CAppFuncs::UpdateToDb(const std::string& codeId, bool isIndex, Time_Type timeType, const IBKLinePtrs& klines)
 {
 	if (!klines.empty())
 	{
@@ -67,7 +67,7 @@ void CAppFuncs::UpdateToDb(const std::string& codeId, Time_Type timeType, const 
 		MakeAndGet_QDatabase()->RemoveKLines(codeId, timeType, timePair);
 
 	}
-	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, klines);
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, isIndex, timeType, klines);
 
 	return;
 

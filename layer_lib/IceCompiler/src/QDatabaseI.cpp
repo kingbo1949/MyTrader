@@ -21,6 +21,7 @@ IBTrader::IQDatabaseI::TaskCount(const Ice::Current& current)
 
 void
 IBTrader::IQDatabaseI::UpdateTickToDB(ITick /*tick*/,
+                                      bool /*isIndex*/,
                                       const Ice::Current& current)
 {
 }
@@ -78,6 +79,7 @@ IBTrader::IQDatabaseI::GetOneTick(::std::string /*codeId*/,
 
 void
 IBTrader::IQDatabaseI::UpdateKLine(::std::string /*codeId*/,
+                                   bool /*isIndex*/,
                                    ITimeType /*timeType*/,
                                    IKLine /*kline*/,
                                    const Ice::Current& current)
@@ -86,6 +88,7 @@ IBTrader::IQDatabaseI::UpdateKLine(::std::string /*codeId*/,
 
 void
 IBTrader::IQDatabaseI::UpdateKLines(::std::string /*codeId*/,
+                                    bool /*isIndex*/,
                                     ITimeType /*timeType*/,
                                     IKLines /*klines*/,
                                     const Ice::Current& current)
@@ -150,6 +153,7 @@ IBTrader::IQDatabaseI::GetKLinePairs(::std::string /*first*/,
 
 void
 IBTrader::IQDatabaseI::GetInvalidKLines(::std::string /*codeId*/,
+                                        bool /*isIndex*/,
                                         ITimeType /*timeType*/,
                                         IKLines& klines,
                                         const Ice::Current& current)

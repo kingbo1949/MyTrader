@@ -34,6 +34,7 @@ std::string CTransToStr::Get_SecurityType(SecurityType securityType)
 {
 	if (securityType == SecurityType::STK) return "STK";
 	if (securityType == SecurityType::FUT) return "FUT";
+	if (securityType == SecurityType::INDEX) return "IND";
 
 	Log_Print(LogLevel::Err, fmt::format("unknows SecurityType Type:{}", int(securityType)));
 	exit(-1);
@@ -44,6 +45,7 @@ SecurityType CTransToStr::Get_SecurityType(const std::string& SecurityTypeStr)
 {
 	if (SecurityTypeStr == "STK") return SecurityType::STK;
 	if (SecurityTypeStr == "FUT") return SecurityType::FUT;
+	if (SecurityTypeStr == "IND") return SecurityType::INDEX;
 
 	Log_Print(LogLevel::Err, fmt::format("unknows SecurityType :{}", SecurityTypeStr.c_str()));
 	exit(-1);
@@ -60,6 +62,7 @@ std::string CTransToStr::Get_ExchangePl(ExchangePl exchangePl)
 	if (exchangePl == ExchangePl::ARCA) return "ARCA";
 	if (exchangePl == ExchangePl::CME) return "CME";
 	if (exchangePl == ExchangePl::COMEX) return "COMEX";
+	if (exchangePl == ExchangePl::CBOE) return "CBOE";
 
 	Log_Print(LogLevel::Err, fmt::format("unknows ExchangePl Type:{}", int(exchangePl)));
 	exit(-1);
@@ -75,6 +78,7 @@ ExchangePl CTransToStr::Get_ExchangePl(const std::string& exchangePlStr)
 	if (exchangePlStr == "ARCA") return ExchangePl::ARCA;
 	if (exchangePlStr == "CME") return ExchangePl::CME;
 	if (exchangePlStr == "COMEX") return ExchangePl::COMEX;
+	if (exchangePlStr == "CBOE") return ExchangePl::CBOE;
 
 	Log_Print(LogLevel::Err, fmt::format("unknows ExchangePl Type:{}", exchangePlStr.c_str()));
 	exit(-1);

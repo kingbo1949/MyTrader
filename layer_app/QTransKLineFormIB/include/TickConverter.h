@@ -15,7 +15,7 @@ public:
 
 protected:
 
-	void				ConvertTicksFromIBToDb(const CodeStr& codeId, time_t daySecond);
+	void				ConvertTicksFromIBToDb(const CodeStr& codeId, bool isIndex, time_t daySecond);
 
 	// 打印tick数目
 	void				QueryTickInDb(const CodeStr& codeId, time_t daySecond, MarketType marketType);

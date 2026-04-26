@@ -9,10 +9,10 @@ CTickUpdator::CTickUpdator()
 {
 }
 
-void CTickUpdator::UpdateTickToDB(const ITick& tick)
+void CTickUpdator::UpdateTickToDB(const ITick& tick, bool isIndex)
 {
-	//UpdateTickToTickHis(tick);
-	UpdateTickToKLine(tick);
+	//UpdateTickToTickHis(tick, isIndex);
+	UpdateTickToKLine(tick, isIndex);
 
 }
 
@@ -23,9 +23,9 @@ void CTickUpdator::UpdateTickToTickHis(const ITick& tick)
 	return;
 }
 
-void CTickUpdator::UpdateTickToKLine(const ITick& tick)
+void CTickUpdator::UpdateTickToKLine(const ITick& tick, bool isIndex)
 {
-	if (tick.vol == 0)
+	if (tick.vol == 0 && !isIndex)
 	{
 		printf("%s drop tick\n", tick.codeId.c_str());
 		return;
@@ -35,18 +35,18 @@ void CTickUpdator::UpdateTickToKLine(const ITick& tick)
 		// 只有期货需要15秒线
 		//UpdateTickToKLine(tick, ITimeType::S15);
 	}
-	UpdateTickToKLine(tick, ITimeType::M1);
-	UpdateTickToKLine(tick, ITimeType::M5);
-	UpdateTickToKLine(tick, ITimeType::M15);
-	UpdateTickToKLine(tick, ITimeType::M30);
-	UpdateTickToKLine(tick, ITimeType::H1);
-	UpdateTickToKLine(tick, ITimeType::D1);
+	UpdateTickToKLine(tick, isIndex, ITimeType::M1);
+	UpdateTickToKLine(tick, isIndex,ITimeType::M5);
+	UpdateTickToKLine(tick, isIndex,ITimeType::M15);
+	UpdateTickToKLine(tick, isIndex,ITimeType::M30);
+	UpdateTickToKLine(tick, isIndex,ITimeType::H1);
+	UpdateTickToKLine(tick, isIndex,ITimeType::D1);
 	return;
 
 }
 
 
-void CTickUpdator::UpdateTickToKLine(const ITick& tick, ITimeType timeType)
+void CTickUpdator::UpdateTickToKLine(const ITick& tick, bool isIndex, ITimeType timeType)
 {
 	time_t	recordNo = CGetRecordNoForDb::GetRecordNo(timeType, tick.time);
 
@@ -74,7 +74,7 @@ void CTickUpdator::UpdateTickToKLine(const ITick& tick, ITimeType timeType)
 		kline.low = tick.last;
 		kline.vol = tick.vol;
 	}
-	if (!ValidKline(tick.codeId, timeType, kline))
+	if (!ValidKline(tick.codeId, isIndex, timeType, kline))
 	{
 		return;
 	}

@@ -5,6 +5,7 @@
 #include <Factory_Log.h>
 #include <Factory_UnifyInterface.h>
 #include <Factory_QDatabase.h>
+#include <Factory_HashEnv.h>
 
 void CDownloadData::Go()
 {
@@ -44,7 +45,12 @@ void CDownloadData::UpdateDbKLineFromIB(const std::string& codeId, Time_Type tim
 		if (kline->time >= now) continue;
 		temKlines.push_back(kline);
 	}
-	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, temKlines);
+
+	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(codeId.c_str());
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
+	bool isIndex = (contract->securityType == SecurityType::INDEX);
+
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, isIndex, timeType, temKlines);
 
 	// ����ָ��
 	if (!klines.empty())

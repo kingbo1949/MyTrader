@@ -208,9 +208,10 @@ IBTrader::IQDatabase::_iceD_UpdateTickToDB(::IceInternal::Incoming& inS, const :
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
     ITick iceP_tick;
-    istr->readAll(iceP_tick);
+    bool iceP_isIndex;
+    istr->readAll(iceP_tick, iceP_isIndex);
     inS.endReadParams();
-    this->UpdateTickToDB(::std::move(iceP_tick), current);
+    this->UpdateTickToDB(::std::move(iceP_tick), iceP_isIndex, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -326,11 +327,12 @@ IBTrader::IQDatabase::_iceD_UpdateKLine(::IceInternal::Incoming& inS, const ::Ic
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
     ::std::string iceP_codeId;
+    bool iceP_isIndex;
     ITimeType iceP_timeType;
     IKLine iceP_kline;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_kline);
+    istr->readAll(iceP_codeId, iceP_isIndex, iceP_timeType, iceP_kline);
     inS.endReadParams();
-    this->UpdateKLine(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_kline), current);
+    this->UpdateKLine(::std::move(iceP_codeId), iceP_isIndex, iceP_timeType, ::std::move(iceP_kline), current);
     inS.writeEmptyParams();
     return true;
 }
@@ -343,11 +345,12 @@ IBTrader::IQDatabase::_iceD_UpdateKLines(::IceInternal::Incoming& inS, const ::I
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
     ::std::string iceP_codeId;
+    bool iceP_isIndex;
     ITimeType iceP_timeType;
     IKLines iceP_klines;
-    istr->readAll(iceP_codeId, iceP_timeType, iceP_klines);
+    istr->readAll(iceP_codeId, iceP_isIndex, iceP_timeType, iceP_klines);
     inS.endReadParams();
-    this->UpdateKLines(::std::move(iceP_codeId), iceP_timeType, ::std::move(iceP_klines), current);
+    this->UpdateKLines(::std::move(iceP_codeId), iceP_isIndex, iceP_timeType, ::std::move(iceP_klines), current);
     inS.writeEmptyParams();
     return true;
 }
@@ -472,11 +475,12 @@ IBTrader::IQDatabase::_iceD_GetInvalidKLines(::IceInternal::Incoming& inS, const
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
     ::std::string iceP_codeId;
+    bool iceP_isIndex;
     ITimeType iceP_timeType;
-    istr->readAll(iceP_codeId, iceP_timeType);
+    istr->readAll(iceP_codeId, iceP_isIndex, iceP_timeType);
     inS.endReadParams();
     IKLines iceP_klines;
-    this->GetInvalidKLines(::std::move(iceP_codeId), iceP_timeType, iceP_klines, current);
+    this->GetInvalidKLines(::std::move(iceP_codeId), iceP_isIndex, iceP_timeType, iceP_klines, current);
     auto ostr = inS.startWriteParams();
     ostr->writeAll(iceP_klines);
     inS.endWriteParams();
@@ -1032,12 +1036,12 @@ IBTrader::IQDatabasePrx::_iceI_TaskCount(const ::std::shared_ptr<::IceInternal::
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_UpdateTickToDB(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ITick& iceP_tick, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_UpdateTickToDB(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ITick& iceP_tick, bool iceP_isIndex, const ::Ice::Context& context)
 {
     outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateTickToDB_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
-            ostr->writeAll(iceP_tick);
+            ostr->writeAll(iceP_tick, iceP_isIndex);
         },
         nullptr);
 }
@@ -1135,12 +1139,12 @@ IBTrader::IQDatabasePrx::_iceI_GetOneTick(const ::std::shared_ptr<::IceInternal:
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_UpdateKLine(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IKLine& iceP_kline, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_UpdateKLine(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, bool iceP_isIndex, ITimeType iceP_timeType, const IKLine& iceP_kline, const ::Ice::Context& context)
 {
     outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateKLine_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_kline);
+            ostr->writeAll(iceP_codeId, iceP_isIndex, iceP_timeType, iceP_kline);
         },
         nullptr);
 }
@@ -1148,12 +1152,12 @@ IBTrader::IQDatabasePrx::_iceI_UpdateKLine(const ::std::shared_ptr<::IceInternal
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_UpdateKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const IKLines& iceP_klines, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_UpdateKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_codeId, bool iceP_isIndex, ITimeType iceP_timeType, const IKLines& iceP_klines, const ::Ice::Context& context)
 {
     outAsync->invoke(iceC_IBTrader_IQDatabase_UpdateKLines_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
-            ostr->writeAll(iceP_codeId, iceP_timeType, iceP_klines);
+            ostr->writeAll(iceP_codeId, iceP_isIndex, iceP_timeType, iceP_klines);
         },
         nullptr);
 }
@@ -1248,13 +1252,13 @@ IBTrader::IQDatabasePrx::_iceI_GetKLinePairs(const ::std::shared_ptr<::IceIntern
 
 /// \cond INTERNAL
 void
-IBTrader::IQDatabasePrx::_iceI_GetInvalidKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IKLines>>& outAsync, const ::std::string& iceP_codeId, ITimeType iceP_timeType, const ::Ice::Context& context)
+IBTrader::IQDatabasePrx::_iceI_GetInvalidKLines(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::IBTrader::IKLines>>& outAsync, const ::std::string& iceP_codeId, bool iceP_isIndex, ITimeType iceP_timeType, const ::Ice::Context& context)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetInvalidKLines_name);
     outAsync->invoke(iceC_IBTrader_IQDatabase_GetInvalidKLines_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
         {
-            ostr->writeAll(iceP_codeId, iceP_timeType);
+            ostr->writeAll(iceP_codeId, iceP_isIndex, iceP_timeType);
         },
         nullptr);
 }
@@ -1778,7 +1782,7 @@ IceProxy::IBTrader::IQDatabase::end_TaskCount(const ::Ice::AsyncResultPtr& resul
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateTickToDB(const ::IBTrader::ITick& iceP_tick, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateTickToDB(const ::IBTrader::ITick& iceP_tick, bool iceP_isIndex, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateTickToDB_name, del, cookie, sync);
     try
@@ -1786,6 +1790,7 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateTickToDB(const ::IBTrader::ITi
         result->prepare(iceC_IBTrader_IQDatabase_UpdateTickToDB_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_tick);
+        ostr->write(iceP_isIndex);
         result->endWriteParams();
         result->invoke(iceC_IBTrader_IQDatabase_UpdateTickToDB_name);
     }
@@ -2069,7 +2074,7 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneTick(::IBTrader::ITick& ice
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateKLine(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IKLine& iceP_kline, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateKLine(const ::std::string& iceP_codeId, bool iceP_isIndex, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IKLine& iceP_kline, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateKLine_name, del, cookie, sync);
     try
@@ -2077,6 +2082,7 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateKLine(const ::std::string& ice
         result->prepare(iceC_IBTrader_IQDatabase_UpdateKLine_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
+        ostr->write(iceP_isIndex);
         ostr->write(iceP_timeType);
         ostr->write(iceP_kline);
         result->endWriteParams();
@@ -2096,7 +2102,7 @@ IceProxy::IBTrader::IQDatabase::end_UpdateKLine(const ::Ice::AsyncResultPtr& res
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateKLines(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IKLines& iceP_klines, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateKLines(const ::std::string& iceP_codeId, bool iceP_isIndex, ::IBTrader::ITimeType iceP_timeType, const ::IBTrader::IKLines& iceP_klines, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_UpdateKLines_name, del, cookie, sync);
     try
@@ -2104,6 +2110,7 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_UpdateKLines(const ::std::string& ic
         result->prepare(iceC_IBTrader_IQDatabase_UpdateKLines_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
+        ostr->write(iceP_isIndex);
         ostr->write(iceP_timeType);
         ostr->write(iceP_klines);
         result->endWriteParams();
@@ -2392,7 +2399,7 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetKLinePairs(::IBTrader::IKLineP
 }
 
 ::Ice::AsyncResultPtr
-IceProxy::IBTrader::IQDatabase::_iceI_begin_GetInvalidKLines(const ::std::string& iceP_codeId, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::IBTrader::IQDatabase::_iceI_begin_GetInvalidKLines(const ::std::string& iceP_codeId, bool iceP_isIndex, ::IBTrader::ITimeType iceP_timeType, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetInvalidKLines_name, sync);
     ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetInvalidKLines_name, del, cookie, sync);
@@ -2401,6 +2408,7 @@ IceProxy::IBTrader::IQDatabase::_iceI_begin_GetInvalidKLines(const ::std::string
         result->prepare(iceC_IBTrader_IQDatabase_GetInvalidKLines_name, ::Ice::Normal, context);
         ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
         ostr->write(iceP_codeId);
+        ostr->write(iceP_isIndex);
         ostr->write(iceP_timeType);
         result->endWriteParams();
         result->invoke(iceC_IBTrader_IQDatabase_GetInvalidKLines_name);
@@ -3561,9 +3569,11 @@ IBTrader::IQDatabase::_iceD_UpdateTickToDB(::IceInternal::Incoming& inS, const :
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
     ITick iceP_tick;
+    bool iceP_isIndex;
     istr->read(iceP_tick);
+    istr->read(iceP_isIndex);
     inS.endReadParams();
-    this->UpdateTickToDB(iceP_tick, current);
+    this->UpdateTickToDB(iceP_tick, iceP_isIndex, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -3688,13 +3698,15 @@ IBTrader::IQDatabase::_iceD_UpdateKLine(::IceInternal::Incoming& inS, const ::Ic
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
     ::std::string iceP_codeId;
+    bool iceP_isIndex;
     ITimeType iceP_timeType;
     IKLine iceP_kline;
     istr->read(iceP_codeId);
+    istr->read(iceP_isIndex);
     istr->read(iceP_timeType);
     istr->read(iceP_kline);
     inS.endReadParams();
-    this->UpdateKLine(iceP_codeId, iceP_timeType, iceP_kline, current);
+    this->UpdateKLine(iceP_codeId, iceP_isIndex, iceP_timeType, iceP_kline, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -3707,13 +3719,15 @@ IBTrader::IQDatabase::_iceD_UpdateKLines(::IceInternal::Incoming& inS, const ::I
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
     ::std::string iceP_codeId;
+    bool iceP_isIndex;
     ITimeType iceP_timeType;
     IKLines iceP_klines;
     istr->read(iceP_codeId);
+    istr->read(iceP_isIndex);
     istr->read(iceP_timeType);
     istr->read(iceP_klines);
     inS.endReadParams();
-    this->UpdateKLines(iceP_codeId, iceP_timeType, iceP_klines, current);
+    this->UpdateKLines(iceP_codeId, iceP_isIndex, iceP_timeType, iceP_klines, current);
     inS.writeEmptyParams();
     return true;
 }
@@ -3852,12 +3866,14 @@ IBTrader::IQDatabase::_iceD_GetInvalidKLines(::IceInternal::Incoming& inS, const
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
     ::std::string iceP_codeId;
+    bool iceP_isIndex;
     ITimeType iceP_timeType;
     istr->read(iceP_codeId);
+    istr->read(iceP_isIndex);
     istr->read(iceP_timeType);
     inS.endReadParams();
     IKLines iceP_klines;
-    this->GetInvalidKLines(iceP_codeId, iceP_timeType, iceP_klines, current);
+    this->GetInvalidKLines(iceP_codeId, iceP_isIndex, iceP_timeType, iceP_klines, current);
     ::Ice::OutputStream* ostr = inS.startWriteParams();
     ostr->write(iceP_klines);
     inS.endWriteParams();

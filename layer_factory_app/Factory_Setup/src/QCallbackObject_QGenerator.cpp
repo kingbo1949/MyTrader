@@ -43,8 +43,11 @@ void CQCallbackObject_QGenerator::UpdateTickToDb(IBTickPtr tick)
 	}
 	m_lastUpdateTicks[tick->codeHash] = tick;
 
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(tick->codeHash);
+	if (!contract) return;
+	bool isIndex = (contract->securityType == SecurityType::INDEX);
 
-	MakeAndGet_QDatabase()->UpdateTicks(tick);
+	MakeAndGet_QDatabase()->UpdateTicks(tick, isIndex);
 
 	//// 检查数据库最近更新的数据并打印到文件
 	if (Get_CurrentTime()->GetCurrentTime_second() - m_lastUpdateSecond <= 10) return;
@@ -54,8 +57,6 @@ void CQCallbackObject_QGenerator::UpdateTickToDb(IBTickPtr tick)
 	IBTickPtr  lastUpdateTick = MakeAndGet_QDatabase()->GetLastUpdateTick(tickCount, recentUpdateSecnd);
 	if (!lastUpdateTick->codeHash) return;
 
-	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(tick->codeHash);
-	if (!contract) return;
 
 	std::string timeStr = Get_CurrentTime()->GetCurrentTimeStr();
 	std::string tickTimeStr = CGlobal::GetTimeStr(lastUpdateTick->time / 1000);

@@ -26,6 +26,12 @@ protected:
     void                            FillAtr();
     void                            FillPreDay();
 
+    // 得到指数的名称
+    std::string                     GetIndexCode();
+    void                            FillIndexKLine(const std::string& indexCodeId);
+    void                            FillIndexMacd(const std::string& indexCodeId);
+    void                            FillIndexDivType(const std::string& indexCodeId);
+
 };
 
 

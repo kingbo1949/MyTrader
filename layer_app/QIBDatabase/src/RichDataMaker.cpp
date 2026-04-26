@@ -16,6 +16,8 @@ CRichDataMaker::CRichDataMaker(const std::string &codeId, ITimeType timeType, co
         richValue.close = kline.close;
         richValue.vol = kline.vol;
 
+        richValue.indexValid = false;
+
         m_mapRick[kline.time] = richValue;
     }
     return;
@@ -28,15 +30,44 @@ void CRichDataMaker::Go()
     FillAtr();
     FillDivType();
     FillPreDay();
+
+    std::string indexCode = GetIndexCode();
+    if (indexCode == "") return;
+
+    FillIndexKLine(indexCode);
+    FillIndexMacd(indexCode);
+    FillIndexDivType(indexCode);
     return;
 
 }
+std::string CRichDataMaker::GetIndexCode()
+{
+    std::string indexCode = "";
+    if (m_codeId == "NQ")
+    {
+        indexCode = "VXN";
+    }
+    if (m_codeId == "ES")
+    {
+        indexCode = "VIX";
+    }
+
+    return indexCode;
+}
+
 
 IRichValues CRichDataMaker::GetResult()
 {
     IRichValues result;
-    for (const auto &item : m_mapRick)
+    for (auto &item : m_mapRick)
     {
+        if (item.second.time == item.second.indexValue.time)
+        {
+            item.second.indexValid = true;
+        }else
+        {
+            item.second.indexValid = false;
+        }
         result.push_back(item.second);
     }
     return result;
@@ -169,5 +200,80 @@ void CRichDataMaker::FillPreDay()
         pos->second.preDayClose = dayKline.close;
 
     }
+}
+
+
+void CRichDataMaker::FillIndexKLine(const std::string& indexCodeId)
+{
+    if (m_klines.empty()) return;
+
+    IQuery query;
+    query.byReqType = 4;
+    query.timePair.beginPos = m_klines[0].time;
+    query.timePair.endPos = m_klines.back().time;
+
+    IKLines indexKlines;
+    MakeAndGet_Env()->GetDB_KLine()->GetKLines(indexCodeId, m_timeType, query, indexKlines);
+    for (const auto &kline : indexKlines)
+    {
+        auto pos = m_mapRick.find(kline.time);
+        if (pos == m_mapRick.end()) continue;
+
+        pos->second.indexValue.time = kline.time;
+        pos->second.indexValue.open = kline.open;
+        pos->second.indexValue.high = kline.high;
+        pos->second.indexValue.low = kline.low;
+        pos->second.indexValue.close = kline.close;
+        pos->second.indexValue.vol = kline.vol;
+    }
+    return;
+
+}
+
+void CRichDataMaker::FillIndexMacd(const std::string &indexCodeId)
+{
+    if (m_klines.empty()) return;
+
+    IQuery query;
+    query.byReqType = 4;
+    query.timePair.beginPos = m_klines[0].time;
+    query.timePair.endPos = m_klines.back().time;
+
+    IMacdValues values;
+    MakeAndGet_Env()->GetDB_Macd()->GetValues(indexCodeId, m_timeType, query, values);
+    for (const auto &value : values)
+    {
+        auto pos = m_mapRick.find(value.time);
+        if (pos == m_mapRick.end()) continue;
+
+        pos->second.indexValue.dif = value.dif;
+        pos->second.indexValue.dea = value.dea;
+        pos->second.indexValue.macd = value.macd;
+    }
+    return;
+
+}
+
+void CRichDataMaker::FillIndexDivType(const std::string &indexCodeId)
+{
+    if (m_klines.empty()) return;
+
+    IQuery query;
+    query.byReqType = 4;
+    query.timePair.beginPos = m_klines[0].time;
+    query.timePair.endPos = m_klines.back().time;
+
+    IDivTypeValues values;
+    MakeAndGet_Env()->GetDB_DivType()->GetValues(indexCodeId, m_timeType, query, values);
+    for (const auto &value : values)
+    {
+        auto pos = m_mapRick.find(value.time);
+        if (pos == m_mapRick.end()) continue;
+
+        pos->second.indexValue.divType = value.divType;
+        pos->second.indexValue.isUTurn = value.isUTurn;
+    }
+    return;
+
 }
 

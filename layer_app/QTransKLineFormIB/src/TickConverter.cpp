@@ -5,20 +5,26 @@
 #include <Factory_QDatabase.h>
 #include <Factory_Log.h>
 #include <Global.h>
+#include <Factory_HashEnv.h>
 void CTickConverter::ConvertTicksFromIBToDb(const CodeStr& codeId, TimePair timePair)
 {
 	time_t beginDaySecond = CHighFrequencyGlobalFunc::GetDayMillisec(timePair.beginPos) / 1000;
 	time_t endDaySecond = CHighFrequencyGlobalFunc::GetDayMillisec(timePair.endPos) / 1000;
 
+	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(codeId.c_str());
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
+	bool isIndex = (contract->securityType == SecurityType::INDEX);
+
+
 	time_t secondInDay = 24 * 3600;
 	for (time_t i = beginDaySecond; i <= endDaySecond; i += secondInDay)
 	{
-		ConvertTicksFromIBToDb(codeId, i);
+		ConvertTicksFromIBToDb(codeId, isIndex, i);
 	}
 	return;
 }
 
-void CTickConverter::ConvertTicksFromIBToDb(const CodeStr& codeId, time_t daySecond)
+void CTickConverter::ConvertTicksFromIBToDb(const CodeStr& codeId, bool isIndex, time_t daySecond)
 {
 	IBTickPtrs ticks_pre = Get_IBApi()->QueryTicks(codeId, daySecond, MarketType::PreMarket);
 	IBTickPtrs ticks_post = Get_IBApi()->QueryTicks(codeId, daySecond, MarketType::AfterHour);
@@ -50,7 +56,7 @@ void CTickConverter::ConvertTicksFromIBToDb(const CodeStr& codeId, time_t daySec
 	// 更新到数据库
 	for (auto onetick : ticks_pre)
 	{
-		MakeAndGet_QDatabase()->UpdateTicks(onetick);
+		MakeAndGet_QDatabase()->UpdateTicks(onetick, isIndex);
 	}
 
 
@@ -80,7 +86,7 @@ void CTickConverter::ConvertTicksFromIBToDb(const CodeStr& codeId, time_t daySec
 
 	for (auto onetick : ticks_post)
 	{
-		MakeAndGet_QDatabase()->UpdateTicks(onetick);
+		MakeAndGet_QDatabase()->UpdateTicks(onetick, isIndex);
 	}
 
 }

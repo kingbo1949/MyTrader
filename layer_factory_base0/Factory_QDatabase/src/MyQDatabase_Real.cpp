@@ -25,12 +25,12 @@ int CMyQDatabase_Real::TaskCount()
 	return MakeAndGet_IceProxy()->GetQDatabasePrx()->TaskCount();
 }
 
-void CMyQDatabase_Real::UpdateTicks(IBTickPtr tick)
+void CMyQDatabase_Real::UpdateTicks(IBTickPtr tick, bool isIndex)
 {
 	ITick iTick = CIceTransfor::TransTickMyToIce(tick);
 
 	// 更新到数据库
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateTickToDB(iTick);
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateTickToDB(iTick, isIndex);
 
 	return;
 }
@@ -167,14 +167,14 @@ IBTickPtrs CMyQDatabase_Real::FliteTicks(const IBTickPtrs& ticks, time_t ms, int
 	return back;
 }
 
-void CMyQDatabase_Real::UpdateKLine(const CodeStr& codeId, Time_Type timeType, IBKLinePtr kline)
+void CMyQDatabase_Real::UpdateKLine(const CodeStr& codeId, bool isIndex, Time_Type timeType, IBKLinePtr kline)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
 	IKLine ikline = CIceTransfor::TransKLineMyToIce(kline);
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateKLine(codeId, iTimeType, ikline);
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateKLine(codeId, isIndex, iTimeType, ikline);
 }
 
-void CMyQDatabase_Real::UpdateKLinesByLoop(const CodeStr &codeId, Time_Type timeType, const IBKLinePtrs &klines)
+void CMyQDatabase_Real::UpdateKLinesByLoop(const CodeStr &codeId, bool isIndex, Time_Type timeType, const IBKLinePtrs &klines)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
 	IKLines ikines;
@@ -196,7 +196,7 @@ void CMyQDatabase_Real::UpdateKLinesByLoop(const CodeStr &codeId, Time_Type time
 	for (const auto& batche : batches)
 	{
 		if (batche.empty()) continue ;
-		MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateKLines(codeId, iTimeType, batche);
+		MakeAndGet_IceProxy()->GetQDatabasePrx()->UpdateKLines(codeId, isIndex, iTimeType, batche);
 
 	}
 
@@ -331,12 +331,12 @@ IBKLinePairs CMyQDatabase_Real::GetKLinePair(const CodeStr& firstcode, const Cod
 	return ret;
 }
 
-IBKLinePtrs CMyQDatabase_Real::GetInvalidKLines(const CodeStr& codeId, Time_Type timeType)
+IBKLinePtrs CMyQDatabase_Real::GetInvalidKLines(const CodeStr& codeId, bool isIndex, Time_Type timeType)
 {
 	ITimeType iTimeType = CIceTransfor::TransTimeTypeToIce(timeType);
 
 	IKLines klines;
-	MakeAndGet_IceProxy()->GetQDatabasePrx()->GetInvalidKLines(codeId, iTimeType, klines);
+	MakeAndGet_IceProxy()->GetQDatabasePrx()->GetInvalidKLines(codeId, isIndex, iTimeType, klines);
 
 	IBKLinePtrs back;
 	for (auto& oneKline : klines)

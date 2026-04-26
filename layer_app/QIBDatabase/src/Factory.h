@@ -26,7 +26,7 @@ CommunicatorPtr				GetCommunicator();
 std::string					Trans_Str(ITimeType timetype);
 
 // 检查Kline的合法性
-bool						ValidKline(const std::string& codeId, ITimeType timetype, const IKLine& kline);
+bool						ValidKline(const std::string& codeId, bool isIndex, ITimeType timetype, const IKLine& kline);
 
 TimerTask_UpdateIndexPtr	MakeAndGet_TimerTask_UpdateIndex();
 

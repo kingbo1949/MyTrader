@@ -45,28 +45,6 @@
 namespace IBTrader
 {
 
-enum class IExchangePl : unsigned char
-{
-    SMART,
-    SEHK,
-    NYSE,
-    NASDAQ,
-    ARCA
-};
-
-enum class IMoney : unsigned char
-{
-    RMB,
-    USD,
-    HKD,
-    GBP,
-    JPY,
-    CAD,
-    AUD,
-    EUR,
-    KRW
-};
-
 struct ITimePair
 {
     long long int beginPos = 0LL;
@@ -100,28 +78,6 @@ struct IQuery
         return std::tie(byReqType, dwSubscribeNum, tTime, timePair);
     }
 };
-
-struct IContract
-{
-    ::std::string codeId;
-    ::std::string des;
-    ::IBTrader::IExchangePl exchangePl = ::IBTrader::IExchangePl::SMART;
-    ::IBTrader::IExchangePl primaryExchangePl = ::IBTrader::IExchangePl::NASDAQ;
-    ::IBTrader::IMoney currencyID = ::IBTrader::IMoney::USD;
-    int decDigits = 0;
-    double minMove = 0;
-
-    /**
-     * Obtains a tuple containing all of the struct's data members.
-     * @return The data members in a tuple.
-     */
-    std::tuple<const ::std::string&, const ::std::string&, const ::IBTrader::IExchangePl&, const ::IBTrader::IExchangePl&, const ::IBTrader::IMoney&, const int&, const double&> ice_tuple() const
-    {
-        return std::tie(codeId, des, exchangePl, primaryExchangePl, currencyID, decDigits, minMove);
-    }
-};
-
-using IContracts = ::std::vector<IContract>;
 
 struct IBidAsk
 {
@@ -318,6 +274,30 @@ struct IAtrValue
 
 using IAtrValues = ::std::vector<IAtrValue>;
 
+struct IIndexValue
+{
+    long long int time = 0LL;
+    double close = 0;
+    double open = 0;
+    double high = 0;
+    double low = 0;
+    long long int vol = 0LL;
+    double dif = 0;
+    double dea = 0;
+    double macd = 0;
+    ::IBTrader::IDivType divType = ::IBTrader::IDivType::NORMAL;
+    bool isUTurn = false;
+
+    /**
+     * Obtains a tuple containing all of the struct's data members.
+     * @return The data members in a tuple.
+     */
+    std::tuple<const long long int&, const double&, const double&, const double&, const double&, const long long int&, const double&, const double&, const double&, const ::IBTrader::IDivType&, const bool&> ice_tuple() const
+    {
+        return std::tie(time, close, open, high, low, vol, dif, dea, macd, divType, isUTurn);
+    }
+};
+
 struct IRichValue
 {
     long long int time = 0LL;
@@ -340,14 +320,16 @@ struct IRichValue
     double preDayHigh = 0;
     double preDayLow = 0;
     double preDayClose = 0;
+    bool indexValid = false;
+    ::IBTrader::IIndexValue indexValue;
 
     /**
      * Obtains a tuple containing all of the struct's data members.
      * @return The data members in a tuple.
      */
-    std::tuple<const long long int&, const double&, const double&, const double&, const double&, const long long int&, const double&, const double&, const double&, const ::IBTrader::IDivType&, const bool&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&> ice_tuple() const
+    std::tuple<const long long int&, const double&, const double&, const double&, const double&, const long long int&, const double&, const double&, const double&, const ::IBTrader::IDivType&, const bool&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const double&, const bool&, const ::IBTrader::IIndexValue&> ice_tuple() const
     {
-        return std::tie(time, close, open, high, low, vol, dif, dea, macd, divType, isUTurn, thisAtr, avgAtr, ma5, ma20, ma60, ma200, preDayHigh, preDayLow, preDayClose);
+        return std::tie(time, close, open, high, low, vol, dif, dea, macd, divType, isUTurn, thisAtr, avgAtr, ma5, ma20, ma60, ma200, preDayHigh, preDayLow, preDayClose, indexValid, indexValue);
     }
 };
 
@@ -365,26 +347,6 @@ using Ice::operator!=;
 /// \cond STREAM
 namespace Ice
 {
-
-template<>
-struct StreamableTraits< ::IBTrader::IExchangePl>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryEnum;
-    static const int minValue = 0;
-    static const int maxValue = 4;
-    static const int minWireSize = 1;
-    static const bool fixedLength = false;
-};
-
-template<>
-struct StreamableTraits< ::IBTrader::IMoney>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryEnum;
-    static const int minValue = 0;
-    static const int maxValue = 8;
-    static const int minWireSize = 1;
-    static const bool fixedLength = false;
-};
 
 template<>
 struct StreamableTraits<::IBTrader::ITimePair>
@@ -417,23 +379,6 @@ struct StreamReader<::IBTrader::IQuery, S>
     static void read(S* istr, ::IBTrader::IQuery& v)
     {
         istr->readAll(v.byReqType, v.dwSubscribeNum, v.tTime, v.timePair);
-    }
-};
-
-template<>
-struct StreamableTraits<::IBTrader::IContract>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 17;
-    static const bool fixedLength = false;
-};
-
-template<typename S>
-struct StreamReader<::IBTrader::IContract, S>
-{
-    static void read(S* istr, ::IBTrader::IContract& v)
-    {
-        istr->readAll(v.codeId, v.des, v.exchangePl, v.primaryExchangePl, v.currencyID, v.decDigits, v.minMove);
     }
 };
 
@@ -611,10 +556,27 @@ struct StreamReader<::IBTrader::IAtrValue, S>
 };
 
 template<>
+struct StreamableTraits<::IBTrader::IIndexValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 74;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamReader<::IBTrader::IIndexValue, S>
+{
+    static void read(S* istr, ::IBTrader::IIndexValue& v)
+    {
+        istr->readAll(v.time, v.close, v.open, v.high, v.low, v.vol, v.dif, v.dea, v.macd, v.divType, v.isUTurn);
+    }
+};
+
+template<>
 struct StreamableTraits<::IBTrader::IRichValue>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 146;
+    static const int minWireSize = 221;
     static const bool fixedLength = false;
 };
 
@@ -623,7 +585,7 @@ struct StreamReader<::IBTrader::IRichValue, S>
 {
     static void read(S* istr, ::IBTrader::IRichValue& v)
     {
-        istr->readAll(v.time, v.close, v.open, v.high, v.low, v.vol, v.dif, v.dea, v.macd, v.divType, v.isUTurn, v.thisAtr, v.avgAtr, v.ma5, v.ma20, v.ma60, v.ma200, v.preDayHigh, v.preDayLow, v.preDayClose);
+        istr->readAll(v.time, v.close, v.open, v.high, v.low, v.vol, v.dif, v.dea, v.macd, v.divType, v.isUTurn, v.thisAtr, v.avgAtr, v.ma5, v.ma20, v.ma60, v.ma200, v.preDayHigh, v.preDayLow, v.preDayClose, v.indexValid, v.indexValue);
     }
 };
 
@@ -634,28 +596,6 @@ struct StreamReader<::IBTrader::IRichValue, S>
 
 namespace IBTrader
 {
-
-enum IExchangePl
-{
-    SMART,
-    SEHK,
-    NYSE,
-    NASDAQ,
-    ARCA
-};
-
-enum IMoney
-{
-    RMB,
-    USD,
-    HKD,
-    GBP,
-    JPY,
-    CAD,
-    AUD,
-    EUR,
-    KRW
-};
 
 struct ITimePair
 {
@@ -845,43 +785,6 @@ struct IQuery
         return !operator<(rhs_);
     }
 };
-
-struct IContract
-{
-    /** Default constructor that assigns default values to members as specified in the Slice definition. */
-    IContract() :
-        codeId(""),
-        des(""),
-        exchangePl(SMART),
-        primaryExchangePl(NASDAQ),
-        currencyID(USD),
-        decDigits(0),
-        minMove(0)
-    {
-    }
-    
-    IContract(const ::std::string& codeId, const ::std::string& des, IExchangePl exchangePl, IExchangePl primaryExchangePl, IMoney currencyID, ::Ice::Int decDigits, ::Ice::Double minMove) :
-        codeId(codeId),
-        des(des),
-        exchangePl(exchangePl),
-        primaryExchangePl(primaryExchangePl),
-        currencyID(currencyID),
-        decDigits(decDigits),
-        minMove(minMove)
-    {
-    }
-    
-
-    ::std::string codeId;
-    ::std::string des;
-    ::IBTrader::IExchangePl exchangePl;
-    ::IBTrader::IExchangePl primaryExchangePl;
-    ::IBTrader::IMoney currencyID;
-    ::Ice::Int decDigits;
-    ::Ice::Double minMove;
-};
-
-typedef ::std::vector<IContract> IContracts;
 
 struct IBidAsk
 {
@@ -1218,6 +1121,53 @@ struct IAtrValue
 
 typedef ::std::vector<IAtrValue> IAtrValues;
 
+struct IIndexValue
+{
+    /** Default constructor that assigns default values to members as specified in the Slice definition. */
+    IIndexValue() :
+        time(ICE_INT64(0)),
+        close(0),
+        open(0),
+        high(0),
+        low(0),
+        vol(ICE_INT64(0)),
+        dif(0),
+        dea(0),
+        macd(0),
+        divType(NORMAL),
+        isUTurn(false)
+    {
+    }
+    
+    IIndexValue(::Ice::Long time, ::Ice::Double close, ::Ice::Double open, ::Ice::Double high, ::Ice::Double low, ::Ice::Long vol, ::Ice::Double dif, ::Ice::Double dea, ::Ice::Double macd, IDivType divType, bool isUTurn) :
+        time(time),
+        close(close),
+        open(open),
+        high(high),
+        low(low),
+        vol(vol),
+        dif(dif),
+        dea(dea),
+        macd(macd),
+        divType(divType),
+        isUTurn(isUTurn)
+    {
+    }
+    
+
+    ::Ice::Long time;
+    ::Ice::Double close;
+    ::Ice::Double open;
+    ::Ice::Double high;
+    ::Ice::Double low;
+    ::Ice::Long vol;
+    ::Ice::Double dif;
+    ::Ice::Double dea;
+    ::Ice::Double macd;
+    ::IBTrader::IDivType divType;
+    bool isUTurn;
+};
+
 struct IRichValue
 {
     /** Default constructor that assigns default values to members as specified in the Slice definition. */
@@ -1241,11 +1191,12 @@ struct IRichValue
         ma200(0),
         preDayHigh(0),
         preDayLow(0),
-        preDayClose(0)
+        preDayClose(0),
+        indexValid(false)
     {
     }
     
-    IRichValue(::Ice::Long time, ::Ice::Double close, ::Ice::Double open, ::Ice::Double high, ::Ice::Double low, ::Ice::Long vol, ::Ice::Double dif, ::Ice::Double dea, ::Ice::Double macd, IDivType divType, bool isUTurn, ::Ice::Double thisAtr, ::Ice::Double avgAtr, ::Ice::Double ma5, ::Ice::Double ma20, ::Ice::Double ma60, ::Ice::Double ma200, ::Ice::Double preDayHigh, ::Ice::Double preDayLow, ::Ice::Double preDayClose) :
+    IRichValue(::Ice::Long time, ::Ice::Double close, ::Ice::Double open, ::Ice::Double high, ::Ice::Double low, ::Ice::Long vol, ::Ice::Double dif, ::Ice::Double dea, ::Ice::Double macd, IDivType divType, bool isUTurn, ::Ice::Double thisAtr, ::Ice::Double avgAtr, ::Ice::Double ma5, ::Ice::Double ma20, ::Ice::Double ma60, ::Ice::Double ma200, ::Ice::Double preDayHigh, ::Ice::Double preDayLow, ::Ice::Double preDayClose, bool indexValid, const IIndexValue& indexValue) :
         time(time),
         close(close),
         open(open),
@@ -1265,7 +1216,9 @@ struct IRichValue
         ma200(ma200),
         preDayHigh(preDayHigh),
         preDayLow(preDayLow),
-        preDayClose(preDayClose)
+        preDayClose(preDayClose),
+        indexValid(indexValid),
+        indexValue(indexValue)
     {
     }
     
@@ -1290,6 +1243,8 @@ struct IRichValue
     ::Ice::Double preDayHigh;
     ::Ice::Double preDayLow;
     ::Ice::Double preDayClose;
+    bool indexValid;
+    ::IBTrader::IIndexValue indexValue;
 };
 
 typedef ::std::vector<IRichValue> IRichValues;
@@ -1299,26 +1254,6 @@ typedef ::std::vector<IRichValue> IRichValues;
 /// \cond STREAM
 namespace Ice
 {
-
-template<>
-struct StreamableTraits< ::IBTrader::IExchangePl>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryEnum;
-    static const int minValue = 0;
-    static const int maxValue = 4;
-    static const int minWireSize = 1;
-    static const bool fixedLength = false;
-};
-
-template<>
-struct StreamableTraits< ::IBTrader::IMoney>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryEnum;
-    static const int minValue = 0;
-    static const int maxValue = 8;
-    static const int minWireSize = 1;
-    static const bool fixedLength = false;
-};
 
 template<>
 struct StreamableTraits< ::IBTrader::ITimePair>
@@ -1377,44 +1312,6 @@ struct StreamReader< ::IBTrader::IQuery, S>
         istr->read(v.dwSubscribeNum);
         istr->read(v.tTime);
         istr->read(v.timePair);
-    }
-};
-
-template<>
-struct StreamableTraits< ::IBTrader::IContract>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 17;
-    static const bool fixedLength = false;
-};
-
-template<typename S>
-struct StreamWriter< ::IBTrader::IContract, S>
-{
-    static void write(S* ostr, const ::IBTrader::IContract& v)
-    {
-        ostr->write(v.codeId);
-        ostr->write(v.des);
-        ostr->write(v.exchangePl);
-        ostr->write(v.primaryExchangePl);
-        ostr->write(v.currencyID);
-        ostr->write(v.decDigits);
-        ostr->write(v.minMove);
-    }
-};
-
-template<typename S>
-struct StreamReader< ::IBTrader::IContract, S>
-{
-    static void read(S* istr, ::IBTrader::IContract& v)
-    {
-        istr->read(v.codeId);
-        istr->read(v.des);
-        istr->read(v.exchangePl);
-        istr->read(v.primaryExchangePl);
-        istr->read(v.currencyID);
-        istr->read(v.decDigits);
-        istr->read(v.minMove);
     }
 };
 
@@ -1735,10 +1632,56 @@ struct StreamReader< ::IBTrader::IAtrValue, S>
 };
 
 template<>
+struct StreamableTraits< ::IBTrader::IIndexValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 74;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamWriter< ::IBTrader::IIndexValue, S>
+{
+    static void write(S* ostr, const ::IBTrader::IIndexValue& v)
+    {
+        ostr->write(v.time);
+        ostr->write(v.close);
+        ostr->write(v.open);
+        ostr->write(v.high);
+        ostr->write(v.low);
+        ostr->write(v.vol);
+        ostr->write(v.dif);
+        ostr->write(v.dea);
+        ostr->write(v.macd);
+        ostr->write(v.divType);
+        ostr->write(v.isUTurn);
+    }
+};
+
+template<typename S>
+struct StreamReader< ::IBTrader::IIndexValue, S>
+{
+    static void read(S* istr, ::IBTrader::IIndexValue& v)
+    {
+        istr->read(v.time);
+        istr->read(v.close);
+        istr->read(v.open);
+        istr->read(v.high);
+        istr->read(v.low);
+        istr->read(v.vol);
+        istr->read(v.dif);
+        istr->read(v.dea);
+        istr->read(v.macd);
+        istr->read(v.divType);
+        istr->read(v.isUTurn);
+    }
+};
+
+template<>
 struct StreamableTraits< ::IBTrader::IRichValue>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 146;
+    static const int minWireSize = 221;
     static const bool fixedLength = false;
 };
 
@@ -1767,6 +1710,8 @@ struct StreamWriter< ::IBTrader::IRichValue, S>
         ostr->write(v.preDayHigh);
         ostr->write(v.preDayLow);
         ostr->write(v.preDayClose);
+        ostr->write(v.indexValid);
+        ostr->write(v.indexValue);
     }
 };
 
@@ -1795,6 +1740,8 @@ struct StreamReader< ::IBTrader::IRichValue, S>
         istr->read(v.preDayHigh);
         istr->read(v.preDayLow);
         istr->read(v.preDayClose);
+        istr->read(v.indexValid);
+        istr->read(v.indexValue);
     }
 };
 

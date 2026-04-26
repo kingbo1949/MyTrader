@@ -13,6 +13,7 @@ set(SRC_LIST
         src/UpdateKlineFromFile.cpp
         src/SaveKlineToFile.cpp
         src/QueryThreadPoolStatus.cpp
+        src/ConvertContractsKlines.cpp
 
 
 )

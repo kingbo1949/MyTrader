@@ -26,6 +26,7 @@ public:
 protected:
 	TradeDayPtr						m_pTradeDay;
 	CodeStr							m_codeId;
+	bool							m_isIndex;
 	Time_Type						m_timeType;
 	IBKLinePtrs						m_klines;
 

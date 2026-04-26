@@ -6,6 +6,7 @@
 #include <Factory_UnifyInterface.h>
 #include <Factory_QDatabase.h>
 #include <Global.h>
+#include <Factory_HashEnv.h>
 #include "Factory_Setup.h"
 
 void CCmdUpdateDbFromIB::operator()()
@@ -46,7 +47,13 @@ void CCmdUpdateDbFromIB::UpdateDbKLineFromIB(const std::string& codeId, Time_Typ
 		if (kline->time >= now) continue;
 		temKlines.push_back(kline);
 	}
-	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, temKlines);
+
+	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(codeId.c_str());
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
+	bool isIndex = (contract->securityType == SecurityType::INDEX);
+
+
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, isIndex, timeType, temKlines);
 	// 更新指标
 	if (!klines.empty())
 	{

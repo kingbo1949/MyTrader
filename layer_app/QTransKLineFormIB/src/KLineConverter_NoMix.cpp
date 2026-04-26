@@ -18,25 +18,26 @@ void CKLineConverter_NoMix::ConvertOneKLineFromIBToDb(const CodeStr& targetCodeI
 {
 	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(targetCodeId.c_str());
 	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
+	bool isIndex = (contract->securityType == SecurityType::INDEX);
 	if (contract->securityType == SecurityType::FUT)
 	{
 		// 期货需要15秒线
 		//ConvertOneKLineFromIBToDb(targetCodeId, Time_Type::S15, timePair);
 	}
-	ConvertOneKLineFromIBToDb(targetCodeId, Time_Type::M1, timePair);
-	ConvertOneKLineFromIBToDb(targetCodeId, Time_Type::M5, timePair);
-	ConvertOneKLineFromIBToDb(targetCodeId, Time_Type::M15, timePair);
-	ConvertOneKLineFromIBToDb(targetCodeId, Time_Type::M30, timePair);
-	ConvertOneKLineFromIBToDb(targetCodeId, Time_Type::H1, timePair);
-	ConvertOneKLineFromIBToDb(targetCodeId, Time_Type::D1, timePair);
+	ConvertOneKLineFromIBToDb(targetCodeId, isIndex, Time_Type::M1, timePair);
+	ConvertOneKLineFromIBToDb(targetCodeId, isIndex, Time_Type::M5, timePair);
+	ConvertOneKLineFromIBToDb(targetCodeId, isIndex, Time_Type::M15, timePair);
+	ConvertOneKLineFromIBToDb(targetCodeId, isIndex, Time_Type::M30, timePair);
+	ConvertOneKLineFromIBToDb(targetCodeId, isIndex, Time_Type::H1, timePair);
+	ConvertOneKLineFromIBToDb(targetCodeId, isIndex, Time_Type::D1, timePair);
 }
 
-void CKLineConverter_NoMix::ConvertOneKLineFromIBToDb(const CodeStr& codeId, Time_Type timeType, TimePair timePair)
+void CKLineConverter_NoMix::ConvertOneKLineFromIBToDb(const CodeStr& codeId, bool isIndex, Time_Type timeType, TimePair timePair)
 {
 	IBKLinePtrs klines = QueryFromIb(codeId, timeType, timePair);
 	if (klines.empty()) return;
 
-	CAppFuncs::UpdateToDb(codeId, timeType, klines);
+	CAppFuncs::UpdateToDb(codeId, isIndex, timeType, klines);
 
 	// 更新指标
 	MakeAndGet_QDatabase()->RecountAllIndex(codeId, timeType);

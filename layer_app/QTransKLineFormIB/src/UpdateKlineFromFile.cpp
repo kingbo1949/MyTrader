@@ -6,6 +6,7 @@
 #include <Factory_QDatabase.h>
 #include <Factory_Log.h>
 #include <Global.h>
+#include <Factory_HashEnv.h>
 using namespace boost::algorithm;
 
 void CUpdateKlineFromFile::Go()
@@ -67,18 +68,22 @@ std::string CUpdateKlineFromFile::GetFileName(const CodeStr& codeId, Time_Type t
 
 void CUpdateKlineFromFile::UpdateOneCode(const CodeStr& codeId)
 {
+	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(codeId.c_str());
+	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
+	bool isIndex = (contract->securityType == SecurityType::INDEX);
+
 	// UpdateFile(codeId, Time_Type::S15);
 
-	UpdateFile(codeId, Time_Type::M1);
-	UpdateFile(codeId, Time_Type::M5);
-	UpdateFile(codeId, Time_Type::M15);
-	UpdateFile(codeId, Time_Type::M30);
-	UpdateFile(codeId, Time_Type::H1);
-	UpdateFile(codeId, Time_Type::D1);
+	UpdateFile(codeId, isIndex, Time_Type::M1);
+	UpdateFile(codeId, isIndex, Time_Type::M5);
+	UpdateFile(codeId, isIndex, Time_Type::M15);
+	UpdateFile(codeId, isIndex, Time_Type::M30);
+	UpdateFile(codeId, isIndex, Time_Type::H1);
+	UpdateFile(codeId, isIndex, Time_Type::D1);
 
 }
 
-void CUpdateKlineFromFile::UpdateFile(const CodeStr& codeId, Time_Type timeType)
+void CUpdateKlineFromFile::UpdateFile(const CodeStr& codeId, bool isIndex, Time_Type timeType)
 {
 	time_t beginPos = benchmark_milliseconds();
 	std::string filename = GetFileName(codeId, timeType);
@@ -100,7 +105,7 @@ void CUpdateKlineFromFile::UpdateFile(const CodeStr& codeId, Time_Type timeType)
 	}
 
 	// 更新到数据库
-	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, timeType, klines);
+	MakeAndGet_QDatabase()->UpdateKLinesByLoop(codeId, isIndex, timeType, klines);
 	MakeAndGet_QDatabase()->RecountAllIndex(codeId, timeType);
 }
 

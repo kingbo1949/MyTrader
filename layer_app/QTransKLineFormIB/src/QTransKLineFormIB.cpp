@@ -19,6 +19,7 @@
 #include "CleanUpKline.h"
 #include "SaveKlineToFile.h"
 #include "QueryThreadPoolStatus.h"
+#include "ConvertContractsKlines.h"
 
 CSetupEnv setupEnv;
 CKLineConverter_NoMix klineConverter_nomix;
@@ -130,33 +131,13 @@ void ConvertOneContractTicks()
 // 从ib接口查询单品种的K线并更新到数据库
 void ConvertOneContractKLines()
 {
-	//std::string targetCodeId = "ETHUSDRR";
-	std::string targetCodeId = "TSLA";
+	// std::set<CodeStr> codeIds = {"MS", "C"};
+	std::set<CodeStr> codeIds = {"VXN"};
+	// std::set<CodeStr> codeIds = {"TSLA"};
 
-	TimePair timePair;
-	timePair.beginPos = CGlobal::GetTimeByStr("20240101 00:00:00") * 1000;
-	//timePair.beginPos = CGlobal::GetTimeByStr("20250702 00:00:00") * 1000;
-	//timePair.endPos = CGlobal::GetTimeByStr("20240524 00:00:00") * 1000;
-	timePair.endPos = Get_CurrentTime()->GetCurrentTime_millisecond();
+	CConvertContractsKlines converter(codeIds);
+	converter.Go();
 
-	CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(targetCodeId.c_str());
-	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(codeHash);
-	if (contract->securityType == SecurityType::STK)
-	{
-		// 股票需要删除指定时间段的k线和指标
-		CAppFuncs::DelToDb(targetCodeId, Time_Type::S15, timePair);
-		CAppFuncs::DelToDb(targetCodeId, Time_Type::M1, timePair);
-		CAppFuncs::DelToDb(targetCodeId, Time_Type::M5, timePair);
-		CAppFuncs::DelToDb(targetCodeId, Time_Type::M15, timePair);
-		CAppFuncs::DelToDb(targetCodeId, Time_Type::M30, timePair);
-		CAppFuncs::DelToDb(targetCodeId, Time_Type::H1, timePair);
-		CAppFuncs::DelToDb(targetCodeId, Time_Type::D1, timePair);
-	}
-
-	// 更新K线和指标
-	klineConverter_nomix.ConvertOneKLineFromIBToDb(targetCodeId, timePair);
-
-	klineConverter_nomix.QueryKLineInDb(targetCodeId);
 
 }
 
@@ -266,20 +247,20 @@ int main()
 		{
 			ConvertOneContractTicks();
 		}
-		if (cmd == "b" || cmd == "B")
+		else if (cmd == "b" || cmd == "B")
 		{
 			ReadKlineFromFile();;
 		}
-		if (cmd == "c" || cmd == "C")
+		else if (cmd == "c" || cmd == "C")
 		{
 			CleanUpKlines();;
 		}
-		if (cmd == "d" || cmd == "D")
+		else if (cmd == "d" || cmd == "D")
 		{
 			CSaveKlineToFile saveKlineToFile;
 			saveKlineToFile.Go();
 		}
-		if (cmd == "e" || cmd == "E")
+		else if (cmd == "e" || cmd == "E")
 		{
 			CQueryThreadPoolStatus queryThreadPoolStatus;
 			queryThreadPoolStatus.Go();

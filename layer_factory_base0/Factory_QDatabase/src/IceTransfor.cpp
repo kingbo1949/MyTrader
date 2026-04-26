@@ -295,6 +295,26 @@ IBRichDataPtr CIceTransfor::TransRichData(const IRichValue &value)
 	back->preDayLow = value.preDayLow;
 	back->preDayClose = value.preDayClose;
 
+	// 指数部分
+	if (!value.indexValid) return back;
+
+	IBIndexRichDataPtr indexPart = std::make_shared<CIBIndexRichData>();
+	indexPart->time = value.indexValue.time;
+	indexPart->open = value.indexValue.open;
+	indexPart->high = value.indexValue.high;
+	indexPart->low = value.indexValue.low;
+	indexPart->close = value.indexValue.close;
+	indexPart->vol = value.indexValue.vol;
+
+	indexPart->dif = value.indexValue.dif;
+	indexPart->dea = value.indexValue.dea;
+	indexPart->macd = value.indexValue.macd;
+
+	indexPart->divType = TransType(value.indexValue.divType);
+	indexPart->isUTurn = value.indexValue.isUTurn;
+
+	back->indexRichData = indexPart;
+
 	return back;
 }
 

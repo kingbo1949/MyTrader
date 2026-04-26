@@ -60,7 +60,8 @@ enum class SelectType
 enum class SecurityType
 {
 	STK,				// 股票
-	FUT					// 期货
+	FUT,				// 期货
+	INDEX				// 指数
 };
 
 
@@ -89,7 +90,8 @@ enum class ExchangePl
 	NASDAQ = 3,						// 纳斯达克
 	ARCA = 4,						// 群岛交易所 
 	CME = 5,						// CME
-	COMEX = 6						// COMEX
+	COMEX = 6,						// COMEX
+	CBOE = 7						// CBOE
 
 };
 // 币种标识
@@ -316,6 +318,33 @@ public:
 };
 typedef std::vector<IBAtrPtr> IBAtrPtrs;
 
+class  CIBIndexRichData;
+typedef std::shared_ptr<CIBIndexRichData> IBIndexRichDataPtr;
+typedef std::vector<IBIndexRichDataPtr> IBIndexRichDataPtrs;
+class  CIBIndexRichData
+{
+	public:
+
+	time_t			time = 0;					// localtime时间(毫秒)
+
+	// k线部分
+	double			open = std::numeric_limits<double>::quiet_NaN();					// 今日开盘价位
+	double			close = std::numeric_limits<double>::quiet_NaN();				// 最新价位
+	double			high = std::numeric_limits<double>::quiet_NaN();					// 最高价位
+	double			low = std::numeric_limits<double>::quiet_NaN();					// 最低价位
+	int				vol = 0;					// 最新成交量
+
+	// macd部分
+	double			dif = std::numeric_limits<double>::quiet_NaN();
+	double			dea = std::numeric_limits<double>::quiet_NaN();
+	double			macd = std::numeric_limits<double>::quiet_NaN() ;
+
+	// divType部分
+	DivergenceType	divType = DivergenceType::Normal;
+	bool			isUTurn = false;
+};
+
+
 
 class  CIBRichData;
 typedef std::shared_ptr<CIBRichData> IBRichDataPtr;
@@ -356,6 +385,8 @@ class  CIBRichData
 	double			preDayLow = std::numeric_limits<double>::quiet_NaN();
 	double			preDayClose = std::numeric_limits<double>::quiet_NaN();
 
+	// 指数部分
+	IBIndexRichDataPtr indexRichData = nullptr;
 };
 
 
