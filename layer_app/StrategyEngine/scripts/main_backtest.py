@@ -1,4 +1,6 @@
 import logging
+import math
+import pickle
 import IBTrader
 
 from qib_trader.api.converters import IceConverter
@@ -10,9 +12,10 @@ from qib_trader.core.models import BarData
 from qib_trader.utils.factory_ice import FactoryIce
 from pathlib import Path
 import pandas as pd
-from qib_trader.utils.config_loader import get_strategies_config, get_codeId_config, is_export_trades_csv
+from qib_trader.utils.config_loader import get_strategies_config, get_codeId_config, is_export_trades_csv, is_use_cache, is_verbose_trade_log
 from qib_trader.utils.log_setup import setup_logging
 from qib_trader.utils.stats import PerformanceAnalyzer
+from signal_character_plot import plot_closed_positions
 
 logger = logging.getLogger("MainBacktest")
 
@@ -31,15 +34,33 @@ def _build_data_key_map(active_configs: list) -> dict:
     return data_key_map
 
 
+def _cache_path(code_id: str, interval_str: str, start_time: str, end_time: str) -> Path:
+    d = Path(__file__).resolve().parents[1] / "datadb"
+    d.mkdir(exist_ok=True)
+    start = str(start_time)[:10].replace("-", "")
+    end   = str(end_time)[:10].replace("-", "")
+    return d / f"{code_id}_{interval_str}_{start}_{end}.pkl"
+
+
 def _fetch_bars(code_id: str, interval_str: str, start_time, end_time) -> list[BarData]:
     """拉取单组 (code_id, interval) 的 bar 列表，失败返回空列表。"""
+    cache = _cache_path(code_id, interval_str, start_time, end_time)
+    if is_use_cache() and cache.exists():
+        logger.info(f"从本地缓存加载: {cache}")
+        with open(cache, "rb") as f:
+            return pickle.load(f)
+
     time_type = getattr(IBTrader.ITimeType, interval_str)
     time_pair = FactoryIce.make_timepair(start_time, end_time)
     df = FactoryIce.get_enriched_klines_loop(code_id, time_type, time_pair)
     if df.empty:
         logger.warning(f"未获取到数据: {code_id} {interval_str}，跳过")
         return []
-    return IceConverter.enriched_df_to_bars(df, code_id, interval_str)
+    bars = IceConverter.enriched_df_to_bars(df, code_id, interval_str)
+    with open(cache, "wb") as f:
+        pickle.dump(bars, f)
+    logger.info(f"数据已缓存到: {cache}")
+    return bars
 
 
 def _fetch_all_bars(data_key_map: dict) -> dict[tuple, list[BarData]]:
@@ -63,6 +84,7 @@ def _register_strategies(active_configs: list, bars_map: dict) -> None:
             logger.warning(f"策略 {s_config['class']} 无对应数据，跳过")
             continue
         strategy = FactoryStrategy.create_strategy(s_config)
+        strategy._own_bars = bars_map[key]
         pool.add_strategy(strategy)
         logger.info(f"注册策略: {strategy.strategy_id}")
 
@@ -77,7 +99,7 @@ def _merge_bars(bars_map: dict) -> list[BarData]:
 
 
 def _output_dir(code_id: str, subdir: str) -> Path:
-    d = Path(__file__).resolve().parents[1] / "output" / code_id / subdir
+    d = Path(__file__).resolve().parents[1] / "output1" / code_id / subdir
     d.mkdir(parents=True, exist_ok=True)
     return d
 
@@ -99,6 +121,59 @@ def _export_spreads_csv(strategy_id: str, code_id: str, closed_spreads: list) ->
     logger.info(f"期权仓位记录已导出: {path}")
 
 
+def _export_roll_log_csv(strategy_id: str, code_id: str, roll_log: list) -> None:
+    """将滚仓/展期明细导出为 output/<code_id>/deallist/<strategy_id>_rolls.csv，
+    通过 position_id 与主记录（{strategy_id}.csv）关联。"""
+    if not roll_log:
+        return
+    df = pd.DataFrame(roll_log)
+    path = _output_dir(code_id, "deallist") / f"{strategy_id}_rolls.csv"
+    df.to_csv(path, index=False, float_format='%.4f')
+    logger.info(f"滚仓明细已导出: {path}")
+
+
+def _max_concurrent_positions(closed: list) -> int:
+    events = []
+    for p in closed:
+        events.append((p["entry_dt"], 1))
+        events.append((p["settlement_dt"], -1))
+    events.sort(key=lambda x: x[0])
+    peak, cur = 0, 0
+    for _, delta in events:
+        cur += delta
+        if cur > peak:
+            peak = cur
+    return peak
+
+
+def _print_deal_report(strategy) -> None:
+    closed = getattr(strategy, "_closed_spreads", None) or getattr(strategy, "_closed_positions", None)
+    if not closed:
+        logger.info("无交易记录，跳过报告")
+        return
+    pnls   = [p["final_pnl"] for p in closed]
+    n      = len(pnls)
+    wins   = [p for p in pnls if p > 0]
+    losses = [p for p in pnls if p <= 0]
+    wr     = len(wins) / n
+    avg    = sum(pnls) / n
+    z      = (len(wins) - n * 0.5) / (math.sqrt(n) * 0.5) if n > 0 else 0.0
+    peak   = _max_concurrent_positions(closed)
+    lines = [
+        "-" * 50,
+        f"  class               : {strategy.__class__.__name__}",
+        f"  max_concurrent_pos  : {peak}",
+        f"  win_rate            : {wr:.2%}",
+        f"  avg_pnl_points      : {avg:.2f}",
+        f"  avg_win_points      : {sum(wins)/len(wins):.2f}" if wins else "  avg_win_points      : N/A",
+        f"  avg_loss_points     : {sum(losses)/len(losses):.2f}" if losses else "  avg_loss_points     : N/A",
+        f"  expectancy          : {avg:.2f}",
+        f"  z_score             : {z:.2f}",
+        "-" * 50,
+    ]
+    logger.info("\n" + "\n".join(lines))
+
+
 def _print_results(bars_map: dict) -> None:
     """按策略调用 PerformanceAnalyzer 输出绩效报告。"""
     all_trades = get_broker().get_trades()
@@ -107,8 +182,13 @@ def _print_results(bars_map: dict) -> None:
         bars = bars_map.get((strategy.codeId, strategy.interval.value), [])
         multiplier = get_codeId_config(strategy.codeId).get("multiplier", 1.0)
         logger.info(f"策略 {strategy.strategy_id}: 共 {len(trades)} 笔成交")
+        closed_pos = (getattr(strategy, '_closed_positions', None)
+                      or getattr(strategy, '_closed_spreads', None) or [])
+        mtm_series = getattr(strategy, '_mtm_pnl_series', {})
         analyzer = PerformanceAnalyzer(trades, bars, initial_capital=strategy.initial_capital,
-                                        contract_multiplier=multiplier, options_mode=strategy.options_mode)
+                                        contract_multiplier=multiplier, options_mode=strategy.options_mode,
+                                        mtm_pnl_series=mtm_series,
+                                        closed_positions=closed_pos)
         df = analyzer.calculate_performance()
         chart_path = _output_dir(strategy.codeId, "deallist") / f"{strategy.strategy_id}.png"
         analyzer.plot_result(df, title=strategy.strategy_id, params=strategy.params,
@@ -120,10 +200,19 @@ def _print_results(bars_map: dict) -> None:
                 _export_spreads_csv(strategy.strategy_id, strategy.codeId, closed)
             else:
                 _export_trades_csv(strategy.strategy_id, strategy.codeId, trades)
+            _export_roll_log_csv(strategy.strategy_id, strategy.codeId,
+                                 getattr(strategy, '_roll_log', None))
+        _print_deal_report(strategy)
+        csv_path = chart_path.with_suffix(".csv")
+        window_hours = strategy.params.get("option_days", 5) * 24
+        plot_closed_positions(csv_path, bars, strategy.codeId, window_hours=window_hours)
 
 
 def main():
     setup_logging()
+    if not is_verbose_trade_log():
+        logging.getLogger("qib_trader").setLevel(logging.WARNING)
+        logging.getLogger("Strategy").setLevel(logging.WARNING)
     make_pool()
     make_broker()
     try:

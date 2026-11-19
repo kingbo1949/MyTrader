@@ -2,26 +2,14 @@
 UTurnBottomShortCall 策略：顶部 UTurn 信号 → 直接开仓 Bear Call Spread → 持有至到期结算。
 同时卖出 short call（K1，较低行权价）和买入 long call（K2，较高行权价），收取净权利金。
 """
-import math
 from collections import deque
 from datetime import timedelta, datetime, time as dtime
-from scipy.stats import norm
 
 from qib_trader.strategies.base import Strategy
 from qib_trader.core.models import BarData, Direction
 from qib_trader.utils.bar_patterns import detect_multi_uturn
 from qib_trader.utils.config_loader import get_iv
-
-
-def bs_call_price(S: float, K: float, T: float, r: float, sigma: float) -> float:
-    """欧式 Call 期权 Black-Scholes 定价（T 为年化剩余时间）。"""
-    if T <= 0:
-        return max(S - K, 0.0)
-    if K <= 0 or sigma <= 0:
-        return max(S - K, 0.0)
-    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
-    d2 = d1 - sigma * math.sqrt(T)
-    return S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
+from qib_trader.utils import option_pricing
 
 
 class UTurnBottomShortCall(Strategy):
@@ -47,6 +35,8 @@ class UTurnBottomShortCall(Strategy):
     require_high_above_prev_day_high: int = 0  # 1=开仓bar最高价须大于上一日最高价
     stop_loss_ratio: float = 0.0      # 亏损达到最大亏损(价差宽度−credit)的此比例时平仓，0=不启用
     require_plus_pattern: int = 0     # 1=要求当前UTurn点|dif|大于上一个UTurn点|dif|（plus形态）
+    early_profit_ratio: float = 0.0  # 提前止盈：盈利达到最大盈利此比例时触发，0=不启用
+    early_time_ratio: float = 0.0    # 提前止盈：仅在已用时间占总持仓时间低于此比例时触发，0=不启用
 
     def on_init(self) -> None:
         self._spreads: list[dict] = []
@@ -70,9 +60,8 @@ class UTurnBottomShortCall(Strategy):
 
     def _call_strike_by_delta(self, S: float, T: float, call_delta: float, iv: float) -> float:
         """由 call delta 反推行权价，取整到最近的 strike_round 点。"""
-        d1 = norm.ppf(call_delta)   # call delta = N(d1) → d1 = N⁻¹(delta)
-        K = S * math.exp(-d1 * iv * math.sqrt(max(T, 1e-8)))
-        return round(K / self.strike_round) * self.strike_round
+        return option_pricing.call_strike_by_delta(
+            S, T, call_delta, iv, self.risk_free_rate, self.codeId, self.strike_round)
 
     def _next_expiry(self, bar_dt, min_days: int):
         if min_days == 1:
@@ -141,8 +130,8 @@ class UTurnBottomShortCall(Strategy):
     def _settle_stop_loss(self, sp: dict, bar: BarData) -> None:
         T = self._rem_t(bar.datetime, sp['expiry'])
         S = bar.close_price
-        curr_p1 = bs_call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'])
-        curr_p2 = bs_call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'])
+        curr_p1 = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+        curr_p2 = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'], self.codeId)
         curr_spread = curr_p1 - curr_p2
         final_pnl = sp['net_credit'] - curr_spread
         self._send_order(Direction.LONG, curr_spread, 1, "MKT")
@@ -156,8 +145,8 @@ class UTurnBottomShortCall(Strategy):
         S, remaining = bar.close_price, []
         for sp in self._spreads:
             T = self._rem_t(bar.datetime, sp['expiry'])
-            curr_p1 = bs_call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'])
-            curr_p2 = bs_call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'])
+            curr_p1 = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+            curr_p2 = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'], self.codeId)
             max_loss = (sp['k2'] - sp['k1']) - sp['net_credit']
             loss = (curr_p1 - curr_p2) - sp['net_credit']
             if max_loss > 0 and loss >= self.stop_loss_ratio * max_loss:
@@ -165,6 +154,52 @@ class UTurnBottomShortCall(Strategy):
             else:
                 remaining.append(sp)
         self._spreads = remaining
+
+    def _settle_early_profit(self, sp: dict, bar: BarData) -> None:
+        T = self._rem_t(bar.datetime, sp['expiry'])
+        S = bar.close_price
+        curr_p1 = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+        curr_p2 = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'], self.codeId)
+        curr_spread = curr_p1 - curr_p2
+        final_pnl = sp['net_credit'] - curr_spread
+        self._send_order(Direction.LONG, curr_spread, 1, "MKT")
+        self._record_position(sp, bar, 'early_profit', 0.0, 0.0, final_pnl)
+        self.logger.info(f"[{bar.datetime}] 提前止盈 K1={sp['k1']} K2={sp['k2']} "
+                         f"curr_spread={curr_spread:.2f} final_pnl={final_pnl:.2f}")
+
+    def _check_early_profit(self, bar: BarData) -> None:
+        if self.early_profit_ratio <= 0 or self.early_time_ratio <= 0:
+            return
+        S, remaining = bar.close_price, []
+        for sp in self._spreads:
+            total_secs = (sp['expiry'] - sp['entry_dt']).total_seconds()
+            elapsed_secs = (bar.datetime - sp['entry_dt']).total_seconds()
+            if total_secs <= 0 or elapsed_secs / total_secs >= self.early_time_ratio:
+                remaining.append(sp)
+                continue
+            T = self._rem_t(bar.datetime, sp['expiry'])
+            curr_p1 = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+            curr_p2 = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'], self.codeId)
+            curr_profit = sp['net_credit'] - (curr_p1 - curr_p2)
+            if sp['net_credit'] > 0 and curr_profit >= self.early_profit_ratio * sp['net_credit']:
+                self._settle_early_profit(sp, bar)
+            else:
+                remaining.append(sp)
+        self._spreads = remaining
+
+    # ── 盯市 ──────────────────────────────────────────────────────────────────
+
+    def _calc_mtm_pnl(self, bar: BarData) -> float:
+        """Bear Call Spread MTM：Σ (收到净权利金 - 当前回购成本)，盈正亏负。"""
+        if not self._spreads:
+            return 0.0
+        S, total = bar.close_price, 0.0
+        for sp in self._spreads:
+            T       = self._rem_t(bar.datetime, sp['expiry'])
+            curr_p1 = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+            curr_p2 = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'],  self.codeId)
+            total  += sp['net_credit'] - (curr_p1 - curr_p2)
+        return total
 
     def _is_plus_pattern(self, zone) -> bool:
         """当前 UTurnTop 点的 |dif| > 上一个 UTurnTop 点的 |dif|。"""
@@ -200,8 +235,8 @@ class UTurnBottomShortCall(Strategy):
         iv_long  = get_iv(self.codeId, 'call', self.entry_long)
         k1 = self._call_strike_by_delta(bar.close_price, T, self.entry_short, iv_short)
         k2 = self._call_strike_by_delta(bar.close_price, T, self.entry_long,  iv_long)
-        p1 = bs_call_price(bar.close_price, k1, T, self.risk_free_rate, iv_short)
-        p2 = bs_call_price(bar.close_price, k2, T, self.risk_free_rate, iv_long)
+        p1 = option_pricing.call_price(bar.close_price, k1, T, self.risk_free_rate, iv_short, self.codeId)
+        p2 = option_pricing.call_price(bar.close_price, k2, T, self.risk_free_rate, iv_long, self.codeId)
         net_credit = p1 - p2
         self._last_entry_dt = bar.datetime
         self._spreads.append({
@@ -223,5 +258,7 @@ class UTurnBottomShortCall(Strategy):
         self._bar_history.append(bar)
         self._check_expiry(bar)
         self._check_stop_loss(bar)
+        self._check_early_profit(bar)
         self._check_entry(bar)
+        self._record_mtm_pnl(bar)
         self._last_bar = bar

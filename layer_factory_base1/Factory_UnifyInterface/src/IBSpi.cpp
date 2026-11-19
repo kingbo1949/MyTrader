@@ -55,22 +55,21 @@ void CIBSpi::tickPrice(TickerId tickerId, TickType field, double price, const Ti
 	}
 	if (field == LAST)
 	{
+		if (TICK_BY_TICK_CODE_IDS.count(contract->codeId)) return ;
+
 		// printf("%s receive tickPrice: %.2f LAST \n", contract->codeId.c_str(), price);
 		MakeAndGet_WhiteBoard()->UpdateLastPrice(tickerId, price);
 	}
 
-	if (!USE_TICK_BY_TICK)
+	if (field == BID)
 	{
-		if (field == BID)
-		{
-			// printf("%s receive tickPrice: %.2f BID \n", contract->codeId.c_str(), price);
-			MakeAndGet_WhiteBoard()->UpdateBid(tickerId, price);
-		}
-		if (field == ASK)
-		{
-			// printf("%s receive tickPrice: %.2f ASK \n", contract->codeId.c_str(), price);
-			MakeAndGet_WhiteBoard()->UpdateAsk(tickerId, price);
-		}
+		// printf("%s receive tickPrice: %.2f BID \n", contract->codeId.c_str(), price);
+		MakeAndGet_WhiteBoard()->UpdateBid(tickerId, price);
+	}
+	if (field == ASK)
+	{
+		// printf("%s receive tickPrice: %.2f ASK \n", contract->codeId.c_str(), price);
+		MakeAndGet_WhiteBoard()->UpdateAsk(tickerId, price);
 	}
 	return;
 
@@ -82,14 +81,16 @@ void CIBSpi::tickSize(TickerId tickerId, TickType field, Decimal size)
 	IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(tickerId);
 	// printf("%s receive tickSize: %d \n", contract->codeId.c_str(), decimal_to_int(size));
 	IBTickPtr tick = nullptr;
-	if (field == LAST_SIZE)
+	if (field == LAST_SIZE )
 	{
+		if (TICK_BY_TICK_CODE_IDS.count(contract->codeId)) return ;
 		// printf("%s receive tickSize: %d LAST SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
 		tick = MakeAndGet_WhiteBoard()->UpdateLastVol(tickerId, decimal_to_int(size));
 
 	}
 	if (field == VOLUME)
 	{
+		// 累积成交量
 		// tickSize 股票返回的值是手数，需要乘以100转换成股
 		// printf("%s receive tickSize: %d VOLUME \n", contract->codeId.c_str(), decimal_to_int(size));
 		if (contract->securityType == SecurityType::STK)
@@ -100,27 +101,24 @@ void CIBSpi::tickSize(TickerId tickerId, TickType field, Decimal size)
 		else
 		{
 			int totalvol = decimal_to_int(size);
-			std::string timeStr = CGlobal::GetTickTimeStr(Get_CurrentTime()->GetCurrentTime_millisecond());
-			std::string str = fmt::format("{} {} rec totalvol = {}", timeStr.c_str(), contract->codeId.c_str(), totalvol);
-			Log_AsyncPrintDailyFile("whiteboard", str, 1, false);
+			// std::string timeStr = CGlobal::GetTickTimeStr(Get_CurrentTime()->GetCurrentTime_millisecond());
+			// std::string str = fmt::format("{} {} rec totalvol = {}", timeStr.c_str(), contract->codeId.c_str(), totalvol);
+			// Log_AsyncPrintDailyFile("whiteboard", str, 1, false);
 
 			tick = MakeAndGet_WhiteBoard()->UpdateTotalVol(tickerId, totalvol);
 		}
 
 	}
 
-	if (!USE_TICK_BY_TICK)
+	if (field == BID_SIZE)
 	{
-		if (field == BID_SIZE)
-		{
-			// printf("%s receive tickSize: %d BID SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
-			tick = MakeAndGet_WhiteBoard()->UpdateBidVol(tickerId, decimal_to_int(size));
-		}
-		if (field == ASK_SIZE)
-		{
-			// printf("%s receive tickSize: %d ASK SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
-			tick = MakeAndGet_WhiteBoard()->UpdateAskVol(tickerId, decimal_to_int(size));
-		}
+		// printf("%s receive tickSize: %d BID SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
+		tick = MakeAndGet_WhiteBoard()->UpdateBidVol(tickerId, decimal_to_int(size));
+	}
+	if (field == ASK_SIZE)
+	{
+		// printf("%s receive tickSize: %d ASK SIZE \n", contract->codeId.c_str(), decimal_to_int(size));
+		tick = MakeAndGet_WhiteBoard()->UpdateAskVol(tickerId, decimal_to_int(size));
 	}
 
 	if (!tick) return;
@@ -146,16 +144,18 @@ void CIBSpi::tickSize(TickerId tickerId, TickType field, Decimal size)
 void CIBSpi::tickByTickAllLast(int reqId, int tickType, time_t time, double price, Decimal size, const TickAttribLast& tickAttribLast, const std::string& exchange, const std::string& specialConditions)
 {
 	std::lock_guard<std::mutex> lock(m_mutex);
-	// last由tickPrice更新，不由这里更新
-	//if (tickType == 1) return;  // Last更新
+	//IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(reqId);
+	IBTickPtr tick = nullptr;
 
-	//printf("tick-by-tick rec last = %.2f, lastvol = %d \n", price, size);
+	MakeAndGet_WhiteBoard()->UpdateLastPrice(reqId, price);
+	tick = MakeAndGet_WhiteBoard()->UpdateLastVol(reqId, decimal_to_int(size));
 
-	////// AllLast更新
-	//IBTickPtr tick = Get_WhiteBoard()->UpdateLast(reqId, price, size);
-	//if (!tick) return;
+	if (!tick) return;
+	IBTickPtr cloneTick = tick->Clone();
+	MakeAndGet_MarketDepth()->Combine(reqId, cloneTick->bidAsks);
+	//printf("tick size %d \n", cloneTick->bidAsks.size());
+	UpdateTickToApp(reqId, cloneTick);
 
-	//MakeAndGet_Topic_OnTick()->UpdateTick_OnTick(tick);
 	return;
 }
 

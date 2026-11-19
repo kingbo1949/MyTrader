@@ -2,25 +2,14 @@
 UTurnBottomLongCall 策略：底部 UTurn 信号 → 买入指定 Delta 的 Call → 防御型锁定 → 到期结算
 期权通过 BS 公式模拟定价，所有 PnL 以 点数 记录，multiplier 由 PerformanceAnalyzer 换算 USD。
 """
-import math
 from datetime import timedelta
-from scipy.stats import norm
 
 from qib_trader.strategies.base import Strategy
 from qib_trader.core.models import BarData, Direction
 from qib_trader.utils.config_loader import get_iv
-
+from qib_trader.utils import option_pricing
 
 NQ_MULTIPLIER = 20.0  # 每点 $20
-
-
-def bs_call_price(S: float, K: float, T: float, r: float, sigma: float) -> float:
-    """欧式 Call 期权 Black-Scholes 定价（T 为年化剩余时间）。"""
-    if T <= 0:
-        return max(S - K, 0.0)
-    d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
-    d2 = d1 - sigma * math.sqrt(T)
-    return S * norm.cdf(d1) - K * math.exp(-r * T) * norm.cdf(d2)
 
 
 class UTurnBottomLongCall(Strategy):
@@ -57,12 +46,9 @@ class UTurnBottomLongCall(Strategy):
     # ── 工具方法 ──────────────────────────────────────────────────────────────
 
     def _strike_by_delta(self, S: float, T: float, iv: float) -> float:
-        """由目标 entry_delta 反推行权价，结果取整到最近的 100 点。
-        使用简化公式 K = S·exp(-N⁻¹(delta)·σ·√T)，忽略漂移项，
-        使 delta=0.5 精确等价于 ATM（K=round(S/100)×100）。"""
-        d1 = norm.ppf(self.entry_delta)
-        K = S * math.exp(-d1 * iv * math.sqrt(max(T, 1e-8)))
-        return round(K / self.strike_round) * self.strike_round
+        """由目标 entry_delta 反推行权价，取整到最近的 strike_round 点。"""
+        return option_pricing.call_strike_by_delta(
+            S, T, self.entry_delta, iv, self.risk_free_rate, self.codeId, self.strike_round)
 
     def _next_expiry(self, bar_dt, min_days: int):
         """返回 bar_dt + min_days 之后的第一个 expiry_weekday（0=周一,2=周三,4=周五）。"""
@@ -91,8 +77,8 @@ class UTurnBottomLongCall(Strategy):
         remaining = []
         for sp in self._spreads:
             rem_t = self._rem_t(bar.datetime, sp['expiry'])
-            curr_long  = bs_call_price(bar.close_price, sp['k1'], rem_t, self.risk_free_rate, sp['iv'])
-            curr_short = bs_call_price(bar.close_price, sp['k2'], rem_t, self.risk_free_rate, sp['iv'])
+            curr_long  = option_pricing.call_price(bar.close_price, sp['k1'], rem_t, self.risk_free_rate, sp['iv'], self.codeId)
+            curr_short = option_pricing.call_price(bar.close_price, sp['k2'], rem_t, self.risk_free_rate, sp['iv'], self.codeId)
             net_debit  = sp['long_prem'] - sp['short_prem']
             max_profit = (sp['k2'] - sp['k1']) - net_debit
             curr_profit = (curr_long - curr_short) - net_debit
@@ -158,7 +144,7 @@ class UTurnBottomLongCall(Strategy):
             self._long_call = None
             return
         rem_t = self._rem_t(bar.datetime, lc['expiry'])
-        short_prem = bs_call_price(bar.close_price, k2, rem_t, self.risk_free_rate, lc['iv'])
+        short_prem = option_pricing.call_price(bar.close_price, k2, rem_t, self.risk_free_rate, lc['iv'], self.codeId)
         net_debit = lc['long_prem'] - short_prem
         self._spreads.append({
             'k1': lc['k1'], 'k2': k2,
@@ -192,7 +178,7 @@ class UTurnBottomLongCall(Strategy):
             return
         lc = self._long_call
         rem_t = self._rem_t(bar.datetime, lc['expiry'])
-        curr_val = bs_call_price(bar.close_price, lc['k1'], rem_t, self.risk_free_rate, lc['iv'])
+        curr_val = option_pricing.call_price(bar.close_price, lc['k1'], rem_t, self.risk_free_rate, lc['iv'], self.codeId)
         if curr_val <= self.stop_loss_ratio * lc['long_prem']:
             self._lock_spread(bar, lc['entry_close'] + self.k2_stoploss, lc)
 
@@ -206,6 +192,24 @@ class UTurnBottomLongCall(Strategy):
                 and (bar.prev_day_close <= 0
                      or bar.high_price > bar.prev_day_close * (1 + self.min_rise_from_prev_close))):
             self._lock_spread(bar, bar.close_price + self.k2_takeprofit, self._long_call)
+
+    # ── 盯市 ──────────────────────────────────────────────────────────────────
+
+    def _calc_mtm_pnl(self, bar: BarData) -> float:
+        """LongCall MTM：未锁仓 call 的期权价值变化 + 已锁仓 Bull Call Spread 的浮动盈亏。"""
+        S, total = bar.close_price, 0.0
+        if self._long_call is not None:
+            lc       = self._long_call
+            T        = self._rem_t(bar.datetime, lc['expiry'])
+            curr_val = option_pricing.call_price(S, lc['k1'], T, self.risk_free_rate, lc['iv'], self.codeId)
+            total   += curr_val - lc['long_prem']
+        for sp in self._spreads:
+            T        = self._rem_t(bar.datetime, sp['expiry'])
+            curr_p1  = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv'], self.codeId)
+            curr_p2  = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv'], self.codeId)
+            net_debit = sp['long_prem'] - sp['short_prem']
+            total   += (curr_p1 - curr_p2) - net_debit
+        return total
 
     def _entry_signal(self, bar: BarData) -> bool:
         """底部 UTurn + dif < dif_entry + low 破昨低 + low 低于昨收 min_drop_from_prev_close。"""
@@ -228,7 +232,7 @@ class UTurnBottomLongCall(Strategy):
         T = (expiry - bar.datetime).total_seconds() / (365.25 * 24 * 3600)
         iv_entry = get_iv(self.codeId, 'call', self.entry_delta)
         k1 = self._strike_by_delta(bar.close_price, T, iv_entry)
-        long_prem = bs_call_price(bar.close_price, k1, T, self.risk_free_rate, iv_entry)
+        long_prem = option_pricing.call_price(bar.close_price, k1, T, self.risk_free_rate, iv_entry, self.codeId)
         self._long_call = {
             'entry_dt': bar.datetime, 'entry_close': bar.close_price,
             'k1': k1, 'expiry': expiry, 'long_prem': long_prem, 'iv': iv_entry,
@@ -247,4 +251,5 @@ class UTurnBottomLongCall(Strategy):
         self._check_stop_loss(bar)
         self._check_take_profit(bar)
         self._check_entry(bar)
+        self._record_mtm_pnl(bar)
         self._last_bar = bar

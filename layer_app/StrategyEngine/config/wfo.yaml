@@ -9,7 +9,7 @@ wfo_tasks:
     end_time:   "2026-03-01 00:00:00"
     is_months:    3       # in-sample 窗口长度（月）
     oos_months:   3       # out-of-sample 窗口长度（月），同时也是滑动步长
-    optimize_by:  "recovery_factor"  # 可选: recovery_factor / sharpe_ratio / total_return / win_rate
+    optimize_by:  "calmar_ratio"  # 可选: calmar_ratio / sharpe_ratio / total_return / win_rate
     grid:
       iv:               [0.24]
       risk_free_rate:   [0.04]
@@ -36,7 +36,7 @@ wfo_tasks:
     end_time:   "2026-03-01 00:00:00"
     is_months:    3
     oos_months:   3
-    optimize_by:  "recovery_factor"
+    optimize_by:  "calmar_ratio"
     grid:
       iv:                        [0.24]
       risk_free_rate:            [0.04]

@@ -11,9 +11,9 @@ CTickUpdator::CTickUpdator()
 
 void CTickUpdator::UpdateTickToDB(const ITick& tick, bool isIndex)
 {
-	if (tick.codeId == "NQ")
+	if (tick.codeId == "NQ" || tick.codeId == "ES")
 	{
-		UpdateTickToTickHis(tick, isIndex);
+		UpdateTickToTickHis(tick);
 	}
 
 	UpdateTickToKLine(tick, isIndex);

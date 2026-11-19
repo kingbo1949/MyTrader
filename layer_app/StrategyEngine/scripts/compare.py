@@ -94,7 +94,7 @@ def _build_raw_table(results: list[dict]) -> pd.DataFrame:
             "Return": f"{r['total_return']:+.2%}",
             "Sharpe": f"{r['sharpe']:.2f}",
             "MaxDD": f"{r['max_dd_pct']:.2%}",
-            "RecovFactor": f"{r['recovery_factor']:.2f}",
+            "Calmar": f"{r['calmar_ratio']:.2f}",
             "Trades": r["total_trades"],
             "WinRate": f"{r['win_rate']:.2%}",
             "PnLRatio": f"{r['pnl_ratio']:.2f}",
@@ -113,7 +113,7 @@ def _normalize_leverage(results: list[dict]) -> list[dict]:
         adj_dd = r["max_dd_pct"] * factor
         adj_recov = adj_return / abs(adj_dd) if adj_dd != 0 else 0.0
         adjusted.append({**r, "total_return": adj_return,
-                         "max_dd_pct": adj_dd, "recovery_factor": adj_recov})
+                         "max_dd_pct": adj_dd, "recovery_factor_adj": adj_recov})
     return adjusted
 
 
@@ -126,7 +126,7 @@ def _build_adjusted_table(results: list[dict], ref_lev: float) -> pd.DataFrame:
             f"Return(折至{ref_lev:.2f}x)": f"{r['total_return']:+.2%}",
             "Sharpe(不变)": f"{r['sharpe']:.2f}",
             f"MaxDD(折至{ref_lev:.2f}x)": f"{r['max_dd_pct']:.2%}",
-            "RecovFactor": f"{r['recovery_factor']:.2f}",
+            "RecovFactor(%,杠杆折算)": f"{r['recovery_factor_adj']:.2f}",
         })
     return pd.DataFrame(rows)
 

@@ -22,9 +22,19 @@ class Strategy(ABC):
         self.active: bool = False
         self.pos: float = 0.0
         self._current_dt: datetime = datetime.min
+        self._mtm_pnl_series: Dict[datetime, float] = {}   # datetime → 当前未平仓浮动盈亏
+        self._own_bars: list = []   # 由回测脚本在创建后注入：该品种/周期的完整 bar 列表
+        self._bar_idx: int = -1     # 当前 bar 在 _own_bars 中的索引
 
         self.logger = logging.getLogger(f"Strategy.{self.strategy_id}")
         self._update_params(params)
+
+        # 若参数中含 sync_signals，将所有品种名追加到 strategy_id（与 optimizer 保持一致）
+        sync_sigs = getattr(self, 'sync_signals', None)
+        if sync_sigs:
+            suffix = "_" + "-".join(s["code_id"] for s in sync_sigs)
+            self.strategy_id = self.strategy_id + suffix
+            self.logger = logging.getLogger(f"Strategy.{self.strategy_id}")
 
     def _update_params(self, params: Dict[str, Any]) -> None:
         for key, value in params.items():
@@ -46,6 +56,23 @@ class Strategy(ABC):
         self.active = False
         self.logger.info(f"策略 {self.strategy_id} 已停止")
 
+    # --- 盯市（MTM）接口 ---
+
+    def _calc_mtm_pnl(self, bar: BarData) -> float:
+        """计算当前所有未平仓持仓的浮动盈亏（盈正亏负）。期权策略子类覆盖此方法。"""
+        return 0.0
+
+    def _record_mtm_pnl(self, bar: BarData) -> None:
+        """在 logic() 末尾调用，将本 bar 的盯市盈亏写入 _mtm_pnl_series。"""
+        self._mtm_pnl_series[bar.datetime] = self._calc_mtm_pnl(bar)
+
+    def _peek_next_bars(self, n: int) -> list:
+        """返回当前 bar 之后最多 n 根本策略自身品种/周期的 bar，越界或未注入 _own_bars 时返回 []。"""
+        if n <= 0 or not self._own_bars:
+            return []
+        start = self._bar_idx + 1
+        return self._own_bars[start:start + n]
+
     # --- 数据驱动钩子 ---
 
     def on_bar(self, bar: BarData) -> None:
@@ -53,6 +80,7 @@ class Strategy(ABC):
             return
         if bar.interval != self.interval:
             return
+        self._bar_idx += 1
         self._current_dt = bar.datetime
         self.logic(bar)
 

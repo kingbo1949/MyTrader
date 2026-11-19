@@ -38,7 +38,7 @@ logger = logging.getLogger("WFO")
 @dataclass(slots=True, frozen=True)
 class OptResult:
     params: dict
-    recovery_factor: float
+    calmar_ratio: float   # 年化收益% / 最大回撤%，用于网格排名（原 recovery_factor 美元法已废弃排名用途）
     sharpe_ratio: float
     total_return: float
     win_rate: float
@@ -65,16 +65,19 @@ def _run_single(task: tuple) -> OptResult:
     conf = {"class": class_name, "code_id": code_id,
             "interval": interval_str, "direction": direction_str, "params": params}
     strategy = FactoryStrategy.create_strategy(conf)
+    strategy._own_bars = bars
     get_pool().add_strategy(strategy)
     BacktestEngine().run_backtest(bars)
     trades = get_broker().get_trades()
+    closed = getattr(strategy, "_closed_positions", None) or []
     return _score(params, trades, bars, multiplier,
-                  strategy.initial_capital, strategy.options_mode)
+                  strategy.initial_capital, strategy.options_mode, closed)
 
 
 def _score(params, trades, bars, multiplier,
            initial_capital: float = _INITIAL_CAPITAL,
-           options_mode: bool = False) -> OptResult:
+           options_mode: bool = False,
+           closed_positions: list | None = None) -> OptResult:
     if not trades or not bars:
         return OptResult(params, 0.0, 0.0, 0.0, 0.0, 0)
     trade_df = _build_trade_df(trades)
@@ -82,10 +85,10 @@ def _score(params, trades, bars, multiplier,
         _merge_pos_into_bars(_build_bar_df(bars), trade_df),
         trade_df, initial_capital, multiplier, options_mode
     )
-    s = _calc_summary(bar_df, initial_capital)
+    s = _calc_summary(bar_df, initial_capital, closed_positions)
     tm = _calc_trade_metrics(_round_trip_pnls(trade_df, multiplier))
     return OptResult(params=params,
-                     recovery_factor=s["recovery_factor"],
+                     calmar_ratio=s["calmar_ratio"],
                      sharpe_ratio=s["sharpe"],
                      total_return=s["total_return"],
                      win_rate=tm["win_rate"],
@@ -142,7 +145,7 @@ def _best_params(bars_is: BarDatas, cfg: dict, multiplier: float) -> tuple[dict,
              for p in grid]
     with Pool(processes=cpu_count()) as pool:
         results = pool.map(_run_single, tasks)
-    metric = cfg.get("optimize_by", "recovery_factor")
+    metric = cfg.get("optimize_by", "calmar_ratio")
     best = max(results, key=lambda r: getattr(r, metric))
     return best.params, best
 
@@ -158,6 +161,7 @@ def _run_oos(bars_oos: BarDatas, params: dict, cfg: dict) -> tuple:
             "interval": cfg["interval"], "direction": cfg["direction"],
             "params": params}
     strategy = FactoryStrategy.create_strategy(conf)
+    strategy._own_bars = bars_oos
     get_pool().add_strategy(strategy)
     BacktestEngine().run_backtest(bars_oos)
     return get_broker().get_trades(), strategy
@@ -185,7 +189,7 @@ def _print_window_performance(perf_records: list[WindowPerf]) -> None:
     print(f"\n{'★' * 6}  WFO 各窗口 IS vs OOS 绩效  {'★' * 6}")
     hdr = (f"{'窗口':<6} {'OOS区间':<24} {'成交':>5}  "
            f"{'IS夏普':>8}  {'IS收益%':>8}  "
-           f"{'OOS夏普':>8}  {'OOS收益%':>8}  {'恢复系数':>8}  {'胜率%':>6}")
+           f"{'OOS夏普':>8}  {'OOS收益%':>8}  {'Calmar':>8}  {'胜率%':>6}")
     sep = "─" * len(hdr)
     print(sep); print(hdr); print(sep)
     for wp in perf_records:
@@ -194,7 +198,7 @@ def _print_window_performance(perf_records: list[WindowPerf]) -> None:
         print(f"{wp.idx:<6} {period:<24} {o.trade_count:>5}"
               f"  {i.sharpe_ratio:>8.2f}  {i.total_return*100:>7.2f}%"
               f"  {o.sharpe_ratio:>8.2f}  {o.total_return*100:>7.2f}%"
-              f"  {o.recovery_factor:>8.2f}  {o.win_rate*100:>5.1f}%")
+              f"  {o.calmar_ratio:>8.2f}  {o.win_rate*100:>5.1f}%")
     print(sep + "\n")
 
 
@@ -210,7 +214,8 @@ def _run_wfo_task(cfg: dict) -> None:
     end   = datetime.strptime(cfg["end_time"],   "%Y-%m-%d %H:%M:%S")
     windows = _generate_windows(start, end, cfg["is_months"], cfg["oos_months"])
     logger.info(f"共 {len(windows)} 个滚动窗口，IS={cfg['is_months']}月，OOS={cfg['oos_months']}月")
-    all_oos_trades, all_oos_bars, window_records, perf_records = [], [], [], []
+    all_oos_trades, all_oos_bars, all_oos_closed = [], [], []
+    window_records, perf_records = [], []
     for i, (is_s, is_e, oos_s, oos_e) in enumerate(windows, 1):
         bars_is  = _filter_bars(all_bars, is_s, is_e)
         bars_oos = _filter_bars(all_bars, oos_s, oos_e)
@@ -218,20 +223,23 @@ def _run_wfo_task(cfg: dict) -> None:
                     f"  OOS {oos_s.date()}~{oos_e.date()} ({len(bars_oos)}bars)")
         params, is_result = _best_params(bars_is, cfg, multiplier)
         oos_trades, oos_strategy = _run_oos(bars_oos, params, cfg)
+        oos_closed = getattr(oos_strategy, "_closed_positions", None) or []
         oos_result = _score(params, oos_trades, bars_oos, multiplier,
-                            oos_strategy.initial_capital, oos_strategy.options_mode)
+                            oos_strategy.initial_capital, oos_strategy.options_mode, oos_closed)
         logger.info(f"窗口{i} OOS 成交: {len(oos_trades)} 笔")
         window_records.append((i, oos_s, oos_e, len(oos_trades), params))
         perf_records.append(WindowPerf(i, oos_s, oos_e, is_result, oos_result))
         all_oos_trades.extend(oos_trades)
         all_oos_bars.extend(bars_oos)
+        all_oos_closed.extend(oos_closed)
     logger.info(f"WFO完成，OOS总成交: {len(all_oos_trades)} 笔")
     _print_params_summary(window_records, cfg)
     _print_window_performance(perf_records)
     analyzer = PerformanceAnalyzer(all_oos_trades, all_oos_bars,
                                    initial_capital=oos_strategy.initial_capital,
                                    contract_multiplier=multiplier,
-                                   options_mode=oos_strategy.options_mode)
+                                   options_mode=oos_strategy.options_mode,
+                                   closed_positions=all_oos_closed)
     df = analyzer.calculate_performance()
     if not df.empty:
         dd_idx = df["drawdown"].idxmin()

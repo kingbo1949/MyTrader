@@ -67,10 +67,26 @@ class BarData:
     is_uturn: bool = False
     atr: float = 0.0
     avg_atr: float = 0.0          # 最近14周期 ATR 均值
+    ma5:   float = 0.0            # 5周期均线（数据库实时算好的，当前bar自带）
+    ma20:  float = 0.0
+    ma60:  float = 0.0
+    ma200: float = 0.0
     # 上一日日线数据（仅对日内 bar 有效）
     prev_day_high: float = 0.0
     prev_day_low: float = 0.0
     prev_day_close: float = 0.0
+    # 指数数据（ES 或 NQ 均返回 VIX），indexValid=True 时有效
+    index_valid:    bool  = False
+    index_close:    float = 0.0
+    index_open:     float = 0.0
+    index_high:     float = 0.0
+    index_low:      float = 0.0
+    index_vol:      int   = 0
+    index_dif:      float = 0.0
+    index_dea:      float = 0.0
+    index_macd:     float = 0.0
+    index_div_type: str   = ""
+    index_is_uturn: bool  = False
 
 # --- 3. 交易执行数据模型 ---
 

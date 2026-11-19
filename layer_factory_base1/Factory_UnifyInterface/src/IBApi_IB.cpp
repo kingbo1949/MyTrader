@@ -291,19 +291,19 @@ void CIBApi_IB::SubscribeQuote(const IbContractPtrs& contracts)
 		Contract contract = Trans(one_contract);
 		CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(one_contract->codeId.c_str());
 
-		//m_pApi->reqMktData(codeHash, contract, "233,236,258", false, false, TagValueListSPtr());
-		if (USE_TICK_BY_TICK)
-		{
-			m_pApi->reqTickByTickData(codeHash, contract, "BidAsk", 0, false);
-			//m_pApi->reqTickByTickData(1001, contract, "AllLast", 0, false);
-		}
+		// 订阅普通行情
 		m_pApi->reqMktData(codeHash, contract, "", false, false, TagValueListSPtr());
 
-		if (one_contract->codeId == "NQ")
+		// 订阅深度行情
+		if (MrkDepth_CODE_IDS.count(one_contract->codeId))
 		{
 			m_pApi->reqMktDepth(codeHash, contract, MaxPriceRowCountSubscribe, false, TagValueListSPtr());
 		}
 
+		if (TICK_BY_TICK_CODE_IDS.count(one_contract->codeId))
+		{
+			m_pApi->reqTickByTickData(codeHash, contract, "AllLast", 0, false);
+		}
 
 		Log_Print(LogLevel::Warn, fmt::format("SubscribeQuote {} {}", contract.symbol.c_str(), contract.localSymbol.c_str()));
 	}
@@ -319,14 +319,18 @@ void CIBApi_IB::UnSubscribeQuote(const IbContractPtrs& contracts)
 		Contract contract = Trans(one_contract);
 		CodeHashId codeHash = Get_CodeIdEnv()->Get_CodeId_Hash(one_contract->codeId.c_str());
 
-		m_pApi->cancelMktDepth(codeHash, false);
 		m_pApi->cancelMktData(codeHash);
 
-		if (USE_TICK_BY_TICK)
+		// 订阅深度行情
+		if (MrkDepth_CODE_IDS.count(one_contract->codeId))
+		{
+			m_pApi->cancelMktDepth(codeHash, false);
+		}
+
+		if (TICK_BY_TICK_CODE_IDS.count(one_contract->codeId))
 		{
 			m_pApi->cancelTickByTickData(codeHash);
 		}
-
 
 	}
 

@@ -48,5 +48,8 @@ layer_app/Requirement_Description/*.csv
 *.tmp
 *.bak
 
-# ===== Strategy output images =====
-layer_app/StrategyEngine/output/**/*.png
+# ===== StrategyEngine 回测/优化输出（不需要版本跟踪） =====
+layer_app/StrategyEngine/output/
+layer_app/StrategyEngine/output1/
+layer_app/StrategyEngine/logs/
+layer_app/StrategyEngine/图像/

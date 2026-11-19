@@ -12,12 +12,16 @@ codeIds:
   NQ:
     multiplier: 20.0  # Nasdaq 100 每点 $20
     commission: 2.0   # 每手手续费 (预留)
-    strike_round: 50  # 期权链行权价档位（点数）
+    strike_round: 10  # 期权链行权价档位（点数）
     iv:
       put:
-        0.5: 0.17
+        0.5: 0.2    # 0.2 7日为13，3日为4
+                     # 0.25 2日收益比为17 1日为11 0日为2， 7日为25，3日为8
+                     # 0.30 2日收益比为35 1日为15 0日为6， 7日为36，3日为19
+                     # 0.35 2日收益比为58 1日为22 0日为10，7日为50，3日为39
       call:
-        0.5: 0.17
+        0.5: 0.2    # 0.25 2日收益比为12 1日为9 0日为3，  7日为8，3日为16
+                     # 0.30 2日收益比为34 1日为26 0日为11， 7日为23，3日为35
 #      put:
 #        0.5: 0.275
 #        0.4: 0.283
@@ -38,12 +42,17 @@ codeIds:
   ES:
     multiplier: 50.0  # S&P 500 每点 $50
     commission: 2.0
-    strike_round: 10
+    strike_round: 5
     iv:
       put:
-        0.5: 0.15
+        0.5: 0.15    # 0.25 2日收益比为24 1日为20 0日为13， 7日为46， 3日为23
+                     # 0.20 2日收益比为13 1日为8 0日为5, 7日为19，3日为8
+                     # 0.12 1日收益比为1.8 2日为1.6 0日为1.1, 7日为6.17，3日为1.7
       call:
-        0.5: 0.15
+        0.5: 0.15    # 0.2 1日收益比为37 2日为26 0日为9, 3日为21，7日为14
+                     # 0.15 2日收益比为12 1日为11 0日为2.8，3日为8，7日为2
+                     # 0.12 3日为5，7日为-0.4
+
 
 #  ES:
 #    multiplier: 50.0  # S&P 500 每点 $50
@@ -67,6 +76,11 @@ codeIds:
     commission: 0.01
     strike_round: 5
     iv:
+#      put:
+#        0.5: 0.25
+#      call:
+#        0.5: 0.25
+
       put:
         0.5: 0.459
         0.4: 0.469
@@ -105,9 +119,9 @@ codeIds:
     strike_round: 1
     iv:
       put:
-        0.5: 0.14
+        0.5: 0.16
       call:
-        0.5: 0.14
+        0.5: 0.16
 
 #      put:
 #        0.5: 0.28
@@ -128,9 +142,18 @@ codeIds:
     strike_round: 1
     iv:
       put:
-        0.5: 0.3
+        0.5: 0.2
       call:
-        0.5: 0.3
+        0.5: 0.2
+  TQQQ:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 1
+    iv:
+      put:
+        0.5: 0.6
+      call:
+        0.5: 0.6
   PSQ:
     multiplier: 100.0
     commission: 0.01
@@ -146,18 +169,18 @@ codeIds:
     strike_round: 1
     iv:
       put:
-        0.5: 0.343
+        0.5: 0.23
       call:
-        0.5: 0.343
+        0.5: 0.23
   SMH:
     multiplier: 100.0
     commission: 0.01
     strike_round: 2.5
     iv:
       put:
-        0.5: 0.449
+        0.5: 0.5
       call:
-        0.5: 0.449
+        0.5: 0.5
   JPM:
     multiplier: 100.0
     commission: 0.01
@@ -188,12 +211,12 @@ codeIds:
   GS:
     multiplier: 100.0
     commission: 0.01
-    strike_round: 5
+    strike_round: 2.5
     iv:
       put:
-        0.5: 0.30
+        0.5: 0.3
       call:
-        0.5: 0.30
+        0.5: 0.3
   NVDA:
     multiplier: 100.0
     commission: 0.01
@@ -221,6 +244,15 @@ codeIds:
         0.5: 0.683
       call:
         0.5: 0.683
+  ORCL:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 2.5
+    iv:
+      put:
+        0.5: 0.66
+      call:
+        0.5: 0.66
 
   GOOG:
     multiplier: 100.0
@@ -273,9 +305,27 @@ codeIds:
     strike_round: 5
     iv:
       put:
-        0.5: 0.41
+        0.5: 0.5
       call:
-        0.5: 0.41
+        0.5: 0.5
+  NASA:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 0.5
+    iv:
+      put:
+        0.5: 0.5
+      call:
+        0.5: 0.5
+  RKLB:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.6
+      call:
+        0.5: 0.6
   AAPL:
     multiplier: 100.0
     commission: 0.01
@@ -312,6 +362,15 @@ codeIds:
         0.5: 0.7
       call:
         0.5: 0.7
+  MU:
+    multiplier: 100.0
+    commission: 0.01
+    strike_round: 5
+    iv:
+      put:
+        0.5: 0.55
+      call:
+        0.5: 0.55
   AMD:
     multiplier: 100.0
     commission: 0.01
@@ -328,3 +387,5 @@ environment:
   mode: "backtest"
   qdatabase_proxy: "QServer/IBQDatabase:tcp -h 10.0.0.64 -p 10000"
   export_trades_csv: true   # 回测结束后按策略导出成交记录到 output/ 目录
+  use_cache: false          # true=使用 datadb/ 本地缓存，false=重新从远端拉取并更新缓存
+  verbose_trade_log: false  # true=输出每笔成交明细；false=仅输出策略级摘要

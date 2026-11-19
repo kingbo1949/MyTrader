@@ -1,4 +1,5 @@
 import yaml
+from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Any
 from qib_trader.core.models import CodeId
@@ -12,20 +13,18 @@ def get_project_root() -> Path:
     return Path(__file__).resolve().parents[3]
 
 
+@lru_cache(maxsize=None)
 def load_yaml_config(file_path: str) -> Dict[str, Any]:
     """
-    加载并解析 YAML 配置文件。
+    加载并解析 YAML 配置文件。每个进程内按路径缓存，避免并行子进程反复读磁盘。
     [保持] 自动定位根目录逻辑，确保相对路径在不同执行环境下均有效。
     """
-    # 1. 拼接目标配置文件的绝对路径
     absolute_path = get_project_root() / file_path
 
     if not absolute_path.exists():
-        # [保持] 报错时输出绝对路径，方便调试
         raise FileNotFoundError(f"无法找到配置文件。请确认文件存在于: {absolute_path}")
 
     with open(absolute_path, 'r', encoding='utf-8') as f:
-        # [保持] 使用 safe_load 确保解析安全
         config = yaml.safe_load(f)
 
     return config if config else {}
@@ -95,6 +94,16 @@ def is_export_trades_csv() -> bool:
     """返回是否在回测结束后导出成交记录 CSV。"""
     return bool(get_env_config().get("export_trades_csv", False))
 
+
+def is_use_cache() -> bool:
+    """返回是否使用 datadb/ 本地缓存而非从远端拉取数据。"""
+    return bool(get_env_config().get("use_cache", False))
+
+
+def is_verbose_trade_log() -> bool:
+    """返回是否输出每笔成交明细；false 时策略日志静默到 WARNING 级别。"""
+    return bool(get_env_config().get("verbose_trade_log", True))
+
 def get_strategies_config() -> [Any]:
     """
     从 config/strategies.yaml 中获取环境的全局配置属性。
@@ -117,4 +126,30 @@ def get_optimizations_config() -> [Any]:
     loader = load_yaml_config("config/optimization.yaml")
     optimizations_configs = loader.get("optimizations", [])
     return optimizations_configs
+
+
+def get_live_config() -> Dict[str, Any]:
+    """从 config/live.yaml 中获取 live 段（IB连接/轮询/对照窗口配置）。"""
+    loader = load_yaml_config("config/live.yaml")
+    return loader.get("live", {})
+
+
+def get_live_ib_config() -> Dict[str, Any]:
+    """live.yaml 里的 IB 连接配置（host/port/client_id/timeout_seconds）。"""
+    return get_live_config().get("ib", {})
+
+
+def get_live_poll_buffer_seconds() -> int:
+    return int(get_live_config().get("poll_buffer_seconds", 59))
+
+
+def get_live_reconciliation_window_hours() -> float:
+    return float(get_live_config().get("reconciliation_window_hours", 48))
+
+
+def get_live_strategies_config() -> [Any]:
+    """从 config/live.yaml 中获取实盘策略配置列表，结构与 strategies.yaml 的
+    strategies 段一致（class/enable/code_id/interval/direction/params）。"""
+    loader = load_yaml_config("config/live.yaml")
+    return loader.get("strategies", [])
 

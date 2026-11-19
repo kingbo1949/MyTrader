@@ -6,8 +6,16 @@
 
 #ifndef PCH_H
 #define PCH_H
+#include <string>
 
 
-const bool USE_TICK_BY_TICK = false;
+#include <set>
+// 需要用逐笔(tick-by-tick)行情的品种集合——codeId在这个集合里的，
+// SubscribeQuote/UnSubscribeQuote及tickPrice/tickSize里对应字段的
+// 处理方式都要查这个集合，不要再用单独的bool开关。
+const std::set<std::string> TICK_BY_TICK_CODE_IDS = {"NQ"};
+
+// 深度行情的品种集合
+const std::set<std::string> MrkDepth_CODE_IDS = {"NQ"};
 
 #endif //PCH_H

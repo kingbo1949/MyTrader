@@ -91,7 +91,7 @@ class FactoryIce:
             continue
         return klines
 
-    # ── Enriched klines: GetRichs 一次返回 kline + MACD + DivType + ATR + 上日高低 ──
+    # ── Enriched klines: GetRichs 一次返回 kline + MACD + DivType + ATR + 上日高低 + VIX（ES/NQ）──
 
     @classmethod
     def _generic_loop(cls, getter_name: str, code_id: str, time_type, time_pair):
@@ -140,9 +140,24 @@ class FactoryIce:
             'is_uturn':      bool(r.isUTurn),
             'atr':           float(r.thisAtr),
             'avg_atr':       float(r.avgAtr),
+            'ma5':           float(r.ma5),
+            'ma20':          float(r.ma20),
+            'ma60':          float(r.ma60),
+            'ma200':         float(r.ma200),
             'prev_day_high':  float(r.preDayHigh),
             'prev_day_low':   float(r.preDayLow),
             'prev_day_close': float(r.preDayClose),
+            'index_valid':    bool(r.indexValid),
+            'index_close':    float(r.indexValue.close)    if r.indexValid else 0.0,
+            'index_open':     float(r.indexValue.open)     if r.indexValid else 0.0,
+            'index_high':     float(r.indexValue.high)     if r.indexValid else 0.0,
+            'index_low':      float(r.indexValue.low)      if r.indexValid else 0.0,
+            'index_vol':      int  (r.indexValue.vol)      if r.indexValid else 0,
+            'index_dif':      float(r.indexValue.dif)      if r.indexValid else 0.0,
+            'index_dea':      float(r.indexValue.dea)      if r.indexValid else 0.0,
+            'index_macd':     float(r.indexValue.macd)     if r.indexValid else 0.0,
+            'index_div_type': cls._divtype_str(r.indexValue.divType) if r.indexValid else '',
+            'index_is_uturn': bool(r.indexValue.isUTurn)   if r.indexValid else False,
         } for r in richs]
         df = pd.DataFrame(data)
         df.set_index('datetime', inplace=True, drop=False)

@@ -5,6 +5,7 @@ auto_test.py — 自动化测试脚本
 """
 import ast
 import logging
+import math
 import re
 import sys
 from pathlib import Path
@@ -25,15 +26,17 @@ from qib_trader.utils.stats import PerformanceAnalyzer
 
 from qib_trader.utils.config_loader import load_yaml_config
 
-from optimizer import _run_opt_task, _fetch_bars, _task_id
+from optimizer import _run_opt_task, _fetch_bars, _task_id, _sync_suffix
+from signal_character_plot import plot_closed_positions
 
 # ─── 硬编码配置（按需修改）────────────────────────────────────────────────────
 
-TARGETS   = ["ES"]
+TARGETS   = ["TSLA"]
+# TARGETS   = ["SMH"]
 # TARGETS   = ["QQQ", "SPY", "AAPL", "AMD", "AMZN", "AVGO", "COIN", "GOOG", "GS", "INTC", "IWM", "JPM", "MCD", "META", "MSFT", "MSTR", "NVDA", "SMH", "SOXX", "TSLA", "TSM", "WMT"]
 # TARGETS   = ["QQQ", "SPY", "GS", "JPM", "MS", "SMH", "TSM"]
 
-INTERVALS = ["M15","M5"]
+INTERVALS = ["M1"]
 
 # ─── 模板加载 ──────────────────────────────────────────────────────────────────
 
@@ -76,10 +79,9 @@ def _build_opt_config(template: dict, code_id: str, interval: str) -> dict:
 
 def _opt_txt_path(opt_config: dict) -> Path:
     """返回 optimizer 保存结果的 txt 文件路径。"""
-    tid   = _task_id(opt_config)
-    parts = tid.split("_")
-    code_id  = parts[1]
-    filename = "_".join(parts[:3]) + "_opt.txt"
+    code_id  = opt_config["code_id"]
+    suffix   = _sync_suffix(opt_config.get("fixed_params") or {})
+    filename = f"{opt_config['class']}_{code_id}_{opt_config['interval']}_opt{suffix}.txt"
     return Path(__file__).resolve().parents[1] / "output" / code_id / "optimizer" / filename
 
 
@@ -108,7 +110,7 @@ def _out_dir(code_id: str, subdir: str) -> Path:
 
 
 def _export_csv(strategy, trades: list, code_id: str) -> None:
-    """导出 CSV，优先使用期权仓位记录，否则用成交流水。"""
+    """导出 CSV，优先使用期权仓位记录，否则用成交流水；同时导出滚仓明细（如有）。"""
     import pandas as pd
     from dataclasses import asdict
     sid    = strategy.strategy_id
@@ -119,6 +121,37 @@ def _export_csv(strategy, trades: list, code_id: str) -> None:
     elif trades:
         pd.DataFrame([asdict(t) for t in trades]).to_csv(
             _out_dir(code_id, "deallist") / f"{sid}.csv", index=False, float_format='%.4f')
+    roll_log = getattr(strategy, "_roll_log", None)
+    if roll_log:
+        pd.DataFrame(roll_log).to_csv(_out_dir(code_id, "deallist") / f"{sid}_rolls.csv",
+                                      index=False, float_format='%.4f')
+
+
+def _print_deal_report(strategy, logger: logging.Logger) -> None:
+    closed = getattr(strategy, "_closed_spreads", None) or getattr(strategy, "_closed_positions", None)
+    if not closed:
+        logger.info("无交易记录，跳过报告")
+        return
+    pnls   = [p["final_pnl"] for p in closed]
+    n      = len(pnls)
+    wins   = [p for p in pnls if p > 0]
+    losses = [p for p in pnls if p <= 0]
+    wr     = len(wins) / n
+    avg    = sum(pnls) / n
+    z      = (len(wins) - n * 0.5) / (math.sqrt(n) * 0.5) if n > 0 else 0.0
+    lines = [
+        "-" * 50,
+        f"  class               : {strategy.__class__.__name__}",
+        f"  total_signals       : {n}",
+        f"  win_rate            : {wr:.2%}",
+        f"  avg_pnl_points      : {avg:.2f}",
+        f"  avg_win_points      : {sum(wins)/len(wins):.2f}" if wins else "  avg_win_points      : N/A",
+        f"  avg_loss_points     : {sum(losses)/len(losses):.2f}" if losses else "  avg_loss_points     : N/A",
+        f"  expectancy          : {avg:.2f}",
+        f"  z_score             : {z:.2f}",
+        "-" * 50,
+    ]
+    logger.info("\n" + "\n".join(lines))
 
 
 def _run_verified_backtest(opt_config: dict, best_params: dict) -> None:
@@ -136,18 +169,32 @@ def _run_verified_backtest(opt_config: dict, best_params: dict) -> None:
         "params": best_params,
     }
     strategy = FactoryStrategy.create_strategy(strategy_conf)
+    strategy._own_bars = bars
     get_pool().add_strategy(strategy)
     BacktestEngine().run_backtest(bars)
     trades     = [t for t in get_broker().get_trades() if t.strategy_id == strategy.strategy_id]
     multiplier = get_codeId_config(opt_config["code_id"]).get("multiplier", 1.0)
+    mtm_series = getattr(strategy, '_mtm_pnl_series', {})
+    closed     = getattr(strategy, '_closed_positions', None) or []
     analyzer   = PerformanceAnalyzer(trades, bars, initial_capital=strategy.initial_capital,
-                                     contract_multiplier=multiplier, options_mode=strategy.options_mode)
+                                     contract_multiplier=multiplier, options_mode=strategy.options_mode,
+                                     mtm_pnl_series=mtm_series, closed_positions=closed)
     df         = analyzer.calculate_performance()
     chart_path = _out_dir(opt_config["code_id"], "deallist") / f"{strategy.strategy_id}.png"
     analyzer.plot_result(df, title=strategy.strategy_id, params=strategy.params,
                          save_path=str(chart_path), show=False)
     if is_export_trades_csv() and trades:
         _export_csv(strategy, trades, opt_config["code_id"])
+    _print_deal_report(strategy, logger)
+    csv_path = chart_path.with_suffix(".csv")
+    # 确保 MFE/MAE 图所需 CSV 存在，不依赖 export_trades_csv 开关
+    if not csv_path.exists():
+        closed = getattr(strategy, "_closed_positions", None) or getattr(strategy, "_closed_spreads", None)
+        if closed:
+            import pandas as pd
+            pd.DataFrame(closed).to_csv(csv_path, index=False, float_format='%.4f')
+    window_hours = best_params.get("option_days", 5) * 24
+    plot_closed_positions(csv_path, bars, opt_config["code_id"], window_hours=window_hours)
 
 
 # ─── 单任务编排 ───────────────────────────────────────────────────────────────

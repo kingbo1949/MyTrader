@@ -1,212 +1,563 @@
 # config/strategies.yaml
 strategies:
-  - class: "DoubleMAStrategy"
-    enable: false
-    code_id: "NQ"
-    interval: "D1"
-    start_time: "2025-01-01 00:00:00"
-    end_time: "2026-01-01 00:00:00"
-    direction: "LONG"
-    params:
-      fast_window: 5
-      slow_window: 20
-
-  - class: "Break4Week"
-    enable: false
-    code_id: "NQ"
-    interval: "M15"
-    start_time: "2024-01-05 00:00:00"
-    end_time: "2026-01-01 00:00:00"
-    direction: "LONG"
-    params:
-      bar_count: 40
-      can_open_begin: "00:00:00"
-      can_open_end: "23:00:00"
-      max_avg_atr: 45  # 开仓时 avg_atr 必须小于此值（14周期ATR均值，点数）
-
-  - class: "UTurnBottomLongCall"
-    enable: false
-    code_id: "NQ"
-    interval: "M15"
-    direction: "LONG"
-    start_time: "2024-01-05 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
-    params:
-      initial_capital: 100000       # 从峰值净值开始
-      risk_free_rate: 0.04
-      option_days: 21
-      expiry_weekday: 2 # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      dif_entry: -20
-      dif_profit: 20
-      k2_takeprofit: 100
-      k2_stoploss: 100
-      k2_timeout_profit: 100
-      k2_timeout_loss: 100
-      early_exit_ratio: 0.9  # 锁定spread盈利达到最大盈利此比例时提前平仓
-      min_drop_from_prev_close: 0.002   # 开仓低价须低于昨收的最小跌幅比率
-      min_rise_from_prev_close: 0.002    # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
-      entry_delta: 0.5                   # 开仓 Call 的目标 Delta（0.5=ATM）
-      stop_loss_ratio: 0.5               # 期权价值跌至保费此比例时触发止损
-
-  - class: "UTurnBottomShortPut"
-    enable: false
-    code_id: "ES"
-    interval: "M5"
-    direction: "LONG"
+- class: "UTurnBSync_CreditPutSpreadEx"
+  enable: false
+  code_id: "SMH"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-08-04 00:00:00"
+  params:
+    initial_capital: 100000
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
-    params:
-      initial_capital: 100000
-      risk_free_rate: 0.04
-      option_days: 7
-      expiry_weekday: 2         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      entry_short: 0.5          # 卖出腿 put delta 绝对值（K1，较高行权价）
-      entry_long: 0.2           # 买入腿 put delta 绝对值（K2，较低行权价）
-      min_drop_from_prev_close: 0.00001
-      multi_uturn_window: 300
-      cooldown_hours: 1            # 开仓后冷却时间（小时），0=不限制
-      max_positions: 0             # 最大并发持仓数，0=不限制
-      require_low_below_prev_day_low: 0  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
-      require_lower_k1_than_existing: 0  # 1=连续开仓时新仓K1须低于所有现有仓位K1；0=不限制
-      stop_loss_ratio: 0                 # 亏损达到最大亏损的此比例时平仓，0=不启用
+    end_time: "2026-08-04 00:00:00"
+    uturn_btm_level: 1
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: SMH
+      min_dif_abs: 0.0
+    - code_id: QQQ
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    # ── Phase 1: 价差参数 ────────────────────────────────────────────────────
+    min_dif_abs: 0
+    entry_short: 0.5                   # 短腿 |put delta|（K1，较高行权价）
+    entry_long: 0.15                  # 长腿 |put delta|（K2，保护腿）
+    option_days: 21
+    expiry_weekday: -1
+    min_net_credit: 0
+    # ── Phase 1: 价差平仓参数 ────────────────────────────────────────────────
+    spread_early_profit_ratio: 0.8
+    spread_early_time_ratio: 0.1
+    price_check_hours: 0
+    min_price_gain_ratio: 0
+    min_vix: 0
+    vix_code_id: "NQ"
+    # ── Phase 2: 滚仓 call 参数 ─────────────────────────────────────────────
+    roll_entry_short: 0.3
+    roll_option_days: 14
+    roll_expiry_weekday: -1
+    max_roll_count: 0
+    # ── Phase 2: 无滑点成交可行性检查 ────────────────────────────────────────
+    fill_check_bars: 0        # 0=不启用；>0=开平仓需在N根bar内出现有利价位才算成交
+    fill_check_spread: 1     # 假设的期权 bid/ask 宽度（美元）
+    # ── Phase 2: profit_roll 延迟重开 ────────────────────────────────────────
+    profit_roll_wait_reopen: true   # true=买回旧call后裸持正股，等UTurnTop信号(复用dip_reopen_*)才重开新call
+    # ── Phase 2: CC 平仓参数 ─────────────────────────────────────────────────
+    cc_roll_profit_ratio: 0.9
+    cc_early_profit_ratio: 0.8
+    cc_early_time_ratio: 0.1
+    # ── 下跌回调展期 ────────────────────────────────────────────────────────
+    dip_close_level: 1
+    dip_close_sync: true
+    dip_close_code_id: ""
+    dip_close_window: 100
+    dip_reopen_level: 1
+    dip_reopen_sync: true
+    dip_reopen_code_id: "NQ"
+    dip_reopen_window: 100
+    dip_roll_option_days: 7
+    dip_apply_to_spread: true
+    dip_reopen_allow_early_profit: true  # false=dip_reopen开出的call不参与cc_early_profit提前平仓，只能到期/强平结束
+    cooldown_hours: 1
+    max_positions: 4
 
-  - class: "UTurnBottomShortPut"
-    enable: true
-    code_id: "ES"
-    interval: "M15"
-    direction: "LONG"
+- class: "UTurnBSync_CreditPutSpreadPMCC"
+  enable: false
+  code_id: "SMH"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-08-04 00:00:00"
+  params:
+    initial_capital: 100000
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-28 00:00:00"
-    params:
-      initial_capital: 100000
-      risk_free_rate: 0.04
-      option_days: 3
-      expiry_weekday: 2         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      entry_short: 0.5          # 卖出腿 put delta 绝对值（K1，较高行权价）
-      entry_long: 0.2           # 买入腿 put delta 绝对值（K2，较低行权价）
-      min_drop_from_prev_close: 0.00001
-      multi_uturn_window: 300
-      cooldown_hours: 1         # 开仓后冷却时间（小时），0=不限制
-      max_positions: 3          # 最大并发持仓数，0=不限制
-      require_low_below_prev_day_low: 1  # 1=开仓bar最低价必须小于上一日最低价；0=不限制
-      require_lower_k1_than_existing: 0  # 1=连续开仓时新仓K1须低于所有现有仓位K1；0=不限制
-      stop_loss_ratio: 1                 # 亏损达到最大亏损的此比例时平仓，0=不启用
-      require_plus_pattern: 0            # 1=要求当前UTurn点|dif|>上一个UTurn点|dif|（plus形态）
+    end_time: "2026-08-04 00:00:00"
+    uturn_btm_level: 2
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: SMH
+      min_dif_abs: 0.0
+    - code_id: QQQ
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    # ── Phase 1: 价差参数（跟EX完全一致，Phase1没有任何改动）──────────────────
+    min_dif_abs: 0
+    entry_short: 0.5
+    entry_long: 0.3
+    option_days: 14
+    expiry_weekday: -1
+    min_net_credit: 0
+    # ── Phase 1: 价差平仓参数 ────────────────────────────────────────────────
+    spread_early_profit_ratio: 0.8
+    spread_early_time_ratio: 0.1
+    price_check_hours: 0
+    min_price_gain_ratio: 0
+    min_vix: 0
+    vix_code_id: "ES"
+    # ── Phase 2: 滚仓 call 参数 ─────────────────────────────────────────────
+    roll_entry_short: 0.2
+    roll_option_days: 21
+    roll_expiry_weekday: -1
+    max_roll_count: 0
+    # ── Phase 2: 无滑点成交可行性检查 ────────────────────────────────────────
+    fill_check_bars: 0
+    fill_check_spread: 1
+    # ── Phase 2: profit_roll 延迟重开 ────────────────────────────────────────
+    profit_roll_wait_reopen: true
+    # ── Phase 2: CC 平仓参数 ─────────────────────────────────────────────────
+    cc_roll_profit_ratio: 0.9
+    cc_early_profit_ratio: 0.8
+    cc_early_time_ratio: 0.1
+    # ── 下跌回调展期 ────────────────────────────────────────────────────────
+    dip_close_level: 1
+    dip_close_sync: true
+    dip_close_code_id: ""
+    dip_close_window: 100
+    dip_reopen_level: 1
+    dip_reopen_sync: false
+    dip_reopen_code_id: "QQQ"
+    dip_reopen_window: 100
+    dip_roll_option_days: 7
+    dip_apply_to_spread: true
+    dip_reopen_allow_early_profit: true  # false=dip_reopen开出的call不参与cc_early_profit提前平仓，只能到期/强平结束
+    cooldown_hours: 1
+    max_positions: 4
+    # ── PMCC 专属参数（正股腿替换成深度实值远期call）────────────────────────
+    pmcc_days: 200
+    pmcc_target_delta: 0.9
+    pmcc_expiry_weekday: -1
+    pmcc_roll_before_days: 30   # 剩余天数≤此值时主动展期这份long call（0=不启用，退回旧行为）
 
-  - class: "UTurnBottomShortCall"
-    enable: false
-    code_id: "ES"
-    interval: "M5"
-    direction: "SHORT"
+
+
+- class: "UTurnBSync_CreditPutSpread"
+  enable: false
+  code_id: "TSLA"
+  interval: "H1"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-06-01 00:00:00"
+  params:
+    initial_capital: 100000
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
-    params:
-      initial_capital: 100000
-      risk_free_rate: 0.04
-      option_days: 2
-      expiry_weekday: -1         # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      entry_short: 0.4          # 卖出腿 call delta（K1，较低行权价）
-      entry_long: 0.1           # 买入腿 call delta（K2，较高行权价）
-      multi_uturn_window: 300
-      cooldown_hours: 1        # 开仓后冷却时间（小时），0=不限制
-      max_positions: 5          # 最大并发持仓数，0=不限制
-      require_high_above_prev_day_high: 1  # 1=开仓bar最高价须大于上一日最高价；0=不限制
-      stop_loss_ratio: 0.5                   # 亏损达到最大亏损的此比例时平仓，0=不启用
-      require_plus_pattern: 0               # 1=要求当前UTurn点|dif|>上一个UTurn点|dif|（plus形态）
+    end_time: "2026-06-01 00:00:00"
+    uturn_btm_level: 3              # 1=SimpleUBtm 2=DbSimpleBtm 3=MixDbSimpleBtm
+    multi_uturn_window: 300          # Level 2/3 使用的 bar 历史窗口（缺省50，建议300）
+    sync_signals:                    # 所有品种同时触发指定等级 UTurnBottom 才开仓
+    - code_id: TSLA
+      min_dif_abs: 0.0
+    - code_id: TSLA
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    min_dif_abs: 0                  # 交易标的开仓 bar 的 |dif| 最小值（0=不限制）
+    option_days: 30
+    expiry_weekday: -1
+    entry_short: 0.5
+    entry_long: 0.2
+    cooldown_hours: 1
+    max_positions: 3
+    hard_stop_points: 0
+    price_check_hours: 0          # 价格检查：开仓后多少小时做一次性检查（0=不启用）
+    min_price_gain_ratio: 0          # 价格检查：标的涨幅低于此比例则平仓（支持负值）
+    early_profit_ratio: 0.8
+    early_time_ratio: 0.1
+    min_net_credit: 0.0               # 最低净权利金（低于此值不开仓，0=不限制）
+    late_close_time_ratio: 0
 
-  - class: "MixUTurnBottomLongCall"
-    enable: false
-    code_id: "ES"
-    interval: "M5"
-    direction: "LONG"
+- class: "UTurnBSync_DebitCallSpreadEx"
+  enable: false
+  code_id: "SMH"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-08-04 00:00:00"
+  params:
+    initial_capital: 100000
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
-    params:
-      initial_capital: 100000
-      risk_free_rate: 0.04
-      option_days: 7
-      expiry_weekday: -1        # -1=每日期权（跳过周末）
-      entry_long: 0.5           # 买入腿 call delta（K1，较低行权价）
-      entry_short: 0.3          # 卖出腿 call delta（K2，较高行权价）
-      min_drop_from_prev_close: 0.0001
-      multi_uturn_window: 300
-      cooldown_hours: 1
-      max_positions: 5
-      require_low_below_prev_day_low: 0
-      require_lower_k1_than_existing: 0
+    end_time: "2026-08-04 00:00:00"
+    uturn_btm_level: 1
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: SMH
+      min_dif_abs: 0.0
+    - code_id: QQQ
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    # ── Phase 1: 价差开仓参数 ────────────────────────────────────────────────
+    min_dif_abs: 0
+    entry_long: 0.7                    # 买入腿 call delta（K1，较低行权价）
+    entry_short: 0.4                   # 卖出腿 call delta（K2，较高行权价）
+    option_days: 14
+    expiry_weekday: -1
+    # ── Phase 1: 价差平仓参数 ────────────────────────────────────────────────
+    hard_stop_points: 0
+    price_check_hours: 0
+    min_price_gain_ratio: 0
+    mid_min_profit_ratio: 0
+    mid_time_ratio: 0
+    early_profit_ratio: 0.8
+    early_time_ratio: 0.1
+    late_profit_ratio: 0.001
+    late_time_ratio: 0.9
+    stop_loss_ratio: 0
+    min_vix: 0
+    vix_code_id: "NQ"
+    # ── Phase 2: 滚仓 call 参数 ─────────────────────────────────────────────
+    roll_entry_short: 0.3
+    roll_option_days: 14
+    roll_expiry_weekday: -1
+    max_roll_count: 0
+    # ── Phase 2: CC 平仓参数 ───────────────────────────────────────────────
+    cc_roll_profit_ratio: 0.9
+    cc_early_profit_ratio: 0.8
+    cc_early_time_ratio: 0.1
+    # ── 下跌回调展期 ──────────────────────────────────────────────────────
+    dip_close_level: 1
+    dip_close_sync: true
+    dip_close_code_id: "NQ"
+    dip_close_window: 100
+    dip_reopen_level: 1
+    dip_reopen_sync: false
+    dip_reopen_code_id: "NQ"
+    dip_reopen_window: 100
+    dip_roll_option_days: 14
+    dip_apply_to_spread: true
+    cooldown_hours: 1
+    max_positions: 4
 
-  - class: "MixMultipleTurn_Long"
-    enable: false
-    code_id: "ES"
-    interval: "M5"
-    direction: "LONG"
-    start_time: "2024-01-05 00:00:00"
-    end_time:   "2025-04-01 00:00:00"
-    params:
-      multi_uturn_window: 300
-
-  - class: "UTurnBottomLongCall"
-    enable: false
-    code_id: "ES"
-    interval: "M15"
-    direction: "LONG"
-    start_time: "2024-01-05 00:00:00"
-    end_time:   "2026-04-10 00:00:00"
-    params:
-      risk_free_rate: 0.04
-      option_days: 7
-      expiry_weekday: 2  # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
-      dif_entry: -8
-      dif_profit: 2
-      k2_takeprofit: 20
-      k2_stoploss: 30
-      k2_timeout_profit: 50
-      k2_timeout_loss: 50
-      early_exit_ratio: 0.8  # 锁定spread盈利达到最大盈利此比例时提前平仓
-      min_drop_from_prev_close: 0.002   # 开仓低价须低于昨收的最小跌幅比率
-      min_rise_from_prev_close: 0.005    # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
-      entry_delta: 0.5                   # 开仓 Call 的目标 Delta（0.5=ATM）
-      stop_loss_ratio: 0.6               # 期权价值跌至保费此比例时触发止损
-
-  - class: "UTurnLongCallMomentum"
-    enable: false
-    code_id: "ES"
-    interval: "M5"
-    direction: "LONG"
+- class: "UTurnBSync_DebitCallSpreadPMCC"
+  enable: false
+  code_id: "SMH"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-08-04 00:00:00"
+  params:
+    initial_capital: 100000
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
-    params:
-      initial_capital: 100000
-      risk_free_rate: 0.04
-      option_days: 7
-      expiry_weekday: -1
-      entry_delta: 0.5               # ATM call
-      take_profit_ratio: 1.0         # 期权市值涨 100% 时止盈
-      stop_loss_ratio: 0.5           # 期权市值跌 50% 时止损
-      risk_per_trade: 0.01           # 每笔风险 1% 资金
-      multi_uturn_window: 300
-      cooldown_hours: 1
-      max_positions: 3
-      require_low_below_prev_day_low: 1
-      min_drop_from_prev_close: 0.0001
+    end_time: "2026-08-04 00:00:00"
+    uturn_btm_level: 1
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: SMH
+      min_dif_abs: 0.0
+    - code_id: QQQ
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    min_dif_abs: 0
+    min_vix: 0
+    vix_code_id: "NQ"
+    min_drop_from_prev_close: 0   # 当前价须低于昨收此比例才开仓（0=不限制，如0.02=须跌破昨收2%）
+    settle_itm_via_exercise: true   # short call到期S>K2时：false(默认,新版本)=只平short腿,long call永不平仓；true(老版本)=行权long call覆盖,两腿一起平仓离场
+    # ── 开仓：long call（远期，模拟正股）────────────────────────────────────
+    entry_long: 0.8
+    long_call_days: 60
+    long_call_expiry_weekday: -1
+    long_call_roll_after_days: 15
+    # ── short call（近期，反复滚动）─────────────────────────────────────────
+    roll_entry_short: 0.4
+    roll_option_days: 14
+    roll_expiry_weekday: -1
+    max_roll_count: 0
+    # ── 下跌回调展期（与DebitCallSpreadEx行为一致；dip_reopen_level不可为0）──
+    dip_close_level: 1
+    dip_close_sync: true
+    dip_close_code_id: "QQQ"
+    dip_close_window: 100
+    dip_reopen_level: 1
+    dip_reopen_sync: false
+    dip_reopen_code_id: "QQQ"
+    dip_reopen_window: 100
+    dip_roll_option_days: 10
+    dip_close_min_realized_ratio: 0.0   # short call权利金实现率需≥此比例才允许dip_close买回（0=不限制，如0.6=须实现60%以上）
+    # ── long call ↔ 正股 切换（独立于short call的dip信号；0=不启用） ────────
+    long_dip_close_level: 1
+    long_dip_close_sync: true
+    long_dip_close_code_id: "QQQ"
+    long_dip_close_window: 100
+    long_dip_reopen_level: 1
+    long_dip_reopen_sync: true
+    long_dip_reopen_code_id: "QQQ"
+    long_dip_reopen_window: 100
+    long_dip_reopen_delta: 0.8  # 正股换回long call时用的delta，独立于entry_long
+    cooldown_hours: 1
+    max_positions: 4
 
-  - class: "MixUTurnStrangleBull"
-    enable: false
-    code_id: "NQ"
-    interval: "M15"
-    direction: "LONG"
+
+
+- class: "UTurnBSync_DebitCallSpread"
+  enable: false
+  code_id: "TSLA"
+  interval: "H1"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-06-01 00:00:00"
+  params:
+    initial_capital: 100000
     start_time: "2024-01-01 00:00:00"
-    end_time:   "2026-04-01 00:00:00"
-    params:
-      initial_capital: 100000
-      risk_free_rate: 0.04
-      option_days: 7
-      expiry_weekday: -1         # -1=每日期权（跳过周末）
-      entry_call: 0.5            # 买入 OTM call 的 delta
-      entry_put: 0.3             # 买入 OTM put 的 delta 绝对值（较高行权价）
-      entry_put_short: 0       # 卖出 put 的 delta 绝对值（较低行权价），0=不启用
-      multi_uturn_window: 300
-      cooldown_hours: 1
-      max_positions: 3
-      min_drop_from_prev_close: 0.0001
-      require_low_below_prev_day_low: 1
+    end_time: "2026-06-01 00:00:00"
+    uturn_btm_level: 1              # 1=SimpleUBtm 2=DbSimpleBtm 3=MixDbSimpleBtm
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: SMH
+      min_dif_abs: 0.0
+    - code_id: QQQ
+      min_dif_abs: 0.0
+    min_dif_abs: 0                  # 交易标的开仓 bar 的 |dif| 最小值（0=不限制）
+    risk_free_rate: 0.04
+    option_days: 30
+    expiry_weekday: -1
+    entry_long: 0.75                # 买入腿 call delta（K1，较低行权价，较高 delta）
+    entry_short: 0.2              # 卖出腿 call delta（K2，较高行权价，较低 delta）
+    cooldown_hours: 1
+    max_positions: 3
+    hard_stop_points: 0
+    price_check_hours: 0          # 价格检查：开仓后 24 小时做一次性检查（0=不启用）
+    min_price_gain_ratio: 0.001    # 价格检查：标的涨幅低于 0.2% 则平仓（0=不启用）
+    mid_min_profit_ratio: -0.4    # 中期检查：利润低于此比例×max_profit则平仓（支持负值，mid_time_ratio=0时禁用）
+    mid_time_ratio: 0           # 中期检查时间点（已用时间/总持仓时间，0=不启用）
+    early_profit_ratio: 0.8       # 利润达到 max_profit 80% 时提前止盈（0=不启用）
+    early_time_ratio: 0.1       # 仅在已用时间不足总持仓 30% 时触发（0=不启用）
+    late_profit_ratio: 0.001      # 用了 80% 时间后，利润达到 50% 则平仓（0=不启用）
+    late_time_ratio: 0.9       # 已用时间/总持仓时间高于此比例时才触发（0=不启用）
+
+
+
+- class: "UTurnBSync_Ratio"
+  enable: false
+  code_id: "SMH"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-06-01 00:00:00"
+  params:
+    initial_capital: 100000
+    start_time: "2024-01-01 00:00:00"
+    end_time: "2026-06-01 00:00:00"
+    uturn_btm_level: 1              # 1=SimpleUBtm 2=DbSimpleBtm 3=MixDbSimpleBtm
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: SMH
+      min_dif_abs: 0.0
+    - code_id: NQ
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    entry_long: 0.5                 # Long call delta（ATM，K1 ≈ S）
+    entry_short: 0.25               # Short call delta（OTM，K2 > K1）
+    option_days: 7
+    expiry_weekday: -1
+    cooldown_hours: 1
+    max_positions: 3
+    ratio_entry_signal: "bottom"    # "bottom"=随正股在UTurnBottom开仓；"top"=等UTurnTop再开仓
+    uturn_top_level: 1              # top 模式 UTurnTop 等级（1=SimpleUTop）
+    top_uturn_window: 300           # Level 2/3 top 信号窗口
+    top_sync: false                 # true=用 sync_signals 的交集；false=单品种（top_code_id）
+    top_code_id: "NQ"               # 单品种 top 信号来源品种（空串=使用 code_id 本身）
+
+- class: "UTurnBSync_RatioEx"
+  enable: false
+  code_id: "SMH"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-06-01 00:00:00"
+  params:
+    initial_capital: 100000
+    start_time: "2024-01-01 00:00:00"
+    end_time: "2026-06-01 00:00:00"
+    uturn_btm_level: 1
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: SMH
+      min_dif_abs: 0.0
+    - code_id: NQ
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    # ── Call Spread 参数 ─────────────────────────────────────────────────────
+    entry_long: 0.5                   # long call delta（ATM，K1）
+    entry_short: 0.25                 # short call delta（OTM，K2）
+    option_days: 7
+    expiry_weekday: -1
+    cooldown_hours: 1
+    max_positions: 4
+    ratio_entry_signal: "bottom"      # "bottom" 或 "top"
+    uturn_top_level: 1
+    top_uturn_window: 300
+    top_sync: false
+    top_code_id: "NQ"
+    ratio_roll_mode: "immediate"      # "immediate"=立刻滚；"signal"=等信号
+    max_roll_count: 0                 # 0=不限制
+    roll_option_days: 0               # 0=复用 option_days
+    roll_entry_long: 0.0              # 0=复用 entry_long
+    roll_entry_short: 0.0             # 0=复用 entry_short
+    # ── Put Spread 参数 ──────────────────────────────────────────────────────
+    enable_put_spread: false          # true=启用 Put Spread 接货
+    put_entry_signal: "bottom"        # "bottom"=随正股；"top"=等 UTurnTop
+    put_option_days: 0                # 0=复用 option_days
+    put_entry_long: 0.5               # long put |delta|（K_pl，较高行权价，接近 ATM）
+    put_entry_short: 0.25             # short put |delta|（K_ps，较低行权价，更 OTM）
+    put_roll_mode: "immediate"        # "immediate"=立刻滚；"signal"=等信号
+    put_max_roll_count: 0             # 0=不限制
+
+- class: "UTurnBottomLongCall"
+  enable: false
+  code_id: "NQ"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-05 00:00:00"
+  end_time: "2026-04-01 00:00:00"
+  params:
+    initial_capital: 100000         # 从峰值净值开始
+    risk_free_rate: 0.04
+    option_days: 21
+    expiry_weekday: 2   # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
+    dif_entry: -20
+    dif_profit: 20
+    k2_takeprofit: 100
+    k2_stoploss: 100
+    k2_timeout_profit: 100
+    k2_timeout_loss: 100
+    early_exit_ratio: 0.9    # 锁定spread盈利达到最大盈利此比例时提前平仓
+    min_drop_from_prev_close: 0.002     # 开仓低价须低于昨收的最小跌幅比率
+    min_rise_from_prev_close: 0.002      # 盈利锁仓时高价须高于昨收的最小涨幅比率（0=不限制）
+    entry_delta: 0.5                     # 开仓 Call 的目标 Delta（0.5=ATM）
+    stop_loss_ratio: 0.5                 # 期权价值跌至保费此比例时触发止损
+
+- class: "UTurnBottomCreditPut"
+  enable: false
+  code_id: "NQ"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-06-01 00:00:00"
+  params:
+    initial_capital: 100000
+    risk_free_rate: 0.04
+    uturn_btm_level: 1              # 3=MixDbSimpleBtm
+    multi_uturn_window: 300
+    option_days: 7
+    expiry_weekday: -1
+    entry_short: 0.6
+    entry_long: 0.2
+    cooldown_hours: 1
+    max_positions: 3
+    min_dif_abs: 5
+    require_low_below_prev_day_low: 0
+    require_lower_k1_than_existing: 0
+    require_plus_pattern: 0
+    stop_loss_ratio: 0
+    early_profit_ratio: 0.8
+    early_time_ratio: 0.6
+    late_close_time_ratio: 0     # 时间强制平仓：已用时间/总持仓时间超过此比例时无条件平仓，0=不启用
+
+    hard_stop_points: 0
+- class: "UTurnBottomShortCall"
+  enable: false
+  code_id: "ES"
+  interval: "M5"
+  direction: "SHORT"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-04-01 00:00:00"
+  params:
+    initial_capital: 100000
+    risk_free_rate: 0.04
+    option_days: 2
+    expiry_weekday: -1           # 到期日星期几: 0=周一 1=周二 2=周三 3=周四 4=周五
+    entry_short: 0.4            # 卖出腿 call delta（K1，较低行权价）
+    entry_long: 0.1             # 买入腿 call delta（K2，较高行权价）
+    multi_uturn_window: 300
+    cooldown_hours: 1          # 开仓后冷却时间（小时），0=不限制
+    max_positions: 5            # 最大并发持仓数，0=不限制
+    require_high_above_prev_day_high: 1    # 1=开仓bar最高价须大于上一日最高价；0=不限制
+    stop_loss_ratio: 0.5                     # 亏损达到最大亏损的此比例时平仓，0=不启用
+    require_plus_pattern: 0                 # 1=要求当前UTurn点|dif|>上一个UTurn点|dif|（plus形态）
+    early_profit_ratio: 0                   # 提前止盈：盈利达到最大盈利此比例时触发，0=不启用
+    early_time_ratio: 0                     # 提前止盈：已用时间/总持仓时间低于此比例时才触发，0=不启用
+
+
+
+- class: "UTurnBottomRatioCall"
+  enable: false
+  code_id: "ES"
+  interval: "M5"
+  direction: "LONG"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-06-01 00:00:00"
+  params:
+    initial_capital: 100000
+    risk_free_rate: 0.04
+    option_days: 1
+    expiry_weekday: -1
+    entry_short: 0.5            # short call delta（K1，较低行权价）
+    entry_long: 0.2            # long call delta（K2，较高行权价）
+    multi_uturn_window: 300
+    cooldown_hours: 1
+    max_positions: 1
+    require_low_below_prev_day_low: 0
+    require_lower_k1_than_existing: 0
+    require_plus_pattern: 1
+    roll_delta_drop: 0.4             # short call delta 下降超过此值时滚仓（0=不启用）
+    long_ratio: 3                    # long call 手数（≥2）
+
+- class: "ict_fvg_long"
+  enable: true
+  code_id: "NQ"
+  interval: "M1"
+  direction: "LONG"
+  start_time: "2026-11-09 00:00:00"
+  end_time: "2026-11-09 16:00:00"
+  params:
+    initial_capital: 100000
+    ma_period: 5
+    ma2_period: 5   # 第2条MA周期，两条MA必须同时判定为涨势才放行
+    enable_ma_filter: true   # false=关闭MA方向过滤，缺口+价位条件满足即可开仓
+    tick_size: 0.25        # NQ最小变动价位；股票一般用0.01
+    entry_offset_ticks: 10.0   # 跌破上沿后还要再跌这么多价位才真正开多（0=一跌破上沿就开多）
+    target_ticks: 40.0     # 止盈价位数：40×0.25=涨10点即止盈
+    min_gap_ticks: 0.0     # 缺口宽度(upper-lower)小于此值×tick_size则忽略，不追踪、不开仓
+    enable_stop_loss: true   # false=关闭止损，只剩止盈/收盘平仓两种结果
+    stop_loss_ticks: 40.0   # 固定价位止损：60×0.25=止损价=入场价-15点
+
+- class: "ict_fvg_short"
+  enable: false
+  code_id: "MU"
+  interval: "M1"
+  direction: "SHORT"
+  start_time: "2026-09-01 00:00:00"
+  end_time: "2026-11-11 16:00:00"
+  params:
+    initial_capital: 100000
+    ma_period: 5
+    ma2_period: 10   # 第2条MA周期，两条MA必须同时判定为跌势才放行
+    enable_ma_filter: true   # false=关闭MA方向过滤，缺口+价位条件满足即可开仓
+    tick_size: 0.01        # NQ最小变动价位；股票一般用0.01
+    entry_offset_ticks: 0.0   # 突破下沿后还要再涨这么多价位才真正开空（0=一突破下沿就开空）
+    target_ticks: 700.0     # 止盈价位数：60×0.25=跌15点即止盈
+    min_gap_ticks: 0.0     # 缺口宽度(upper-lower)小于此值×tick_size则忽略，不追踪、不开仓
+    enable_stop_loss: false   # false=关闭止损，只剩止盈/收盘平仓两种结果
+    stop_loss_ticks: 40.0   # 固定价位止损：40×0.25=止损价=入场价+10点
+
+- class: "UTurnTopRatioPut"
+  enable: false
+  code_id: "SPY"
+  interval: "M5"
+  direction: "SHORT"
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2026-06-01 00:00:00"
+  params:
+    initial_capital: 100000
+    risk_free_rate: 0.04
+    option_days: 1
+    expiry_weekday: -1
+    entry_short: 0.5            # short put delta 绝对值（K1，较高行权价，靠近平值）
+    entry_long: 0.25            # long put delta 绝对值（K2，较低行权价，更 OTM）
+    multi_uturn_window: 300
+    cooldown_hours: 1
+    max_positions: 1
+    require_high_above_prev_day_high: 0
+    require_plus_pattern: 0
+    roll_delta_drop: 0.4             # short put |delta| 下降超过此值时滚仓（0=不启用）
+    long_ratio: 2                    # long put 手数（≥2）
+
+

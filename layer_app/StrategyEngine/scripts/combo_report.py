@@ -127,7 +127,8 @@ def _max_dd_combo(ticker: str, c_iv: str, p_iv: str, cap: float) -> float:
 
 
 def _recovery_factor(total_pnl: float, cap: float, dd_pct: float) -> float:
-    """recovery_factor = total_return / abs(max_dd)，与 stats.py 一致"""
+    """total_return% / abs(max_dd%)，百分比法，跟 stats.py 的 recovery_factor_pct 同一公式
+    （本函数独立实现，不导入 stats.py，无需跟随其 profit_cushion_multiple 改名联动）"""
     total_return = total_pnl / cap
     abs_dd = abs(dd_pct / 100)
     return total_return / abs_dd if abs_dd > 0 else 0.0
