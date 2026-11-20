@@ -144,7 +144,6 @@ void CIBSpi::tickSize(TickerId tickerId, TickType field, Decimal size)
 void CIBSpi::tickByTickAllLast(int reqId, int tickType, time_t time, double price, Decimal size, const TickAttribLast& tickAttribLast, const std::string& exchange, const std::string& specialConditions)
 {
 	std::lock_guard<std::mutex> lock(m_mutex);
-	//IbContractPtr contract = MakeAndGet_ContractEnv()->GetContract(reqId);
 	IBTickPtr tick = nullptr;
 
 	MakeAndGet_WhiteBoard()->UpdateLastPrice(reqId, price);
