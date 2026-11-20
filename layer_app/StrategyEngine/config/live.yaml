@@ -1,0 +1,79 @@
+# config/live.yaml
+# 实盘信号系统 Phase 1（只打印不下单）配置。
+#
+# 跟 config/strategies.yaml 的 strategies 段结构完全一致（class/enable/code_id/
+# interval/direction/params），可以直接从 strategies.yaml 复制一份验证过的策略
+# 配置过来用。**不需要** 顶层 start_time/end_time——那是回测拉历史数据用的时间
+# 窗口；params 里的 start_time/end_time 在实盘模式下也不会被用到（live/engine.py
+# 不调用策略原本的 on_start()，改用 LiveSyncTimestampTracker 流式重建同样的信号
+# 时间戳集合，详见 live/engine.py 顶部说明），保留在这里纯粹是为了跟 strategies.yaml
+# 的条目对照方便，不影响行为。
+
+live:
+  ib:
+    host: "10.0.0.64"
+    port: 4001          # 真实资金账户 U6944938 的 TWS 端口——不是模拟盘
+    client_id: 17
+    timeout_seconds: 15
+  poll_buffer_seconds: 59        # 每个bar边界之后延迟这么久再轮询，换取数据完整性
+  reconciliation_window_hours: 48 # 真实成交与"建议"意图匹配时的最大回溯时间窗口
+
+strategies:
+- class: "UTurnBSync_CreditPutSpreadEx"
+  enable: true
+  code_id: "NASA"
+  interval: "M5"
+  direction: "LONG"
+  params:
+    initial_capital: 100000
+    uturn_btm_level: 1
+    multi_uturn_window: 300
+    sync_signals:
+    - code_id: NASA
+      min_dif_abs: 0.0
+    - code_id: QQQ
+      min_dif_abs: 0.0
+    risk_free_rate: 0.04
+    # ── Phase 1: 价差参数 ────────────────────────────────────────────────────
+    min_dif_abs: 0
+    entry_short: 0.5                   # 短腿 |put delta|（K1，较高行权价）
+    entry_long: 0.2                    # 长腿 |put delta|（K2，保护腿）
+    option_days: 21
+    expiry_weekday: -1
+    min_net_credit: 0
+    # ── Phase 1: 价差平仓参数 ────────────────────────────────────────────────
+    spread_early_profit_ratio: 0.8
+    spread_early_time_ratio: 0.1
+    price_check_hours: 0
+    min_price_gain_ratio: 0
+    min_vix: 0
+    vix_code_id: "NQ"
+    # ── Phase 2: 滚仓 call 参数 ─────────────────────────────────────────────
+    roll_entry_short: 0.3
+    roll_option_days: 14
+    roll_expiry_weekday: -1
+    max_roll_count: 0
+    # 注意：fill_check_bars 故意不在这里配置（保持类默认值0=禁用）。这个功能靠
+    # strategy._own_bars（回测时注入的完整历史bar列表）向后看，live模式不会注入
+    # _own_bars，一旦设成>0，_fill_check() 会因为 _peek_next_bars() 恒为空列表
+    # 而永远返回"不成交"，导致Phase2开平仓仓位全部卡死——不要从 strategies.yaml
+    # 复制这个参数过来。
+    # ── Phase 2: profit_roll 延迟重开 ────────────────────────────────────────
+    profit_roll_wait_reopen: true
+    # ── Phase 2: CC 平仓参数 ─────────────────────────────────────────────────
+    cc_roll_profit_ratio: 0.9
+    cc_early_profit_ratio: 0.8
+    cc_early_time_ratio: 0.1
+    # ── 下跌回调展期 ────────────────────────────────────────────────────────
+    dip_close_level: 1
+    dip_close_sync: true
+    dip_close_code_id: ""
+    dip_close_window: 100
+    dip_reopen_level: 1
+    dip_reopen_sync: true
+    dip_reopen_code_id: "NQ"
+    dip_reopen_window: 100
+    dip_roll_option_days: 14
+    dip_apply_to_spread: true
+    cooldown_hours: 1
+    max_positions: 4

@@ -1,0 +1,239 @@
+"""
+UTurnBottomRatioCall 策略：底部 UTurn 信号 → 开仓 Ratio Call Backspread → 持有至到期结算。
+Short 1 call（K1，较低行权价）+ Long 2 calls（K2，较高行权价），收取/付出净权利金。
+开仓条件与 UTurnBottomShortPut 完全相同（底部 Mix UTurn）。
+"""
+from collections import deque
+from datetime import timedelta, datetime, time as dtime
+
+from qib_trader.strategies.base import Strategy
+from qib_trader.core.models import BarData, Direction
+from qib_trader.utils.bar_patterns import detect_multi_uturn
+from qib_trader.utils.config_loader import get_iv
+from qib_trader.utils import option_pricing
+
+
+class UTurnBottomRatioCall(Strategy):
+    """
+    底部 UTurn Ratio Call Backspread：
+    触发底部 Mix UTurn 信号后，Short 1 call（K1）+ Long 2 calls（K2），持有至到期结算。
+    params: risk_free_rate, option_days, entry_short, entry_long,
+            expiry_weekday, cooldown_hours, max_positions,
+            require_low_below_prev_day_low, require_lower_k1_than_existing,
+            require_plus_pattern
+    """
+
+    options_mode: bool = True
+    initial_capital: float = 100_000.0
+
+    entry_short: float = 0.5      # short call delta（K1，较低行权价，靠近平值）
+    entry_long: float = 0.25      # long call delta（K2，较高行权价，更 OTM）
+    option_days: int = 7
+    expiry_weekday: int = -1
+    risk_free_rate: float = 0.04
+    strike_round: float = 100.0
+    multi_uturn_window: int = 300
+    cooldown_hours: float = 0.0
+    max_positions: int = 0
+    require_low_below_prev_day_low: int = 0
+    require_lower_k1_than_existing: int = 0
+    require_plus_pattern: int = 0
+    roll_delta_drop: float = 0.0   # short call delta 下降超过此值时滚仓（0=不启用）
+    long_ratio: int = 2            # long call 手数（≥2）
+
+    def on_init(self) -> None:
+        self._spreads: list[dict] = []
+        self._closed_positions: list[dict] = []
+        self._last_bar: BarData | None = None
+        self._last_entry_dt = None
+        self._bar_history: deque = deque(maxlen=self.multi_uturn_window)
+
+    def on_start(self) -> None:
+        self.active = True
+
+    def on_stop(self) -> None:
+        self.active = False
+        if self._last_bar is None:
+            return
+        for sp in self._spreads:
+            self._settle_spread(sp, self._last_bar, 'force_close')
+        self._spreads.clear()
+
+    # ── 工具方法 ──────────────────────────────────────────────────────────────
+
+    def _call_strike_by_delta(self, S: float, T: float, call_delta: float, iv: float) -> float:
+        return option_pricing.call_strike_by_delta(
+            S, T, call_delta, iv, self.risk_free_rate, self.codeId, self.strike_round)
+
+    def _next_expiry(self, bar_dt, min_days: int):
+        if min_days == 1:
+            target = bar_dt + timedelta(days=1)
+            extra = {5: 2, 6: 1}.get(target.weekday(), 0)
+            expiry_date = (target + timedelta(days=extra)).date()
+        elif self.expiry_weekday == -1:
+            target = bar_dt + timedelta(days=min_days)
+            extra = {5: 2, 6: 1}.get(target.weekday(), 0)
+            expiry_date = (target + timedelta(days=extra)).date()
+        else:
+            target = bar_dt + timedelta(days=min_days)
+            days_ahead = (self.expiry_weekday - target.weekday()) % 7
+            expiry_date = (target + timedelta(days=days_ahead)).date()
+        return datetime.combine(expiry_date, dtime(16, 0))
+
+    # ── 持仓管理 ──────────────────────────────────────────────────────────────
+
+    def _check_expiry(self, bar: BarData) -> None:
+        remaining = []
+        for sp in self._spreads:
+            if bar.datetime >= sp['expiry']:
+                self._settle_spread(sp, bar)
+            else:
+                remaining.append(sp)
+        self._spreads = remaining
+
+    def _settle_spread(self, sp: dict, bar: BarData, close_reason: str = 'expiry') -> None:
+        """到期结算。payoff = 2*max(S-K2,0) - max(S-K1,0)；final_pnl = net_credit + payoff。"""
+        S = bar.close_price
+        short_settle = max(S - sp['k1'], 0.0)
+        long_settle  = self.long_ratio * max(S - sp['k2'], 0.0)
+        payoff = long_settle - short_settle
+        final_pnl = sp['net_credit'] + payoff
+        self._send_order(Direction.LONG, sp['net_credit'] - final_pnl, 1, "MKT")
+        self._closed_positions.append({
+            'entry_dt':      sp['entry_dt'],
+            'settlement_dt': bar.datetime,
+            'close_reason':  close_reason,
+            'k1':            sp['k1'],
+            'k2':            sp['k2'],
+            'short_prem':    sp['short_prem'],
+            'long_prem':     sp['long_prem'],
+            'net_credit':    sp['net_credit'],
+            'short_settle':  short_settle,
+            'long_settle':   long_settle,
+            'final_pnl':     final_pnl,
+        })
+        self.logger.info(
+            f"[{bar.datetime}] RatioCall到期 K1={sp['k1']} K2={sp['k2']} "
+            f"payoff={payoff:.2f} final_pnl={final_pnl:.2f}"
+        )
+
+    # ── 盯市 ──────────────────────────────────────────────────────────────────
+
+    def _calc_mtm_pnl(self, bar: BarData) -> float:
+        """Ratio Call Backspread MTM：Σ (net_credit + ratio×curr_K2_call - curr_K1_call)。"""
+        if not self._spreads:
+            return 0.0
+        S, total = bar.close_price, 0.0
+        for sp in self._spreads:
+            T       = max((sp['expiry'] - bar.datetime).total_seconds() / (365.25 * 24 * 3600), 1e-8)
+            curr_p1 = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+            curr_p2 = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'],  self.codeId)
+            total  += sp['net_credit'] + (self.long_ratio * curr_p2 - curr_p1)
+        return total
+
+    # ── 开仓信号 ──────────────────────────────────────────────────────────────
+
+    def _is_plus_pattern(self, zone) -> bool:
+        uturn_bars = [b for b in zone.zone_bars
+                      if b.div_type in ('Bottom', 'BottomSub') and b.is_uturn]
+        if len(uturn_bars) < 2:
+            return False
+        return abs(uturn_bars[-1].dif) > abs(uturn_bars[-2].dif)
+
+    def _entry_signal(self, bar: BarData) -> bool:
+        if (self._last_entry_dt is not None and self.cooldown_hours > 0
+                and bar.datetime < self._last_entry_dt + timedelta(hours=self.cooldown_hours)):
+            return False
+        if self.max_positions > 0 and len(self._spreads) >= self.max_positions:
+            return False
+        if self.require_low_below_prev_day_low and bar.prev_day_low > 0 and bar.low_price >= bar.prev_day_low:
+            return False
+        zone = detect_multi_uturn(list(self._bar_history))
+        if zone is None or zone.zone_type != 'bottom' or not zone.is_mix:
+            return False
+        if self.require_plus_pattern and not self._is_plus_pattern(zone):
+            return False
+        return True
+
+    def _open_spread(self, bar: BarData, expiry, check_k1: bool = True) -> None:
+        """开仓 Ratio Call Backspread：Short 1 call（K1）+ Long 2 calls（K2）。"""
+        S = bar.close_price
+        T = max((expiry - bar.datetime).total_seconds() / (365.25 * 24 * 3600), 1e-8)
+        iv_short = get_iv(self.codeId, 'call', self.entry_short)
+        iv_long  = get_iv(self.codeId, 'call', self.entry_long)
+        k1 = self._call_strike_by_delta(S, T, self.entry_short, iv_short)
+        k2 = self._call_strike_by_delta(S, T, self.entry_long,  iv_long)
+        if check_k1 and self.require_lower_k1_than_existing and self._spreads and k1 >= min(sp['k1'] for sp in self._spreads):
+            return
+        p1 = option_pricing.call_price(S, k1, T, self.risk_free_rate, iv_short, self.codeId)
+        p2 = option_pricing.call_price(S, k2, T, self.risk_free_rate, iv_long, self.codeId)
+        net_credit = p1 - self.long_ratio * p2
+        self._spreads.append({
+            'entry_dt': bar.datetime, 'k1': k1, 'k2': k2,
+            'short_prem': p1, 'long_prem': p2, 'net_credit': net_credit,
+            'expiry': expiry, 'iv_short': iv_short, 'iv_long': iv_long,
+        })
+        self._send_order(Direction.SHORT, net_credit, 1, "MKT")
+        self.logger.info(
+            f"[{bar.datetime}] 开仓RatioCallBackspread K1={k1}(short×1) K2={k2}(long×2) "
+            f"net_credit={net_credit:.2f} expiry={expiry.date()}"
+        )
+
+    def _check_entry(self, bar: BarData) -> None:
+        if not self._entry_signal(bar):
+            return
+        expiry = self._next_expiry(bar.datetime, self.option_days)
+        self._last_entry_dt = bar.datetime
+        self._open_spread(bar, expiry, check_k1=True)
+
+    def _curr_call_delta(self, S: float, sp: dict, bar) -> float:
+        """计算仓位 short call 的当前 delta。"""
+        T = max((sp['expiry'] - bar.datetime).total_seconds() / (365.25 * 24 * 3600), 1e-8)
+        return option_pricing.call_delta(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+
+    def _roll_spread(self, sp: dict, bar: BarData) -> None:
+        """平掉旧仓，在当前价格重新开仓（保持到期日不变）。"""
+        S = bar.close_price
+        T = max((sp['expiry'] - bar.datetime).total_seconds() / (365.25 * 24 * 3600), 1e-8)
+        p1_curr = option_pricing.call_price(S, sp['k1'], T, self.risk_free_rate, sp['iv_short'], self.codeId)
+        p2_curr = option_pricing.call_price(S, sp['k2'], T, self.risk_free_rate, sp['iv_long'], self.codeId)
+        mark_payoff = self.long_ratio * p2_curr - p1_curr
+        roll_pnl = sp['net_credit'] + mark_payoff
+        self._send_order(Direction.LONG, sp['net_credit'] - roll_pnl, 1, "MKT")
+        self._closed_positions.append({
+            'entry_dt': sp['entry_dt'], 'settlement_dt': bar.datetime,
+            'close_reason': 'roll', 'k1': sp['k1'], 'k2': sp['k2'],
+            'short_prem': sp['short_prem'], 'long_prem': sp['long_prem'],
+            'net_credit': sp['net_credit'], 'short_settle': p1_curr,
+            'long_settle': self.long_ratio * p2_curr, 'final_pnl': roll_pnl,
+        })
+        self.logger.info(
+            f"[{bar.datetime}] 滚仓 K1={sp['k1']} K2={sp['k2']} "
+            f"roll_pnl={roll_pnl:.2f} → 重新开仓 expiry={sp['expiry'].date()}"
+        )
+        self._open_spread(bar, sp['expiry'], check_k1=False)
+
+    def _check_roll(self, bar: BarData) -> None:
+        if self.roll_delta_drop <= 0:
+            return
+        S = bar.close_price
+        to_roll, remaining = [], []
+        for sp in self._spreads:
+            curr_delta = self._curr_call_delta(S, sp, bar)
+            if self.entry_short - curr_delta >= self.roll_delta_drop:
+                to_roll.append(sp)
+            else:
+                remaining.append(sp)
+        self._spreads = remaining
+        for sp in to_roll:
+            self._roll_spread(sp, bar)
+
+    # ── 主逻辑 ────────────────────────────────────────────────────────────────
+
+    def logic(self, bar: BarData) -> None:
+        self._bar_history.append(bar)
+        self._check_expiry(bar)
+        self._check_roll(bar)
+        self._check_entry(bar)
+        self._record_mtm_pnl(bar)
+        self._last_bar = bar

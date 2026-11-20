@@ -1,0 +1,32 @@
+# config/simple_uturn_signal_test.yaml
+# 共享参数（数据源、结算逻辑）
+code_id:        "RKLB"
+interval:       "M5"
+start_time:     "2024-01-01 00:00:00"
+end_time:       "2026-06-01 00:00:00"
+option_days:    14         # 结算日距信号日的最少天数（0=信号后第一个收盘，1=次日，N=N天后）
+expiry_weekday: -1        # 结算日星期几（-1=仅跳过周末，0=周一…4=周五）
+market_close_time: "16:00:00"
+no_hold_weekend: false     # true=不持仓过周末，到期日越过周末则提前至最近周五收盘结算
+
+# 信号列表：每个信号独立配置、独立输出文件
+signals:
+  - type:   bottom
+    enable: true
+    min_dif_abs: 0                    # dif 绝对值最小阈值（es选2, nq选10）
+    require_low_below_prev_day_low: 0 # 1=要求 bar 最低价低于昨日最低价
+    cooldown_bars: 12                 # 触发后冷却 bar 数（M5下12=1小时）
+    min_minutes_to_close: 30          # 距收盘不足此分钟数的信号忽略
+    stop_loss_points: 0               # 硬止损点数（0=不启用；止损后重置冷却）
+    signal_valid_times:               # 空列表=全天有效
+      - ["00:00:00", "23:59:00"]
+
+  - type:   top
+    enable: false
+    min_dif_abs: 50
+    require_high_above_prev_day_high: 1 # 1=要求 bar 最高价高于昨日最高价
+    cooldown_bars: 12
+    min_minutes_to_close: 30
+    stop_loss_points: 0
+    signal_valid_times:
+      - ["00:00:00", "23:59:00"]

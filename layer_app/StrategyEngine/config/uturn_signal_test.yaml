@@ -1,0 +1,15 @@
+# config/uturn_signal_test.yaml
+code_id:   "ES"
+interval:  "M5"
+start_time: "2024-01-01 00:00:00"
+end_time:   "2026-06-01 00:00:00"
+multi_uturn_window: 300   # 滑动窗口大小（与策略一致）
+require_plus_pattern: 1           # 1=要求当前 UTurn |dif| > 前一个 UTurn |dif|        es此值为1
+require_low_below_prev_day_low: 0 # 1=bottom 信号要求 bar 最低价低于昨日最低价            es此值为0
+require_high_above_prev_day_high: 0 # 1=top 信号要求 bar 最高价高于昨日最高价
+cooldown_bars: 12                 # 同方向信号触发后冷却的 bar 数（0=不限制，M5 下 12=1小时）
+min_minutes_to_close: 30          # 距当日收盘不足此分钟数的信号不计入（0=不限制）
+market_close_time: "16:00:00"     # 当日收盘时间（用于 min_minutes_to_close 计算）
+signal_valid_times:               # 信号有效时间段列表（当天时间，空列表=全天有效）
+  - [ "00:00:00", "23:59:00"]
+#  - ["09:30:00", "15:30:00"]
