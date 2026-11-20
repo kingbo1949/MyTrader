@@ -390,7 +390,45 @@ class  CIBRichData
 	IBIndexRichDataPtr indexRichData = nullptr;
 };
 
+class  CIBTableModelOneItemData;
+typedef std::shared_ptr<CIBTableModelOneItemData> IBTableModelOneItemDataPtr;
+typedef std::vector<IBTableModelOneItemDataPtr> IBTableModelOneItemDataPtrs;
+class  CIBTableModelOneItemData
+{
+public:
+	// 均线部分
+	double			v5 = std::numeric_limits<double>::quiet_NaN();
+	double			v20 = std::numeric_limits<double>::quiet_NaN();
+	double			v60 = std::numeric_limits<double>::quiet_NaN();
+	double			v200 = std::numeric_limits<double>::quiet_NaN();
 
+	// macd部分
+	double			dif = std::numeric_limits<double>::quiet_NaN();
+	double			bar = std::numeric_limits<double>::quiet_NaN() ;
+
+	// divType部分
+	DivergenceType	last_divType = DivergenceType::Normal;
+	bool			last_isUTurn = false;
+	DivergenceType	this_divType = DivergenceType::Normal;
+	bool			this_isUTurn = false;
+
+};
+
+class  CIBTableModelData;
+typedef std::shared_ptr<CIBTableModelData> IBTableModelDataPtr;
+typedef std::vector<IBTableModelDataPtr> IBTableModelDataPtrs;
+class  CIBTableModelData
+{
+public:
+	double 						close = std::numeric_limits<double>::quiet_NaN();
+
+	IBTableModelOneItemDataPtr    item_m1;
+	IBTableModelOneItemDataPtr    item_m5;
+	IBTableModelOneItemDataPtr    item_m15;
+	IBTableModelOneItemDataPtr    item_m30;
+	IBTableModelOneItemDataPtr    item_h1;
+	IBTableModelOneItemDataPtr    item_d1;
+};
 
 
 enum class TimeZone_Type

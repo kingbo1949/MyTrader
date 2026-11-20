@@ -27,6 +27,8 @@ set(SRC_LIST
         src/TickUpdator.cpp
         src/TimerTask_UpdateIndex.cpp
         src/RichDataMaker.cpp
+        src/TableModelValueMaker.cpp
+        src/TableModelValueMaker.h
 
         cmd/Cmd_RecountAllIndex.cpp
         cmd/Cmd_UpdateAllIndexFromTimePos.cpp

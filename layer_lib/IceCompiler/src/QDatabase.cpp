@@ -75,6 +75,7 @@ const ::std::string iceC_IBTrader_IQDatabase_ops[] =
     "GetOneTick",
     "GetOneVwMa",
     "GetRichs",
+    "GetTableModelValue",
     "GetTicks",
     "GetVwMas",
     "IdlCount",
@@ -131,6 +132,7 @@ const ::std::string iceC_IBTrader_IQDatabase_GetAtrs_name = "GetAtrs";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneAtr_name = "GetOneAtr";
 const ::std::string iceC_IBTrader_IQDatabase_GetRichs_name = "GetRichs";
 const ::std::string iceC_IBTrader_IQDatabase_GetOneRich_name = "GetOneRich";
+const ::std::string iceC_IBTrader_IQDatabase_GetTableModelValue_name = "GetTableModelValue";
 
 }
 
@@ -822,9 +824,27 @@ IBTrader::IQDatabase::_iceD_GetOneRich(::IceInternal::Incoming& inS, const ::Ice
 
 /// \cond INTERNAL
 bool
+IBTrader::IQDatabase::_iceD_GetTableModelValue(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    istr->readAll(iceP_codeId);
+    inS.endReadParams();
+    ITableModelValue iceP_tableModelValue;
+    bool ret = this->GetTableModelValue(::std::move(iceP_codeId), iceP_tableModelValue, current);
+    auto ostr = inS.startWriteParams();
+    ostr->writeAll(iceP_tableModelValue, ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 40, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_ops, iceC_IBTrader_IQDatabase_ops + 41, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -918,77 +938,81 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 21:
         {
-            return _iceD_GetTicks(in, current);
+            return _iceD_GetTableModelValue(in, current);
         }
         case 22:
         {
-            return _iceD_GetVwMas(in, current);
+            return _iceD_GetTicks(in, current);
         }
         case 23:
         {
-            return _iceD_IdlCount(in, current);
+            return _iceD_GetVwMas(in, current);
         }
         case 24:
         {
-            return _iceD_IsAllIdle(in, current);
+            return _iceD_IdlCount(in, current);
         }
         case 25:
         {
-            return _iceD_RecountAllIndex(in, current);
+            return _iceD_IsAllIdle(in, current);
         }
         case 26:
         {
-            return _iceD_RemoveAllKLines(in, current);
+            return _iceD_RecountAllIndex(in, current);
         }
         case 27:
         {
-            return _iceD_RemoveAllTicks(in, current);
+            return _iceD_RemoveAllKLines(in, current);
         }
         case 28:
         {
-            return _iceD_RemoveKLinesByRange(in, current);
+            return _iceD_RemoveAllTicks(in, current);
         }
         case 29:
         {
-            return _iceD_RemoveOneKLine(in, current);
+            return _iceD_RemoveKLinesByRange(in, current);
         }
         case 30:
         {
-            return _iceD_RemoveTicksByRange(in, current);
+            return _iceD_RemoveOneKLine(in, current);
         }
         case 31:
         {
-            return _iceD_TaskCount(in, current);
+            return _iceD_RemoveTicksByRange(in, current);
         }
         case 32:
         {
-            return _iceD_UpdateAllIndexFromTimePos(in, current);
+            return _iceD_TaskCount(in, current);
         }
         case 33:
         {
-            return _iceD_UpdateKLine(in, current);
+            return _iceD_UpdateAllIndexFromTimePos(in, current);
         }
         case 34:
         {
-            return _iceD_UpdateKLines(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 35:
         {
-            return _iceD_UpdateTickToDB(in, current);
+            return _iceD_UpdateKLines(in, current);
         }
         case 36:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_UpdateTickToDB(in, current);
         }
         case 37:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 38:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_ice_ids(in, current);
         }
         case 39:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 40:
         {
             return _iceD_ice_ping(in, current);
         }
@@ -1549,6 +1573,26 @@ IBTrader::IQDatabasePrx::_iceI_GetOneRich(const ::std::shared_ptr<::IceInternal:
 /// \endcond
 
 /// \cond INTERNAL
+void
+IBTrader::IQDatabasePrx::_iceI_GetTableModelValue(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetTableModelValueResult>>& outAsync, const ::std::string& iceP_codeId, const ::Ice::Context& context)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetTableModelValue_name);
+    outAsync->invoke(iceC_IBTrader_IQDatabase_GetTableModelValue_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_codeId);
+        },
+        nullptr,
+        [](::Ice::InputStream* istr)
+        {
+            IQDatabase::GetTableModelValueResult v;
+            istr->readAll(v.tableModelValue, v.returnValue);
+            return v;
+        });
+}
+/// \endcond
+
+/// \cond INTERNAL
 ::std::shared_ptr<::Ice::ObjectPrx>
 IBTrader::IQDatabasePrx::_newInstance() const
 {
@@ -1638,6 +1682,8 @@ const ::std::string iceC_IBTrader_IQDatabase_GetOneAtr_name = "GetOneAtr";
 const ::std::string iceC_IBTrader_IQDatabase_GetRichs_name = "GetRichs";
 
 const ::std::string iceC_IBTrader_IQDatabase_GetOneRich_name = "GetOneRich";
+
+const ::std::string iceC_IBTrader_IQDatabase_GetTableModelValue_name = "GetTableModelValue";
 
 }
 
@@ -3458,6 +3504,69 @@ void IceProxy::IBTrader::IQDatabase::_iceI_end_GetOneRich(::IBTrader::IRichValue
     result->_endReadParams();
 }
 
+::Ice::AsyncResultPtr
+IceProxy::IBTrader::IQDatabase::_iceI_begin_GetTableModelValue(const ::std::string& iceP_codeId, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    _checkTwowayOnly(iceC_IBTrader_IQDatabase_GetTableModelValue_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_IBTrader_IQDatabase_GetTableModelValue_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_IBTrader_IQDatabase_GetTableModelValue_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_codeId);
+        result->endWriteParams();
+        result->invoke(iceC_IBTrader_IQDatabase_GetTableModelValue_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+bool
+IceProxy::IBTrader::IQDatabase::end_GetTableModelValue(::IBTrader::ITableModelValue& iceP_tableModelValue, const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetTableModelValue_name);
+    bool ret;
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(iceP_tableModelValue);
+    istr->read(ret);
+    result->_endReadParams();
+    return ret;
+}
+
+void IceProxy::IBTrader::IQDatabase::_iceI_end_GetTableModelValue(::IBTrader::ITableModelValue& iceP_tableModelValue, bool& ret, const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_IBTrader_IQDatabase_GetTableModelValue_name);
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(iceP_tableModelValue);
+    istr->read(ret);
+    result->_endReadParams();
+}
+
 /// \cond INTERNAL
 ::IceProxy::Ice::Object*
 IceProxy::IBTrader::IQDatabase::_newInstance() const
@@ -4253,6 +4362,25 @@ IBTrader::IQDatabase::_iceD_GetOneRich(::IceInternal::Incoming& inS, const ::Ice
 }
 /// \endcond
 
+/// \cond INTERNAL
+bool
+IBTrader::IQDatabase::_iceD_GetTableModelValue(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_codeId;
+    istr->read(iceP_codeId);
+    inS.endReadParams();
+    ITableModelValue iceP_tableModelValue;
+    bool ret = this->GetTableModelValue(iceP_codeId, iceP_tableModelValue, current);
+    ::Ice::OutputStream* ostr = inS.startWriteParams();
+    ostr->write(iceP_tableModelValue);
+    ostr->write(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
 namespace
 {
 const ::std::string iceC_IBTrader_IQDatabase_all[] =
@@ -4278,6 +4406,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
     "GetOneTick",
     "GetOneVwMa",
     "GetRichs",
+    "GetTableModelValue",
     "GetTicks",
     "GetVwMas",
     "IdlCount",
@@ -4305,7 +4434,7 @@ const ::std::string iceC_IBTrader_IQDatabase_all[] =
 bool
 IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 40, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_IBTrader_IQDatabase_all, iceC_IBTrader_IQDatabase_all + 41, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -4399,77 +4528,81 @@ IBTrader::IQDatabase::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Cur
         }
         case 21:
         {
-            return _iceD_GetTicks(in, current);
+            return _iceD_GetTableModelValue(in, current);
         }
         case 22:
         {
-            return _iceD_GetVwMas(in, current);
+            return _iceD_GetTicks(in, current);
         }
         case 23:
         {
-            return _iceD_IdlCount(in, current);
+            return _iceD_GetVwMas(in, current);
         }
         case 24:
         {
-            return _iceD_IsAllIdle(in, current);
+            return _iceD_IdlCount(in, current);
         }
         case 25:
         {
-            return _iceD_RecountAllIndex(in, current);
+            return _iceD_IsAllIdle(in, current);
         }
         case 26:
         {
-            return _iceD_RemoveAllKLines(in, current);
+            return _iceD_RecountAllIndex(in, current);
         }
         case 27:
         {
-            return _iceD_RemoveAllTicks(in, current);
+            return _iceD_RemoveAllKLines(in, current);
         }
         case 28:
         {
-            return _iceD_RemoveKLinesByRange(in, current);
+            return _iceD_RemoveAllTicks(in, current);
         }
         case 29:
         {
-            return _iceD_RemoveOneKLine(in, current);
+            return _iceD_RemoveKLinesByRange(in, current);
         }
         case 30:
         {
-            return _iceD_RemoveTicksByRange(in, current);
+            return _iceD_RemoveOneKLine(in, current);
         }
         case 31:
         {
-            return _iceD_TaskCount(in, current);
+            return _iceD_RemoveTicksByRange(in, current);
         }
         case 32:
         {
-            return _iceD_UpdateAllIndexFromTimePos(in, current);
+            return _iceD_TaskCount(in, current);
         }
         case 33:
         {
-            return _iceD_UpdateKLine(in, current);
+            return _iceD_UpdateAllIndexFromTimePos(in, current);
         }
         case 34:
         {
-            return _iceD_UpdateKLines(in, current);
+            return _iceD_UpdateKLine(in, current);
         }
         case 35:
         {
-            return _iceD_UpdateTickToDB(in, current);
+            return _iceD_UpdateKLines(in, current);
         }
         case 36:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_UpdateTickToDB(in, current);
         }
         case 37:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 38:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_ice_ids(in, current);
         }
         case 39:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 40:
         {
             return _iceD_ice_ping(in, current);
         }

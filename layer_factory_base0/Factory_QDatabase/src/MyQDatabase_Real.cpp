@@ -656,6 +656,15 @@ IBRichDataPtr CMyQDatabase_Real::GetOneRich(const CodeStr &codeId, Time_Type tim
 	return CIceTransfor::TransRichData(oneValue);
 }
 
+IBTableModelDataPtr CMyQDatabase_Real::GetTableModelData(const CodeStr &codeId)
+{
+	ITableModelValue tableModelValue;
+	bool success = MakeAndGet_IceProxy()->GetQDatabasePrx()->GetTableModelValue(codeId, tableModelValue);
+	if (!success) return nullptr;
+
+	return CIceTransfor::TransTableModelData(tableModelValue);
+}
+
 bool CMyQDatabase_Real::ValidFlite(time_t ms, int bigTick, IBTickPtr thisTick, IBTickPtr lastTick, IBTickPtr lastAddedTick)
 {
 	if (thisTick->time - lastAddedTick->time >= ms)

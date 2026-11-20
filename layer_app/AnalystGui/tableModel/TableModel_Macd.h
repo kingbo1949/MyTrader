@@ -36,6 +36,8 @@ public:
 protected:
 	TableItems								m_tableItems;
 
+	void									FillTableItems(Time_Type timetype, IBTableModelOneItemDataPtr item);
+
 	void									QueryData(Time_Type timetype);
 
 

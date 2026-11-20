@@ -374,6 +374,20 @@ public:
     bool _iceD_GetOneRich(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    /**
+     * Encapsulates the results of a call to GetTableModelValue.
+     */
+    struct GetTableModelValueResult
+    {
+        bool returnValue;
+        ITableModelValue tableModelValue;
+    };
+
+    virtual bool GetTableModelValue(::std::string codeId, ITableModelValue& tableModelValue, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetTableModelValue(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     /// \cond INTERNAL
     virtual bool _iceDispatch(::IceInternal::Incoming&, const ::Ice::Current&) override;
     /// \endcond
@@ -1387,6 +1401,38 @@ public:
     void _iceI_GetOneRich(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetOneRichResult>>&, const ::std::string&, ITimeType, long long int, const ::Ice::Context&);
     /// \endcond
 
+    bool GetTableModelValue(const ::std::string& codeId, ITableModelValue& tableModelValue, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        auto _result = _makePromiseOutgoing<IQDatabase::GetTableModelValueResult>(true, this, &IQDatabasePrx::_iceI_GetTableModelValue, codeId, context).get();
+        tableModelValue = ::std::move(_result.tableModelValue);
+        return _result.returnValue;
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto GetTableModelValueAsync(const ::std::string& codeId, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<IQDatabase::GetTableModelValueResult>>().get_future())
+    {
+        return _makePromiseOutgoing<IQDatabase::GetTableModelValueResult, P>(false, this, &IQDatabasePrx::_iceI_GetTableModelValue, codeId, context);
+    }
+
+    ::std::function<void()>
+    GetTableModelValueAsync(const ::std::string& codeId,
+                            ::std::function<void(bool, ::IBTrader::ITableModelValue)> response,
+                            ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                            ::std::function<void(bool)> sent = nullptr,
+                            const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        auto _responseCb = [response](IQDatabase::GetTableModelValueResult&& _result)
+        {
+            response(_result.returnValue, ::std::move(_result.tableModelValue));
+        };
+        return _makeLamdaOutgoing<IQDatabase::GetTableModelValueResult>(std::move(_responseCb), std::move(ex), std::move(sent), this, &IBTrader::IQDatabasePrx::_iceI_GetTableModelValue, codeId, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_GetTableModelValue(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<IQDatabase::GetTableModelValueResult>>&, const ::std::string&, const ::Ice::Context&);
+    /// \endcond
+
     /**
      * Obtains the Slice type ID of this interface.
      * @return The fully-scoped type ID.
@@ -1746,6 +1792,14 @@ typedef ::IceUtil::Handle< Callback_IQDatabase_GetRichs_Base> Callback_IQDatabas
  */
 class Callback_IQDatabase_GetOneRich_Base : public virtual ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_IQDatabase_GetOneRich_Base> Callback_IQDatabase_GetOneRichPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetTableModelValue.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetTableModelValue.
+ */
+class Callback_IQDatabase_GetTableModelValue_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_IQDatabase_GetTableModelValue_Base> Callback_IQDatabase_GetTableModelValuePtr;
 
 }
 
@@ -3215,6 +3269,48 @@ private:
 
 public:
 
+    bool GetTableModelValue(const ::std::string& codeId, ::IBTrader::ITableModelValue& tableModelValue, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return end_GetTableModelValue(tableModelValue, _iceI_begin_GetTableModelValue(codeId, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_GetTableModelValue(const ::std::string& codeId, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_GetTableModelValue(codeId, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetTableModelValue(const ::std::string& codeId, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetTableModelValue(codeId, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetTableModelValue(const ::std::string& codeId, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetTableModelValue(codeId, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetTableModelValue(const ::std::string& codeId, const ::IBTrader::Callback_IQDatabase_GetTableModelValuePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetTableModelValue(codeId, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_GetTableModelValue(const ::std::string& codeId, const ::Ice::Context& context, const ::IBTrader::Callback_IQDatabase_GetTableModelValuePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_GetTableModelValue(codeId, context, cb, cookie);
+    }
+
+    bool end_GetTableModelValue(::IBTrader::ITableModelValue& tableModelValue, const ::Ice::AsyncResultPtr& result);
+    /// \cond INTERNAL
+
+    void _iceI_end_GetTableModelValue(::IBTrader::ITableModelValue& iceP_tableModelValue, bool& ret, const ::Ice::AsyncResultPtr&);
+    /// \endcond
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_GetTableModelValue(const ::std::string&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
     /**
      * Obtains the Slice type ID corresponding to this interface.
      * @return A fully-scoped type ID.
@@ -3456,6 +3552,11 @@ public:
     virtual bool GetOneRich(const ::std::string& codeId, ITimeType timeType, ::Ice::Long timePos, IRichValue& rich, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_GetOneRich(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual bool GetTableModelValue(const ::std::string& codeId, ITableModelValue& tableModelValue, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_GetTableModelValue(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
     /// \cond INTERNAL
@@ -9032,6 +9133,160 @@ template<class T, typename CT> Callback_IQDatabase_GetOneRichPtr
 newCallback_IQDatabase_GetOneRich(T* instance, void (T::*cb)(bool, const IRichValue&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_IQDatabase_GetOneRich<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetTableModelValue.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetTableModelValue.
+ */
+template<class T>
+class CallbackNC_IQDatabase_GetTableModelValue : public Callback_IQDatabase_GetTableModelValue_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(bool, const ITableModelValue&);
+
+    CallbackNC_IQDatabase_GetTableModelValue(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        ITableModelValue iceP_tableModelValue;
+        bool ret;
+        try
+        {
+            ret = proxy->end_GetTableModelValue(iceP_tableModelValue, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(ret, iceP_tableModelValue);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetTableModelValue.
+ */
+template<class T> Callback_IQDatabase_GetTableModelValuePtr
+newCallback_IQDatabase_GetTableModelValue(const IceUtil::Handle<T>& instance, void (T::*cb)(bool, const ITableModelValue&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetTableModelValue<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetTableModelValue.
+ */
+template<class T> Callback_IQDatabase_GetTableModelValuePtr
+newCallback_IQDatabase_GetTableModelValue(T* instance, void (T::*cb)(bool, const ITableModelValue&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_IQDatabase_GetTableModelValue<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::IBTrader::IQDatabase::begin_GetTableModelValue.
+ * Create a wrapper instance by calling ::IBTrader::newCallback_IQDatabase_GetTableModelValue.
+ */
+template<class T, typename CT>
+class Callback_IQDatabase_GetTableModelValue : public Callback_IQDatabase_GetTableModelValue_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(bool, const ITableModelValue&, const CT&);
+
+    Callback_IQDatabase_GetTableModelValue(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        IQDatabasePrx proxy = IQDatabasePrx::uncheckedCast(result->getProxy());
+        ITableModelValue iceP_tableModelValue;
+        bool ret;
+        try
+        {
+            ret = proxy->end_GetTableModelValue(iceP_tableModelValue, result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(ret, iceP_tableModelValue, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetTableModelValue.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetTableModelValuePtr
+newCallback_IQDatabase_GetTableModelValue(const IceUtil::Handle<T>& instance, void (T::*cb)(bool, const ITableModelValue&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetTableModelValue<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::IBTrader::IQDatabase::begin_GetTableModelValue.
+ */
+template<class T, typename CT> Callback_IQDatabase_GetTableModelValuePtr
+newCallback_IQDatabase_GetTableModelValue(T* instance, void (T::*cb)(bool, const ITableModelValue&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_IQDatabase_GetTableModelValue<T, CT>(instance, cb, excb, sentcb);
 }
 
 }

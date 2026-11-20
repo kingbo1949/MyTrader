@@ -8,6 +8,7 @@
 #include <Global.h>
 #include <Factory_AnalystDeal.h>
 #include "../tableModel/TableModel.h"
+#include "../tableModel/TableModelDataGetter.h"
 #include "Factory_AnalystGui.h"
 #include "../klineShape/ScanKShape_BreakMix.h"
 #include "../klineShape/ScanKShape_Future.h"
@@ -402,6 +403,9 @@ void AnalystGui::onTimerRealQuote()
 void AnalystGui::onTimerKlineShape()
 {
 	std::string codeId = GetSelectCodeId(ui.tabWidget);
+	MakeAndGet_TableModelDataGetter()->Go(codeId);
+	if (!MakeAndGet_TableModelDataGetter()->GetResult()) return;
+
 	MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
 	MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
 

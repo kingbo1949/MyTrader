@@ -145,6 +145,9 @@ public:
 	virtual IBRichDataPtrs	GetRichs(const CodeStr& codeId, Time_Type timeType, const QQuery& query) = 0;
 
 	virtual IBRichDataPtr	GetOneRich(const CodeStr& codeId, Time_Type timeType, time_t timePos) = 0;
+
+	virtual IBTableModelDataPtr GetTableModelData(const CodeStr& codeId) = 0;
+
 };
 typedef std::shared_ptr<CMyQDatabase> MyQDatabasePtr;
 

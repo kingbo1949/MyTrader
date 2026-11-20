@@ -72,6 +72,8 @@ module IBTrader
 		// 组合数据
 		void		GetRichs(string codeId, ITimeType timeType, IQuery query,out IRichValues richs);
 		bool		GetOneRich(string codeId, ITimeType timeType, long timePos, out IRichValue rich);	    // 查询单个指定数据
+		bool		GetTableModelValue(string codeId, out ITableModelValue tableModelValue);
+
 
 
 

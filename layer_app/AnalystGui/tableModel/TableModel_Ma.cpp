@@ -2,6 +2,9 @@
 #include <Factory_QDatabase.h>
 #include <Factory_IBGlobalShare.h>
 #include <QtGlobal.h>
+
+#include "TableModelDataGetter.h"
+
 CTableModel_Ma::CTableModel_Ma()
 	:CTableModel()
 {
@@ -17,14 +20,23 @@ void CTableModel_Ma::QueryData()
 	m_tableItems.clear();
 	m_close = std::numeric_limits<double>::quiet_NaN();
 
-	QueryClose();
+	// QueryClose();
 	// QueryData(Time_Type::S15);
-	QueryData(Time_Type::M1);
-	QueryData(Time_Type::M5);
-	QueryData(Time_Type::M15);
-	QueryData(Time_Type::M30);
-	QueryData(Time_Type::H1);
-	QueryData(Time_Type::D1);
+	// QueryData(Time_Type::M1);
+	// QueryData(Time_Type::M5);
+	// QueryData(Time_Type::M15);
+	// QueryData(Time_Type::M30);
+	// QueryData(Time_Type::H1);
+	// QueryData(Time_Type::D1);
+
+	m_close = MakeAndGet_TableModelDataGetter()->GetResult()->close;
+	FillMapMa(Time_Type::M1, MakeAndGet_TableModelDataGetter()->GetResult()->item_m1);
+	FillMapMa(Time_Type::M5, MakeAndGet_TableModelDataGetter()->GetResult()->item_m5);
+	FillMapMa(Time_Type::M15, MakeAndGet_TableModelDataGetter()->GetResult()->item_m15);
+	FillMapMa(Time_Type::M30, MakeAndGet_TableModelDataGetter()->GetResult()->item_m30);
+	FillMapMa(Time_Type::H1, MakeAndGet_TableModelDataGetter()->GetResult()->item_h1);
+	FillMapMa(Time_Type::D1, MakeAndGet_TableModelDataGetter()->GetResult()->item_d1);
+
 
 	m_tableItems = GetTableItems();
 
@@ -106,6 +118,17 @@ void CTableModel_Ma::QueryData(Time_Type timetype)
 		mavalue.v200 = value->v200;
 		m_mapMa[timetype] = mavalue;
 	}
+	return;
+}
+
+void CTableModel_Ma::FillMapMa(Time_Type timetype, IBTableModelOneItemDataPtr item)
+{
+	AverageValue mavalue;
+	mavalue.v5 = item->v5;
+	mavalue.v20 = item->v20;
+	mavalue.v60 = item->v60;
+	mavalue.v200 = item->v200;
+	m_mapMa[timetype] = mavalue;
 	return;
 }
 

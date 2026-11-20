@@ -200,10 +200,33 @@ module IBTrader
 	sequence<IRichValue> IRichValues;
 
 
+	struct ITableModelValueOneItem
+	{
+		double			v5 = 0.0;			// 5周期均线
+		double			v20 = 0.0;			// 20周期均线
+		double			v60 = 0.0;			// 60周期均线
+		double			v200 = 0.0;			// 200周期均线
 
-	
-	
+		double          macd_diff = 0.0;
+		double          macd_bar = 0.0;
 
+		IDivTypeValue   thisDivType;
+		IDivTypeValue   lastDivType;
+
+	}
+
+	struct ITableModelValue
+	{
+	    double                        close = 0.0;
+
+	    ITableModelValueOneItem       tableModelValue_m1;             // m1 k线上的4根均线
+	    ITableModelValueOneItem       tableModelValue_m5;             // m5 k线上的4根均线
+	    ITableModelValueOneItem       tableModelValue_m15;            // m15 k线上的4根均线
+	    ITableModelValueOneItem       tableModelValue_m30;            // m30 k线上的4根均线
+	    ITableModelValueOneItem       tableModelValue_h1;             // h1 k线上的4根均线
+	    ITableModelValueOneItem       tableModelValue_d1;             // d1 k线上的4根均线
+	}
+	sequence<ITableModelValue> ITableModelValues;
 
 };
 #endif

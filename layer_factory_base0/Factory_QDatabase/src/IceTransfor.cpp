@@ -405,3 +405,36 @@ DivergenceType CIceTransfor::TransType(IDivType type)
 	return back;
 
 }
+
+IBTableModelOneItemDataPtr CIceTransfor::TransTableModelOneItemData(const ITableModelValueOneItem &oneItem)
+{
+	IBTableModelOneItemDataPtr back = std::make_shared<CIBTableModelOneItemData>();
+	back->v5 = oneItem.v5;
+	back->v20 = oneItem.v20;
+	back->v60 = oneItem.v60;
+	back->v200 = oneItem.v200;
+
+	back->dif = oneItem.macd_diff;
+	back->bar = oneItem.macd_bar;
+
+	back->last_divType = TransType(oneItem.lastDivType.divType);
+	back->last_isUTurn = oneItem.lastDivType.isUTurn;
+	back->this_divType = TransType(oneItem.thisDivType.divType);
+	back->this_isUTurn = oneItem.thisDivType.isUTurn;
+	return back;
+
+}
+
+IBTableModelDataPtr CIceTransfor::TransTableModelData(const ITableModelValue &tableModelValue)
+{
+	IBTableModelDataPtr back = std::make_shared<CIBTableModelData>();
+	back->close = tableModelValue.close;
+	back->item_m1 = TransTableModelOneItemData(tableModelValue.tableModelValue_m1);
+	back->item_m5 = TransTableModelOneItemData(tableModelValue.tableModelValue_m5);
+	back->item_m15 = TransTableModelOneItemData(tableModelValue.tableModelValue_m15);
+	back->item_m30 = TransTableModelOneItemData(tableModelValue.tableModelValue_m30);
+	back->item_h1 = TransTableModelOneItemData(tableModelValue.tableModelValue_h1);
+	back->item_d1 = TransTableModelOneItemData(tableModelValue.tableModelValue_d1);
+	return back;
+
+}

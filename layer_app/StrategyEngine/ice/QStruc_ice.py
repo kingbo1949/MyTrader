@@ -1034,4 +1034,145 @@ if 'IRichValue' not in _M_IBTrader.__dict__:
 if '_t_IRichValues' not in _M_IBTrader.__dict__:
     _M_IBTrader._t_IRichValues = IcePy.defineSequence('::IBTrader::IRichValues', (), _M_IBTrader._t_IRichValue)
 
+if 'ITableModelValueOneItem' not in _M_IBTrader.__dict__:
+    _M_IBTrader.ITableModelValueOneItem = Ice.createTempClass()
+    class ITableModelValueOneItem(object):
+        def __init__(self, v5=0, v20=0, v60=0, v200=0, macd_diff=0, macd_bar=0, thisDivType=Ice._struct_marker, lastDivType=Ice._struct_marker):
+            self.v5 = v5
+            self.v20 = v20
+            self.v60 = v60
+            self.v200 = v200
+            self.macd_diff = macd_diff
+            self.macd_bar = macd_bar
+            if thisDivType is Ice._struct_marker:
+                self.thisDivType = _M_IBTrader.IDivTypeValue()
+            else:
+                self.thisDivType = thisDivType
+            if lastDivType is Ice._struct_marker:
+                self.lastDivType = _M_IBTrader.IDivTypeValue()
+            else:
+                self.lastDivType = lastDivType
+
+        def __eq__(self, other):
+            if other is None:
+                return False
+            elif not isinstance(other, _M_IBTrader.ITableModelValueOneItem):
+                return NotImplemented
+            else:
+                if self.v5 != other.v5:
+                    return False
+                if self.v20 != other.v20:
+                    return False
+                if self.v60 != other.v60:
+                    return False
+                if self.v200 != other.v200:
+                    return False
+                if self.macd_diff != other.macd_diff:
+                    return False
+                if self.macd_bar != other.macd_bar:
+                    return False
+                if self.thisDivType != other.thisDivType:
+                    return False
+                if self.lastDivType != other.lastDivType:
+                    return False
+                return True
+
+        def __ne__(self, other):
+            return not self.__eq__(other)
+
+        def __str__(self):
+            return IcePy.stringify(self, _M_IBTrader._t_ITableModelValueOneItem)
+
+        __repr__ = __str__
+
+    _M_IBTrader._t_ITableModelValueOneItem = IcePy.defineStruct('::IBTrader::ITableModelValueOneItem', ITableModelValueOneItem, (), (
+        ('v5', (), IcePy._t_double),
+        ('v20', (), IcePy._t_double),
+        ('v60', (), IcePy._t_double),
+        ('v200', (), IcePy._t_double),
+        ('macd_diff', (), IcePy._t_double),
+        ('macd_bar', (), IcePy._t_double),
+        ('thisDivType', (), _M_IBTrader._t_IDivTypeValue),
+        ('lastDivType', (), _M_IBTrader._t_IDivTypeValue)
+    ))
+
+    _M_IBTrader.ITableModelValueOneItem = ITableModelValueOneItem
+    del ITableModelValueOneItem
+
+if 'ITableModelValue' not in _M_IBTrader.__dict__:
+    _M_IBTrader.ITableModelValue = Ice.createTempClass()
+    class ITableModelValue(object):
+        def __init__(self, close=0, tableModelValue_m1=Ice._struct_marker, tableModelValue_m5=Ice._struct_marker, tableModelValue_m15=Ice._struct_marker, tableModelValue_m30=Ice._struct_marker, tableModelValue_h1=Ice._struct_marker, tableModelValue_d1=Ice._struct_marker):
+            self.close = close
+            if tableModelValue_m1 is Ice._struct_marker:
+                self.tableModelValue_m1 = _M_IBTrader.ITableModelValueOneItem()
+            else:
+                self.tableModelValue_m1 = tableModelValue_m1
+            if tableModelValue_m5 is Ice._struct_marker:
+                self.tableModelValue_m5 = _M_IBTrader.ITableModelValueOneItem()
+            else:
+                self.tableModelValue_m5 = tableModelValue_m5
+            if tableModelValue_m15 is Ice._struct_marker:
+                self.tableModelValue_m15 = _M_IBTrader.ITableModelValueOneItem()
+            else:
+                self.tableModelValue_m15 = tableModelValue_m15
+            if tableModelValue_m30 is Ice._struct_marker:
+                self.tableModelValue_m30 = _M_IBTrader.ITableModelValueOneItem()
+            else:
+                self.tableModelValue_m30 = tableModelValue_m30
+            if tableModelValue_h1 is Ice._struct_marker:
+                self.tableModelValue_h1 = _M_IBTrader.ITableModelValueOneItem()
+            else:
+                self.tableModelValue_h1 = tableModelValue_h1
+            if tableModelValue_d1 is Ice._struct_marker:
+                self.tableModelValue_d1 = _M_IBTrader.ITableModelValueOneItem()
+            else:
+                self.tableModelValue_d1 = tableModelValue_d1
+
+        def __eq__(self, other):
+            if other is None:
+                return False
+            elif not isinstance(other, _M_IBTrader.ITableModelValue):
+                return NotImplemented
+            else:
+                if self.close != other.close:
+                    return False
+                if self.tableModelValue_m1 != other.tableModelValue_m1:
+                    return False
+                if self.tableModelValue_m5 != other.tableModelValue_m5:
+                    return False
+                if self.tableModelValue_m15 != other.tableModelValue_m15:
+                    return False
+                if self.tableModelValue_m30 != other.tableModelValue_m30:
+                    return False
+                if self.tableModelValue_h1 != other.tableModelValue_h1:
+                    return False
+                if self.tableModelValue_d1 != other.tableModelValue_d1:
+                    return False
+                return True
+
+        def __ne__(self, other):
+            return not self.__eq__(other)
+
+        def __str__(self):
+            return IcePy.stringify(self, _M_IBTrader._t_ITableModelValue)
+
+        __repr__ = __str__
+
+    _M_IBTrader._t_ITableModelValue = IcePy.defineStruct('::IBTrader::ITableModelValue', ITableModelValue, (), (
+        ('close', (), IcePy._t_double),
+        ('tableModelValue_m1', (), _M_IBTrader._t_ITableModelValueOneItem),
+        ('tableModelValue_m5', (), _M_IBTrader._t_ITableModelValueOneItem),
+        ('tableModelValue_m15', (), _M_IBTrader._t_ITableModelValueOneItem),
+        ('tableModelValue_m30', (), _M_IBTrader._t_ITableModelValueOneItem),
+        ('tableModelValue_h1', (), _M_IBTrader._t_ITableModelValueOneItem),
+        ('tableModelValue_d1', (), _M_IBTrader._t_ITableModelValueOneItem)
+    ))
+
+    _M_IBTrader.ITableModelValue = ITableModelValue
+    del ITableModelValue
+
+if '_t_ITableModelValues' not in _M_IBTrader.__dict__:
+    _M_IBTrader._t_ITableModelValues = IcePy.defineSequence('::IBTrader::ITableModelValues', (), _M_IBTrader._t_ITableModelValue)
+
 # End of module IBTrader

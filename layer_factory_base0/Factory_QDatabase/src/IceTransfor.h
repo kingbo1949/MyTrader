@@ -52,5 +52,9 @@ public:
 
 	static IDivType						TransType(DivergenceType type);
 	static DivergenceType				TransType(IDivType type);
+
+	// 转换TableModelData
+	static IBTableModelOneItemDataPtr   TransTableModelOneItemData(const ITableModelValueOneItem& oneItem);
+	static IBTableModelDataPtr			TransTableModelData(const ITableModelValue& tableModelValue);
 };
 

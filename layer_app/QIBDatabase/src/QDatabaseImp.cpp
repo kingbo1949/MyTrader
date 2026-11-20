@@ -5,6 +5,7 @@
 #include "Calculator/Calculator.h"
 #include "MakeKlinePairs.h"
 #include "RichDataMaker.h"
+#include "TableModelValueMaker.h"
 #include "../cmd/Cmd_RecountAllIndex.h"
 #include "../cmd/Cmd_UpdateAllIndexFromTimePos.h"
 
@@ -267,6 +268,16 @@ bool CQDatabaseImp::GetOneRich(std::string codeId, ITimeType timeType, long long
 
 	if (richs.empty()) return false;
 	rich = richs[0];
+	return true;
+}
+
+bool CQDatabaseImp::GetTableModelValue(std::string codeId, ITableModelValue &tableModelValue,
+	const Ice::Current &current)
+{
+	CTableModelValueMaker maker;
+	maker.SetCodeId(codeId);
+	if (!maker.Go()) return false;
+	tableModelValue = maker.GetResult();
 	return true;
 }
 

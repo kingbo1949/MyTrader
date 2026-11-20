@@ -462,6 +462,18 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
         def end_GetOneRich(self, _r):
             return _M_IBTrader.IQDatabase._op_GetOneRich.end(self, _r)
 
+        def GetTableModelValue(self, codeId, context=None):
+            return _M_IBTrader.IQDatabase._op_GetTableModelValue.invoke(self, ((codeId, ), context))
+
+        def GetTableModelValueAsync(self, codeId, context=None):
+            return _M_IBTrader.IQDatabase._op_GetTableModelValue.invokeAsync(self, ((codeId, ), context))
+
+        def begin_GetTableModelValue(self, codeId, _response=None, _ex=None, _sent=None, context=None):
+            return _M_IBTrader.IQDatabase._op_GetTableModelValue.begin(self, ((codeId, ), _response, _ex, _sent, context))
+
+        def end_GetTableModelValue(self, _r):
+            return _M_IBTrader.IQDatabase._op_GetTableModelValue.end(self, _r)
+
         @staticmethod
         def checkedCast(proxy, facetOrContext=None, context=None):
             return _M_IBTrader.IQDatabasePrx.ice_checkedCast(proxy, '::IBTrader::IQDatabase', facetOrContext, context)
@@ -599,6 +611,9 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
         def GetOneRich(self, codeId, timeType, timePos, current=None):
             raise NotImplementedError("servant method 'GetOneRich' not implemented")
 
+        def GetTableModelValue(self, codeId, current=None):
+            raise NotImplementedError("servant method 'GetTableModelValue' not implemented")
+
         def __str__(self):
             return IcePy.stringify(self, _M_IBTrader._t_IQDatabaseDisp)
 
@@ -643,6 +658,7 @@ if 'IQDatabasePrx' not in _M_IBTrader.__dict__:
     IQDatabase._op_GetOneAtr = IcePy.Operation('GetOneAtr', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), IcePy._t_long, False, 0)), (((), _M_IBTrader._t_IAtrValue, False, 0),), ((), IcePy._t_bool, False, 0), ())
     IQDatabase._op_GetRichs = IcePy.Operation('GetRichs', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), _M_IBTrader._t_IQuery, False, 0)), (((), _M_IBTrader._t_IRichValues, False, 0),), None, ())
     IQDatabase._op_GetOneRich = IcePy.Operation('GetOneRich', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0), ((), _M_IBTrader._t_ITimeType, False, 0), ((), IcePy._t_long, False, 0)), (((), _M_IBTrader._t_IRichValue, False, 0),), ((), IcePy._t_bool, False, 0), ())
+    IQDatabase._op_GetTableModelValue = IcePy.Operation('GetTableModelValue', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_string, False, 0),), (((), _M_IBTrader._t_ITableModelValue, False, 0),), None, ())
 
     _M_IBTrader.IQDatabase = IQDatabase
     del IQDatabase

@@ -2,6 +2,7 @@
 #include <QtGlobal.h>
 #include <Factory_IBGlobalShare.h>
 #include <Factory_QDatabase.h>
+#include "TableModelDataGetter.h"
 CTableModel_Macd::CTableModel_Macd()
 	:CTableModel()
 {
@@ -14,13 +15,20 @@ void CTableModel_Macd::QueryData()
 
 	m_tableItems.clear();
 
-	QueryData(Time_Type::S15);
-	QueryData(Time_Type::M1);
-	QueryData(Time_Type::M5);
-	QueryData(Time_Type::M15);
-	QueryData(Time_Type::M30);
-	QueryData(Time_Type::H1);
-	QueryData(Time_Type::D1);
+	// QueryData(Time_Type::S15);
+	// QueryData(Time_Type::M1);
+	// QueryData(Time_Type::M5);
+	// QueryData(Time_Type::M15);
+	// QueryData(Time_Type::M30);
+	// QueryData(Time_Type::H1);
+	// QueryData(Time_Type::D1);
+
+	FillTableItems(Time_Type::M1, MakeAndGet_TableModelDataGetter()->GetResult()->item_m1);
+	FillTableItems(Time_Type::M5, MakeAndGet_TableModelDataGetter()->GetResult()->item_m5);
+	FillTableItems(Time_Type::M15, MakeAndGet_TableModelDataGetter()->GetResult()->item_m15);
+	FillTableItems(Time_Type::M30, MakeAndGet_TableModelDataGetter()->GetResult()->item_m30);
+	FillTableItems(Time_Type::H1, MakeAndGet_TableModelDataGetter()->GetResult()->item_h1);
+	FillTableItems(Time_Type::D1, MakeAndGet_TableModelDataGetter()->GetResult()->item_d1);
 
 	
 
@@ -75,6 +83,22 @@ QVariant CTableModel_Macd::data(const QModelIndex& index, int role) const
 	
 
 	return QVariant();
+}
+
+void CTableModel_Macd::FillTableItems(Time_Type timetype, IBTableModelOneItemDataPtr item)
+{
+	TableItem tableItem;
+	tableItem.timetype = timetype;
+	tableItem.lastDivType = std::make_shared<CIBDivType>();
+	tableItem.thisDivType = std::make_shared<CIBDivType>();
+	tableItem.lastDivType->divType = item->last_divType;
+	tableItem.lastDivType->isUTurn = item->last_isUTurn;
+	tableItem.thisDivType->divType = item->this_divType;
+	tableItem.thisDivType->isUTurn = item->this_isUTurn;
+	tableItem.diff = item->dif;
+	tableItem.bar = item->bar ;
+	return;
+
 }
 
 void CTableModel_Macd::QueryData(Time_Type timetype)

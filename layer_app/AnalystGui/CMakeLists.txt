@@ -82,6 +82,8 @@ set(TABLEMODEL_LIST
         tableModel/TableModel_Ma.h
         tableModel/TableModel_Macd.cpp
         tableModel/TableModel_Macd.h
+        tableModel/TableModelDataGetter.h
+        tableModel/TableModelDataGetter.cpp
 )
 set(TSIDETIMEHANDLER_LIST
         tSideTimeHandler/TSideTimeHandler.cpp
