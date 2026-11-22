@@ -15,14 +15,6 @@ void CTableModel_Macd::QueryData()
 
 	m_tableItems.clear();
 
-	// QueryData(Time_Type::S15);
-	// QueryData(Time_Type::M1);
-	// QueryData(Time_Type::M5);
-	// QueryData(Time_Type::M15);
-	// QueryData(Time_Type::M30);
-	// QueryData(Time_Type::H1);
-	// QueryData(Time_Type::D1);
-
 	FillTableItems(Time_Type::M1, MakeAndGet_TableModelDataGetter()->GetResult()->item_m1);
 	FillTableItems(Time_Type::M5, MakeAndGet_TableModelDataGetter()->GetResult()->item_m5);
 	FillTableItems(Time_Type::M15, MakeAndGet_TableModelDataGetter()->GetResult()->item_m15);
