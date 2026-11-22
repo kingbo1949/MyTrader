@@ -345,6 +345,7 @@ void AnalystGui::FreshAll()
 	Time_Type timeType = GetSelectTimeType();
 	IBKLinePtrs klines = GetKLines(codeId, timeType);;
 
+	MakeAndGet_TableModelDataGetter()->Go(codeId);
 	ShowKlines(codeId, timeType, klines);
 
 }
@@ -397,20 +398,14 @@ void AnalystGui::onTimerRealQuote()
 	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	m_plotContainer->AddKlines(codeId, timeType, klines);
 
-	// MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
-	// MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
-}
-void AnalystGui::onTimerKlineShape()
-{
-	std::string codeId = GetSelectCodeId(ui.tabWidget);
 	MakeAndGet_TableModelDataGetter()->Go(codeId);
 	if (!MakeAndGet_TableModelDataGetter()->GetResult()) return;
 
 	MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
 	MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
-
-
-
+}
+void AnalystGui::onTimerKlineShape()
+{
 	if (!m_pScanKShape_future)
 	{
 		ui.futureView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);

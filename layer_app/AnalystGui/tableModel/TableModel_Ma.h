@@ -37,9 +37,6 @@ protected:
 	double									m_close;
 	TableItems								m_tableItems;
 
-	virtual void							QueryClose();
-	virtual void							QueryData(Time_Type timetype);
-
 	void									FillMapMa(Time_Type timetype, IBTableModelOneItemDataPtr item);
 
 	// 制作显示在表内的数据，排序等特殊处理都在这里

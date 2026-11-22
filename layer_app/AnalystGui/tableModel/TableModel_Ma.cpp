@@ -20,15 +20,6 @@ void CTableModel_Ma::QueryData()
 	m_tableItems.clear();
 	m_close = std::numeric_limits<double>::quiet_NaN();
 
-	// QueryClose();
-	// QueryData(Time_Type::S15);
-	// QueryData(Time_Type::M1);
-	// QueryData(Time_Type::M5);
-	// QueryData(Time_Type::M15);
-	// QueryData(Time_Type::M30);
-	// QueryData(Time_Type::H1);
-	// QueryData(Time_Type::D1);
-
 	m_close = MakeAndGet_TableModelDataGetter()->GetResult()->close;
 	FillMapMa(Time_Type::M1, MakeAndGet_TableModelDataGetter()->GetResult()->item_m1);
 	FillMapMa(Time_Type::M5, MakeAndGet_TableModelDataGetter()->GetResult()->item_m5);
@@ -89,37 +80,6 @@ QVariant CTableModel_Ma::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
-void CTableModel_Ma::QueryClose()
-{
-	m_close = std::numeric_limits<double>::quiet_NaN();
-	QQuery query;
-	query.query_type = QQueryType::FROM_CURRENT;
-	query.query_number = 1;
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(m_codeId, Time_Type::M1, query);
-	if (klines.empty()) return;
-	m_close = klines.back()->close;
-	return;
-}
-
-void CTableModel_Ma::QueryData(Time_Type timetype)
-{
-	QQuery query;
-	query.query_type = QQueryType::FROM_CURRENT;
-	query.query_number = 1;
-	IBAvgValuePtrs avgValues = MakeAndGet_QDatabase()->GetMas(m_codeId, timetype, query);
-	if (avgValues.empty()) return;
-	// 填充数据
-	for (auto value : avgValues)
-	{
-		AverageValue mavalue;
-		mavalue.v5 = value->v5;
-		mavalue.v20 = value->v20;
-		mavalue.v60 = value->v60;
-		mavalue.v200 = value->v200;
-		m_mapMa[timetype] = mavalue;
-	}
-	return;
-}
 
 void CTableModel_Ma::FillMapMa(Time_Type timetype, IBTableModelOneItemDataPtr item)
 {

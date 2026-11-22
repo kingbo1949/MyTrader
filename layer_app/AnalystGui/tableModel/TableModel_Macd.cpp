@@ -97,36 +97,11 @@ void CTableModel_Macd::FillTableItems(Time_Type timetype, IBTableModelOneItemDat
 	tableItem.thisDivType->isUTurn = item->this_isUTurn;
 	tableItem.diff = item->dif;
 	tableItem.bar = item->bar ;
-	return;
-
-}
-
-void CTableModel_Macd::QueryData(Time_Type timetype)
-{
-	QQuery query;
-	query.query_type = QQueryType::FROM_CURRENT;
-	query.query_number = 2;
-	IBMacdPtrs macds = MakeAndGet_QDatabase()->GetMacds(m_codeId, timetype, query);
-	if (macds.size() != 2) return;
-
-	query.query_type = QQueryType::FROM_CURRENT;
-	query.query_number = 2;
-	IBDivTypePtrs divTypes = MakeAndGet_QDatabase()->GetDivTypes(m_codeId, timetype, query);
-	if (divTypes.size() != 2) return;
-
-
-	TableItem tableItem;
-	tableItem.timetype = timetype;
-	tableItem.lastDivType = divTypes[0];
-	tableItem.thisDivType = divTypes[1];
-	tableItem.diff = macds[1]->dif;
-	tableItem.bar = macds[1]->macd ;
-
 	m_tableItems.push_back(tableItem);
 	return;
 
-
 }
+
 
 QVariant CTableModel_Macd::Data_background(const QModelIndex& index) const
 {

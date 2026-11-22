@@ -38,9 +38,6 @@ protected:
 
 	void									FillTableItems(Time_Type timetype, IBTableModelOneItemDataPtr item);
 
-	void									QueryData(Time_Type timetype);
-
-
 	QVariant								Data_background(const QModelIndex& index) const;
 
 
