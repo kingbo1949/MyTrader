@@ -246,17 +246,22 @@ struct IBKLinePair
 };
 typedef std::vector<IBKLinePair> IBKLinePairs;
 
+struct AverageValue
+{
+	double v5 = std::numeric_limits<double>::quiet_NaN();
+	double v20 = std::numeric_limits<double>::quiet_NaN();
+	double v60 = std::numeric_limits<double>::quiet_NaN();
+	double v200 = std::numeric_limits<double>::quiet_NaN();
+};
+typedef std::vector<AverageValue> AverageValues;
 
 class CIBAvgValue;
 typedef std::shared_ptr<CIBAvgValue> IBAvgValuePtr;
 class  CIBAvgValue
 {
 public:
-	time_t		time = 0;					// localtime时间(毫秒)
-	double		v5 = 0;						// 5周期均线
-	double		v20 = 0;					// 20周期均线
-	double		v60 = 0;					// 60周期均线
-	double		v200 = 0;					// 200周期均线
+	time_t		 time = 0;					// localtime时间(毫秒)
+	AverageValue value;
 };
 typedef std::vector<IBAvgValuePtr> IBAvgValuePtrs;
 
@@ -269,18 +274,23 @@ typedef std::vector<IBVwMaPtr> IBVwMaPtrs;
 typedef IBAvgValuePtr IBEmaPtr;
 typedef std::vector<IBEmaPtr> IBEmaPtrs;
 
+struct MacdValue
+{
+	double emaShort = std::numeric_limits<double>::quiet_NaN();
+	double emaLong = std::numeric_limits<double>::quiet_NaN();
+	double dif = std::numeric_limits<double>::quiet_NaN();
+	double dea = std::numeric_limits<double>::quiet_NaN();		// signal
+	double macd = std::numeric_limits<double>::quiet_NaN();	// MACD 柱状图
 
+};
+typedef std::vector<MacdValue> MacdValues;
 class  CIBMacd;
 typedef std::shared_ptr<CIBMacd> IBMacdPtr;
 class  CIBMacd
 {
 public:
 	time_t		time = 0;					// localtime时间(毫秒)
-	double		emaShort = std::numeric_limits<double>::quiet_NaN();
-	double		emaLong = std::numeric_limits<double>::quiet_NaN();
-	double		dif = std::numeric_limits<double>::quiet_NaN();
-	double		dea = std::numeric_limits<double>::quiet_NaN();		// signal
-	double		macd = std::numeric_limits<double>::quiet_NaN();	// MACD 柱状图
+	MacdValue	value;
 
 };
 typedef std::vector<IBMacdPtr> IBMacdPtrs;
@@ -415,46 +425,6 @@ struct IBBirdEyeViewValues
 
 
 
-class  CIBTableModelOneItemData;
-typedef std::shared_ptr<CIBTableModelOneItemData> IBTableModelOneItemDataPtr;
-typedef std::vector<IBTableModelOneItemDataPtr> IBTableModelOneItemDataPtrs;
-class  CIBTableModelOneItemData
-{
-public:
-	// 均线部分
-	double			v5 = std::numeric_limits<double>::quiet_NaN();
-	double			v20 = std::numeric_limits<double>::quiet_NaN();
-	double			v60 = std::numeric_limits<double>::quiet_NaN();
-	double			v200 = std::numeric_limits<double>::quiet_NaN();
-
-	// macd部分
-	double			dif = std::numeric_limits<double>::quiet_NaN();
-	double			bar = std::numeric_limits<double>::quiet_NaN() ;
-
-	// divType部分
-	DivergenceType	last_divType = DivergenceType::Normal;
-	bool			last_isUTurn = false;
-	DivergenceType	this_divType = DivergenceType::Normal;
-	bool			this_isUTurn = false;
-
-};
-
-class  CIBTableModelData;
-typedef std::shared_ptr<CIBTableModelData> IBTableModelDataPtr;
-typedef std::vector<IBTableModelDataPtr> IBTableModelDataPtrs;
-class  CIBTableModelData
-{
-public:
-	double 						close = std::numeric_limits<double>::quiet_NaN();
-
-	IBTableModelOneItemDataPtr    item_m1;
-	IBTableModelOneItemDataPtr    item_m5;
-	IBTableModelOneItemDataPtr    item_m15;
-	IBTableModelOneItemDataPtr    item_m30;
-	IBTableModelOneItemDataPtr    item_h1;
-	IBTableModelOneItemDataPtr    item_d1;
-};
-
 
 enum class TimeZone_Type
 {
@@ -502,25 +472,8 @@ typedef std::shared_ptr<COneBroker> OneBrokerPtr;
 typedef std::vector<OneBrokerPtr> Brokers;
 
 
-struct MacdValue
-{
-	double emaShort = std::numeric_limits<double>::quiet_NaN();
-	double emaLong = std::numeric_limits<double>::quiet_NaN();
-	double dif = std::numeric_limits<double>::quiet_NaN();
-	double dea = std::numeric_limits<double>::quiet_NaN();		// signal
-	double macd = std::numeric_limits<double>::quiet_NaN();	// MACD 柱状图
 
-};
-typedef std::vector<MacdValue> MacdValues;
 
-struct AverageValue
-{
-	double v5 = std::numeric_limits<double>::quiet_NaN();
-	double v20 = std::numeric_limits<double>::quiet_NaN();
-	double v60 = std::numeric_limits<double>::quiet_NaN();
-	double v200 = std::numeric_limits<double>::quiet_NaN();
-};
-typedef std::vector<AverageValue> AverageValues;
 
 double& g_GetCircleValue(AverageValue& value, int circle);
 

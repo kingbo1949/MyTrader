@@ -44,7 +44,7 @@ double CCloseTag_Sub::GetShowNumber(const CodeStr &codeId, Time_Type timeType, T
 		IBMacdPtrs macds = MakeAndGet_QDatabase()->GetMacds(codeId, timeType, query);
 		if (macds.empty()) return ret;
 		if (macds.back()->time != lastTime) return ret;
-		ret = macds.back()->dif;
+		ret = macds.back()->value.dif;
 
 	}
 	if (Get_SubType() == SubType::Atr)

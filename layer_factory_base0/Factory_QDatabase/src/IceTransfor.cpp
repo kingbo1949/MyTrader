@@ -169,10 +169,10 @@ IBAvgValuePtr CIceTransfor::TransAvgValueIceToMy(const IAvgValue& value)
 {
 	IBMaPtr ret = std::make_shared<CIBAvgValue>();
 	ret->time = value.time;
-	ret->v5 = value.v5;
-	ret->v20 = value.v20;
-	ret->v60 = value.v60;
-	ret->v200 = value.v200;
+	ret->value.v5 = value.v5;
+	ret->value.v20 = value.v20;
+	ret->value.v60 = value.v60;
+	ret->value.v200 = value.v200;
 	return ret;
 }
 
@@ -180,10 +180,10 @@ IBTrader::IAvgValue CIceTransfor::TransAvgValueMyToIce(const IBAvgValuePtr& ma)
 {
 	IAvgValue ret;
 	ret.time = ma->time;
-	ret.v5 = ma->v5;
-	ret.v20 = ma->v20;
-	ret.v60 = ma->v60;
-	ret.v200 = ma->v200;
+	ret.v5 = ma->value.v5;
+	ret.v20 = ma->value.v20;
+	ret.v60 = ma->value.v60;
+	ret.v200 = ma->value.v200;
 	return ret;
 }
 
@@ -208,22 +208,22 @@ IBMacdPtr CIceTransfor::TransMacd(const IMacdValue& value)
 	IBMacdPtr back = std::make_shared<CIBMacd>();
 
 	back->time = value.time;
-	back->emaShort = value.emaShort;
-	back->emaLong = value.emaLong;
-	back->dif = value.dif;
-	back->dea = value.dea;
-	back->macd = value.macd;
+	back->value.emaShort = value.emaShort;
+	back->value.emaLong = value.emaLong;
+	back->value.dif = value.dif;
+	back->value.dea = value.dea;
+	back->value.macd = value.macd;
 	return back;
 }
 
 IMacdValue CIceTransfor::TransMacd(const IBMacdPtr pValue)
 {
 	IMacdValue back;
-	back.emaShort = pValue->emaShort;
-	back.emaLong = pValue->emaLong;
-	back.dif = pValue->dif;
-	back.dea = pValue->dea;
-	back.macd = pValue->macd;
+	back.emaShort = pValue->value.emaShort;
+	back.emaLong = pValue->value.emaLong;
+	back.dif = pValue->value.dif;
+	back.dea = pValue->value.dea;
+	back.macd = pValue->value.macd;
 	return back;
 }
 
@@ -406,38 +406,6 @@ DivergenceType CIceTransfor::TransType(IDivType type)
 
 }
 
-IBTableModelOneItemDataPtr CIceTransfor::TransTableModelOneItemData(const ITableModelValueOneItem &oneItem)
-{
-	IBTableModelOneItemDataPtr back = std::make_shared<CIBTableModelOneItemData>();
-	back->v5 = oneItem.v5;
-	back->v20 = oneItem.v20;
-	back->v60 = oneItem.v60;
-	back->v200 = oneItem.v200;
-
-	back->dif = oneItem.macd_diff;
-	back->bar = oneItem.macd_bar;
-
-	back->last_divType = TransType(oneItem.lastDivType.divType);
-	back->last_isUTurn = oneItem.lastDivType.isUTurn;
-	back->this_divType = TransType(oneItem.thisDivType.divType);
-	back->this_isUTurn = oneItem.thisDivType.isUTurn;
-	return back;
-
-}
-
-IBTableModelDataPtr CIceTransfor::TransTableModelData(const ITableModelValue &tableModelValue)
-{
-	IBTableModelDataPtr back = std::make_shared<CIBTableModelData>();
-	back->close = tableModelValue.close;
-	back->item_m1 = TransTableModelOneItemData(tableModelValue.tableModelValue_m1);
-	back->item_m5 = TransTableModelOneItemData(tableModelValue.tableModelValue_m5);
-	back->item_m15 = TransTableModelOneItemData(tableModelValue.tableModelValue_m15);
-	back->item_m30 = TransTableModelOneItemData(tableModelValue.tableModelValue_m30);
-	back->item_h1 = TransTableModelOneItemData(tableModelValue.tableModelValue_h1);
-	back->item_d1 = TransTableModelOneItemData(tableModelValue.tableModelValue_d1);
-	return back;
-
-}
 
 CIBBirdEyeViewValue CIceTransfor::TransBirdEyeViewValue(const IBirdEyeViewValue &value)
 {

@@ -46,16 +46,16 @@ protected:
 
 
 	// 取得对应circle在value中的引用
-	double& GetCircleValue(IBAvgValuePtr value, int circle)
+	double& GetCircleValue(IBAvgValuePtr pvalue, int circle)
 	{
-		if (circle == 5) return value->v5;
-		if (circle == 20) return value->v20;
-		if (circle == 60) return value->v60;
-		if (circle == 200) return value->v200;
+		if (circle == 5) return pvalue->value.v5;
+		if (circle == 20) return pvalue->value.v20;
+		if (circle == 60) return pvalue->value.v60;
+		if (circle == 200) return pvalue->value.v200;
 
 		printf("error circle, circle = %d \n", circle);
 		exit(-1);
-		return value->v5;
+		return pvalue->value.v5;
 	}
 
 

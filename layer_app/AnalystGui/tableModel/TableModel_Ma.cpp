@@ -4,6 +4,7 @@
 #include <QtGlobal.h>
 
 #include "../src/BireEyeDataGetter.h"
+#include "boost/math/special_functions/gamma.hpp"
 
 CTableModel_Ma::CTableModel_Ma()
 	:CTableModel()
@@ -18,7 +19,6 @@ void CTableModel_Ma::QueryData()
 
 	m_mapMa.clear();
 	m_tableItems.clear();
-	m_close = std::numeric_limits<double>::quiet_NaN();
 
 	m_close = MakeAndGet_BireEyeDataGetter()->GetThisOne().value_m1.kline->close;
 	FillMapMa(Time_Type::M1, MakeAndGet_BireEyeDataGetter()->GetThisOne().value_m1.ma);
@@ -83,11 +83,7 @@ QVariant CTableModel_Ma::data(const QModelIndex& index, int role) const
 
 void CTableModel_Ma::FillMapMa(Time_Type timetype, IBAvgValuePtr item)
 {
-	AverageValue mavalue;
-	mavalue.v5 = item->v5;
-	mavalue.v20 = item->v20;
-	mavalue.v60 = item->v60;
-	mavalue.v200 = item->v200;
+	AverageValue mavalue = item->value;
 	m_mapMa[timetype] = mavalue;
 	return;
 }

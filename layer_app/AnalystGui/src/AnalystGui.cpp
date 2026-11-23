@@ -390,15 +390,10 @@ void AnalystGui::onTimerRealQuote()
 	std::string codeId = GetSelectCodeId(ui.tabWidget);
 	Time_Type timeType = GetSelectTimeType();
 
-	// 查询最近两根K线
-	QQuery query;
-	query.query_type = QQueryType::FROM_CURRENT;
-	query.query_number = 2;
-
-	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
+	MakeAndGet_BireEyeDataGetter()->Go(codeId);
+	IBKLinePtrs klines = MakeAndGet_BireEyeDataGetter()->GetKLines(timeType);
 	m_plotContainer->AddKlines(codeId, timeType, klines);
 
-	MakeAndGet_BireEyeDataGetter()->Go(codeId);
 	MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
 	MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
 }

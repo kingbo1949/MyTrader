@@ -91,8 +91,8 @@ void CTableModel_Macd::FillTableItems(Time_Type timetype, IBMacdPtr thisMacd, IB
 	tableItem.lastDivType->isUTurn = lastDivType->isUTurn;
 	tableItem.thisDivType->divType = thisDivType->divType;
 	tableItem.thisDivType->isUTurn = thisDivType->isUTurn;
-	tableItem.diff = thisMacd->dif;
-	tableItem.bar = thisMacd->macd ;
+	tableItem.diff = thisMacd->value.dif;
+	tableItem.bar = thisMacd->value.macd ;
 	m_tableItems.push_back(tableItem);
 	return;
 

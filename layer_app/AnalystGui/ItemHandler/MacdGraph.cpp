@@ -69,24 +69,21 @@ void CMacdGraph::SetKLines(const KlinePlotSuit& klinePlotSuit)
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
-
-
-
 	for (auto i = 0; i < klinePlotSuit.klines.size(); ++i)
 	{
 		auto pos = m_mapMacdValue.find(klinePlotSuit.klines[i]->time);
 		if (pos == m_mapMacdValue.end()) continue;
 
-		m_macd->addData(i, pos->second->dif);
-		m_dea->addData(i, pos->second->dea);
+		m_macd->addData(i, pos->second->value.dif);
+		m_dea->addData(i, pos->second->value.dea);
 
-		if (pos->second->macd > 0)
+		if (pos->second->value.macd > 0)
 		{
-			m_macdBarPositive->addData(i, pos->second->macd);
+			m_macdBarPositive->addData(i, pos->second->value.macd);
 		}
 		else
 		{
-			m_macdBarNegative->addData(i, pos->second->macd);
+			m_macdBarNegative->addData(i, pos->second->value.macd);
 		}
 	}
 	m_macdBarPositive->setWidth(GetKlineWidth());
@@ -134,15 +131,15 @@ void CMacdGraph::UpdateKlines(const KlinePlotSuit& klinePlotSuit, const KlineChg
 		auto pos = m_mapMacdValue.find(klinePlotSuit.klines[i]->time);
 		if (pos == m_mapMacdValue.end()) continue;
 
-		m_macd->addData(i, pos->second->dif);
-		m_dea->addData(i, pos->second->dea);
-		if (pos->second->macd > 0)
+		m_macd->addData(i, pos->second->value.dif);
+		m_dea->addData(i, pos->second->value.dea);
+		if (pos->second->value.macd > 0)
 		{
-			m_macdBarPositive->addData(i, pos->second->macd);
+			m_macdBarPositive->addData(i, pos->second->value.macd);
 		}
 		else
 		{
-			m_macdBarNegative->addData(i, pos->second->macd);
+			m_macdBarNegative->addData(i, pos->second->value.macd);
 		}
 	}
 
@@ -209,13 +206,13 @@ void CMacdGraph::GetHighLow(Tick_T xBeginPos, Tick_T xEndPos, double& high, doub
 	{
 		if (it->second->time >= xEndPos) return;
 
-		if (std::isnan(it->second->dif))
+		if (std::isnan(it->second->value.dif))
 		{
 			continue;
 		}
 
-		if (it->second->dif > high) high = it->second->dif;
-		if (it->second->dif < low) low = it->second->dif;
+		if (it->second->value.dif > high) high = it->second->value.dif;
+		if (it->second->value.dif < low) low = it->second->value.dif;
 	}
 	return;
 

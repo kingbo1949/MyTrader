@@ -146,8 +146,6 @@ public:
 
 	virtual IBRichDataPtr	GetOneRich(const CodeStr& codeId, Time_Type timeType, time_t timePos) final;
 
-	virtual IBTableModelDataPtr GetTableModelData(const CodeStr& codeId) final;
-
 	virtual	bool			GetBirdEyeViewData(const CodeStr& codeId, IBBirdEyeViewValues& lastOne, IBBirdEyeViewValues& thisOne) final;
 
 

@@ -39,7 +39,7 @@ bool CMakePrice_UTurn::GetOpenPrice(double &price, RealPriceType &priceType)
     {
         if (thisKline->close > last1D->low) return false;
         // if (thisKline->close > last1D->close) return false;
-        if (thisDivType->isUTurn && thisMacd->dif < -50)
+        if (thisDivType->isUTurn && thisMacd->value.dif < -50)
         {
             price = thisKline->close;
             return true;
@@ -48,7 +48,7 @@ bool CMakePrice_UTurn::GetOpenPrice(double &price, RealPriceType &priceType)
     else
     {
         if (thisKline->close < last1D->high) return false;
-        if (thisDivType->isUTurn && thisMacd->dif > 40)
+        if (thisDivType->isUTurn && thisMacd->value.dif > 40)
         {
             price = thisKline->close;
             return true;
@@ -109,7 +109,7 @@ bool CMakePrice_UTurn::GetCoverPrice(double &price, RealPriceType &priceType)
         //if (thisKline->close > last1D->low) return false;   // 49 5343 40% 23%
         // if (thisKline->close > last1D->close) return false;   // 111 7060 34% 31%
         if (thisKline->close > last1D->low  ) return false; // 69 6948 37% 31%
-        if (thisDivType->isUTurn && thisMacd->dif < -0)
+        if (thisDivType->isUTurn && thisMacd->value.dif < -0)
         {
             price = thisKline->close;
             return true;
@@ -127,7 +127,7 @@ bool CMakePrice_UTurn::GetCoverPrice(double &price, RealPriceType &priceType)
 
         // 卖平仓
         if (thisKline->close < last1D->high) return false;
-        if (thisDivType->isUTurn && thisMacd->dif > 50)
+        if (thisDivType->isUTurn && thisMacd->value.dif > 50)
         {
             price = thisKline->close;
             return true;

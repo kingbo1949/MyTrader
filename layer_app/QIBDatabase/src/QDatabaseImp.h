@@ -99,8 +99,6 @@ public:
 
 	virtual bool GetOneRich(::std::string codeId, ITimeType timeType, long long int timePos, IRichValue& rich, const ::Ice::Current& current) final;
 
-	virtual bool GetTableModelValue(::std::string codeId, ITableModelValue& tableModelValue, const ::Ice::Current& current) final;
-
 	virtual bool GetBirdEyeViewData(::std::string codeId, IBirdEyeViewValues& lastOne, IBirdEyeViewValues& thisOne, const ::Ice::Current& current) final;
 
 

@@ -335,49 +335,6 @@ struct IRichValue
 
 using IRichValues = ::std::vector<IRichValue>;
 
-struct ITableModelValueOneItem
-{
-    double v5 = 0;
-    double v20 = 0;
-    double v60 = 0;
-    double v200 = 0;
-    double macd_diff = 0;
-    double macd_bar = 0;
-    ::IBTrader::IDivTypeValue thisDivType;
-    ::IBTrader::IDivTypeValue lastDivType;
-
-    /**
-     * Obtains a tuple containing all of the struct's data members.
-     * @return The data members in a tuple.
-     */
-    std::tuple<const double&, const double&, const double&, const double&, const double&, const double&, const ::IBTrader::IDivTypeValue&, const ::IBTrader::IDivTypeValue&> ice_tuple() const
-    {
-        return std::tie(v5, v20, v60, v200, macd_diff, macd_bar, thisDivType, lastDivType);
-    }
-};
-
-struct ITableModelValue
-{
-    double close = 0;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m1;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m5;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m15;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m30;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_h1;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_d1;
-
-    /**
-     * Obtains a tuple containing all of the struct's data members.
-     * @return The data members in a tuple.
-     */
-    std::tuple<const double&, const ::IBTrader::ITableModelValueOneItem&, const ::IBTrader::ITableModelValueOneItem&, const ::IBTrader::ITableModelValueOneItem&, const ::IBTrader::ITableModelValueOneItem&, const ::IBTrader::ITableModelValueOneItem&, const ::IBTrader::ITableModelValueOneItem&> ice_tuple() const
-    {
-        return std::tie(close, tableModelValue_m1, tableModelValue_m5, tableModelValue_m15, tableModelValue_m30, tableModelValue_h1, tableModelValue_d1);
-    }
-};
-
-using ITableModelValues = ::std::vector<ITableModelValue>;
-
 struct IBirdEyeViewValue
 {
     ::IBTrader::IKLine kline;
@@ -680,40 +637,6 @@ struct StreamReader<::IBTrader::IRichValue, S>
     static void read(S* istr, ::IBTrader::IRichValue& v)
     {
         istr->readAll(v.time, v.close, v.open, v.high, v.low, v.vol, v.dif, v.dea, v.macd, v.divType, v.isUTurn, v.thisAtr, v.avgAtr, v.ma5, v.ma20, v.ma60, v.ma200, v.preDayHigh, v.preDayLow, v.preDayClose, v.indexValid, v.indexValue);
-    }
-};
-
-template<>
-struct StreamableTraits<::IBTrader::ITableModelValueOneItem>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 68;
-    static const bool fixedLength = false;
-};
-
-template<typename S>
-struct StreamReader<::IBTrader::ITableModelValueOneItem, S>
-{
-    static void read(S* istr, ::IBTrader::ITableModelValueOneItem& v)
-    {
-        istr->readAll(v.v5, v.v20, v.v60, v.v200, v.macd_diff, v.macd_bar, v.thisDivType, v.lastDivType);
-    }
-};
-
-template<>
-struct StreamableTraits<::IBTrader::ITableModelValue>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 416;
-    static const bool fixedLength = false;
-};
-
-template<typename S>
-struct StreamReader<::IBTrader::ITableModelValue, S>
-{
-    static void read(S* istr, ::IBTrader::ITableModelValue& v)
-    {
-        istr->readAll(v.close, v.tableModelValue_m1, v.tableModelValue_m5, v.tableModelValue_m15, v.tableModelValue_m30, v.tableModelValue_h1, v.tableModelValue_d1);
     }
 };
 
@@ -1428,73 +1351,6 @@ struct IRichValue
 
 typedef ::std::vector<IRichValue> IRichValues;
 
-struct ITableModelValueOneItem
-{
-    /** Default constructor that assigns default values to members as specified in the Slice definition. */
-    ITableModelValueOneItem() :
-        v5(0),
-        v20(0),
-        v60(0),
-        v200(0),
-        macd_diff(0),
-        macd_bar(0)
-    {
-    }
-    
-    ITableModelValueOneItem(::Ice::Double v5, ::Ice::Double v20, ::Ice::Double v60, ::Ice::Double v200, ::Ice::Double macd_diff, ::Ice::Double macd_bar, const IDivTypeValue& thisDivType, const IDivTypeValue& lastDivType) :
-        v5(v5),
-        v20(v20),
-        v60(v60),
-        v200(v200),
-        macd_diff(macd_diff),
-        macd_bar(macd_bar),
-        thisDivType(thisDivType),
-        lastDivType(lastDivType)
-    {
-    }
-    
-
-    ::Ice::Double v5;
-    ::Ice::Double v20;
-    ::Ice::Double v60;
-    ::Ice::Double v200;
-    ::Ice::Double macd_diff;
-    ::Ice::Double macd_bar;
-    ::IBTrader::IDivTypeValue thisDivType;
-    ::IBTrader::IDivTypeValue lastDivType;
-};
-
-struct ITableModelValue
-{
-    /** Default constructor that assigns default values to members as specified in the Slice definition. */
-    ITableModelValue() :
-        close(0)
-    {
-    }
-    
-    ITableModelValue(::Ice::Double close, const ITableModelValueOneItem& tableModelValue_m1, const ITableModelValueOneItem& tableModelValue_m5, const ITableModelValueOneItem& tableModelValue_m15, const ITableModelValueOneItem& tableModelValue_m30, const ITableModelValueOneItem& tableModelValue_h1, const ITableModelValueOneItem& tableModelValue_d1) :
-        close(close),
-        tableModelValue_m1(tableModelValue_m1),
-        tableModelValue_m5(tableModelValue_m5),
-        tableModelValue_m15(tableModelValue_m15),
-        tableModelValue_m30(tableModelValue_m30),
-        tableModelValue_h1(tableModelValue_h1),
-        tableModelValue_d1(tableModelValue_d1)
-    {
-    }
-    
-
-    ::Ice::Double close;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m1;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m5;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m15;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_m30;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_h1;
-    ::IBTrader::ITableModelValueOneItem tableModelValue_d1;
-};
-
-typedef ::std::vector<ITableModelValue> ITableModelValues;
-
 struct IBirdEyeViewValue
 {
     ::IBTrader::IKLine kline;
@@ -2012,84 +1868,6 @@ struct StreamReader< ::IBTrader::IRichValue, S>
         istr->read(v.preDayClose);
         istr->read(v.indexValid);
         istr->read(v.indexValue);
-    }
-};
-
-template<>
-struct StreamableTraits< ::IBTrader::ITableModelValueOneItem>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 68;
-    static const bool fixedLength = false;
-};
-
-template<typename S>
-struct StreamWriter< ::IBTrader::ITableModelValueOneItem, S>
-{
-    static void write(S* ostr, const ::IBTrader::ITableModelValueOneItem& v)
-    {
-        ostr->write(v.v5);
-        ostr->write(v.v20);
-        ostr->write(v.v60);
-        ostr->write(v.v200);
-        ostr->write(v.macd_diff);
-        ostr->write(v.macd_bar);
-        ostr->write(v.thisDivType);
-        ostr->write(v.lastDivType);
-    }
-};
-
-template<typename S>
-struct StreamReader< ::IBTrader::ITableModelValueOneItem, S>
-{
-    static void read(S* istr, ::IBTrader::ITableModelValueOneItem& v)
-    {
-        istr->read(v.v5);
-        istr->read(v.v20);
-        istr->read(v.v60);
-        istr->read(v.v200);
-        istr->read(v.macd_diff);
-        istr->read(v.macd_bar);
-        istr->read(v.thisDivType);
-        istr->read(v.lastDivType);
-    }
-};
-
-template<>
-struct StreamableTraits< ::IBTrader::ITableModelValue>
-{
-    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
-    static const int minWireSize = 416;
-    static const bool fixedLength = false;
-};
-
-template<typename S>
-struct StreamWriter< ::IBTrader::ITableModelValue, S>
-{
-    static void write(S* ostr, const ::IBTrader::ITableModelValue& v)
-    {
-        ostr->write(v.close);
-        ostr->write(v.tableModelValue_m1);
-        ostr->write(v.tableModelValue_m5);
-        ostr->write(v.tableModelValue_m15);
-        ostr->write(v.tableModelValue_m30);
-        ostr->write(v.tableModelValue_h1);
-        ostr->write(v.tableModelValue_d1);
-    }
-};
-
-template<typename S>
-struct StreamReader< ::IBTrader::ITableModelValue, S>
-{
-    static void read(S* istr, ::IBTrader::ITableModelValue& v)
-    {
-        istr->read(v.close);
-        istr->read(v.tableModelValue_m1);
-        istr->read(v.tableModelValue_m5);
-        istr->read(v.tableModelValue_m15);
-        istr->read(v.tableModelValue_m30);
-        istr->read(v.tableModelValue_h1);
-        istr->read(v.tableModelValue_d1);
     }
 };
 

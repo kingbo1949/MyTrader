@@ -134,9 +134,9 @@ void CMouseMoveItems::DrawToolTip(const CodeStr& codeId, Time_Type timeType, QMo
 		.arg(QString::number(kline->close, 'f', 2))
 		.arg(QString::number(kline->low, 'f', 2))
 		.arg(QString::number(kline->high, 'f', 2))
-		.arg(QString::number(pMacd->dif, 'f', 2))
-		.arg(QString::number(pMacd->dea, 'f', 2))
-		.arg(QString::number(pMacd->macd, 'f', 2))
+		.arg(QString::number(pMacd->value.dif, 'f', 2))
+		.arg(QString::number(pMacd->value.dea, 'f', 2))
+		.arg(QString::number(pMacd->value.macd, 'f', 2))
 		.arg(QString::number(avgatr, 'f', 2))
 		;
 	QToolTip::showText(event->globalPosition().toPoint(), info, m_customPlot);

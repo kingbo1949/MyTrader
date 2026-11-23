@@ -175,10 +175,10 @@ std::string CTransDataToStr::GetMaStr_Csv(IBMaPtr maline)
 		"{:.2f} ,"					// 30
 		,
 		CGlobal::GetTickTimeStr(maline->time).c_str(),
-		maline->v5,
-		maline->v20,
-		maline->v60,
-		maline->v200
+		maline->value.v5,
+		maline->value.v20,
+		maline->value.v60,
+		maline->value.v200
 	);
 	return temstr;
 

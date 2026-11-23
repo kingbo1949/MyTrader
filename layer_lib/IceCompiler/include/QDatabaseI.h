@@ -196,6 +196,11 @@ public:
                             long long int,
                             IRichValue&,
                             const Ice::Current&) override;
+
+    virtual bool GetBirdEyeViewData(::std::string,
+                                    IBirdEyeViewValues&,
+                                    IBirdEyeViewValues&,
+                                    const Ice::Current&) override;
 };
 
 }

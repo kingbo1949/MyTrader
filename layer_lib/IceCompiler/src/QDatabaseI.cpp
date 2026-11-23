@@ -332,3 +332,14 @@ IBTrader::IQDatabaseI::GetOneRich(::std::string /*codeId*/,
     rich = IRichValue();
     return false;
 }
+
+bool
+IBTrader::IQDatabaseI::GetBirdEyeViewData(::std::string /*codeId*/,
+                                          IBirdEyeViewValues& lastOne,
+                                          IBirdEyeViewValues& thisOne,
+                                          const Ice::Current& current)
+{
+    lastOne = IBirdEyeViewValues();
+    thisOne = IBirdEyeViewValues();
+    return false;
+}

@@ -271,15 +271,7 @@ bool CQDatabaseImp::GetOneRich(std::string codeId, ITimeType timeType, long long
 	return true;
 }
 
-bool CQDatabaseImp::GetTableModelValue(std::string codeId, ITableModelValue &tableModelValue,
-	const Ice::Current &current)
-{
-	// CTableModelValueMaker maker;
-	// maker.SetCodeId(codeId);
-	// if (!maker.Go()) return false;
-	// tableModelValue = maker.GetResult();
-	return true;
-}
+
 
 bool CQDatabaseImp::GetBirdEyeViewData(std::string codeId, IBirdEyeViewValues &lastOne, IBirdEyeViewValues &thisOne,
 	const Ice::Current &current)

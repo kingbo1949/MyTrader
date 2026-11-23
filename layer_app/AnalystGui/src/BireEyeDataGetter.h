@@ -16,6 +16,8 @@ public:
     void                Go(const ::std::string& codeId);
     IBBirdEyeViewValues GetLastOne();
     IBBirdEyeViewValues GetThisOne();
+
+    IBKLinePtrs         GetKLines(Time_Type timeType);
 protected:
     CodeStr             m_codeId;
     IBBirdEyeViewValues m_lastOne;
