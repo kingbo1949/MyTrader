@@ -8,7 +8,7 @@
 #include <Global.h>
 #include <Factory_AnalystDeal.h>
 #include "../tableModel/TableModel.h"
-#include "../tableModel/TableModelDataGetter.h"
+#include "BireEyeDataGetter.h"
 #include "Factory_AnalystGui.h"
 #include "../klineShape/ScanKShape_BreakMix.h"
 #include "../klineShape/ScanKShape_Future.h"
@@ -345,7 +345,7 @@ void AnalystGui::FreshAll()
 	Time_Type timeType = GetSelectTimeType();
 	IBKLinePtrs klines = GetKLines(codeId, timeType);;
 
-	MakeAndGet_TableModelDataGetter()->Go(codeId);
+	MakeAndGet_BireEyeDataGetter()->Go(codeId);
 	ShowKlines(codeId, timeType, klines);
 
 }
@@ -398,9 +398,7 @@ void AnalystGui::onTimerRealQuote()
 	IBKLinePtrs klines = MakeAndGet_QDatabase()->GetKLines(codeId, timeType, query);
 	m_plotContainer->AddKlines(codeId, timeType, klines);
 
-	MakeAndGet_TableModelDataGetter()->Go(codeId);
-	if (!MakeAndGet_TableModelDataGetter()->GetResult()) return;
-
+	MakeAndGet_BireEyeDataGetter()->Go(codeId);
 	MakeAndGet_TableModel(TableViewType::Ma)->SetCodeId(codeId);
 	MakeAndGet_TableModel(TableViewType::Macd)->SetCodeId(codeId);
 }

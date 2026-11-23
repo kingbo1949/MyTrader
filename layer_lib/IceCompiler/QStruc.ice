@@ -228,5 +228,29 @@ module IBTrader
 	}
 	sequence<ITableModelValue> ITableModelValues;
 
+	// 全景图数据
+	struct IBirdEyeViewValue
+	{
+	    IKLine                          kline;
+	    IAvgValue                       ma;
+	    IMacdValue                      macd;
+	    IDivTypeValue                   divTypeValue;
+	}
+	struct IBirdEyeViewValues
+	{
+	    IBirdEyeViewValue               birdEyeViewValue_m1;
+	    IBirdEyeViewValue               birdEyeViewValue_m5;
+	    IBirdEyeViewValue               birdEyeViewValue_m15;
+	    IBirdEyeViewValue               birdEyeViewValue_m30;
+	    IBirdEyeViewValue               birdEyeViewValue_h1;
+	    IBirdEyeViewValue               birdEyeViewValue_d1;
+	}
+    struct IBirdEyeViewPair
+    {
+    	IBirdEyeViewValues               lastOne;
+    	IBirdEyeViewValues               thisOne;
+    }
+
+
 };
 #endif

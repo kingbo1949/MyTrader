@@ -390,6 +390,31 @@ class  CIBRichData
 	IBIndexRichDataPtr indexRichData = nullptr;
 };
 
+class  CIBBirdEyeViewValue;
+typedef std::shared_ptr<CIBBirdEyeViewValue> IBBirdEyeViewValuePtr;
+typedef std::vector<IBBirdEyeViewValuePtr> IBBirdEyeViewValuePtrs;
+class  CIBBirdEyeViewValue
+{
+public:
+	IBKLinePtr		kline;
+	IBAvgValuePtr	ma;
+	IBMacdPtr		macd;
+	IBDivTypePtr	divType;
+};
+
+struct IBBirdEyeViewValues
+{
+	CIBBirdEyeViewValue			value_m1;
+	CIBBirdEyeViewValue			value_m5;
+	CIBBirdEyeViewValue			value_m15;
+	CIBBirdEyeViewValue			value_m30;
+	CIBBirdEyeViewValue			value_h1;
+	CIBBirdEyeViewValue			value_d1;
+};
+
+
+
+
 class  CIBTableModelOneItemData;
 typedef std::shared_ptr<CIBTableModelOneItemData> IBTableModelOneItemDataPtr;
 typedef std::vector<IBTableModelOneItemDataPtr> IBTableModelOneItemDataPtrs;

@@ -5,7 +5,7 @@
 #include "Calculator/Calculator.h"
 #include "MakeKlinePairs.h"
 #include "RichDataMaker.h"
-#include "TableModelValueMaker.h"
+#include "BirdEyeViewDataMaker.h"
 #include "../cmd/Cmd_RecountAllIndex.h"
 #include "../cmd/Cmd_UpdateAllIndexFromTimePos.h"
 
@@ -274,10 +274,20 @@ bool CQDatabaseImp::GetOneRich(std::string codeId, ITimeType timeType, long long
 bool CQDatabaseImp::GetTableModelValue(std::string codeId, ITableModelValue &tableModelValue,
 	const Ice::Current &current)
 {
-	CTableModelValueMaker maker;
-	maker.SetCodeId(codeId);
-	if (!maker.Go()) return false;
-	tableModelValue = maker.GetResult();
+	// CTableModelValueMaker maker;
+	// maker.SetCodeId(codeId);
+	// if (!maker.Go()) return false;
+	// tableModelValue = maker.GetResult();
+	return true;
+}
+
+bool CQDatabaseImp::GetBirdEyeViewData(std::string codeId, IBirdEyeViewValues &lastOne, IBirdEyeViewValues &thisOne,
+	const Ice::Current &current)
+{
+	CBirdEyeViewDataMaker maker;
+	if (!maker.Go(codeId)) return false;
+	lastOne = maker.GetResult().lastOne;
+	thisOne = maker.GetResult().thisOne;
 	return true;
 }
 

@@ -36,7 +36,7 @@ public:
 protected:
 	TableItems								m_tableItems;
 
-	void									FillTableItems(Time_Type timetype, IBTableModelOneItemDataPtr item);
+	void									FillTableItems(Time_Type timetype, IBMacdPtr thisMacd, IBDivTypePtr lastDivType, IBDivTypePtr thisDivType);
 
 	QVariant								Data_background(const QModelIndex& index) const;
 

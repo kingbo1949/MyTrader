@@ -2,7 +2,7 @@
 #include <QtGlobal.h>
 #include <Factory_IBGlobalShare.h>
 #include <Factory_QDatabase.h>
-#include "TableModelDataGetter.h"
+#include "../src/BireEyeDataGetter.h"
 CTableModel_Macd::CTableModel_Macd()
 	:CTableModel()
 {
@@ -15,12 +15,16 @@ void CTableModel_Macd::QueryData()
 
 	m_tableItems.clear();
 
-	FillTableItems(Time_Type::M1, MakeAndGet_TableModelDataGetter()->GetResult()->item_m1);
-	FillTableItems(Time_Type::M5, MakeAndGet_TableModelDataGetter()->GetResult()->item_m5);
-	FillTableItems(Time_Type::M15, MakeAndGet_TableModelDataGetter()->GetResult()->item_m15);
-	FillTableItems(Time_Type::M30, MakeAndGet_TableModelDataGetter()->GetResult()->item_m30);
-	FillTableItems(Time_Type::H1, MakeAndGet_TableModelDataGetter()->GetResult()->item_h1);
-	FillTableItems(Time_Type::D1, MakeAndGet_TableModelDataGetter()->GetResult()->item_d1);
+	IBBirdEyeViewValues lastOne = MakeAndGet_BireEyeDataGetter()->GetLastOne();
+	IBBirdEyeViewValues thisOne = MakeAndGet_BireEyeDataGetter()->GetThisOne();
+
+	FillTableItems(Time_Type::M1, thisOne.value_m1.macd, lastOne.value_m1.divType, thisOne.value_m1.divType);
+	FillTableItems(Time_Type::M5, thisOne.value_m5.macd, lastOne.value_m5.divType, thisOne.value_m5.divType);
+	FillTableItems(Time_Type::M15, thisOne.value_m15.macd, lastOne.value_m15.divType, thisOne.value_m15.divType);
+	FillTableItems(Time_Type::M30, thisOne.value_m30.macd, lastOne.value_m30.divType, thisOne.value_m30.divType);
+	FillTableItems(Time_Type::H1, thisOne.value_h1.macd, lastOne.value_h1.divType, thisOne.value_h1.divType);
+	FillTableItems(Time_Type::D1, thisOne.value_d1.macd, lastOne.value_d1.divType, thisOne.value_d1.divType);
+
 
 	
 
@@ -77,18 +81,18 @@ QVariant CTableModel_Macd::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
-void CTableModel_Macd::FillTableItems(Time_Type timetype, IBTableModelOneItemDataPtr item)
+void CTableModel_Macd::FillTableItems(Time_Type timetype, IBMacdPtr thisMacd, IBDivTypePtr lastDivType, IBDivTypePtr thisDivType)
 {
 	TableItem tableItem;
 	tableItem.timetype = timetype;
 	tableItem.lastDivType = std::make_shared<CIBDivType>();
 	tableItem.thisDivType = std::make_shared<CIBDivType>();
-	tableItem.lastDivType->divType = item->last_divType;
-	tableItem.lastDivType->isUTurn = item->last_isUTurn;
-	tableItem.thisDivType->divType = item->this_divType;
-	tableItem.thisDivType->isUTurn = item->this_isUTurn;
-	tableItem.diff = item->dif;
-	tableItem.bar = item->bar ;
+	tableItem.lastDivType->divType = lastDivType->divType;
+	tableItem.lastDivType->isUTurn = lastDivType->isUTurn;
+	tableItem.thisDivType->divType = thisDivType->divType;
+	tableItem.thisDivType->isUTurn = thisDivType->isUTurn;
+	tableItem.diff = thisMacd->dif;
+	tableItem.bar = thisMacd->macd ;
 	m_tableItems.push_back(tableItem);
 	return;
 

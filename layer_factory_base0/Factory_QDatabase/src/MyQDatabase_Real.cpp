@@ -665,6 +665,21 @@ IBTableModelDataPtr CMyQDatabase_Real::GetTableModelData(const CodeStr &codeId)
 	return CIceTransfor::TransTableModelData(tableModelValue);
 }
 
+bool CMyQDatabase_Real::GetBirdEyeViewData(const CodeStr &codeId, IBBirdEyeViewValues &lastOne,
+	IBBirdEyeViewValues &thisOne)
+{
+	IBirdEyeViewValues values1;
+	IBirdEyeViewValues values2;
+	bool success = MakeAndGet_IceProxy()->GetQDatabasePrx()->GetBirdEyeViewData(codeId, values1, values2);
+	if (!success) return false;
+
+	lastOne = CIceTransfor::TransBirdEyeViewValues(values1);
+	thisOne = CIceTransfor::TransBirdEyeViewValues(values2);
+	return true;
+
+
+}
+
 bool CMyQDatabase_Real::ValidFlite(time_t ms, int bigTick, IBTickPtr thisTick, IBTickPtr lastTick, IBTickPtr lastAddedTick)
 {
 	if (thisTick->time - lastAddedTick->time >= ms)

@@ -82,8 +82,6 @@ set(TABLEMODEL_LIST
         tableModel/TableModel_Ma.h
         tableModel/TableModel_Macd.cpp
         tableModel/TableModel_Macd.h
-        tableModel/TableModelDataGetter.h
-        tableModel/TableModelDataGetter.cpp
 )
 set(TSIDETIMEHANDLER_LIST
         tSideTimeHandler/TSideTimeHandler.cpp
@@ -120,6 +118,8 @@ set(SRC_LIST
         src/PlotObject.h
         src/CheckSync.h
         src/CheckSync.cpp
+        src/BireEyeDataGetter.h
+        src/BireEyeDataGetter.cpp
 
         ui/AnalystGui.ui
         resources/AnalystGui.qrc

@@ -148,6 +148,8 @@ public:
 
 	virtual IBTableModelDataPtr GetTableModelData(const CodeStr& codeId) final;
 
+	virtual	bool			GetBirdEyeViewData(const CodeStr& codeId, IBBirdEyeViewValues& lastOne, IBBirdEyeViewValues& thisOne) final;
+
 
 
 

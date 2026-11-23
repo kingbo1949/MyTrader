@@ -438,3 +438,25 @@ IBTableModelDataPtr CIceTransfor::TransTableModelData(const ITableModelValue &ta
 	return back;
 
 }
+
+CIBBirdEyeViewValue CIceTransfor::TransBirdEyeViewValue(const IBirdEyeViewValue &value)
+{
+	CIBBirdEyeViewValue back;
+	back.kline = TransKLineIceToMy(value.kline);
+	back.ma = TransAvgValueIceToMy(value.ma);
+	back.macd = TransMacd(value.macd);
+	back.divType = TransDivType(value.divTypeValue);
+	return back;
+}
+
+IBBirdEyeViewValues CIceTransfor::TransBirdEyeViewValues(const IBirdEyeViewValues &values)
+{
+	IBBirdEyeViewValues back;
+	back.value_m1 = TransBirdEyeViewValue(values.birdEyeViewValue_m1);
+	back.value_m5 = TransBirdEyeViewValue(values.birdEyeViewValue_m5);
+	back.value_m15 = TransBirdEyeViewValue(values.birdEyeViewValue_m15);
+	back.value_m30 = TransBirdEyeViewValue(values.birdEyeViewValue_m30);
+	back.value_h1 = TransBirdEyeViewValue(values.birdEyeViewValue_h1);
+	back.value_d1 = TransBirdEyeViewValue(values.birdEyeViewValue_d1);
+	return back;
+}

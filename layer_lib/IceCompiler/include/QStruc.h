@@ -378,6 +378,57 @@ struct ITableModelValue
 
 using ITableModelValues = ::std::vector<ITableModelValue>;
 
+struct IBirdEyeViewValue
+{
+    ::IBTrader::IKLine kline;
+    ::IBTrader::IAvgValue ma;
+    ::IBTrader::IMacdValue macd;
+    ::IBTrader::IDivTypeValue divTypeValue;
+
+    /**
+     * Obtains a tuple containing all of the struct's data members.
+     * @return The data members in a tuple.
+     */
+    std::tuple<const ::IBTrader::IKLine&, const ::IBTrader::IAvgValue&, const ::IBTrader::IMacdValue&, const ::IBTrader::IDivTypeValue&> ice_tuple() const
+    {
+        return std::tie(kline, ma, macd, divTypeValue);
+    }
+};
+
+struct IBirdEyeViewValues
+{
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m1;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m5;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m15;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m30;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_h1;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_d1;
+
+    /**
+     * Obtains a tuple containing all of the struct's data members.
+     * @return The data members in a tuple.
+     */
+    std::tuple<const ::IBTrader::IBirdEyeViewValue&, const ::IBTrader::IBirdEyeViewValue&, const ::IBTrader::IBirdEyeViewValue&, const ::IBTrader::IBirdEyeViewValue&, const ::IBTrader::IBirdEyeViewValue&, const ::IBTrader::IBirdEyeViewValue&> ice_tuple() const
+    {
+        return std::tie(birdEyeViewValue_m1, birdEyeViewValue_m5, birdEyeViewValue_m15, birdEyeViewValue_m30, birdEyeViewValue_h1, birdEyeViewValue_d1);
+    }
+};
+
+struct IBirdEyeViewPair
+{
+    ::IBTrader::IBirdEyeViewValues lastOne;
+    ::IBTrader::IBirdEyeViewValues thisOne;
+
+    /**
+     * Obtains a tuple containing all of the struct's data members.
+     * @return The data members in a tuple.
+     */
+    std::tuple<const ::IBTrader::IBirdEyeViewValues&, const ::IBTrader::IBirdEyeViewValues&> ice_tuple() const
+    {
+        return std::tie(lastOne, thisOne);
+    }
+};
+
 using Ice::operator<;
 using Ice::operator<=;
 using Ice::operator>;
@@ -663,6 +714,57 @@ struct StreamReader<::IBTrader::ITableModelValue, S>
     static void read(S* istr, ::IBTrader::ITableModelValue& v)
     {
         istr->readAll(v.close, v.tableModelValue_m1, v.tableModelValue_m5, v.tableModelValue_m15, v.tableModelValue_m30, v.tableModelValue_h1, v.tableModelValue_d1);
+    }
+};
+
+template<>
+struct StreamableTraits<::IBTrader::IBirdEyeViewValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 146;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamReader<::IBTrader::IBirdEyeViewValue, S>
+{
+    static void read(S* istr, ::IBTrader::IBirdEyeViewValue& v)
+    {
+        istr->readAll(v.kline, v.ma, v.macd, v.divTypeValue);
+    }
+};
+
+template<>
+struct StreamableTraits<::IBTrader::IBirdEyeViewValues>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 876;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamReader<::IBTrader::IBirdEyeViewValues, S>
+{
+    static void read(S* istr, ::IBTrader::IBirdEyeViewValues& v)
+    {
+        istr->readAll(v.birdEyeViewValue_m1, v.birdEyeViewValue_m5, v.birdEyeViewValue_m15, v.birdEyeViewValue_m30, v.birdEyeViewValue_h1, v.birdEyeViewValue_d1);
+    }
+};
+
+template<>
+struct StreamableTraits<::IBTrader::IBirdEyeViewPair>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 1752;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamReader<::IBTrader::IBirdEyeViewPair, S>
+{
+    static void read(S* istr, ::IBTrader::IBirdEyeViewPair& v)
+    {
+        istr->readAll(v.lastOne, v.thisOne);
     }
 };
 
@@ -1393,6 +1495,30 @@ struct ITableModelValue
 
 typedef ::std::vector<ITableModelValue> ITableModelValues;
 
+struct IBirdEyeViewValue
+{
+    ::IBTrader::IKLine kline;
+    ::IBTrader::IAvgValue ma;
+    ::IBTrader::IMacdValue macd;
+    ::IBTrader::IDivTypeValue divTypeValue;
+};
+
+struct IBirdEyeViewValues
+{
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m1;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m5;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m15;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_m30;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_h1;
+    ::IBTrader::IBirdEyeViewValue birdEyeViewValue_d1;
+};
+
+struct IBirdEyeViewPair
+{
+    ::IBTrader::IBirdEyeViewValues lastOne;
+    ::IBTrader::IBirdEyeViewValues thisOne;
+};
+
 }
 
 /// \cond STREAM
@@ -1964,6 +2090,102 @@ struct StreamReader< ::IBTrader::ITableModelValue, S>
         istr->read(v.tableModelValue_m30);
         istr->read(v.tableModelValue_h1);
         istr->read(v.tableModelValue_d1);
+    }
+};
+
+template<>
+struct StreamableTraits< ::IBTrader::IBirdEyeViewValue>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 146;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamWriter< ::IBTrader::IBirdEyeViewValue, S>
+{
+    static void write(S* ostr, const ::IBTrader::IBirdEyeViewValue& v)
+    {
+        ostr->write(v.kline);
+        ostr->write(v.ma);
+        ostr->write(v.macd);
+        ostr->write(v.divTypeValue);
+    }
+};
+
+template<typename S>
+struct StreamReader< ::IBTrader::IBirdEyeViewValue, S>
+{
+    static void read(S* istr, ::IBTrader::IBirdEyeViewValue& v)
+    {
+        istr->read(v.kline);
+        istr->read(v.ma);
+        istr->read(v.macd);
+        istr->read(v.divTypeValue);
+    }
+};
+
+template<>
+struct StreamableTraits< ::IBTrader::IBirdEyeViewValues>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 876;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamWriter< ::IBTrader::IBirdEyeViewValues, S>
+{
+    static void write(S* ostr, const ::IBTrader::IBirdEyeViewValues& v)
+    {
+        ostr->write(v.birdEyeViewValue_m1);
+        ostr->write(v.birdEyeViewValue_m5);
+        ostr->write(v.birdEyeViewValue_m15);
+        ostr->write(v.birdEyeViewValue_m30);
+        ostr->write(v.birdEyeViewValue_h1);
+        ostr->write(v.birdEyeViewValue_d1);
+    }
+};
+
+template<typename S>
+struct StreamReader< ::IBTrader::IBirdEyeViewValues, S>
+{
+    static void read(S* istr, ::IBTrader::IBirdEyeViewValues& v)
+    {
+        istr->read(v.birdEyeViewValue_m1);
+        istr->read(v.birdEyeViewValue_m5);
+        istr->read(v.birdEyeViewValue_m15);
+        istr->read(v.birdEyeViewValue_m30);
+        istr->read(v.birdEyeViewValue_h1);
+        istr->read(v.birdEyeViewValue_d1);
+    }
+};
+
+template<>
+struct StreamableTraits< ::IBTrader::IBirdEyeViewPair>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 1752;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamWriter< ::IBTrader::IBirdEyeViewPair, S>
+{
+    static void write(S* ostr, const ::IBTrader::IBirdEyeViewPair& v)
+    {
+        ostr->write(v.lastOne);
+        ostr->write(v.thisOne);
+    }
+};
+
+template<typename S>
+struct StreamReader< ::IBTrader::IBirdEyeViewPair, S>
+{
+    static void read(S* istr, ::IBTrader::IBirdEyeViewPair& v)
+    {
+        istr->read(v.lastOne);
+        istr->read(v.thisOne);
     }
 };
 

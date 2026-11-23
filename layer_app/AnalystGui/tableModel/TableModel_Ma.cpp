@@ -3,7 +3,7 @@
 #include <Factory_IBGlobalShare.h>
 #include <QtGlobal.h>
 
-#include "TableModelDataGetter.h"
+#include "../src/BireEyeDataGetter.h"
 
 CTableModel_Ma::CTableModel_Ma()
 	:CTableModel()
@@ -20,13 +20,13 @@ void CTableModel_Ma::QueryData()
 	m_tableItems.clear();
 	m_close = std::numeric_limits<double>::quiet_NaN();
 
-	m_close = MakeAndGet_TableModelDataGetter()->GetResult()->close;
-	FillMapMa(Time_Type::M1, MakeAndGet_TableModelDataGetter()->GetResult()->item_m1);
-	FillMapMa(Time_Type::M5, MakeAndGet_TableModelDataGetter()->GetResult()->item_m5);
-	FillMapMa(Time_Type::M15, MakeAndGet_TableModelDataGetter()->GetResult()->item_m15);
-	FillMapMa(Time_Type::M30, MakeAndGet_TableModelDataGetter()->GetResult()->item_m30);
-	FillMapMa(Time_Type::H1, MakeAndGet_TableModelDataGetter()->GetResult()->item_h1);
-	FillMapMa(Time_Type::D1, MakeAndGet_TableModelDataGetter()->GetResult()->item_d1);
+	m_close = MakeAndGet_BireEyeDataGetter()->GetThisOne().value_m1.kline->close;
+	FillMapMa(Time_Type::M1, MakeAndGet_BireEyeDataGetter()->GetThisOne().value_m1.ma);
+	FillMapMa(Time_Type::M5, MakeAndGet_BireEyeDataGetter()->GetThisOne().value_m5.ma);
+	FillMapMa(Time_Type::M15, MakeAndGet_BireEyeDataGetter()->GetThisOne().value_m15.ma);
+	FillMapMa(Time_Type::M30, MakeAndGet_BireEyeDataGetter()->GetThisOne().value_m30.ma);
+	FillMapMa(Time_Type::H1, MakeAndGet_BireEyeDataGetter()->GetThisOne().value_h1.ma);
+	FillMapMa(Time_Type::D1, MakeAndGet_BireEyeDataGetter()->GetThisOne().value_d1.ma);
 
 
 	m_tableItems = GetTableItems();
@@ -81,7 +81,7 @@ QVariant CTableModel_Ma::data(const QModelIndex& index, int role) const
 }
 
 
-void CTableModel_Ma::FillMapMa(Time_Type timetype, IBTableModelOneItemDataPtr item)
+void CTableModel_Ma::FillMapMa(Time_Type timetype, IBAvgValuePtr item)
 {
 	AverageValue mavalue;
 	mavalue.v5 = item->v5;

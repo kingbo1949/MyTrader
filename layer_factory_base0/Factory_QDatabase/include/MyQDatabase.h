@@ -148,6 +148,9 @@ public:
 
 	virtual IBTableModelDataPtr GetTableModelData(const CodeStr& codeId) = 0;
 
+	virtual	bool			GetBirdEyeViewData(const CodeStr& codeId, IBBirdEyeViewValues& lastOne, IBBirdEyeViewValues& thisOne) = 0;
+
+
 };
 typedef std::shared_ptr<CMyQDatabase> MyQDatabasePtr;
 
